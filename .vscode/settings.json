@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "prettier.eslintIntegration": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "javascript.validate.enable": false
+}
