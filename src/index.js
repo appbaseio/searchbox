@@ -145,6 +145,19 @@ class Searchbase {
 
   sortOptions: Array<SortOption>;
 
+  /* ------------- change events -------------------------------- */
+
+  // called when value changes
+  onValueChange: (next: string, prev: string) => void;
+  // called when results change
+  onResults: (next: string, prev: string) => void;
+  // called when suggestions change
+  onSuggestions: (next: string, prev: string) => void;
+  // called when there is an error while fetching results
+  onError: (error: any) => void;
+  // called when there is an error while fetching suggestions
+  onSuggestionsError: (error: any) => void;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   transformRequest: (requestOptions: Object) => Promise<Object>;
@@ -207,7 +220,6 @@ class Searchbase {
     this.url = url;
     this.analytics = analytics || false;
     this.dataField = dataField;
-    this.value = value || '';
     this.credentials = credentials || '';
     this.nestedField = nestedField || '';
     this.updateOn = updateOn || 'change';
@@ -248,6 +260,13 @@ class Searchbase {
       this.setHeaders(headers, {
         triggerQuery: false,
         stateChanges: false
+      });
+    }
+
+    if (value) {
+      this.setValue(value, {
+        triggerQuery: !query,
+        stateChanges: true
       });
     }
 
@@ -634,6 +653,22 @@ class Searchbase {
 
   // Method to apply the changed based on set options
   _applyOptions(options: Options, key: string, prevValue: any, nextValue: any): void {
+    // Trigger events
+    if (key === 'value' && this.onValueChange) {
+      this.onValueChange(prevValue, nextValue);
+    }
+    if (key === 'error' && this.onError) {
+      this.onError(prevValue);
+    }
+    if (key === 'suggestionsError' && this.onSuggestionsError) {
+      this.onSuggestionsError(prevValue);
+    }
+    if (key === 'results' && this.onResults) {
+      this.onResults(prevValue, nextValue);
+    }
+    if (key === 'suggestions' && this.onSuggestions) {
+      this.onSuggestions(prevValue, nextValue);
+    }
     if (options.triggerQuery) {
       this.triggerQuery();
     }
