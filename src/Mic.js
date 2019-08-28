@@ -38,6 +38,30 @@ class Mic {
       );
     }
   }
+  //getters
+  get micStatus() {
+    return this._status;
+  }
+
+  get micInstance() {
+    return this._instance;
+  }
+
+  get micActive() {
+    return this._status === STATUS.active;
+  }
+
+  get micStopped() {
+    return this._status === STATUS.stopped;
+  }
+
+  get micInactive() {
+    return this._status === STATUS.inactive;
+  }
+
+  get micDenied() {
+    return this._status === STATUS.denied;
+  }
 
   _applyOptions(
     key: string,
