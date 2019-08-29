@@ -202,9 +202,9 @@ class Searchbase {
     excludeFields,
     transformRequest,
     transformResponse,
+    beforeValueChange,
     sortBy,
     nestedField,
-    beforeValueChange,
     sortOptions
   }: Searchbase) {
     if (!index) {
@@ -446,9 +446,20 @@ class Searchbase {
 
   // Method to set the value
   setValue(value: string, options?: Options = defaultOptions): void {
-    const prev = this.value;
-    this.value = value;
-    this._applyOptions(options, 'value', prev, this.value);
+    const performUpdate = () => {
+      const prev = this.value;
+      this.value = value;
+      this._applyOptions(options, 'value', prev, this.value);
+    };
+    if (this.beforeValueChange) {
+      this.beforeValueChange(value)
+        .then(performUpdate)
+        .catch(e => {
+          console.warn(`beforeValueChange rejected the promise with `, e);
+        });
+    } else {
+      performUpdate();
+    }
   }
 
   // Input Events
@@ -509,6 +520,20 @@ class Searchbase {
 
   /* -------- Private methods only for the internal use -------- */
 
+  _handleTransformResponse(res: any): Promise<any> {
+    if (this.transformResponse && typeof this.transformResponse === 'function') {
+      return this.transformResponse(res);
+    }
+    return new Promise(resolve => resolve(res));
+  }
+
+  _handleTransformRequest(requestOptions: any): Promise<any> {
+    if (this.transformRequest && typeof this.transformRequest === 'function') {
+      return this.transformRequest(requestOptions);
+    }
+    return new Promise(resolve => resolve(requestOptions));
+  }
+
   _fetchRequest(requestBody: Object): Promise<any> {
     let analyticsHeaders = {};
     // Set analytics headers
@@ -531,37 +556,55 @@ class Searchbase {
         ...analyticsHeaders
       }
     };
-    // set timestamp in request
-    const timestamp = Date.now();
 
     return new Promise((resolve, reject) => {
-      fetch(`${this.url}/${this.index}/_search`, requestOptions)
-        .then(res => {
-          const responseHeaders = res.headers;
+      this._handleTransformRequest(requestOptions)
+        .then(finalRequestOptions => {
+          // set timestamp in request
+          const timestamp = Date.now();
 
-          // set search id
-          if (res.headers) {
-            this._search_id = res.headers.get('X-Search-Id') || null;
-          }
+          return fetch(`${this.url}/${this.index}/_search`, finalRequestOptions)
+            .then(res => {
+              const responseHeaders = res.headers;
 
-          if (res.status >= 500) {
-            return reject(res);
-          }
-          return res.json().then(data => {
-            if (res.status >= 400) {
-              return reject(res);
-            }
-            if (data && Object.prototype.hasOwnProperty.call(data, 'error')) {
-              reject(data);
-            }
-            const response = Object.assign({}, data, {
-              _timestamp: timestamp,
-              _headers: responseHeaders
-            });
-            return resolve(response);
-          });
+              // set search id
+              if (res.headers) {
+                this._search_id = res.headers.get('X-Search-Id') || null;
+              }
+
+              if (res.status >= 500) {
+                return reject(res);
+              }
+              if (res.status >= 400) {
+                return reject(res);
+              }
+              return res.json().then(data => {
+                this._handleTransformResponse(data)
+                  .then(transformedData => {
+                    if (
+                      transformedData &&
+                      Object.prototype.hasOwnProperty.call(transformedData, 'error')
+                    ) {
+                      reject(transformedData);
+                    }
+                    const response = Object.assign({}, transformedData, {
+                      _timestamp: timestamp,
+                      _headers: responseHeaders
+                    });
+                    return resolve(response);
+                  })
+                  .catch(e => {
+                    console.warn(`transformResponse rejected the promise with `, e);
+                    return reject(e);
+                  });
+              });
+            })
+            .catch(e => reject(e));
         })
-        .catch(e => reject(e));
+        .catch(e => {
+          console.warn(`transformRequest rejected the promise with `, e);
+          return reject(e);
+        });
     });
   }
 

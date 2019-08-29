@@ -61,3 +61,68 @@ it('subscribeToStateChanges with string value `results`', async () => {
   }, 'results');
   await new Promise(r => setTimeout(r, 4000));
 });
+
+it('transformResponse', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+  searchbase.transformResponse = data =>
+    new Promise((res, rej) => {
+      return res({
+        hits: {
+          hits: [
+            {
+              id: 'custom_item'
+            }
+          ]
+        }
+      });
+    });
+  searchbase.triggerQuery();
+  searchbase.subscribeToStateChanges(changes => {
+    expect(changes.results.next.data).toEqual([
+      {
+        id: 'custom_item'
+      }
+    ]);
+  }, 'results');
+  await new Promise(r => setTimeout(r, 4000));
+});
+
+it('transformRequest', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+  searchbase.transformRequest = requestOptions =>
+    new Promise((res, rej) => {
+      expect(true).toEqual(true);
+      return res(requestOptions);
+    });
+  searchbase.triggerQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
+
+it('beforeValueChange', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials,
+    value: 'harry',
+    beforeValueChange: value =>
+      new Promise((res, rej) => {
+        expect(true).toEqual(true);
+        return res(value);
+      })
+  });
+  await new Promise(r => setTimeout(r, 4000));
+});

@@ -15,6 +15,14 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
   let results: Array<Object> = [];
   if (hits) {
     results = [...hits].map(item => {
+      const streamProps = {};
+
+      if (item._updated) {
+        streamProps._updated = item._updated;
+      } else if (item._deleted) {
+        streamProps._deleted = item._deleted;
+      }
+
       const data = highlightResults(item);
       const result = Object.keys(data)
         .filter(key => key !== '_source')
@@ -25,8 +33,8 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
             return obj;
           },
           {
-            highlight: data.highlight || {},
-            ...data._source
+            ...data._source,
+            ...streamProps
           }
         );
       return result;
