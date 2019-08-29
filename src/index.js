@@ -5,6 +5,20 @@ import Results from './Results';
 import Observable from './observable';
 import { getControlValue } from './utils';
 
+//mic constants
+const MIC_STATUS = {
+  inactive: 'INACTIVE',
+  stopped: 'STOPPED',
+  active: 'ACTIVE',
+  denied: 'DENIED'
+};
+
+type MicStatusField =
+  | MIC_STATUS.inactive
+  | MIC_STATUS.stopped
+  | MIC_STATUS.active
+  | MIC_STATUS.denied;
+
 // TODO: add validation in setters
 type UpdateOn = 'change' | 'blur' | 'enter';
 type QueryFormat = 'or' | 'and';
@@ -145,6 +159,10 @@ class Searchbase {
 
   sortOptions: Array<SortOption>;
 
+  //mic fields
+  _micStatus: MicStatusField;
+  micLanguage: string;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
@@ -157,6 +175,9 @@ class Searchbase {
   onError: (error: any) => void;
   // called when there is an error while fetching suggestions
   onSuggestionsError: (error: any) => void;
+
+  //mic change event
+  onMicStatusChange: (next: string, prev: string) => void;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
@@ -205,7 +226,9 @@ class Searchbase {
     sortBy,
     nestedField,
     beforeValueChange,
-    sortOptions
+    sortOptions,
+    micStatus,
+    micLanguage
   }: Searchbase) {
     if (!index) {
       throw new Error('Please provide a valid index.');
@@ -285,6 +308,42 @@ class Searchbase {
         stateChanges: false
       });
     }
+    //  mic fields
+    this._micStatus = micStatus || MIC_STATUS.inactive;
+    this.micLanguage = micLanguage || 'en-US';
+    this._micResults = [];
+    this._micInstance =
+      window.webkitSpeechRecognition || window.SpeechRecognition || null;
+    if (!this._micInstance) {
+      console.error(
+        'SpeechRecognition is not supported in this browser. Please check the browser compatibility at https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#Browser_compatibility.'
+      );
+    }
+  }
+  //getters
+  //mic
+  get micStatus() {
+    return this._micStatus;
+  }
+
+  get micInstance() {
+    return this._micInstance;
+  }
+
+  get micActive() {
+    return this._micStatus === MIC_STATUS.active;
+  }
+
+  get micStopped() {
+    return this._micStatus === MIC_STATUS.stopped;
+  }
+
+  get micInactive() {
+    return this._micStatus === MIC_STATUS.inactive;
+  }
+
+  get micDenied() {
+    return this._micStatus === MIC_STATUS.denied;
   }
 
   get query() {
@@ -312,7 +371,10 @@ class Searchbase {
   }
 
   // Method to subscribe the state changes
-  subscribeToStateChanges(fn: Function, propertiesToSubscribe?: string | Array<string>) {
+  subscribeToStateChanges(
+    fn: Function,
+    propertiesToSubscribe?: string | Array<string>
+  ) {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
   }
 
@@ -339,10 +401,18 @@ class Searchbase {
   }
 
   // Method to set the custom suggestions query DSL
-  setSuggestionsQuery(suggestionsQuery: Object, options?: Options = defaultOptions): void {
+  setSuggestionsQuery(
+    suggestionsQuery: Object,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.suggestionsQuery;
     this.suggestionsQuery = suggestionsQuery;
-    this._applyOptions(options, 'suggestionsQuery', prev, this.suggestionsQuery);
+    this._applyOptions(
+      options,
+      'suggestionsQuery',
+      prev,
+      this.suggestionsQuery
+    );
   }
 
   // Method to set the size option
@@ -360,21 +430,30 @@ class Searchbase {
   }
 
   // Method to set the fuzziness option
-  setFuzziness(fuzziness: number | string, options?: Options = defaultOptions): void {
+  setFuzziness(
+    fuzziness: number | string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.fuzziness;
     this.fuzziness = fuzziness;
     this._applyOptions(options, 'fuzziness', prev, this.fuzziness);
   }
 
   // Method to set the includeFields option
-  setIncludeFields(includeFields: Array<string>, options?: Options = defaultOptions): void {
+  setIncludeFields(
+    includeFields: Array<string>,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.includeFields;
     this.includeFields = includeFields;
     this._applyOptions(options, 'includeFields', prev, includeFields);
   }
 
   // Method to set the excludeFields option
-  setExcludeFields(excludeFields: Array<string>, options?: Options = defaultOptions): void {
+  setExcludeFields(
+    excludeFields: Array<string>,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.excludeFields;
     this.excludeFields = excludeFields;
     this._applyOptions(options, 'excludeFields', prev, excludeFields);
@@ -388,14 +467,20 @@ class Searchbase {
   }
 
   // Method to set the sortByField option
-  setSortByField(sortByField: string, options?: Options = defaultOptions): void {
+  setSortByField(
+    sortByField: string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.sortByField;
     this.sortByField = sortByField;
     this._applyOptions(options, 'sortByField', prev, sortByField);
   }
 
   // Method to set the nestedField option
-  setNestedField(nestedField: string, options?: Options = defaultOptions): void {
+  setNestedField(
+    nestedField: string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.nestedField;
     this.nestedField = nestedField;
     this._applyOptions(options, 'nestedField', prev, nestedField);
@@ -428,7 +513,10 @@ class Searchbase {
     }
   }
   // Method to set the custom suggestions
-  setSuggestions(suggestions: Array<Object>, options?: Option = defaultOption): void {
+  setSuggestions(
+    suggestions: Array<Object>,
+    options?: Option = defaultOption
+  ): void {
     if (suggestions) {
       const prev = this.suggestions;
       this.suggestions = new Results(suggestions);
@@ -457,6 +545,60 @@ class Searchbase {
     this.setValue(value);
   };
 
+  //mic event
+  onMicClick = () => {
+    const prevStatus = this._micStatus;
+    if (window.SpeechRecognition && prevStatus !== MIC_STATUS.denied) {
+      if (prevStatus === MIC_STATUS.active) {
+        this._micStatus = MIC_STATUS.inactive;
+        this._applyOptions(
+          defaultOptions,
+          'mic-status',
+          prevStatus,
+          this._micStatus
+        );
+      }
+      const { SpeechRecognition } = window;
+      if (this._micInstance) {
+        this._stopMic();
+        return;
+      }
+      this._micInstance = new SpeechRecognition();
+      this._micInstance.continuous = true;
+      this._micInstance.interimResults = true;
+      this._micInstance.lang = this.micLanguage;
+      this._micInstance.start();
+      this._micInstance.onstart = () => {
+        this._micStatus = MIC_STATUS.active;
+        this._applyOptions(
+          defaultOptions,
+          'mic-status',
+          prevStatus,
+          this._micStatus
+        );
+      };
+      this._micInstance.onresult = ({ results }) => {
+        if (results && results[0] && results[0].isFinal) {
+          this._stopMic();
+        }
+        this._handleVoiceResults({ results });
+      };
+      this._micInstance.onerror = e => {
+        if (e.error === 'no-speech' || e.error === 'audio-capture') {
+          this._micStatus = MIC_STATUS.inactive;
+        } else if (e.error === 'not-allowed') {
+          this._micStatus = MIC_STATUS.denied;
+        }
+        this._applyOptions(
+          defaultOptions,
+          'mic-status',
+          prevStatus,
+          this._micStatus
+        );
+        console.error(e);
+      };
+    }
+  };
   // Method to execute the query
   triggerQuery(options?: Option = defaultOption): void {
     this._fetchRequest(this.query)
@@ -508,6 +650,29 @@ class Searchbase {
   }
 
   /* -------- Private methods only for the internal use -------- */
+  //mic
+  _handleVoiceResults = ({ results }) => {
+    if (
+      results &&
+      results[0] &&
+      results[0].isFinal &&
+      results[0][0] &&
+      results[0][0].transcript &&
+      results[0][0].transcript.trim()
+    ) {
+      this.setValue(results[0][0].transcript.trim());
+    }
+  };
+
+  _stopMic = () => {
+    if (this._micInstance) {
+      const prev = this._micStatus;
+      this._micStatus = MIC_STATUS.inactive;
+      this._micInstance.stop();
+      this._micInstance = null;
+      this._applyOptions(defaultOptions, 'mic-status', prev, this._micStatus);
+    }
+  };
 
   _fetchRequest(requestBody: Object): Promise<any> {
     let analyticsHeaders = {};
@@ -565,10 +730,18 @@ class Searchbase {
     });
   }
 
-  _setSuggestionsError(suggestionsError: any, options?: Options = defaultOptions) {
+  _setSuggestionsError(
+    suggestionsError: any,
+    options?: Options = defaultOptions
+  ) {
     const prev = this.suggestionsError;
     this.suggestionsError = suggestionsError;
-    this._applyOptions(options, 'suggestionsError', prev, this.suggestionsError);
+    this._applyOptions(
+      options,
+      'suggestionsError',
+      prev,
+      this.suggestionsError
+    );
   }
 
   _setError(error: any, options?: Options = defaultOptions) {
@@ -652,7 +825,15 @@ class Searchbase {
   }
 
   // Method to apply the changed based on set options
-  _applyOptions(options: Options, key: string, prevValue: any, nextValue: any): void {
+  _applyOptions(
+    options: Options,
+    key: string,
+    prevValue: any,
+    nextValue: any
+  ): void {
+    //Trigger mic events
+    if (key === 'mic-status' && this.onMicStatusChange)
+      this.onMicStatusChange(prevValue, nextValue);
     // Trigger events
     if (key === 'value' && this.onValueChange) {
       this.onValueChange(prevValue, nextValue);
@@ -743,7 +924,9 @@ Searchbase.shouldQuery = function(
 ) {
   const fields = dataFields.map((dataField: string | DataField) => {
     if (typeof dataField === 'object') {
-      return `${dataField.field}${dataField.weight ? `^${dataField.weight}` : ''}`;
+      return `${dataField.field}${
+        dataField.weight ? `^${dataField.weight}` : ''
+      }`;
     }
     return dataField;
   });
