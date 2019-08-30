@@ -863,8 +863,9 @@ class Searchbase {
     nextValue: any
   ): void {
     //Trigger mic events
-    if (key === 'micStatus' && this.onMicStatusChange)
+    if (key === 'micStatus' && this.onMicStatusChange) {
       this.onMicStatusChange(prevValue, nextValue);
+    }
     // Trigger events
     if (key === 'value' && this.onValueChange) {
       this.onValueChange(prevValue, nextValue);
