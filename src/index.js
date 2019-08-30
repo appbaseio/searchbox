@@ -5,6 +5,20 @@ import Results from './Results';
 import Observable from './observable';
 import { getControlValue } from './utils';
 
+//mic constants
+const MIC_STATUS = {
+  inactive: 'INACTIVE',
+  stopped: 'STOPPED',
+  active: 'ACTIVE',
+  denied: 'DENIED'
+};
+
+type MicStatusField =
+  | MIC_STATUS.inactive
+  | MIC_STATUS.stopped
+  | MIC_STATUS.active
+  | MIC_STATUS.denied;
+
 // TODO: add validation in setters
 type UpdateOn = 'change' | 'blur' | 'enter';
 type QueryFormat = 'or' | 'and';
@@ -158,6 +172,9 @@ class Searchbase {
   // called when there is an error while fetching suggestions
   onSuggestionsError: (error: any) => void;
 
+  //mic change event
+  onMicStatusChange: (next: string, prev: string) => void;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   transformRequest: (requestOptions: Object) => Promise<Object>;
@@ -178,6 +195,9 @@ class Searchbase {
 
   // search session id, required for analytics
   _searchId: string;
+
+  //mic fields
+  _micStatus: MicStatusField;
 
   constructor({
     index,
@@ -285,6 +305,32 @@ class Searchbase {
         stateChanges: false
       });
     }
+  }
+
+  //getters
+  //mic
+  get micStatus() {
+    return this._micStatus;
+  }
+
+  get micInstance() {
+    return this._micInstance;
+  }
+
+  get micActive() {
+    return this._micStatus === MIC_STATUS.active;
+  }
+
+  get micStopped() {
+    return this._micStatus === MIC_STATUS.stopped;
+  }
+
+  get micInactive() {
+    return this._micStatus === MIC_STATUS.inactive;
+  }
+
+  get micDenied() {
+    return this._micStatus === MIC_STATUS.denied;
   }
 
   get query() {
@@ -498,6 +544,43 @@ class Searchbase {
     this.setValue(value);
   };
 
+  //mic event
+  onMicClick = (micOptions: Object = {}, options: Options = defaultOptions) => {
+    const prevStatus = this._micStatus;
+    if (window.SpeechRecognition && prevStatus !== MIC_STATUS.denied) {
+      if (prevStatus === MIC_STATUS.active) {
+        this._setMicStatus(MIC_STATUS.inactive, options);
+      }
+      const { SpeechRecognition } = window;
+      if (this._micInstance) {
+        this._stopMic();
+        return;
+      }
+      this._micInstance = new SpeechRecognition();
+      this._micInstance.continuous = true;
+      this._micInstance.interimResults = true;
+      Object.assign(this._micInstance, micOptions);
+      this._micInstance.start();
+      this._micInstance.onstart = () => {
+        this._setMicStatus(MIC_STATUS.active, options);
+      };
+      this._micInstance.onresult = ({ results }) => {
+        if (results && results[0] && results[0].isFinal) {
+          this._stopMic();
+        }
+        this._handleVoiceResults({ results });
+      };
+      this._micInstance.onerror = e => {
+        if (e.error === 'no-speech' || e.error === 'audio-capture') {
+          this._setMicStatus(MIC_STATUS.inactive, options);
+        } else if (e.error === 'not-allowed') {
+          this._setMicStatus(MIC_STATUS.denied, options);
+        }
+        console.error(e);
+      };
+    }
+  };
+
   // Method to execute the query
   triggerQuery(options?: Option = defaultOption): void {
     this._fetchRequest(this.query)
@@ -549,6 +632,36 @@ class Searchbase {
   }
 
   /* -------- Private methods only for the internal use -------- */
+  //mic
+  _handleVoiceResults = ({ results }) => {
+    if (
+      results &&
+      results[0] &&
+      results[0].isFinal &&
+      results[0][0] &&
+      results[0][0].transcript &&
+      results[0][0].transcript.trim()
+    ) {
+      this.setValue(results[0][0].transcript.trim());
+    }
+  };
+
+  _stopMic = () => {
+    if (this._micInstance) {
+      this._micInstance.stop();
+      this._micInstance = null;
+      this._setMicStatus(MIC_STATUS.inactive);
+    }
+  };
+
+  _setMicStatus = (
+    status: MicStatusField,
+    options: Options = defaultOptions
+  ) => {
+    const prevStatus = this._micStatus;
+    this._micStatus = status;
+    this._applyOptions(options, 'micStatus', prevStatus, this._micStatus);
+  };
 
   _handleTransformResponse(res: any): Promise<any> {
     if (
@@ -749,6 +862,10 @@ class Searchbase {
     prevValue: any,
     nextValue: any
   ): void {
+    //Trigger mic events
+    if (key === 'micStatus' && this.onMicStatusChange) {
+      this.onMicStatusChange(prevValue, nextValue);
+    }
     // Trigger events
     if (key === 'value' && this.onValueChange) {
       this.onValueChange(prevValue, nextValue);
