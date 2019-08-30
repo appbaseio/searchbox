@@ -9,6 +9,7 @@ import { getControlValue } from './utils';
 type UpdateOn = 'change' | 'blur' | 'enter';
 type QueryFormat = 'or' | 'and';
 
+// eslint-disable-next-line no-unused-vars
 interface StringTMap<T> {
   [key: string]: T;
 }
@@ -149,12 +150,16 @@ class Searchbase {
 
   // called when value changes
   onValueChange: (next: string, prev: string) => void;
+
   // called when results change
   onResults: (next: string, prev: string) => void;
+
   // called when suggestions change
   onSuggestions: (next: string, prev: string) => void;
+
   // called when there is an error while fetching results
   onError: (error: any) => void;
+
   // called when there is an error while fetching suggestions
   onSuggestionsError: (error: any) => void;
 
@@ -177,6 +182,7 @@ class Searchbase {
   _queryOptions: Object;
 
   // search session id, required for analytics
+  // eslint-disable-next-line camelcase
   _search_id: string;
 
   constructor({
@@ -312,7 +318,10 @@ class Searchbase {
   }
 
   // Method to subscribe the state changes
-  subscribeToStateChanges(fn: Function, propertiesToSubscribe?: string | Array<string>) {
+  subscribeToStateChanges(
+    fn: Function,
+    propertiesToSubscribe?: string | Array<string>
+  ) {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
   }
 
@@ -339,10 +348,18 @@ class Searchbase {
   }
 
   // Method to set the custom suggestions query DSL
-  setSuggestionsQuery(suggestionsQuery: Object, options?: Options = defaultOptions): void {
+  setSuggestionsQuery(
+    suggestionsQuery: Object,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.suggestionsQuery;
     this.suggestionsQuery = suggestionsQuery;
-    this._applyOptions(options, 'suggestionsQuery', prev, this.suggestionsQuery);
+    this._applyOptions(
+      options,
+      'suggestionsQuery',
+      prev,
+      this.suggestionsQuery
+    );
   }
 
   // Method to set the size option
@@ -360,21 +377,30 @@ class Searchbase {
   }
 
   // Method to set the fuzziness option
-  setFuzziness(fuzziness: number | string, options?: Options = defaultOptions): void {
+  setFuzziness(
+    fuzziness: number | string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.fuzziness;
     this.fuzziness = fuzziness;
     this._applyOptions(options, 'fuzziness', prev, this.fuzziness);
   }
 
   // Method to set the includeFields option
-  setIncludeFields(includeFields: Array<string>, options?: Options = defaultOptions): void {
+  setIncludeFields(
+    includeFields: Array<string>,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.includeFields;
     this.includeFields = includeFields;
     this._applyOptions(options, 'includeFields', prev, includeFields);
   }
 
   // Method to set the excludeFields option
-  setExcludeFields(excludeFields: Array<string>, options?: Options = defaultOptions): void {
+  setExcludeFields(
+    excludeFields: Array<string>,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.excludeFields;
     this.excludeFields = excludeFields;
     this._applyOptions(options, 'excludeFields', prev, excludeFields);
@@ -388,14 +414,20 @@ class Searchbase {
   }
 
   // Method to set the sortByField option
-  setSortByField(sortByField: string, options?: Options = defaultOptions): void {
+  setSortByField(
+    sortByField: string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.sortByField;
     this.sortByField = sortByField;
     this._applyOptions(options, 'sortByField', prev, sortByField);
   }
 
   // Method to set the nestedField option
-  setNestedField(nestedField: string, options?: Options = defaultOptions): void {
+  setNestedField(
+    nestedField: string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.nestedField;
     this.nestedField = nestedField;
     this._applyOptions(options, 'nestedField', prev, nestedField);
@@ -427,8 +459,12 @@ class Searchbase {
       );
     }
   }
+
   // Method to set the custom suggestions
-  setSuggestions(suggestions: Array<Object>, options?: Option = defaultOption): void {
+  setSuggestions(
+    suggestions: Array<Object>,
+    options?: Option = defaultOption
+  ): void {
     if (suggestions) {
       const prev = this.suggestions;
       this.suggestions = new Results(suggestions);
@@ -455,7 +491,7 @@ class Searchbase {
       this.beforeValueChange(value)
         .then(performUpdate)
         .catch(e => {
-          console.warn(`beforeValueChange rejected the promise with `, e);
+          console.warn('beforeValueChange rejected the promise with ', e);
         });
     } else {
       performUpdate();
@@ -521,7 +557,10 @@ class Searchbase {
   /* -------- Private methods only for the internal use -------- */
 
   _handleTransformResponse(res: any): Promise<any> {
-    if (this.transformResponse && typeof this.transformResponse === 'function') {
+    if (
+      this.transformResponse
+      && typeof this.transformResponse === 'function'
+    ) {
       return this.transformResponse(res);
     }
     return new Promise(resolve => resolve(res));
@@ -582,19 +621,26 @@ class Searchbase {
                 this._handleTransformResponse(data)
                   .then(transformedData => {
                     if (
-                      transformedData &&
-                      Object.prototype.hasOwnProperty.call(transformedData, 'error')
+                      transformedData
+                      && Object.prototype.hasOwnProperty.call(
+                        transformedData,
+                        'error'
+                      )
                     ) {
                       reject(transformedData);
                     }
-                    const response = Object.assign({}, transformedData, {
+                    const response = {
+                      ...transformedData,
                       _timestamp: timestamp,
                       _headers: responseHeaders
-                    });
+                    };
                     return resolve(response);
                   })
                   .catch(e => {
-                    console.warn(`transformResponse rejected the promise with `, e);
+                    console.warn(
+                      'transformResponse rejected the promise with ',
+                      e
+                    );
                     return reject(e);
                   });
               });
@@ -602,16 +648,24 @@ class Searchbase {
             .catch(e => reject(e));
         })
         .catch(e => {
-          console.warn(`transformRequest rejected the promise with `, e);
+          console.warn('transformRequest rejected the promise with ', e);
           return reject(e);
         });
     });
   }
 
-  _setSuggestionsError(suggestionsError: any, options?: Options = defaultOptions) {
+  _setSuggestionsError(
+    suggestionsError: any,
+    options?: Options = defaultOptions
+  ) {
     const prev = this.suggestionsError;
     this.suggestionsError = suggestionsError;
-    this._applyOptions(options, 'suggestionsError', prev, this.suggestionsError);
+    this._applyOptions(
+      options,
+      'suggestionsError',
+      prev,
+      this.suggestionsError
+    );
   }
 
   _setError(error: any, options?: Options = defaultOptions) {
@@ -636,8 +690,8 @@ class Searchbase {
      * First priority goes to the custom query set by user otherwise execute the default query
      * If none of the two exists execute the match_all
      */
-    const finalQuery = query ||
-      Searchbase.defaultQuery(this.value, {
+    const finalQuery = query
+      || Searchbase.defaultQuery(this.value, {
         dataField: this.dataField,
         searchOperators: this.searchOperators,
         queryFormat: this.queryFormat,
@@ -663,8 +717,8 @@ class Searchbase {
      * First priority goes to the custom query set by user otherwise execute the default query
      * If none of the two exists execute the match_all
      */
-    const finalQuery = query ||
-      Searchbase.defaultQuery(this.value, {
+    const finalQuery = query
+      || Searchbase.defaultQuery(this.value, {
         dataField: this.dataField,
         searchOperators: this.searchOperators,
         queryFormat: this.queryFormat,
@@ -695,7 +749,12 @@ class Searchbase {
   }
 
   // Method to apply the changed based on set options
-  _applyOptions(options: Options, key: string, prevValue: any, nextValue: any): void {
+  _applyOptions(
+    options: Options,
+    key: string,
+    prevValue: any,
+    nextValue: any
+  ): void {
     // Trigger events
     if (key === 'value' && this.onValueChange) {
       this.onValueChange(prevValue, nextValue);
@@ -733,7 +792,7 @@ class Searchbase {
 /* ------------------ Static methods ------------------------------ */
 
 // function to generate the default query DSL
-Searchbase.defaultQuery = function(value, options) {
+Searchbase.defaultQuery = function (value, options) {
   let finalQuery = null;
   let fields;
 
@@ -775,7 +834,7 @@ Searchbase.defaultQuery = function(value, options) {
 };
 
 // helper function of default query
-Searchbase.shouldQuery = function(
+Searchbase.shouldQuery = function (
   value,
   dataFields,
   options = {
@@ -786,7 +845,9 @@ Searchbase.shouldQuery = function(
 ) {
   const fields = dataFields.map((dataField: string | DataField) => {
     if (typeof dataField === 'object') {
-      return `${dataField.field}${dataField.weight ? `^${dataField.weight}` : ''}`;
+      return `${dataField.field}${
+        dataField.weight ? `^${dataField.weight}` : ''
+      }`;
     }
     return dataField;
   });
@@ -842,7 +903,7 @@ Searchbase.shouldQuery = function(
 };
 
 // function to generate the query DSL options
-Searchbase.generateQueryOptions = function(options) {
+Searchbase.generateQueryOptions = function (options) {
   const finalOptions = {};
   if (options.size !== undefined) {
     finalOptions.size = options.size;
