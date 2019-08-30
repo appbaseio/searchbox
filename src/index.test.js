@@ -56,7 +56,7 @@ it('subscribeToStateChanges with string value `results`', async () => {
     },
     credentials
   });
-  searchbase.subscribeToStateChanges(value => {
+  searchbase.subscribeToStateChanges(() => {
     expect(true).toEqual(true);
   }, 'results');
   await new Promise(r => setTimeout(r, 4000));
@@ -70,8 +70,8 @@ it('transformResponse', async () => {
     dataField: 'original_title',
     credentials
   });
-  searchbase.transformResponse = data =>
-    new Promise((res, rej) => {
+  // eslint-disable-next-line no-unused-vars
+  searchbase.transformResponse = data => new Promise((res, rej) => {
       return res({
         hits: {
           hits: [
@@ -101,8 +101,7 @@ it('transformRequest', async () => {
     dataField: 'original_title',
     credentials
   });
-  searchbase.transformRequest = requestOptions =>
-    new Promise((res, rej) => {
+  searchbase.transformRequest = requestOptions => new Promise(res => {
       expect(true).toEqual(true);
       return res(requestOptions);
     });
@@ -112,14 +111,14 @@ it('transformRequest', async () => {
 
 it('beforeValueChange', async () => {
   expect.assertions(1);
+  // eslint-disable-next-line no-unused-vars
   const searchbase = new Searchbase({
     index,
     url,
     dataField: 'original_title',
     credentials,
     value: 'harry',
-    beforeValueChange: value =>
-      new Promise((res, rej) => {
+    beforeValueChange: value => new Promise(res => {
         expect(true).toEqual(true);
         return res(value);
       })
