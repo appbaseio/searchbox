@@ -9,11 +9,6 @@ import { getControlValue } from './utils';
 type UpdateOn = 'change' | 'blur' | 'enter';
 type QueryFormat = 'or' | 'and';
 
-// eslint-disable-next-line no-unused-vars
-interface StringTMap<T> {
-  [key: string]: T;
-}
-
 type DataField = {
   field: string,
   weight: number
@@ -182,8 +177,7 @@ class Searchbase {
   _queryOptions: Object;
 
   // search session id, required for analytics
-  // eslint-disable-next-line camelcase
-  _search_id: string;
+  _searchId: string;
 
   constructor({
     index,
@@ -576,9 +570,9 @@ class Searchbase {
   _fetchRequest(requestBody: Object): Promise<any> {
     let analyticsHeaders = {};
     // Set analytics headers
-    if (this._search_id) {
+    if (this._searchId) {
       analyticsHeaders = {
-        'X-Search-Id': this._search_id,
+        'X-Search-Id': this._searchId,
         'X-Search-Query': this.value
       };
     } else if (this.value) {
@@ -608,7 +602,7 @@ class Searchbase {
 
               // set search id
               if (res.headers) {
-                this._search_id = res.headers.get('X-Search-Id') || null;
+                this._searchId = res.headers.get('X-Search-Id') || null;
               }
 
               if (res.status >= 500) {

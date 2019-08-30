@@ -70,8 +70,7 @@ it('transformResponse', async () => {
     dataField: 'original_title',
     credentials
   });
-  // eslint-disable-next-line no-unused-vars
-  searchbase.transformResponse = data => new Promise((res, rej) => {
+  searchbase.transformResponse = () => new Promise(res => {
       return res({
         hits: {
           hits: [
@@ -101,6 +100,7 @@ it('transformRequest', async () => {
     dataField: 'original_title',
     credentials
   });
+
   searchbase.transformRequest = requestOptions => new Promise(res => {
       expect(true).toEqual(true);
       return res(requestOptions);
