@@ -41,7 +41,10 @@ export default {
   },
   external: umd
     ? Object.keys(pkg.peerDependencies || {})
-    : [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
+    : [
+        ...Object.keys(pkg.dependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {})
+      ],
   plugins: [
     umd
       ? resolve({
@@ -55,13 +58,18 @@ export default {
     babel({
       exclude: 'node_modules/**',
       babelrc: false,
-      presets: [['@babel/preset-env', { loose: true, modules: false }], '@babel/preset-flow'],
+      presets: [
+        ['@babel/preset-env', { loose: true, modules: false }],
+        '@babel/preset-flow'
+      ],
       plugins: ['@babel/plugin-proposal-class-properties']
     }),
     umd ? builtins() : {},
     umd
       ? replace({
-          'process.env.NODE_ENV': JSON.stringify(minify ? 'production' : 'development')
+          'process.env.NODE_ENV': JSON.stringify(
+            minify ? 'production' : 'development'
+          )
         })
       : null,
     minify ? terser() : null

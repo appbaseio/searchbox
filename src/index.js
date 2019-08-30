@@ -5,19 +5,14 @@ import Results from './Results';
 import Observable from './observable';
 import { getControlValue } from './utils';
 
-//mic constants
+// mic constants
 const MIC_STATUS = {
   inactive: 'INACTIVE',
-  stopped: 'STOPPED',
   active: 'ACTIVE',
   denied: 'DENIED'
 };
 
-type MicStatusField =
-  | MIC_STATUS.inactive
-  | MIC_STATUS.stopped
-  | MIC_STATUS.active
-  | MIC_STATUS.denied;
+type MicStatusField = 'INACTIVE' | 'ACTIVE' | 'DENIED';
 
 // TODO: add validation in setters
 type UpdateOn = 'change' | 'blur' | 'enter';
@@ -172,7 +167,7 @@ class Searchbase {
   // called when there is an error while fetching suggestions
   onSuggestionsError: (error: any) => void;
 
-  //mic change event
+  // mic change event
   onMicStatusChange: (next: string, prev: string) => void;
 
   /* ---- callbacks to create the side effects while querying ----- */
@@ -196,8 +191,11 @@ class Searchbase {
   // search session id, required for analytics
   _searchId: string;
 
-  //mic fields
+  // mic status
   _micStatus: MicStatusField;
+
+  // mic instance
+  _micInstance: any;
 
   constructor({
     index,
@@ -307,8 +305,7 @@ class Searchbase {
     }
   }
 
-  //getters
-  //mic
+  // getters
   get micStatus() {
     return this._micStatus;
   }
@@ -319,10 +316,6 @@ class Searchbase {
 
   get micActive() {
     return this._micStatus === MIC_STATUS.active;
-  }
-
-  get micStopped() {
-    return this._micStatus === MIC_STATUS.stopped;
   }
 
   get micInactive() {
@@ -544,7 +537,7 @@ class Searchbase {
     this.setValue(value);
   };
 
-  //mic event
+  // mic event
   onMicClick = (micOptions: Object = {}, options: Options = defaultOptions) => {
     const prevStatus = this._micStatus;
     if (window.SpeechRecognition && prevStatus !== MIC_STATUS.denied) {
@@ -632,8 +625,8 @@ class Searchbase {
   }
 
   /* -------- Private methods only for the internal use -------- */
-  //mic
-  _handleVoiceResults = ({ results }) => {
+  // mic
+  _handleVoiceResults = ({ results }: Object) => {
     if (
       results &&
       results[0] &&
@@ -665,8 +658,8 @@ class Searchbase {
 
   _handleTransformResponse(res: any): Promise<any> {
     if (
-      this.transformResponse
-      && typeof this.transformResponse === 'function'
+      this.transformResponse &&
+      typeof this.transformResponse === 'function'
     ) {
       return this.transformResponse(res);
     }
@@ -728,8 +721,8 @@ class Searchbase {
                 this._handleTransformResponse(data)
                   .then(transformedData => {
                     if (
-                      transformedData
-                      && Object.prototype.hasOwnProperty.call(
+                      transformedData &&
+                      Object.prototype.hasOwnProperty.call(
                         transformedData,
                         'error'
                       )
@@ -797,8 +790,8 @@ class Searchbase {
      * First priority goes to the custom query set by user otherwise execute the default query
      * If none of the two exists execute the match_all
      */
-    const finalQuery = query
-      || Searchbase.defaultQuery(this.value, {
+    const finalQuery = query ||
+      Searchbase.defaultQuery(this.value, {
         dataField: this.dataField,
         searchOperators: this.searchOperators,
         queryFormat: this.queryFormat,
@@ -824,8 +817,8 @@ class Searchbase {
      * First priority goes to the custom query set by user otherwise execute the default query
      * If none of the two exists execute the match_all
      */
-    const finalQuery = query
-      || Searchbase.defaultQuery(this.value, {
+    const finalQuery = query ||
+      Searchbase.defaultQuery(this.value, {
         dataField: this.dataField,
         searchOperators: this.searchOperators,
         queryFormat: this.queryFormat,
@@ -862,7 +855,7 @@ class Searchbase {
     prevValue: any,
     nextValue: any
   ): void {
-    //Trigger mic events
+    // Trigger mic events
     if (key === 'micStatus' && this.onMicStatusChange) {
       this.onMicStatusChange(prevValue, nextValue);
     }
@@ -903,7 +896,7 @@ class Searchbase {
 /* ------------------ Static methods ------------------------------ */
 
 // function to generate the default query DSL
-Searchbase.defaultQuery = function (value, options) {
+Searchbase.defaultQuery = (value, options) => {
   let finalQuery = null;
   let fields;
 
@@ -945,7 +938,7 @@ Searchbase.defaultQuery = function (value, options) {
 };
 
 // helper function of default query
-Searchbase.shouldQuery = function (
+Searchbase.shouldQuery = (
   value,
   dataFields,
   options = {
@@ -953,7 +946,7 @@ Searchbase.shouldQuery = function (
     queryFormat: 'or',
     fuzziness: 0
   }
-) {
+) => {
   const fields = dataFields.map((dataField: string | DataField) => {
     if (typeof dataField === 'object') {
       return `${dataField.field}${
@@ -1014,7 +1007,7 @@ Searchbase.shouldQuery = function (
 };
 
 // function to generate the query DSL options
-Searchbase.generateQueryOptions = function (options) {
+Searchbase.generateQueryOptions = options => {
   const finalOptions = {};
   if (options.size !== undefined) {
     finalOptions.size = options.size;

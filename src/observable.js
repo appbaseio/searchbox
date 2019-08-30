@@ -37,15 +37,15 @@ export default class Observable {
       if (item.properties === undefined) {
         item.callback.call(scope, o);
       } else if (
-        item.properties instanceof Array
-        && item.properties.length
-        && item.properties.includes(property)
+        item.properties instanceof Array &&
+        item.properties.length &&
+        item.properties.includes(property)
       ) {
         item.callback.call(scope, o);
       } else if (
-        typeof item.properties === 'string'
-        && item.properties
-        && item.properties === property
+        typeof item.properties === 'string' &&
+        item.properties &&
+        item.properties === property
       ) {
         item.callback.call(scope, o);
       }

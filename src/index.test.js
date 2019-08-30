@@ -70,7 +70,8 @@ it('transformResponse', async () => {
     dataField: 'original_title',
     credentials
   });
-  searchbase.transformResponse = () => new Promise(res => {
+  searchbase.transformResponse = () =>
+    new Promise(res => {
       return res({
         hits: {
           hits: [
@@ -101,7 +102,8 @@ it('transformRequest', async () => {
     credentials
   });
 
-  searchbase.transformRequest = requestOptions => new Promise(res => {
+  searchbase.transformRequest = requestOptions =>
+    new Promise(res => {
       expect(true).toEqual(true);
       return res(requestOptions);
     });
@@ -118,7 +120,8 @@ it('beforeValueChange', async () => {
     dataField: 'original_title',
     credentials,
     value: 'harry',
-    beforeValueChange: value => new Promise(res => {
+    beforeValueChange: value =>
+      new Promise(res => {
         expect(true).toEqual(true);
         return res(value);
       })

@@ -1,8 +1,6 @@
 const npsUtils = require('nps-utils');
 
-const {
- series, concurrent, rimraf, crossEnv
-} = npsUtils;
+const { series, concurrent, rimraf, crossEnv } = npsUtils;
 
 module.exports = {
   scripts: {
@@ -10,13 +8,20 @@ module.exports = {
       default: crossEnv('NODE_ENV=test jest --colors --coverage'),
       update: crossEnv('NODE_ENV=test jest --colors --coverage'),
       watch: crossEnv('NODE_ENV=test jest --colors --watch'),
-      codeCov: crossEnv('cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js')
+      codeCov: crossEnv(
+        'cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js'
+      )
     },
     build: {
       description: 'delete the dist directory and run all builds',
       default: series(
         rimraf('dist'),
-        concurrent.nps('build.es', 'build.cjs', 'build.umd.main', 'build.umd.min')
+        concurrent.nps(
+          'build.es',
+          'build.cjs',
+          'build.umd.main',
+          'build.umd.min'
+        )
       ),
       es: {
         description: 'run the build with rollup (uses rollup.config.js)',

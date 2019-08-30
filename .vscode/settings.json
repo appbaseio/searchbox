@@ -3,6 +3,5 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-  "javascript.validate.enable": false,
-  "eslint.autoFixOnSave": true
+  "javascript.validate.enable": false
 }

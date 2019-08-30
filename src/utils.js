@@ -43,13 +43,14 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
   return results;
 };
 
-export const isReactNative = () => typeof window !== 'undefined'
-  && window.navigator
-  && window.navigator.product
-  && window.navigator.product === 'ReactNative';
+export const isReactNative = () =>
+  typeof window !== 'undefined' &&
+  window.navigator &&
+  window.navigator.product &&
+  window.navigator.product === 'ReactNative';
 
-// eslint-disable-next-line max-len
-export const isEvent = (candidate: any) => !!(candidate && candidate.stopPropagation && candidate.preventDefault);
+export const isEvent = (candidate: any) =>
+  !!(candidate && candidate.stopPropagation && candidate.preventDefault);
 
 export function getControlValue(event: any) {
   if (isEvent(event)) {
