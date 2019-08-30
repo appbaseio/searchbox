@@ -100,12 +100,6 @@ class Searchbase {
   // custom headers object
   headers: Object;
 
-  // Search query
-  query: Object;
-
-  // suggestions query
-  suggestionsQuery: Object;
-
   // To define when to trigger the query
   updateOn: UpdateOn;
 
@@ -286,6 +280,8 @@ class Searchbase {
         triggerQuery: !query,
         stateChanges: true
       });
+    } else {
+      this.value = '';
     }
 
     if (query) {
@@ -293,8 +289,6 @@ class Searchbase {
         triggerQuery: true,
         stateChanges: false
       });
-    } else {
-      this._updateQuery();
     }
 
     if (suggestionsQuery) {
@@ -576,6 +570,8 @@ class Searchbase {
 
   // Method to execute the query
   triggerQuery(options?: Option = defaultOption): void {
+    this._updateQuery();
+    console.log('THIS IS THE QUERY', this._query, this.query);
     this._fetchRequest(this.query)
       .then(results => {
         const prev = this.results;
@@ -601,6 +597,7 @@ class Searchbase {
 
   // Method to execute the suggestions query
   triggerSuggestionsQuery(options?: Option = defaultOption): void {
+    this._updateSuggestionsQuery();
     this._fetchRequest(this.suggestionsQuery)
       .then(suggestions => {
         const prev = this.suggestions;
@@ -1046,4 +1043,4 @@ Searchbase.generateQueryOptions = options => {
   return finalOptions;
 };
 
-module.exports = Searchbase;
+export default Searchbase;

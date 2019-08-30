@@ -3,8 +3,8 @@
   "private": true,
   "description": "Headless core + common utilities for search",
   "workspaces": [
-    "examples/*",
-    "packages/*"
+    "packages/*",
+    "packages/searchbase/examples/*"
   ],
   "scripts": {
     "dev:watch": "npm run watch --prefix packages/searchbase"
