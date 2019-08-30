@@ -54,7 +54,11 @@ export default {
           browser: true
         })
       : {},
-    umd ? commonjs({ include: 'node_modules/**' }) : {},
+    umd
+      ? commonjs({
+          include: 'node_modules/**'
+        })
+      : {},
     babel({
       exclude: 'node_modules/**',
       babelrc: false,

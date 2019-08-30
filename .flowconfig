@@ -1,7 +1,7 @@
 [ignore]
 
 [include]
-src
+packages/searchbase
 
 [libs]
 

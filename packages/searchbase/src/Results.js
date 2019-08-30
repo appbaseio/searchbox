@@ -1,6 +1,6 @@
-import { parseHits } from './utils';
-
 // @flow
+
+import { parseHits } from './utils';
 
 class Results {
   // An array of results obtained from the applied query.

@@ -12,6 +12,13 @@ module.exports = {
         'cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js'
       )
     },
+    watch: {
+      description: 'delete the dist directory and run all builds in watch mode',
+      default: series(
+        rimraf('dist'),
+        concurrent.nps('build.esWatch', 'build.cjsWatch')
+      )
+    },
     build: {
       description: 'delete the dist directory and run all builds',
       default: series(
@@ -23,6 +30,14 @@ module.exports = {
           'build.umd.min'
         )
       ),
+      esWatch: {
+        description: 'watch the build with rollup (uses rollup.config.js)',
+        script: 'rollup --config --environment FORMAT:es --watch'
+      },
+      cjsWatch: {
+        description: 'watch rollup build with CommonJS format',
+        script: 'rollup --config --environment FORMAT:cjs --watch'
+      },
       es: {
         description: 'run the build with rollup (uses rollup.config.js)',
         script: 'rollup --config --environment FORMAT:es'
