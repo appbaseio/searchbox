@@ -60,12 +60,14 @@ class Results {
   // Method to set data explicitly
   setData(data: Object) {
     // parse hits
-    const filteredResults = parseHits(data);
+    let filteredResults = parseHits(data);
     // filter results & remove duplicates if any
     if (this.promotedData.length) {
       const ids = this.promotedData.map(item => item._id).filter(Boolean);
       if (ids) {
-        filteredResults = filteredResults.filter(item => !ids.includes(item._id));
+        filteredResults = filteredResults.filter(
+          item => !ids.includes(item._id)
+        );
       }
 
       filteredResults = [...this.promotedData, ...filteredResults];

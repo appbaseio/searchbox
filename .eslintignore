@@ -3,4 +3,3 @@ __tests__
 node_modules
 coverage
 dist
-src
