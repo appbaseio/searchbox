@@ -5,7 +5,7 @@ import Results from './Results';
 import Observable from './observable';
 import { getControlValue } from './utils';
 
-//mic constants
+// mic constants
 const MIC_STATUS = {
   inactive: 'INACTIVE',
   stopped: 'STOPPED',
@@ -13,11 +13,7 @@ const MIC_STATUS = {
   denied: 'DENIED'
 };
 
-type MicStatusField =
-  | MIC_STATUS.inactive
-  | MIC_STATUS.stopped
-  | MIC_STATUS.active
-  | MIC_STATUS.denied;
+type MicStatusField = 'INACTIVE' | 'STOPPED' | 'ACTIVE' | 'DENIED';
 
 // TODO: add validation in setters
 type UpdateOn = 'change' | 'blur' | 'enter';
@@ -172,7 +168,7 @@ class Searchbase {
   // called when there is an error while fetching suggestions
   onSuggestionsError: (error: any) => void;
 
-  //mic change event
+  // mic change event
   onMicStatusChange: (next: string, prev: string) => void;
 
   /* ---- callbacks to create the side effects while querying ----- */
@@ -196,8 +192,10 @@ class Searchbase {
   // search session id, required for analytics
   _searchId: string;
 
-  //mic fields
+  // mic fields
   _micStatus: MicStatusField;
+
+  _micInstance: Object;
 
   constructor({
     index,
@@ -307,8 +305,8 @@ class Searchbase {
     }
   }
 
-  //getters
-  //mic
+  // getters
+  // mic
   get micStatus() {
     return this._micStatus;
   }
@@ -544,7 +542,7 @@ class Searchbase {
     this.setValue(value);
   };
 
-  //mic event
+  // mic event
   onMicClick = (micOptions: Object = {}, options: Options = defaultOptions) => {
     const prevStatus = this._micStatus;
     if (window.SpeechRecognition && prevStatus !== MIC_STATUS.denied) {
@@ -632,15 +630,15 @@ class Searchbase {
   }
 
   /* -------- Private methods only for the internal use -------- */
-  //mic
-  _handleVoiceResults = ({ results }) => {
+  // mic
+  _handleVoiceResults = ({ results }: Object) => {
     if (
-      results &&
-      results[0] &&
-      results[0].isFinal &&
-      results[0][0] &&
-      results[0][0].transcript &&
-      results[0][0].transcript.trim()
+      results
+      && results[0]
+      && results[0].isFinal
+      && results[0][0]
+      && results[0][0].transcript
+      && results[0][0].transcript.trim()
     ) {
       this.setValue(results[0][0].transcript.trim());
     }
@@ -862,7 +860,7 @@ class Searchbase {
     prevValue: any,
     nextValue: any
   ): void {
-    //Trigger mic events
+    // Trigger mic events
     if (key === 'micStatus' && this.onMicStatusChange) {
       this.onMicStatusChange(prevValue, nextValue);
     }
