@@ -305,14 +305,6 @@ class Searchbase {
         stateChanges: false
       });
     }
-
-    this._micInstance =
-      window.webkitSpeechRecognition || window.SpeechRecognition || null;
-    if (!this._micInstance) {
-      console.error(
-        'SpeechRecognition is not supported in this browser. Please check the browser compatibility at https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#Browser_compatibility.'
-      );
-    }
   }
 
   //getters
