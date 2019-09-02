@@ -42,19 +42,3 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
   }
   return results;
 };
-
-export const isReactNative = () =>
-  typeof window !== 'undefined' &&
-  window.navigator &&
-  window.navigator.product &&
-  window.navigator.product === 'ReactNative';
-
-export const isEvent = (candidate: any) =>
-  !!(candidate && candidate.stopPropagation && candidate.preventDefault);
-
-export function getControlValue(event: any) {
-  if (isEvent(event)) {
-    return isReactNative() ? event.nativeEvent.text : event.target.value;
-  }
-  return event;
-}

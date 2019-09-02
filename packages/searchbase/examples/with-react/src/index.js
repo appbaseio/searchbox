@@ -28,10 +28,21 @@ class App extends React.Component {
     this.searchBase.triggerQuery();
 
     this.searchBase.subscribeToStateChanges(object => {
-      console.log('THINGS GOT CHANGED', object);
       this.forceUpdate();
     });
   }
+
+  handleSelect = value => {
+    this.searchBase.setValue(value, {
+      triggerQuery: true
+    });
+  };
+
+  handleChange = e => {
+    this.searchBase.setValue(e.target.value, {
+      triggerSuggestionsQuery: true
+    });
+  };
 
   render() {
     return (
@@ -39,15 +50,20 @@ class App extends React.Component {
         <input
           type="text"
           value={this.searchBase.value}
-          onChange={this.searchBase.onChange}
+          onChange={this.handleChange}
         />
+
         <section style={{ margin: 20 }}>
           <b>Suggestions</b>
           {this.searchBase.suggestionsRequestPending && (
             <div>Loading suggestions...</div>
           )}
           {this.searchBase.suggestions.data.map(i => {
-            return <div key={i._id}>{i.name}</div>;
+            return (
+              <div onClick={() => this.handleSelect(i.name)} key={i._id}>
+                {i.name}
+              </div>
+            );
           })}
         </section>
 

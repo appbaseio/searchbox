@@ -3,7 +3,6 @@
 import fetch from 'cross-fetch';
 import Results from './Results';
 import Observable from './observable';
-import { getControlValue } from './utils';
 
 // mic constants
 const MIC_STATUS = {
@@ -39,6 +38,7 @@ type SortOption = {
 
 type Options = {
   triggerQuery?: boolean,
+  triggerSuggestionsQuery?: boolean,
   stateChanges?: boolean
 };
 
@@ -48,6 +48,7 @@ type Option = {
 
 const defaultOptions: Options = {
   triggerQuery: true,
+  triggerSuggestionsQuery: false,
   stateChanges: true
 };
 
@@ -556,12 +557,6 @@ class Searchbase {
     }
   }
 
-  // Input Events
-  onChange = (e: any) => {
-    const value = getControlValue(e);
-    this.setValue(value);
-  };
-
   // mic event
   onMicClick = (micOptions: Object = {}, options: Options = defaultOptions) => {
     const prevStatus = this._micStatus;
@@ -960,8 +955,10 @@ class Searchbase {
     if (options.triggerQuery) {
       this.triggerQuery();
     }
-    if (options.stateChanges) {
-      console.log('Property Changed', key);
+    if (options.triggerSuggestionsQuery) {
+      this.triggerSuggestionsQuery();
+    }
+    if (options.stateChanges !== false) {
       this.stateChanges.next(
         {
           [key]: {
