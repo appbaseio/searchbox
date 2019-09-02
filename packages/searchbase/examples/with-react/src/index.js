@@ -41,10 +41,23 @@ class App extends React.Component {
           value={this.searchBase.value}
           onChange={this.searchBase.onChange}
         />
-        {this.searchBase.results.data.map(i => {
-          console.log('Result', i);
-          return <div key={i._id}>{i.name}</div>;
-        })}
+        <section style={{ margin: 20 }}>
+          <b>Suggestions</b>
+          {this.searchBase.suggestionsRequestPending && (
+            <div>Loading suggestions...</div>
+          )}
+          {this.searchBase.suggestions.data.map(i => {
+            return <div key={i._id}>{i.name}</div>;
+          })}
+        </section>
+
+        <section style={{ margin: 20 }}>
+          <b>Results</b>
+          {this.searchBase.requestPending && <div>Loading results...</div>}
+          {this.searchBase.results.data.map(i => {
+            return <div key={i._id}>{i.name}</div>;
+          })}
+        </section>
       </div>
     );
   }

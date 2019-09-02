@@ -12,7 +12,15 @@ const MIC_STATUS = {
   denied: 'DENIED'
 };
 
+const REQUEST_STATUS = {
+  inactive: 'INACTIVE',
+  pending: 'PENDING',
+  error: 'ERROR'
+};
+
 type MicStatusField = 'INACTIVE' | 'ACTIVE' | 'DENIED';
+
+type RequestStatus = 'INACTIVE' | 'PENDING' | 'ERROR';
 
 // TODO: add validation in setters
 type UpdateOn = 'change' | 'blur' | 'enter';
@@ -118,6 +126,12 @@ class Searchbase {
   // state changes subject
   stateChanges: Observable;
 
+  // request status
+  requestStatus: RequestStatus;
+
+  // suggestions request status
+  suggestionsRequestStatus: RequestStatus;
+
   // following are the es query options
 
   nestedField: string;
@@ -160,6 +174,12 @@ class Searchbase {
 
   // called when there is an error while fetching suggestions
   onSuggestionsError: (error: any) => void;
+
+  // called when request status changes
+  onRequestStatusChange: (next: string, prev: string) => void;
+
+  // called when suggestions request status changes
+  onSuggestionsRequestStatusChange: (next: string, prev: string) => void;
 
   // mic change event
   onMicStatusChange: (next: string, prev: string) => void;
@@ -218,7 +238,7 @@ class Searchbase {
     sortBy,
     nestedField,
     sortOptions
-  }: Searchbase) {
+  }: any) {
     if (!index) {
       throw new Error('Please provide a valid index.');
     }
@@ -245,6 +265,9 @@ class Searchbase {
     this.includeFields = includeFields || ['*'];
     this.excludeFields = excludeFields || [];
     this.sortOptions = sortOptions || null;
+
+    this.requestStatus = REQUEST_STATUS.inactive;
+    this.suggestionsRequestStatus = REQUEST_STATUS.inactive;
 
     this.transformRequest = transformRequest || null;
     this.transformResponse = transformResponse || null;
@@ -322,6 +345,14 @@ class Searchbase {
 
   get query() {
     return this._query;
+  }
+
+  get requestPending() {
+    return this.requestStatus === REQUEST_STATUS.pending;
+  }
+
+  get suggestionsRequestPending() {
+    return this.suggestionsRequestStatus === REQUEST_STATUS.pending;
   }
 
   set query(queryTobeSet: Object = {}) {
@@ -585,9 +616,10 @@ class Searchbase {
   // Method to execute the query
   triggerQuery(options?: Option = defaultOption): void {
     this._updateQuery();
-    console.log('THIS IS THE QUERY', this._query, this.query);
+    this._setRequestStatus(REQUEST_STATUS.pending);
     this._fetchRequest(this.query)
       .then(results => {
+        this._setRequestStatus(REQUEST_STATUS.inactive);
         const prev = this.results;
         this.results.setRaw(results);
         this._applyOptions(
@@ -612,8 +644,10 @@ class Searchbase {
   // Method to execute the suggestions query
   triggerSuggestionsQuery(options?: Option = defaultOption): void {
     this._updateSuggestionsQuery();
+    this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
     this._fetchRequest(this.suggestionsQuery)
       .then(suggestions => {
+        this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
         const prev = this.suggestions;
         this.suggestions.setRaw(suggestions);
         this._applyOptions(
@@ -769,6 +803,7 @@ class Searchbase {
     suggestionsError: any,
     options?: Options = defaultOptions
   ) {
+    this._setSuggestionsRequestStatus(REQUEST_STATUS.error);
     const prev = this.suggestionsError;
     this.suggestionsError = suggestionsError;
     this._applyOptions(
@@ -780,9 +815,36 @@ class Searchbase {
   }
 
   _setError(error: any, options?: Options = defaultOptions) {
+    this._setRequestStatus(REQUEST_STATUS.error);
     const prev = this.error;
     this.error = error;
     this._applyOptions(options, 'error', prev, this.error);
+  }
+
+  _setRequestStatus(requestStatus: RequestStatus) {
+    const prev = this.requestStatus;
+    this.requestStatus = requestStatus;
+    this._applyOptions(
+      {
+        stateChanges: true
+      },
+      'requestStatus',
+      prev,
+      this.requestStatus
+    );
+  }
+
+  _setSuggestionsRequestStatus(suggestionsRequestStatus: RequestStatus) {
+    const prev = this.suggestionsRequestStatus;
+    this.suggestionsRequestStatus = suggestionsRequestStatus;
+    this._applyOptions(
+      {
+        stateChanges: true
+      },
+      'suggestionsRequestStatus',
+      prev,
+      this.suggestionsRequestStatus
+    );
   }
 
   // Method to set the default query value
@@ -885,6 +947,15 @@ class Searchbase {
     }
     if (key === 'suggestions' && this.onSuggestions) {
       this.onSuggestions(prevValue, nextValue);
+    }
+    if (key === 'requestStatus' && this.onRequestStatusChange) {
+      this.onRequestStatusChange(prevValue, nextValue);
+    }
+    if (
+      key === 'suggestionsRequestStatus' &&
+      this.onSuggestionsRequestStatusChange
+    ) {
+      this.onSuggestionsRequestStatusChange(prevValue, nextValue);
     }
     if (options.triggerQuery) {
       this.triggerQuery();
