@@ -568,6 +568,20 @@ class Searchbase {
     }
   };
 
+  triggerClickAnalytics = (searchPosition: string | number) => {
+    if (!this._searchId) return;
+    fetch(`${this.url}/${this.index}/_analytics`, {
+      method: 'POST',
+      headers: {
+        ...this.headers,
+        'X-Search-Id': this._searchId,
+        'X-Search-Click': true,
+        'X-Search-ClickPosition': searchPosition + 1,
+        'X-Search-Conversion': true
+      }
+    });
+  };
+
   // Method to execute the query
   triggerQuery(options?: Option = defaultOption): void {
     this._updateQuery();
