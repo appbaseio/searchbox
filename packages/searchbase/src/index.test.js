@@ -45,17 +45,9 @@ it('subscribeToStateChanges with string value `results`', async () => {
     index,
     url,
     dataField: 'original_title',
-    query: {
-      size: 5,
-      from: 1,
-      query: {
-        term: {
-          original_title: 'Harry Potter'
-        }
-      }
-    },
     credentials
   });
+  searchbase.triggerQuery();
   searchbase.subscribeToStateChanges(() => {
     expect(true).toEqual(true);
   }, 'results');

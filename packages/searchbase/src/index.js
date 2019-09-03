@@ -233,8 +233,6 @@ class Searchbase {
     analytics,
     headers,
     value,
-    query,
-    suggestionsQuery,
     updateOn,
     suggestions,
     results,
@@ -312,32 +310,16 @@ class Searchbase {
     }
     if (headers) {
       this.setHeaders(headers, {
-        triggerQuery: false,
         stateChanges: false
       });
     }
 
     if (value) {
       this.setValue(value, {
-        triggerQuery: !query,
         stateChanges: true
       });
     } else {
       this.value = '';
-    }
-
-    if (query) {
-      this.setQuery(query, {
-        triggerQuery: true,
-        stateChanges: false
-      });
-    }
-
-    if (suggestionsQuery) {
-      this.setSuggestionsQuery(query, {
-        triggerQuery: true,
-        stateChanges: false
-      });
     }
   }
 
@@ -366,32 +348,16 @@ class Searchbase {
     return this._query;
   }
 
+  get suggestionsQuery() {
+    return this._suggestionsQuery;
+  }
+
   get requestPending() {
     return this.requestStatus === REQUEST_STATUS.pending;
   }
 
   get suggestionsRequestPending() {
     return this.suggestionsRequestStatus === REQUEST_STATUS.pending;
-  }
-
-  set query(queryTobeSet: Object = {}) {
-    const { query, ...queryOptions } = queryTobeSet || {};
-    // Apply the custom query DSL
-    this._updateQuery(query, queryOptions);
-    // Update the Searchbase properties from the user supplied query options
-    if (queryOptions) {
-      this._syncQueryOptions();
-    }
-  }
-
-  get suggestionsQuery() {
-    return this._suggestionsQuery;
-  }
-
-  set suggestionsQuery(queryTobeSet: Object = {}) {
-    const { query, ...queryOptions } = queryTobeSet || {};
-    // Apply the custom suggestions query DSL
-    this._updateSuggestionsQuery(query, queryOptions);
   }
 
   // Method to subscribe the state changes
@@ -415,28 +381,6 @@ class Searchbase {
       ...headers
     };
     this._applyOptions(options, 'headers', prev, this.headers);
-  }
-
-  // Method to set the custom query DSL
-  setQuery(query: Object, options?: Options = defaultOptions): void {
-    const prev = this.query;
-    this.query = query;
-    this._applyOptions(options, 'query', prev, this.query);
-  }
-
-  // Method to set the custom suggestions query DSL
-  setSuggestionsQuery(
-    suggestionsQuery: Object,
-    options?: Options = defaultOptions
-  ): void {
-    const prev = this.suggestionsQuery;
-    this.suggestionsQuery = suggestionsQuery;
-    this._applyOptions(
-      options,
-      'suggestionsQuery',
-      prev,
-      this.suggestionsQuery
-    );
   }
 
   // Method to set the size option
@@ -527,7 +471,6 @@ class Searchbase {
       this.results = new Results(results);
       this._applyOptions(
         {
-          triggerQuery: false,
           stateChanges: options.stateChanges
         },
         'results',
@@ -548,7 +491,6 @@ class Searchbase {
       this.suggestions.parseResults = this._parseSuggestions;
       this._applyOptions(
         {
-          triggerQuery: false,
           stateChanges: options.stateChanges
         },
         'suggestions',
@@ -642,7 +584,6 @@ class Searchbase {
       this.results.setRaw(results);
       this._applyOptions(
         {
-          triggerQuery: false,
           stateChanges: options.stateChanges
         },
         'results',
@@ -652,7 +593,6 @@ class Searchbase {
       return Promise.resolve(results);
     } catch (err) {
       this._setError(err, {
-        triggerQuery: false,
         stateChanges: options.stateChanges
       });
       console.error(err);
@@ -679,7 +619,6 @@ class Searchbase {
       this.suggestions.setRaw(suggestions);
       this._applyOptions(
         {
-          triggerQuery: false,
           stateChanges: options.stateChanges
         },
         'suggestions',
@@ -689,7 +628,6 @@ class Searchbase {
       return Promise.resolve(suggestions);
     } catch (err) {
       this._setSuggestionsError(err, {
-        triggerQuery: false,
         stateChanges: options.stateChanges
       });
       console.error(err);
@@ -972,19 +910,6 @@ class Searchbase {
     }
     return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
   };
-
-  // Method to sync the user defined query options to the Searchbase properties
-  _syncQueryOptions(
-    queryOptions?: Object = {
-      triggerQuery: false, // Just sync the values, no need to trigger the query
-      stateChanges: true
-    }
-  ): void {
-    if (queryOptions.size !== undefined) {
-      this.setSize(queryOptions.size, queryOptions);
-    }
-    // TODO: sync all options which we support i.e from, include-exclude Fields, sortBy etc
-  }
 
   // Method to apply the changed based on set options
   _applyOptions(
