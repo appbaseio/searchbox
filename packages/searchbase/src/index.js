@@ -592,7 +592,7 @@ class Searchbase {
         if (results && results[0] && results[0].isFinal) {
           this._stopMic();
         }
-        this._handleVoiceResults({ results });
+        this._handleVoiceResults({ results }, options);
       };
       this._micInstance.onerror = e => {
         if (e.error === 'no-speech' || e.error === 'audio-capture') {
@@ -677,7 +677,10 @@ class Searchbase {
 
   /* -------- Private methods only for the internal use -------- */
   // mic
-  _handleVoiceResults = ({ results }: Object) => {
+  _handleVoiceResults = (
+    { results }: Object,
+    options?: Options = defaultOptions
+  ) => {
     if (
       results &&
       results[0] &&
@@ -686,7 +689,7 @@ class Searchbase {
       results[0][0].transcript &&
       results[0][0].transcript.trim()
     ) {
-      this.setValue(results[0][0].transcript.trim());
+      this.setValue(results[0][0].transcript.trim(), options);
     }
   };
 
