@@ -1,4 +1,4 @@
-const Searchbase = require('./../dist/@appbaseio/searchbase.cjs');
+const IndexTest = require('../dist/@appbaseio/searchbase.cjs');
 
 const index = 'gitxplore-latest-app';
 const url = 'https://scalr.api.appbase.io';
@@ -7,7 +7,7 @@ const credentials = 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38';
 test('throw error if empty index', () => {
   try {
     /* eslint-disable-next-line */
-    const searchbase = new Searchbase({});
+    const searchbase = new IndexTest({});
     expect(true).toBe(false);
   } catch (e) {
     expect(e.message).toEqual('Please provide a valid index.');
@@ -17,7 +17,7 @@ test('throw error if empty index', () => {
 test('throw error if empty url', () => {
   try {
     /* eslint-disable-next-line */
-    const searchbase = new Searchbase({
+    const searchbase = new IndexTest({
       index
     });
     expect(true).toBe(false);
@@ -29,7 +29,7 @@ test('throw error if empty url', () => {
 test('throw error if empty dataField', () => {
   try {
     /* eslint-disable-next-line */
-    const searchbase = new Searchbase({
+    const searchbase = new IndexTest({
       index,
       url
     });
@@ -41,7 +41,7 @@ test('throw error if empty dataField', () => {
 
 it('subscribeToStateChanges with string value `results`', async () => {
   expect.assertions(1);
-  const searchbase = new Searchbase({
+  const searchbase = new IndexTest({
     index,
     url,
     dataField: 'original_title',
@@ -64,7 +64,7 @@ it('subscribeToStateChanges with string value `results`', async () => {
 
 it('transformResponse', async () => {
   expect.assertions(1);
-  const searchbase = new Searchbase({
+  const searchbase = new IndexTest({
     index,
     url,
     dataField: 'original_title',
@@ -95,7 +95,7 @@ it('transformResponse', async () => {
 
 it('transformRequest', async () => {
   expect.assertions(1);
-  const searchbase = new Searchbase({
+  const searchbase = new IndexTest({
     index,
     url,
     dataField: 'original_title',
@@ -114,7 +114,7 @@ it('transformRequest', async () => {
 it('beforeValueChange', async () => {
   expect.assertions(1);
   // eslint-disable-next-line no-unused-vars
-  const searchbase = new Searchbase({
+  const searchbase = new IndexTest({
     index,
     url,
     dataField: 'original_title',

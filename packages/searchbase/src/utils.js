@@ -68,9 +68,9 @@ const extractSuggestion = val => {
 };
 
 export const getSuggestions = (
-  fields: Array<string>,
+  fields: Array<string> = [],
   suggestions: Array<Object>,
-  currentValue: string
+  currentValue: string = ''
 ) => {
   let suggestionsList = [];
   let labelsList = [];
