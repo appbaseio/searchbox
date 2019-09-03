@@ -926,7 +926,7 @@ class Searchbase {
         }
       });
     }
-    return getSuggestions(fields, suggestions, this.value);
+    return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
   };
 
   // Method to sync the user defined query options to the Searchbase properties
