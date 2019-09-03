@@ -110,9 +110,6 @@ class Searchbase {
   // input value i.e query term
   value: string;
 
-  // To enable the voice search utilities
-  voiceSearch: boolean;
-
   // custom headers object
   headers: Object;
 
@@ -237,7 +234,6 @@ class Searchbase {
     updateOn,
     suggestions,
     results,
-    voiceSearch,
     fuzziness,
     searchOperators,
     queryFormat,
@@ -270,7 +266,6 @@ class Searchbase {
     this.nestedField = nestedField || '';
     this.updateOn = updateOn || 'change';
     this.queryFormat = queryFormat || 'or';
-    this.voiceSearch = voiceSearch || false;
     this.fuzziness = fuzziness || 0;
     this.searchOperators = searchOperators || false;
     this.size = Number(size) || 10;

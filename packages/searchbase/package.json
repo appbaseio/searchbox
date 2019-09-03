@@ -12,7 +12,8 @@
     "pretest": "nps build",
     "test": "nps test",
     "precommit": "lint-staged",
-    "prepare": "npm start validate"
+    "lint": "nps lint",
+    "prepare": "nps validate"
   },
   "repository": {
     "type": "git",

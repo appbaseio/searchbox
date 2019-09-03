@@ -48,15 +48,13 @@ export default {
   plugins: [
     umd
       ? resolve({
-          jsnext: true,
-          main: true,
           preferBuiltins: false,
           browser: true
         })
       : {},
     umd
       ? commonjs({
-          include: 'node_modules/**'
+          include: '../../node_modules/**'
         })
       : {},
     babel({
