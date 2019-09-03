@@ -72,7 +72,7 @@ npm install @appbaseio/searchbase
 
 ## 5. Docs Manual
 
-The official docs for the Web library are at [docs/searchbase](docs/searchbase).
+The official docs for the Web library are at [docs/searchbase](docs/searchbase.md).
 
 <br />
 
