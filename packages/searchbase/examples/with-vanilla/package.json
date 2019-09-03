@@ -1,0 +1,18 @@
+{
+  "name": "with-vanilla",
+  "version": "1.0.0",
+  "description": "Simple Vanilla Autocomplete",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open  --port 8000",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "@appbaseio/searchbase": "1.0.0-alpha",
+    "@trevoreyre/autocomplete-js": "^2.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "7.2.0",
+    "parcel-bundler": "^1.6.1"
+  }
+}
