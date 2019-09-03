@@ -189,7 +189,13 @@ class Searchbase {
   // called when suggestions request status changes
   onSuggestionsRequestStatusChange: (next: string, prev: string) => void;
 
-  // mic change event
+  // called when query changes
+  onQueryChange: (next: string, prev: string) => void;
+
+  // called when suggestions query changes
+  onSuggestionsQueryChange: (next: string, prev: string) => void;
+
+  // called when mic status changes
   onMicStatusChange: (next: string, prev: string) => void;
 
   /* ---- callbacks to create the side effects while querying ----- */
@@ -878,12 +884,21 @@ class Searchbase {
       }) || {
         match_all: {}
       };
+    const prevQuery = this._query;
     this._query = {
       query: finalQuery,
       ...finalQueryOptions,
       // Overrides the default options by the user defined options
       ...queryOptions
     };
+    this._applyOptions(
+      {
+        stateChanges: false
+      },
+      'query',
+      prevQuery,
+      this._query
+    );
   }
 
   _updateSuggestionsQuery(query?: Object, queryOptions?: Object): void {
@@ -905,12 +920,21 @@ class Searchbase {
       }) || {
         match_all: {}
       };
+    const prevQuery = this._suggestionsQuery;
     this._suggestionsQuery = {
       query: finalQuery,
       ...finalQueryOptions,
       // Overrides the default options by the user defined options
       ...queryOptions
     };
+    this._applyOptions(
+      {
+        stateChanges: false
+      },
+      'suggestionsQuery',
+      prevQuery,
+      this._suggestionsQuery
+    );
   }
 
   _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {
@@ -951,32 +975,38 @@ class Searchbase {
   ): void {
     // Trigger mic events
     if (key === 'micStatus' && this.onMicStatusChange) {
-      this.onMicStatusChange(prevValue, nextValue);
+      this.onMicStatusChange(nextValue, prevValue);
     }
     // Trigger events
+    if (key === 'query' && this.onQueryChange) {
+      this.onQueryChange(nextValue, prevValue);
+    }
+    if (key === 'suggestionsQuery' && this.onSuggestionsQueryChange) {
+      this.onSuggestionsQueryChange(nextValue, prevValue);
+    }
     if (key === 'value' && this.onValueChange) {
-      this.onValueChange(prevValue, nextValue);
+      this.onValueChange(nextValue, prevValue);
     }
     if (key === 'error' && this.onError) {
-      this.onError(prevValue);
+      this.onError(nextValue);
     }
     if (key === 'suggestionsError' && this.onSuggestionsError) {
-      this.onSuggestionsError(prevValue);
+      this.onSuggestionsError(nextValue);
     }
     if (key === 'results' && this.onResults) {
-      this.onResults(prevValue, nextValue);
+      this.onResults(nextValue, prevValue);
     }
     if (key === 'suggestions' && this.onSuggestions) {
-      this.onSuggestions(prevValue, nextValue);
+      this.onSuggestions(nextValue, prevValue);
     }
     if (key === 'requestStatus' && this.onRequestStatusChange) {
-      this.onRequestStatusChange(prevValue, nextValue);
+      this.onRequestStatusChange(nextValue, prevValue);
     }
     if (
       key === 'suggestionsRequestStatus' &&
       this.onSuggestionsRequestStatusChange
     ) {
-      this.onSuggestionsRequestStatusChange(prevValue, nextValue);
+      this.onSuggestionsRequestStatusChange(nextValue, prevValue);
     }
     if (options.triggerQuery) {
       this.triggerQuery();
