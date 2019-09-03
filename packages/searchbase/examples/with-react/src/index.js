@@ -60,8 +60,8 @@ class App extends React.Component {
           )}
           {this.searchBase.suggestions.data.map(i => {
             return (
-              <div onClick={() => this.handleSelect(i.name)} key={i._id}>
-                {i.name}
+              <div onClick={() => this.handleSelect(i.label)} key={i.label}>
+                {i.label}
               </div>
             );
           })}

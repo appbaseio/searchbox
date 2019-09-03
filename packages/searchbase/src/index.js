@@ -3,6 +3,7 @@
 import fetch from 'cross-fetch';
 import Results from './Results';
 import Observable from './observable';
+import { getSuggestions } from './utils';
 
 // mic constants
 const MIC_STATUS = {
@@ -15,6 +16,12 @@ const REQUEST_STATUS = {
   inactive: 'INACTIVE',
   pending: 'PENDING',
   error: 'ERROR'
+};
+
+type Suggestion = {
+  label: string,
+  value: string,
+  source?: any
 };
 
 type MicStatusField = 'INACTIVE' | 'ACTIVE' | 'DENIED';
@@ -279,6 +286,8 @@ class Searchbase {
 
     // Initialize the results
     this.suggestions = new Results(suggestions);
+    // Add suggestions parser
+    this.suggestions.parseResults = this._parseSuggestions;
     this.results = new Results(results);
 
     // Initialize headers
@@ -521,12 +530,13 @@ class Searchbase {
 
   // Method to set the custom suggestions
   setSuggestions(
-    suggestions: Array<Object>,
+    suggestions: Array<Suggestion>,
     options?: Option = defaultOption
   ): void {
     if (suggestions) {
       const prev = this.suggestions;
       this.suggestions = new Results(suggestions);
+      this.suggestions.parseResults = this._parseSuggestions;
       this._applyOptions(
         {
           triggerQuery: false,
@@ -902,6 +912,22 @@ class Searchbase {
       ...queryOptions
     };
   }
+
+  _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {
+    let fields: Array<string> = [];
+    if (this.dataField === 'string') {
+      fields = [this.dataField];
+    } else if (Array.isArray(this.dataField)) {
+      this.dataField.forEach((dataField: string | DataField) => {
+        if (typeof dataField === 'object') {
+          fields.push(dataField.field);
+        } else {
+          fields.push(dataField);
+        }
+      });
+    }
+    return getSuggestions(fields, suggestions, this.value);
+  };
 
   // Method to sync the user defined query options to the Searchbase properties
   _syncQueryOptions(

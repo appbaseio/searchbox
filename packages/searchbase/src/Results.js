@@ -9,6 +9,9 @@ class Results {
   // Raw response returned by ES query
   raw: Object;
 
+  // Results parser
+  parseResults: (results: Array<Object>) => Array<Object>;
+
   constructor(data: Array<Object>) {
     this.data = data || [];
   }
@@ -72,8 +75,13 @@ class Results {
 
       filteredResults = [...this.promotedData, ...filteredResults];
     }
+
     // set data
-    this.data = filteredResults;
+    if (this.parseResults) {
+      this.data = this.parseResults(filteredResults);
+    } else {
+      this.data = filteredResults;
+    }
   }
 }
 
