@@ -28,8 +28,8 @@ Searchbase is a UI independent library which allows you to build search experien
 
 1. Generates the Elasticsearch query for suggestions and search results.
 2. Triggers the query and populate the parsed results/suggestions.
-3. Provides the utilities to build voice search feature.
-4. Manages the search state, centralized search state allows
+3. Provides the common utilities for example, voice search feature.
+4. Manages the search state
 
 <br />
 
