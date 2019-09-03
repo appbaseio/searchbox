@@ -605,7 +605,7 @@ class Searchbase {
   };
 
   triggerClickAnalytics = (searchPosition: string | number) => {
-    if (!this._searchId) return;
+    if (!this.analytics || !this._searchId) return;
     fetch(`${this.url}/${this.index}/_analytics`, {
       method: 'POST',
       headers: {
