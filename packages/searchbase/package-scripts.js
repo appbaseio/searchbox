@@ -25,9 +25,9 @@ module.exports = {
         rimraf('dist'),
         concurrent.nps(
           'build.es',
-          'build.cjs',
-          'build.umd.main',
-          'build.umd.min'
+          'build.cjs'
+          // 'build.umd.main',
+          // 'build.umd.min'
         )
       ),
       esWatch: {
