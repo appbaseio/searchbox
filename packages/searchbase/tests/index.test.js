@@ -128,3 +128,48 @@ it('beforeValueChange', async () => {
   });
   await new Promise(r => setTimeout(r, 4000));
 });
+
+// Events
+it('onQueryChange', async () => {
+  expect.assertions(1);
+  // eslint-disable-next-line no-unused-vars
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+  searchbase.onQueryChange = next => {
+    expect(next).toEqual({
+      query: {
+        match_all: {}
+      },
+      size: 10,
+      from: 0,
+      _source: { includes: ['*'], excludes: [] }
+    });
+  };
+  searchbase.triggerQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
+
+it('onSuggestionsQueryChange', async () => {
+  expect.assertions(1);
+  // eslint-disable-next-line no-unused-vars
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+  searchbase.onSuggestionsQueryChange = next => {
+    expect(next).toEqual({
+      query: {
+        match_all: {}
+      },
+      size: 10
+    });
+  };
+  searchbase.triggerSuggestionsQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
