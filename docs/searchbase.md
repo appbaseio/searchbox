@@ -1,12 +1,12 @@
-## Searchbase
+# Searchbase
 
-# Installation
+## Installation
 
-# Basic Usage
+## Basic Usage
 
-# API
+## API
 
-### constructor
+### Constructor
 
 ### Properties
 
