@@ -197,6 +197,10 @@ class Searchbase {
 
   /* ---- callbacks to create the side effects while querying ----- */
 
+  transformQuery: (query: Object) => Promise<Object>;
+
+  transformSuggestionsQuery: (query: Object) => Promise<Object>;
+
   transformRequest: (requestOptions: Object) => Promise<Object>;
 
   transformResponse: (response: any) => Promise<any>;
@@ -242,6 +246,8 @@ class Searchbase {
     dataField,
     includeFields,
     excludeFields,
+    transformQuery,
+    transformSuggestionsQuery,
     transformRequest,
     transformResponse,
     beforeValueChange,
@@ -280,6 +286,8 @@ class Searchbase {
 
     this.transformRequest = transformRequest || null;
     this.transformResponse = transformResponse || null;
+    this.transformQuery = transformQuery || null;
+    this.transformSuggestionsQuery = transformSuggestionsQuery || null;
     this.beforeValueChange = beforeValueChange || null;
 
     // Initialize the state changes observable
@@ -620,59 +628,73 @@ class Searchbase {
   };
 
   // Method to execute the query
-  triggerQuery(options?: Option = defaultOption): void {
-    this._updateQuery();
-    this._setRequestStatus(REQUEST_STATUS.pending);
-    this._fetchRequest(this.query)
-      .then(results => {
-        this._setRequestStatus(REQUEST_STATUS.inactive);
-        const prev = this.results;
-        this.results.setRaw(results);
-        this._applyOptions(
-          {
-            triggerQuery: false,
-            stateChanges: options.stateChanges
-          },
-          'results',
-          prev,
-          this.results
-        );
-      })
-      .catch(err => {
-        this._setError(err, {
+  async triggerQuery(options?: Option = defaultOption): Promise<any> {
+    try {
+      this._updateQuery();
+      this._setRequestStatus(REQUEST_STATUS.pending);
+      let finalQuery = this.query;
+      if (this.transformQuery) {
+        finalQuery = await this.transformQuery(this.query);
+      }
+      const results = await this._fetchRequest(finalQuery);
+      this._setRequestStatus(REQUEST_STATUS.inactive);
+      const prev = this.results;
+      this.results.setRaw(results);
+      this._applyOptions(
+        {
           triggerQuery: false,
           stateChanges: options.stateChanges
-        });
-        console.error(err);
+        },
+        'results',
+        prev,
+        this.results
+      );
+      return Promise.resolve(results);
+    } catch (err) {
+      this._setError(err, {
+        triggerQuery: false,
+        stateChanges: options.stateChanges
       });
+      console.error(err);
+      return Promise.reject(err);
+    }
   }
 
   // Method to execute the suggestions query
-  triggerSuggestionsQuery(options?: Option = defaultOption): void {
-    this._updateSuggestionsQuery();
-    this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
-    this._fetchRequest(this.suggestionsQuery)
-      .then(suggestions => {
-        this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
-        const prev = this.suggestions;
-        this.suggestions.setRaw(suggestions);
-        this._applyOptions(
-          {
-            triggerQuery: false,
-            stateChanges: options.stateChanges
-          },
-          'suggestions',
-          prev,
-          this.suggestions
+  async triggerSuggestionsQuery(
+    options?: Option = defaultOption
+  ): Promise<any> {
+    try {
+      this._updateSuggestionsQuery();
+      this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
+      let finalQuery = this.suggestionsQuery;
+      if (this.transformSuggestionsQuery) {
+        finalQuery = await this.transformSuggestionsQuery(
+          this.suggestionsQuery
         );
-      })
-      .catch(err => {
-        this._setSuggestionsError(err, {
+      }
+      const suggestions = await this._fetchRequest(finalQuery);
+      this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
+      const prev = this.suggestions;
+      this.suggestions.setRaw(suggestions);
+      this._applyOptions(
+        {
           triggerQuery: false,
           stateChanges: options.stateChanges
-        });
-        console.error(err);
+        },
+        'suggestions',
+        prev,
+        this.suggestions
+      );
+      return Promise.resolve(suggestions);
+    } catch (err) {
+      this._setSuggestionsError(err, {
+        triggerQuery: false,
+        stateChanges: options.stateChanges
       });
+      console.error(err);
+      return Promise.reject(err);
+    }
   }
 
   /* -------- Private methods only for the internal use -------- */

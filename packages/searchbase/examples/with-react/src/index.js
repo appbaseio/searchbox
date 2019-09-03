@@ -27,7 +27,7 @@ class App extends React.Component {
     // Pre-load results
     this.searchBase.triggerQuery();
 
-    this.searchBase.subscribeToStateChanges(object => {
+    this.searchBase.subscribeToStateChanges(() => {
       this.forceUpdate();
     });
   }

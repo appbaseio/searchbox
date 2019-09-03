@@ -111,6 +111,48 @@ it('transformRequest', async () => {
   await new Promise(r => setTimeout(r, 4000));
 });
 
+it('transformQuery', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+
+  searchbase.transformQuery = query =>
+    new Promise(res => {
+      expect(true).toEqual(true);
+      return res({
+        ...query,
+        timeout: '1s'
+      });
+    });
+  searchbase.triggerQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
+
+it('transformSuggestionsQuery', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+
+  searchbase.transformSuggestionsQuery = query =>
+    new Promise(res => {
+      expect(true).toEqual(true);
+      return res({
+        ...query,
+        timeout: '1s'
+      });
+    });
+  searchbase.triggerSuggestionsQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
+
 it('beforeValueChange', async () => {
   expect.assertions(1);
   // eslint-disable-next-line no-unused-vars
