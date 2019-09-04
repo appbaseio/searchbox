@@ -12,11 +12,11 @@
 
 1. **[Searchbase: Intro](#1-searchbase-intro)**
 2. **[Features](#2-features)**
-3. **[Live Examples](#4-live-demos)**
-4. **[Installation](#6-installation)**
-5. **[Docs Manual](#7-docs-manual)**
-6. **[Contributing](#8-contributing)**
-7. **[Other Projects You Might Like](#9-other-projects-you-might-like)**
+3. **[Live Examples](#3-live-demos)**
+4. **[Installation](#4-installation)**
+5. **[Docs Manual](#5-docs-manual)**
+6. **[Contributing](#6-contributing)**
+7. **[Other Projects You Might Like](#7-other-projects-you-might-like)**
 
 <br />
 
@@ -33,6 +33,8 @@ Searchbase is a UI independent library which allows you to build search experien
 
 <br />
 
+[⬆ Back to Top](#toc)
+
 ## 2. Features
 
 ### Design
@@ -45,7 +47,7 @@ Searchbase is a UI independent library which allows you to build search experien
 - One step installation with [npm i @appbaseio/searchbase](docs/searchbase/),
 - A UMD build that works directly in the browser.
 
-[⬆ Back to Top](#search-base)
+[⬆ Back to Top](#toc)
 
 <br />
 
@@ -56,7 +58,7 @@ A set of live demos inspired by real world apps, built with ReactiveSearch.
 - [Vanilla JS](packages/searchbase/examples/with-vanilla)
 - [React](packages/searchbase/examples/with-react)
 
-[⬆ Back to Top](#search-base)
+[⬆ Back to Top](#toc)
 
 <br />
 
@@ -70,17 +72,23 @@ npm install @appbaseio/searchbase
 
 <br />
 
+[⬆ Back to Top](#toc)
+
 ## 5. Docs Manual
 
 The official docs for the Web library are at [docs/searchbase](docs/searchbase.md).
 
 <br />
 
+[⬆ Back to Top](#toc)
+
 ## 6. Contributing
 
 Please check the [contribution guide](.github/CONTRIBUTING.md).
 
 <br />
+
+[⬆ Back to Top](#toc)
 
 ## 7. Other Projects You Might Like
 
@@ -93,6 +101,6 @@ Please check the [contribution guide](.github/CONTRIBUTING.md).
 
 - [**appbase-js**](https://github.com/appbaseio/appbase-js) While building search UIs is dandy with Reactive Search, you might also need to add some input forms. **appbase-js** comes in handy there.
 
-[⬆ Back to Top](#search-base)
+[⬆ Back to Top](#toc)
 
 <a href="https://appbase.io/support/"><img src="https://i.imgur.com/UL6B0uE.png" width="100%" /></a>
