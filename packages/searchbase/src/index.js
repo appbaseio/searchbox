@@ -110,9 +110,6 @@ class Searchbase {
   // input value i.e query term
   value: string;
 
-  // To enable the voice search utilities
-  voiceSearch: boolean;
-
   // custom headers object
   headers: Object;
 
@@ -200,6 +197,10 @@ class Searchbase {
 
   /* ---- callbacks to create the side effects while querying ----- */
 
+  transformQuery: (query: Object) => Promise<Object>;
+
+  transformSuggestionsQuery: (query: Object) => Promise<Object>;
+
   transformRequest: (requestOptions: Object) => Promise<Object>;
 
   transformResponse: (response: any) => Promise<any>;
@@ -232,12 +233,9 @@ class Searchbase {
     analytics,
     headers,
     value,
-    query,
-    suggestionsQuery,
     updateOn,
     suggestions,
     results,
-    voiceSearch,
     fuzziness,
     searchOperators,
     queryFormat,
@@ -246,6 +244,8 @@ class Searchbase {
     dataField,
     includeFields,
     excludeFields,
+    transformQuery,
+    transformSuggestionsQuery,
     transformRequest,
     transformResponse,
     beforeValueChange,
@@ -270,7 +270,6 @@ class Searchbase {
     this.nestedField = nestedField || '';
     this.updateOn = updateOn || 'change';
     this.queryFormat = queryFormat || 'or';
-    this.voiceSearch = voiceSearch || false;
     this.fuzziness = fuzziness || 0;
     this.searchOperators = searchOperators || false;
     this.size = Number(size) || 10;
@@ -285,6 +284,8 @@ class Searchbase {
 
     this.transformRequest = transformRequest || null;
     this.transformResponse = transformResponse || null;
+    this.transformQuery = transformQuery || null;
+    this.transformSuggestionsQuery = transformSuggestionsQuery || null;
     this.beforeValueChange = beforeValueChange || null;
 
     // Initialize the state changes observable
@@ -309,32 +310,16 @@ class Searchbase {
     }
     if (headers) {
       this.setHeaders(headers, {
-        triggerQuery: false,
         stateChanges: false
       });
     }
 
     if (value) {
       this.setValue(value, {
-        triggerQuery: !query,
         stateChanges: true
       });
     } else {
       this.value = '';
-    }
-
-    if (query) {
-      this.setQuery(query, {
-        triggerQuery: true,
-        stateChanges: false
-      });
-    }
-
-    if (suggestionsQuery) {
-      this.setSuggestionsQuery(query, {
-        triggerQuery: true,
-        stateChanges: false
-      });
     }
   }
 
@@ -363,32 +348,16 @@ class Searchbase {
     return this._query;
   }
 
+  get suggestionsQuery() {
+    return this._suggestionsQuery;
+  }
+
   get requestPending() {
     return this.requestStatus === REQUEST_STATUS.pending;
   }
 
   get suggestionsRequestPending() {
     return this.suggestionsRequestStatus === REQUEST_STATUS.pending;
-  }
-
-  set query(queryTobeSet: Object = {}) {
-    const { query, ...queryOptions } = queryTobeSet || {};
-    // Apply the custom query DSL
-    this._updateQuery(query, queryOptions);
-    // Update the Searchbase properties from the user supplied query options
-    if (queryOptions) {
-      this._syncQueryOptions();
-    }
-  }
-
-  get suggestionsQuery() {
-    return this._suggestionsQuery;
-  }
-
-  set suggestionsQuery(queryTobeSet: Object = {}) {
-    const { query, ...queryOptions } = queryTobeSet || {};
-    // Apply the custom suggestions query DSL
-    this._updateSuggestionsQuery(query, queryOptions);
   }
 
   // Method to subscribe the state changes
@@ -412,28 +381,6 @@ class Searchbase {
       ...headers
     };
     this._applyOptions(options, 'headers', prev, this.headers);
-  }
-
-  // Method to set the custom query DSL
-  setQuery(query: Object, options?: Options = defaultOptions): void {
-    const prev = this.query;
-    this.query = query;
-    this._applyOptions(options, 'query', prev, this.query);
-  }
-
-  // Method to set the custom suggestions query DSL
-  setSuggestionsQuery(
-    suggestionsQuery: Object,
-    options?: Options = defaultOptions
-  ): void {
-    const prev = this.suggestionsQuery;
-    this.suggestionsQuery = suggestionsQuery;
-    this._applyOptions(
-      options,
-      'suggestionsQuery',
-      prev,
-      this.suggestionsQuery
-    );
   }
 
   // Method to set the size option
@@ -524,7 +471,6 @@ class Searchbase {
       this.results = new Results(results);
       this._applyOptions(
         {
-          triggerQuery: false,
           stateChanges: options.stateChanges
         },
         'results',
@@ -545,7 +491,6 @@ class Searchbase {
       this.suggestions.parseResults = this._parseSuggestions;
       this._applyOptions(
         {
-          triggerQuery: false,
           stateChanges: options.stateChanges
         },
         'suggestions',
@@ -597,7 +542,7 @@ class Searchbase {
         if (results && results[0] && results[0].isFinal) {
           this._stopMic();
         }
-        this._handleVoiceResults({ results });
+        this._handleVoiceResults({ results }, options);
       };
       this._micInstance.onerror = e => {
         if (e.error === 'no-speech' || e.error === 'audio-capture') {
@@ -625,64 +570,77 @@ class Searchbase {
   };
 
   // Method to execute the query
-  triggerQuery(options?: Option = defaultOption): void {
-    this._updateQuery();
-    this._setRequestStatus(REQUEST_STATUS.pending);
-    this._fetchRequest(this.query)
-      .then(results => {
-        this._setRequestStatus(REQUEST_STATUS.inactive);
-        const prev = this.results;
-        this.results.setRaw(results);
-        this._applyOptions(
-          {
-            triggerQuery: false,
-            stateChanges: options.stateChanges
-          },
-          'results',
-          prev,
-          this.results
-        );
-      })
-      .catch(err => {
-        this._setError(err, {
-          triggerQuery: false,
+  async triggerQuery(options?: Option = defaultOption): Promise<any> {
+    try {
+      this._updateQuery();
+      this._setRequestStatus(REQUEST_STATUS.pending);
+      let finalQuery = this.query;
+      if (this.transformQuery) {
+        finalQuery = await this.transformQuery(this.query);
+      }
+      const results = await this._fetchRequest(finalQuery);
+      this._setRequestStatus(REQUEST_STATUS.inactive);
+      const prev = this.results;
+      this.results.setRaw(results);
+      this._applyOptions(
+        {
           stateChanges: options.stateChanges
-        });
-        console.error(err);
+        },
+        'results',
+        prev,
+        this.results
+      );
+      return Promise.resolve(results);
+    } catch (err) {
+      this._setError(err, {
+        stateChanges: options.stateChanges
       });
+      console.error(err);
+      return Promise.reject(err);
+    }
   }
 
   // Method to execute the suggestions query
-  triggerSuggestionsQuery(options?: Option = defaultOption): void {
-    this._updateSuggestionsQuery();
-    this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
-    this._fetchRequest(this.suggestionsQuery)
-      .then(suggestions => {
-        this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
-        const prev = this.suggestions;
-        this.suggestions.setRaw(suggestions);
-        this._applyOptions(
-          {
-            triggerQuery: false,
-            stateChanges: options.stateChanges
-          },
-          'suggestions',
-          prev,
-          this.suggestions
+  async triggerSuggestionsQuery(
+    options?: Option = defaultOption
+  ): Promise<any> {
+    try {
+      this._updateSuggestionsQuery();
+      this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
+      let finalQuery = this.suggestionsQuery;
+      if (this.transformSuggestionsQuery) {
+        finalQuery = await this.transformSuggestionsQuery(
+          this.suggestionsQuery
         );
-      })
-      .catch(err => {
-        this._setSuggestionsError(err, {
-          triggerQuery: false,
+      }
+      const suggestions = await this._fetchRequest(finalQuery);
+      this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
+      const prev = this.suggestions;
+      this.suggestions.setRaw(suggestions);
+      this._applyOptions(
+        {
           stateChanges: options.stateChanges
-        });
-        console.error(err);
+        },
+        'suggestions',
+        prev,
+        this.suggestions
+      );
+      return Promise.resolve(suggestions);
+    } catch (err) {
+      this._setSuggestionsError(err, {
+        stateChanges: options.stateChanges
       });
+      console.error(err);
+      return Promise.reject(err);
+    }
   }
 
   /* -------- Private methods only for the internal use -------- */
   // mic
-  _handleVoiceResults = ({ results }: Object) => {
+  _handleVoiceResults = (
+    { results }: Object,
+    options?: Options = defaultOptions
+  ) => {
     if (
       results &&
       results[0] &&
@@ -691,7 +649,7 @@ class Searchbase {
       results[0][0].transcript &&
       results[0][0].transcript.trim()
     ) {
-      this.setValue(results[0][0].transcript.trim());
+      this.setValue(results[0][0].transcript.trim(), options);
     }
   };
 
@@ -952,19 +910,6 @@ class Searchbase {
     }
     return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
   };
-
-  // Method to sync the user defined query options to the Searchbase properties
-  _syncQueryOptions(
-    queryOptions?: Object = {
-      triggerQuery: false, // Just sync the values, no need to trigger the query
-      stateChanges: true
-    }
-  ): void {
-    if (queryOptions.size !== undefined) {
-      this.setSize(queryOptions.size, queryOptions);
-    }
-    // TODO: sync all options which we support i.e from, include-exclude Fields, sortBy etc
-  }
 
   // Method to apply the changed based on set options
   _applyOptions(

@@ -45,17 +45,9 @@ it('subscribeToStateChanges with string value `results`', async () => {
     index,
     url,
     dataField: 'original_title',
-    query: {
-      size: 5,
-      from: 1,
-      query: {
-        term: {
-          original_title: 'Harry Potter'
-        }
-      }
-    },
     credentials
   });
+  searchbase.triggerQuery();
   searchbase.subscribeToStateChanges(() => {
     expect(true).toEqual(true);
   }, 'results');
@@ -108,6 +100,48 @@ it('transformRequest', async () => {
       return res(requestOptions);
     });
   searchbase.triggerQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
+
+it('transformQuery', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+
+  searchbase.transformQuery = query =>
+    new Promise(res => {
+      expect(true).toEqual(true);
+      return res({
+        ...query,
+        timeout: '1s'
+      });
+    });
+  searchbase.triggerQuery();
+  await new Promise(r => setTimeout(r, 4000));
+});
+
+it('transformSuggestionsQuery', async () => {
+  expect.assertions(1);
+  const searchbase = new Searchbase({
+    index,
+    url,
+    dataField: 'original_title',
+    credentials
+  });
+
+  searchbase.transformSuggestionsQuery = query =>
+    new Promise(res => {
+      expect(true).toEqual(true);
+      return res({
+        ...query,
+        timeout: '1s'
+      });
+    });
+  searchbase.triggerSuggestionsQuery();
   await new Promise(r => setTimeout(r, 4000));
 });
 

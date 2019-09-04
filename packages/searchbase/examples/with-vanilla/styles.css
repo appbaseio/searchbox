@@ -1,0 +1,29 @@
+.autocomplete-result {
+  border-top: 1px solid #eee;
+  padding: 16px;
+  background: transparent;
+}
+
+.suggestion {
+  display: flex;
+  align-items: flex-start;
+}
+
+.suggestion h4,
+p {
+  margin: 0;
+}
+
+.suggesttion h4 {
+  margin-bottom: 5px;
+}
+
+.suggestion img {
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.suggestion.selected {
+  margin-top: 20px;
+}
