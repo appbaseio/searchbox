@@ -247,8 +247,6 @@ An array of promoted results obtained from the applied query.
 
 An array of original hits obtained from the applied query.
 
-results
-
 ```ts
 suggestionsError: any;
 ```
