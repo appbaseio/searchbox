@@ -43,7 +43,14 @@ export default {
     ? Object.keys(pkg.peerDependencies || {})
     : [
         ...Object.keys(pkg.dependencies || {}),
-        ...Object.keys(pkg.peerDependencies || {})
+        ...Object.keys(pkg.peerDependencies || {}),
+        ...[
+          '@babel/runtime/regenerator',
+          '@babel/runtime/helpers/asyncToGenerator',
+          '@babel/runtime/helpers/extends',
+          '@babel/runtime/helpers/defineProperty',
+          '@babel/runtime/helpers/createClass'
+        ]
       ],
   plugins: [
     umd
@@ -60,11 +67,15 @@ export default {
     babel({
       exclude: 'node_modules/**',
       babelrc: false,
+      runtimeHelpers: true,
       presets: [
         ['@babel/preset-env', { loose: true, modules: false }],
         '@babel/preset-flow'
       ],
-      plugins: ['@babel/plugin-proposal-class-properties']
+      plugins: [
+        '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-transform-runtime'
+      ]
     }),
     umd ? builtins() : {},
     umd
