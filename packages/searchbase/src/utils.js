@@ -44,27 +44,22 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
 };
 
 // flattens a nested array
-const flatten = arr =>
+export const flatten = (arr: Array<any>) =>
   arr.reduce(
-    (flat, toFlatten) =>
+    (flat, toFlatten): Array<any> =>
       flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten),
     []
   );
 
 // helper function to extract suggestions
-const extractSuggestion = val => {
-  switch (typeof val) {
-    case 'string':
-      return val;
-    case 'object':
-      if (Array.isArray(val)) {
-        return flatten(val);
-      }
-      return null;
-
-    default:
-      return val;
+export const extractSuggestion = (val: any) => {
+  if (typeof val === 'object') {
+    if (Array.isArray(val)) {
+      return flatten(val);
+    }
+    return null;
   }
+  return val;
 };
 
 export const getSuggestions = (

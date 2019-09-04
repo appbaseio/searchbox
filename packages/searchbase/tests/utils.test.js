@@ -1,6 +1,14 @@
-import { getSuggestions, highlightResults, parseHits } from '../src/utils';
+import {
+  extractSuggestion,
+  flatten,
+  getSuggestions,
+  highlightResults,
+  parseHits
+} from '../src/utils';
+
 import { hits, parsedHits } from '../tests_data/hit';
 import {
+  nestedFields,
   suggestions,
   suggestionsWithCurrentValueOut,
   suggestionsWithNoCurrentValueOut
@@ -46,4 +54,25 @@ test('suggestions with current value', () => {
   expect(
     getSuggestions(['_id', '_index', '_score'], suggestions, '4292')
   ).toEqual(suggestionsWithCurrentValueOut);
+});
+
+test('suggestions with nested fields with empty output', () => {
+  expect(getSuggestions(['original_title.search'], nestedFields)).toEqual([]);
+});
+
+test('flatten array', () => {
+  expect(flatten([1, 2, 3])).toEqual([1, 2, 3]);
+  expect(flatten([1, 2, 3, [4, 5]])).toEqual([1, 2, 3, 4, 5]);
+  expect(flatten([1, 2, 3, [4, 5, [8, 9]]])).toEqual([1, 2, 3, 4, 5, 8, 9]);
+  //  edge case
+  expect(flatten([[]])).toEqual([]);
+});
+
+test('extract suggestions', () => {
+  // array
+  expect(extractSuggestion([1, 2, [3, 4]])).toEqual([1, 2, 3, 4]);
+  // object
+  expect(extractSuggestion({ key1: 1, key2: 2 })).toEqual(null);
+  //  string
+  expect(extractSuggestion('hello')).toEqual('hello');
 });
