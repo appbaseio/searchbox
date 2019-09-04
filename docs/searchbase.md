@@ -2,7 +2,25 @@
 
 ## Installation
 
+Run the below command to install `Searchbase` in your project.
+
+```bash
+yarn add @appbaseio/searchbase
+```
+
+To use the umd build, add the following script in your `index.html` file.
+
+```js
+<script defer src="https://cdn.jsdelivr.net/npm/@appbaseio/searchbase@1.0.0-alpha/dist/@appbaseio/searchbase.umd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@appbaseio/searchbase@1.0.0-alpha/dist/@appbaseio/searchbase.umd.min.js.map"></script>
+
+```
+
 ## Basic Usage
+
+### Without suggestions
+
+### With suggestions
 
 ## API
 
