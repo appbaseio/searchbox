@@ -1,4 +1,5 @@
-const Searchbase = require('./../dist/@appbaseio/searchbase.cjs');
+// TODO: handle coverage for _setError* (e.g. _setError, _setSuggestionError, etc..)
+import Searchbase from '../src/index';
 
 const index = 'gitxplore-latest-app';
 const url = 'https://scalr.api.appbase.io';
@@ -206,4 +207,77 @@ it('onSuggestionsQueryChange', async () => {
   };
   searchbase.triggerSuggestionsQuery();
   await new Promise(r => setTimeout(r, 4000));
+});
+
+test('suggestions with subscribeToStateChanges', () => {
+  const searchbase = new Searchbase({
+    index,
+    url,
+    credentials,
+    dataField: 'original_title'
+  });
+  searchbase.subscribeToStateChanges(({ suggestions }) => {
+    expect(suggestions.prev.data).toEqual([]);
+    expect(suggestions.next.data).toEqual([
+      { label: 'hello', value: 'world', source: { _id: 123 } }
+    ]);
+  });
+  searchbase.setSuggestions([
+    { label: 'hello', value: 'world', source: { _id: 123 } }
+  ]);
+});
+
+test('set [value, results, suggestions]', async () => {
+  const searchbase = new Searchbase({
+    index,
+    url,
+    credentials,
+    dataField: 'original_title'
+  });
+  searchbase.onValueChange = (next, prev) => {
+    expect(prev).toEqual('');
+    expect(next).toEqual('hello world');
+  };
+  searchbase.onResults = (next, prev) => {
+    expect(prev.data).toEqual([]);
+    expect(next.data).toEqual([{ key: 'value' }]);
+  };
+  searchbase.onSuggestions = (next, prev) => {
+    expect(prev.data).toEqual([]);
+    expect(next.data).toEqual([
+      { label: 'hello', value: 'world', source: { _id: 123 } }
+    ]);
+  };
+  searchbase.setResults([{ key: 'value' }]);
+  searchbase.setValue('hello world');
+  searchbase.setSuggestions([
+    { label: 'hello', value: 'world', source: { _id: 123 } }
+  ]);
+});
+
+test('should query with and operator `and` field weight', () => {
+  expect(
+    Searchbase.shouldQuery(
+      'hello world',
+      [{ field: 'original_title.search', weight: 50 }, '_id'],
+      { queryFormat: 'and' }
+    )
+  ).toEqual([
+    {
+      multi_match: {
+        query: 'hello world',
+        fields: ['original_title.search^50', '_id'],
+        type: 'cross_fields',
+        operator: 'and'
+      }
+    },
+    {
+      multi_match: {
+        query: 'hello world',
+        fields: ['original_title.search^50', '_id'],
+        type: 'phrase_prefix',
+        operator: 'and'
+      }
+    }
+  ]);
 });
