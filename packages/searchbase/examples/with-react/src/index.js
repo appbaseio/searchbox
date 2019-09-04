@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Searchbase from '@appbaseio/searchbase';
 
+// eslint-disable-next-line
 class App extends React.Component {
   constructor(props) {
     super(props);
