@@ -29,7 +29,6 @@ type MicStatusField = 'INACTIVE' | 'ACTIVE' | 'DENIED';
 type RequestStatus = 'INACTIVE' | 'PENDING' | 'ERROR';
 
 // TODO: add validation in setters
-type UpdateOn = 'change' | 'blur' | 'enter';
 type QueryFormat = 'or' | 'and';
 
 type DataField = {
@@ -112,9 +111,6 @@ class Searchbase {
 
   // custom headers object
   headers: Object;
-
-  // To define when to trigger the query
-  updateOn: UpdateOn;
 
   // suggestions
   suggestions: Results;
@@ -233,7 +229,6 @@ class Searchbase {
     analytics,
     headers,
     value,
-    updateOn,
     suggestions,
     results,
     fuzziness,
@@ -268,7 +263,6 @@ class Searchbase {
     this.dataField = dataField;
     this.credentials = credentials || '';
     this.nestedField = nestedField || '';
-    this.updateOn = updateOn || 'change';
     this.queryFormat = queryFormat || 'or';
     this.fuzziness = fuzziness || 0;
     this.searchOperators = searchOperators || false;
