@@ -26,51 +26,65 @@ const searchBase = new Searchbase({
   credentials
 });
 
+const handleInput = e => {
+  searchBase.setValue(e.target.value, {
+    triggerSuggestionsQuery: true
+  });
+};
+
+input.addEventListener('input', handleInput);
+
 searchBase.triggerQuery();
 
-input.value = searchBase.value;
-input.addEventListener('change', searchBase.onChange);
-
 searchBase.subscribeToStateChanges(() => {
-  // If we press enter key than autocomplete box is closed.
-  // Handling a edge case.
-
-  if (input.value) {
-    input.blur();
-    input.focus();
-  }
+  console.log('Track State Updates');
 });
+
+searchBase.onResults = results => {
+  const items = results.data.map(i => {
+    return `<div class="suggestion">
+        <div>
+          <img src=${i.avatar} alt=${i.name} />
+        </div>
+        <div>
+        <h4>${i.name}</h4>
+        <p>${i.description}</p>
+        </div>
+      </div>`;
+  });
+
+  selectedSuggestion.innerHTML = items.join('<br>');
+};
+
+searchBase.onValueChange = value => {
+  console.log('Value Updated to', value);
+};
 
 // eslint-disable-next-line
 new Autocomplete('#autocomplete', {
   search: () => {
-    return searchBase.results.data;
+    return searchBase.suggestions.data;
   },
-  getResultValue: result => result.name,
+  getResultValue: result => result.label,
   renderResult: (result, props) => `
     <li ${props}>
       <div class="suggestion">
         <div>
-          <img src=${result.avatar} alt=${result.name} />
+          <img src=${result.source.avatar} alt=${result.label} />
         </div>
         <div>
-        <h4>${result.name}</h4>
-        <p>${result.description}</p>
+        <h4>${result.label}</h4>
+        <p>${result.source.description}</p>
         </div>
       </div>
     </li>
   `,
   onSubmit: result => {
-    selectedSuggestion.innerHTML = `
-    <h4>Suggestion Selected</h4>
-    <div class="suggestion selected">
-        <div>
-          <img src=${result.avatar} alt=${result.name} />
-        </div>
-        <div>
-          <h4>${result.name}</h4>
-          <p>${result.stars} Stars</p>
-        </div>
-      </div>`;
+    if (result) {
+      console.log('Selected', result);
+      searchBase.setValue(input.value, {
+        triggerQuery: true
+      });
+    }
   }
 });
