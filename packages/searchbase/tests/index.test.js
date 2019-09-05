@@ -1,5 +1,5 @@
 // TODO: handle coverage for _setError* (e.g. _setError, _setSuggestionError, etc..)
-import Searchbase from '../src/index';
+const Searchbase = require('./../dist/@appbaseio/searchbase.cjs');
 
 const index = 'gitxplore-latest-app';
 const url = 'https://scalr.api.appbase.io';

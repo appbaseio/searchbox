@@ -11,8 +11,5 @@ module.exports = {
     ]
   ],
   //for supporting flow typed functions
-  plugins: [
-    'transform-flow-strip-types',
-    '@babel/plugin-proposal-class-properties'
-  ]
+  plugins: ['transform-flow-strip-types']
 };
