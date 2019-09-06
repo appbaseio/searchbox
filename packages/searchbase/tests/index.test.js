@@ -227,32 +227,41 @@ test('suggestions with subscribeToStateChanges', () => {
   ]);
 });
 
-test('set [value, results, suggestions]', async () => {
-  const searchbase = new Searchbase({
-    index,
-    url,
-    credentials,
-    dataField: 'original_title'
+describe('set [value, results, suggestions]', () => {
+  let searchbase;
+  beforeEach(() => {
+    searchbase = new Searchbase({
+      index,
+      url,
+      credentials,
+      dataField: 'original_title'
+    });
   });
-  searchbase.onValueChange = (next, prev) => {
-    expect(prev).toEqual('');
-    expect(next).toEqual('hello world');
-  };
-  searchbase.onResults = (next, prev) => {
-    expect(prev.data).toEqual([]);
-    expect(next.data).toEqual([{ key: 'value' }]);
-  };
-  searchbase.onSuggestions = (next, prev) => {
-    expect(prev.data).toEqual([]);
-    expect(next.data).toEqual([
+  test('onValueChange', () => {
+    searchbase.onValueChange = (next, prev) => {
+      expect(prev).toEqual('');
+      expect(next).toEqual('hello world');
+    };
+    searchbase.setValue('hello world');
+  });
+  test('onResultChange', () => {
+    searchbase.onResults = (next, prev) => {
+      expect(prev.data).toEqual([]);
+      expect(next.data).toEqual([{ key: 'value' }]);
+    };
+    searchbase.setResults([{ key: 'value' }]);
+  });
+  test('onSuggestionsChange', () => {
+    searchbase.onSuggestions = (next, prev) => {
+      expect(prev.data).toEqual([]);
+      expect(next.data).toEqual([
+        { label: 'hello', value: 'world', source: { _id: 123 } }
+      ]);
+    };
+    searchbase.setSuggestions([
       { label: 'hello', value: 'world', source: { _id: 123 } }
     ]);
-  };
-  searchbase.setResults([{ key: 'value' }]);
-  searchbase.setValue('hello world');
-  searchbase.setSuggestions([
-    { label: 'hello', value: 'world', source: { _id: 123 } }
-  ]);
+  });
 });
 
 test('should query with and operator `and` field weight', () => {
