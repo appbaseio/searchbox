@@ -1,9 +1,13 @@
 import { Results } from './Results';
 import {
   DataField,
+  MicStatusField,
+  Option,
+  Options,
   QueryFormat,
   RequestStatus,
   SortOption,
+  Suggestion,
   UpdateOn
 } from './types';
 import { Observable } from './observable';
@@ -151,4 +155,86 @@ export class SearchBase {
   transformResponse: (response: any) => Promise<any>;
 
   beforeValueChange: (value: string) => Promise<any>;
+
+  subscribeToStateChanges: (
+    fn: Function,
+    propertiesToSubscribe?: string | Array<string>
+  ) => void;
+
+  unsubscribeToStateChanges: (fn?: Function) => void;
+
+  setHeaders: (headers: Object, options?: Options) => void;
+
+  setSize: (size: number, options?: Options) => void;
+
+  setFrom: (from: number, options?: Options) => void;
+
+  setFuzziness: (fuzziness: number | string, options?: Options) => void;
+
+  setIncludeFields: (includeFields: Array<string>, options?: Options) => void;
+
+  setExcludeFields: (excludeFields: Array<string>, options?: Options) => void;
+
+  setSortBy: (sortBy: string, options?: Options) => void;
+
+  setSortByField: (sortByField: string, options?: Options) => void;
+
+  setNestedField: (nestedField: string, options?: Options) => void;
+
+  setDataField: (
+    dataField: string | Array<string | DataField>,
+    options?: Options
+  ) => void;
+
+  setResults: (results: Array<Object>, options?: Option) => void;
+
+  setSuggestions: (suggestions: Array<Suggestion>, options?: Option) => void;
+
+  setValue: (value: string, options?: Options) => void;
+
+  onMicClick: (micOptions: Object, options: Options) => void;
+
+  triggerClickAnalytics: (searchPosition: string | number) => void;
+
+  triggerQuery: (options?: Option) => Promise<any>;
+
+  triggerSuggestionsQuery: (options?: Option) => Promise<any>;
+
+  // getters
+  readonly micStatus: MicStatusField;
+  readonly micInstance: any;
+  readonly micActive: boolean;
+  readonly micInactive: boolean;
+  readonly micDenied: boolean;
+  readonly query: Object;
+  readonly suggestionsQuery: Object;
+  readonly requestPending: boolean;
+  readonly suggestionsRequestPending: boolean;
+
+  constructor({
+    index,
+    url,
+    credentials,
+    analytics,
+    headers,
+    value,
+    suggestions,
+    results,
+    fuzziness,
+    searchOperators,
+    queryFormat,
+    size,
+    from,
+    dataField,
+    includeFields,
+    excludeFields,
+    transformQuery,
+    transformSuggestionsQuery,
+    transformRequest,
+    transformResponse,
+    beforeValueChange,
+    sortBy,
+    nestedField,
+    sortOptions
+  }: any);
 }
