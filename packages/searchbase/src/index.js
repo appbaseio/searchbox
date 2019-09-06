@@ -12,7 +12,8 @@ import type {
   RequestStatus,
   SortOption,
   Suggestion,
-  Option
+  Option,
+  SearchBaseConfig
 } from './types';
 
 // mic constants
@@ -223,7 +224,7 @@ class Searchbase {
     sortBy,
     nestedField,
     sortOptions
-  }: any) {
+  }: SearchBaseConfig) {
     if (!index) {
       throw new Error('Please provide a valid index.');
     }

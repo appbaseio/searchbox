@@ -6,6 +6,7 @@ import {
   Options,
   QueryFormat,
   RequestStatus,
+  SearchBaseConfig,
   SortOption,
   Suggestion,
   UpdateOn
@@ -236,5 +237,5 @@ export class SearchBase {
     sortBy,
     nestedField,
     sortOptions
-  }: any);
+  }: SearchBaseConfig);
 }
