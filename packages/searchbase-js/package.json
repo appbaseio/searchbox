@@ -1,0 +1,40 @@
+{
+  "name": "@appbaseio/searchbase-js",
+  "version": "1.0.0-alpha",
+  "private": false,
+  "description": "Vanilla JS Wrapper for Searchbase",
+  "main": "dist/@appbaseio/searchbase-js.cjs.js",
+  "jsnext:main": "dist/@appbaseio/searchbase-js.es.js",
+  "module": "dist/@appbaseio/searchbase-js.es.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appbaseio/searchbase.git"
+  },
+  "author": "jyash97@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/appbaseio/searchbase/issues"
+  },
+  "homepage": "https://github.com/appbaseio/searchbase#readme",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "appbase",
+    "elasticsearch",
+    "search",
+    "vanilla js"
+  ],
+  "dependencies": {
+    "@appbaseio/searchbase": "1.0.0-alpha"
+  },
+  "devDependencies": {
+    "rollup": "^1.21.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-postcss": "^2.0.3"
+  }
+}

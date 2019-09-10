@@ -4,7 +4,8 @@
   "description": "Headless core + common utilities for search",
   "workspaces": [
     "packages/*",
-    "packages/searchbase/examples/*"
+    "packages/searchbase/examples/*",
+    "packages/searchbase-js/examples/*"
   ],
   "scripts": {
     "dev:watch": "npm run watch --prefix packages/searchbase"

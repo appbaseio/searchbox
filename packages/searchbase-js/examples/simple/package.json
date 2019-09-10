@@ -1,0 +1,17 @@
+{
+  "name": "simple",
+  "version": "1.0.0",
+  "description": "Simple Vanilla Autocomplete",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open  --port 8000",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "@appbaseio/searchbase-js": "1.0.0-alpha"
+  },
+  "devDependencies": {
+    "@babel/core": "7.2.0",
+    "parcel-bundler": "^1.6.1"
+  }
+}
