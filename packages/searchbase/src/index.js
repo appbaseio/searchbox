@@ -4,6 +4,17 @@ import fetch from 'cross-fetch';
 import Results from './Results';
 import Observable from './observable';
 import { getSuggestions } from './utils';
+import type {
+  DataField,
+  MicStatusField,
+  Options,
+  QueryFormat,
+  RequestStatus,
+  SortOption,
+  Suggestion,
+  Option,
+  SearchBaseConfig
+} from './types';
 
 // mic constants
 const MIC_STATUS = {
@@ -16,40 +27,6 @@ const REQUEST_STATUS = {
   inactive: 'INACTIVE',
   pending: 'PENDING',
   error: 'ERROR'
-};
-
-type Suggestion = {
-  label: string,
-  value: string,
-  source?: any
-};
-
-type MicStatusField = 'INACTIVE' | 'ACTIVE' | 'DENIED';
-
-type RequestStatus = 'INACTIVE' | 'PENDING' | 'ERROR';
-
-// TODO: add validation in setters
-type QueryFormat = 'or' | 'and';
-
-type DataField = {
-  field: string,
-  weight: number
-};
-
-type SortOption = {
-  label: string,
-  dataField: string,
-  sortBy: string
-};
-
-type Options = {
-  triggerQuery?: boolean,
-  triggerSuggestionsQuery?: boolean,
-  stateChanges?: boolean
-};
-
-type Option = {
-  stateChanges?: boolean
 };
 
 const defaultOptions: Options = {
@@ -247,7 +224,7 @@ class Searchbase {
     sortBy,
     nestedField,
     sortOptions
-  }: any) {
+  }: SearchBaseConfig) {
     if (!index) {
       throw new Error('Please provide a valid index.');
     }

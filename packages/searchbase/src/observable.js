@@ -1,8 +1,7 @@
 // @flow
-type Observer = {
-  callback: Function,
-  properties?: string | Array<string>
-};
+
+import type { Observer } from './types';
+
 export default class Observable {
   observers: Array<Observer>;
 
