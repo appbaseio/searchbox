@@ -76,7 +76,7 @@ npm install @appbaseio/searchbase
 
 ## 5. Docs Manual
 
-The official docs for the Web library are at [docs/searchbase](https://docs.appbase.io/api/searchbase/quickstart/).
+The official docs for the Web library are at [docs/searchbase](https://docs.appbase.io/docs/reactivesearch/searchbase/overview/QuickStart/).
 
 <br />
 
