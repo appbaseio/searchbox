@@ -223,7 +223,8 @@ class Searchbase {
     beforeValueChange,
     sortBy,
     nestedField,
-    sortOptions
+    sortOptions,
+    sortByField
   }: SearchBaseConfig) {
     if (!index) {
       throw new Error('Please provide a valid index.');
@@ -249,6 +250,7 @@ class Searchbase {
     this.includeFields = includeFields || ['*'];
     this.excludeFields = excludeFields || [];
     this.sortOptions = sortOptions || null;
+    this.sortByField = sortByField || '';
 
     this.requestStatus = REQUEST_STATUS.inactive;
     this.suggestionsRequestStatus = REQUEST_STATUS.inactive;
