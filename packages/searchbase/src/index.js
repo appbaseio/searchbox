@@ -492,6 +492,8 @@ class Searchbase {
   // mic event
   onMicClick = (micOptions: Object = {}, options: Options = defaultOptions) => {
     const prevStatus = this._micStatus;
+    window.SpeechRecognition =
+      window.webkitSpeechRecognition || window.SpeechRecognition || null;
     if (window.SpeechRecognition && prevStatus !== MIC_STATUS.denied) {
       if (prevStatus === MIC_STATUS.active) {
         this._setMicStatus(MIC_STATUS.inactive, options);
