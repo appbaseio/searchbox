@@ -545,68 +545,83 @@ class Searchbase {
   };
 
   // Method to execute the query
-  async triggerQuery(options?: Option = defaultOption): Promise<any> {
-    try {
-      this._updateQuery();
-      this._setRequestStatus(REQUEST_STATUS.pending);
-      let finalQuery = this.query;
-      if (this.transformQuery) {
-        finalQuery = await this.transformQuery(this.query);
-      }
-      const results = await this._fetchRequest(finalQuery);
-      this._setRequestStatus(REQUEST_STATUS.inactive);
-      const prev = this.results;
-      this.results.setRaw(results);
-      this._applyOptions(
-        {
-          stateChanges: options.stateChanges
-        },
-        'results',
-        prev,
-        this.results
-      );
-      return Promise.resolve(results);
-    } catch (err) {
+  triggerQuery(options?: Option = defaultOption): Promise<any> {
+    const handleError = err => {
       this._setError(err, {
         stateChanges: options.stateChanges
       });
       console.error(err);
       return Promise.reject(err);
+    };
+    try {
+      this._updateQuery();
+      this._setRequestStatus(REQUEST_STATUS.pending);
+      const transformQuery = this.transformQuery
+        ? this.transformQuery(this.query)
+        : new Promise(res => res(this.query));
+      return transformQuery
+        .then(finalQuery => {
+          this._fetchRequest(finalQuery)
+            .then(results => {
+              this._setRequestStatus(REQUEST_STATUS.inactive);
+              const prev = this.results;
+              this.results.setRaw(results);
+              this._applyOptions(
+                {
+                  stateChanges: options.stateChanges
+                },
+                'results',
+                prev,
+                this.results
+              );
+              return Promise.resolve(results);
+            })
+            .catch(handleError);
+        })
+        .catch(handleError);
+    } catch (err) {
+      return handleError(err);
     }
   }
 
   // Method to execute the suggestions query
-  async triggerSuggestionsQuery(
-    options?: Option = defaultOption
-  ): Promise<any> {
-    try {
-      this._updateSuggestionsQuery();
-      this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
-      let finalQuery = this.suggestionsQuery;
-      if (this.transformSuggestionsQuery) {
-        finalQuery = await this.transformSuggestionsQuery(
-          this.suggestionsQuery
-        );
-      }
-      const suggestions = await this._fetchRequest(finalQuery);
-      this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
-      const prev = this.suggestions;
-      this.suggestions.setRaw(suggestions);
-      this._applyOptions(
-        {
-          stateChanges: options.stateChanges
-        },
-        'suggestions',
-        prev,
-        this.suggestions
-      );
-      return Promise.resolve(suggestions);
-    } catch (err) {
+  triggerSuggestionsQuery(options?: Option = defaultOption): Promise<any> {
+    const handleError = err => {
       this._setSuggestionsError(err, {
         stateChanges: options.stateChanges
       });
       console.error(err);
       return Promise.reject(err);
+    };
+
+    try {
+      this._updateSuggestionsQuery();
+      this._setSuggestionsRequestStatus(REQUEST_STATUS.pending);
+      const transformSuggestionsQuery = this.transformSuggestionsQuery
+        ? this.transformSuggestionsQuery(this.suggestionsQuery)
+        : new Promise(res => res(this.suggestionsQuery));
+      return transformSuggestionsQuery
+        .then(finalQuery => {
+          this._fetchRequest(finalQuery)
+            .then(suggestions => {
+              this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
+              const prev = this.suggestions;
+              this.suggestions.setRaw(suggestions);
+              this._applyOptions(
+                {
+                  stateChanges: options.stateChanges
+                },
+                'suggestions',
+                prev,
+                this.suggestions
+              );
+              return Promise.resolve(suggestions);
+            })
+            .catch(handleError);
+        })
+        .catch(handleError);
+    } catch (err) {
+      return handleError(err);
     }
   }
 

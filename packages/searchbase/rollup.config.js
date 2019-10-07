@@ -67,15 +67,11 @@ export default {
     babel({
       exclude: 'node_modules/**',
       babelrc: false,
-      runtimeHelpers: true,
       presets: [
         ['@babel/preset-env', { loose: true, modules: false }],
         '@babel/preset-flow'
       ],
-      plugins: [
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-transform-runtime'
-      ]
+      plugins: ['@babel/plugin-proposal-class-properties']
     }),
     umd ? builtins() : {},
     umd

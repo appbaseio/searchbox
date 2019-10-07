@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/searchbase",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-alpha.2",
   "private": false,
   "description": "Headless core + common utilities for search",
   "main": "dist/@appbaseio/searchbase.cjs.js",
@@ -37,7 +37,8 @@
     "cross-fetch": "^3.0.4"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.5.5",
+    "eslint": "^6.2.1",
+    "babel-eslint": "^10.0.3",
     "@babel/runtime": "^7.5.5",
     "nps": "^5.9.8",
     "nps-utils": "^1.7.0",
