@@ -61,6 +61,12 @@ class Searchbase {
     }
   ) => Object;
 
+  static highlightQuery: (
+    highlight: boolean,
+    highlightFields: string | Array<string>,
+    dataFields: string | Array<string | DataField>
+  ) => Object;
+
   static generateQueryOptions: (options: {
     size?: number,
     from?: number,
@@ -135,6 +141,10 @@ class Searchbase {
   excludeFields: Array<string>;
 
   sortOptions: Array<SortOption>;
+
+  highlight: boolean;
+
+  highlightField: string | Array<string>;
 
   /* ------------- change events -------------------------------- */
 
@@ -224,7 +234,9 @@ class Searchbase {
     sortBy,
     nestedField,
     sortOptions,
-    sortByField
+    sortByField,
+    highlight,
+    highlightField
   }: SearchBaseConfig) {
     if (!index) {
       throw new Error('Please provide a valid index.');
@@ -251,6 +263,8 @@ class Searchbase {
     this.excludeFields = excludeFields || [];
     this.sortOptions = sortOptions || null;
     this.sortByField = sortByField || '';
+    this.highlight = highlight;
+    this.highlightField = highlightField;
 
     this.requestStatus = REQUEST_STATUS.inactive;
     this.suggestionsRequestStatus = REQUEST_STATUS.inactive;
@@ -835,6 +849,11 @@ class Searchbase {
     const prevQuery = this._query;
     this._query = {
       query: finalQuery,
+      ...Searchbase.highlightQuery(
+        this.highlight,
+        this.highlightField,
+        this.dataField
+      ),
       ...finalQueryOptions,
       // Overrides the default options by the user defined options
       ...queryOptions
@@ -871,6 +890,11 @@ class Searchbase {
     const prevQuery = this._suggestionsQuery;
     this._suggestionsQuery = {
       query: finalQuery,
+      ...Searchbase.highlightQuery(
+        this.highlight,
+        this.highlightField,
+        this.dataField
+      ),
       ...finalQueryOptions,
       // Overrides the default options by the user defined options
       ...queryOptions
@@ -1074,6 +1098,33 @@ Searchbase.shouldQuery = (
       }
     }
   ];
+};
+
+// helper function to generate highlight query
+Searchbase.highlightQuery = (highlight, highlightFields, dataFields) => {
+  if (!highlight) return null;
+  const fields = {};
+  const highlightField = highlightFields || dataFields;
+  const flatHighlightedFields =
+    typeof highlightFields === 'string' ? [highlightFields] : highlightFields;
+
+  if (typeof highlightField === 'string') {
+    fields[highlightField] = {};
+  } else if (Array.isArray(highlightField)) {
+    highlightField.forEach(item => {
+      if (typeof item === 'object') fields[item.field] = {};
+      else fields[item] = {};
+    });
+  }
+
+  return {
+    highlight: {
+      pre_tags: ['<mark>'],
+      post_tags: ['</mark>'],
+      fields,
+      ...(flatHighlightedFields && { require_field_match: false })
+    }
+  };
 };
 
 // function to generate the query DSL options

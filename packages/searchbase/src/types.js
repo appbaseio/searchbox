@@ -58,6 +58,8 @@ type SearchBaseConfig = {
   nestedField: string,
   sortOptions: Array<SortOption>,
   sortByField: string,
+  highlight: boolean,
+  highlightField: string | Array<string>,
   transformQuery: (query: Object) => Promise<Object>,
   transformSuggestionsQuery: (query: Object) => Promise<Object>,
   transformRequest: (requestOptions: Object) => Promise<Object>,
