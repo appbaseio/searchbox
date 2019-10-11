@@ -113,6 +113,10 @@ export class SearchBase {
 
   sortOptions: Array<SortOption>;
 
+  highlight: boolean;
+
+  highlightField: string | Array<string>;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
