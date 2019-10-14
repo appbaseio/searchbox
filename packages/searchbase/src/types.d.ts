@@ -43,6 +43,8 @@ type SearchBaseConfig = {
   credentials: string;
   analytics: boolean;
   headers: Object;
+  highlight: boolean;
+  highlightField: string | Array<string>;
   value: string;
   suggestions: Array<Suggestion>;
   results: Array<Object>;

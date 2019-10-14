@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@appbaseio/searchbase@1.0.0-alpha":
-  version "1.0.0-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.0-alpha.tgz#dc1b6cf44b5eef27ecc8c9fc6e57093bbed64224"
-  integrity sha512-wM4Dt4G+/XEoCe4no2q09XUihmNBmhVrWCEe5kBIXdJoe/zgg9cmA6JP4YZV8Yh/kJuo+8HD2f5nsnQ1PYXB4g==
-  dependencies:
-    cross-fetch "^3.0.4"
-
 "@babel/code-frame@7.5.5", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
