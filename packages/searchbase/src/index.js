@@ -5,7 +5,7 @@ import AppbaseAnalytics from '@appbaseio/analytics';
 import Results from './Results';
 import Observable from './observable';
 import { getSuggestions } from './utils';
-import {
+import type {
   DataField,
   MicStatusField,
   Options,
