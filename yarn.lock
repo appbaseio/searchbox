@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@appbaseio/analytics@^1.0.0-alpha":
+  version "1.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-1.0.0-alpha.tgz#a70cb120cacb73671b6094c82f8b30b9fd126dcf"
+  integrity sha512-qivIUttloQGUrjsEtSxi4yeFMBTgXinuUck+NV7XjiRxidpH0O/jBVXk0OtrQb7toQUc3k6tjB9IpykK7hJ6lA==
+  dependencies:
+    cross-fetch "^3.0.4"
+
 "@babel/code-frame@7.5.5", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"

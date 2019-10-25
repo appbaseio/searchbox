@@ -199,8 +199,6 @@ export class SearchBase {
 
   onMicClick: (micOptions: Object, options: Options) => void;
 
-  triggerClickAnalytics: (searchPosition: string | number) => void;
-
   triggerQuery: (options?: Option) => Promise<any>;
 
   triggerSuggestionsQuery: (options?: Option) => Promise<any>;

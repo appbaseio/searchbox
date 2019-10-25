@@ -34,12 +34,13 @@
     "search"
   ],
   "dependencies": {
+    "@appbaseio/analytics": "^1.0.0-alpha",
     "cross-fetch": "^3.0.4"
   },
   "devDependencies": {
-    "eslint": "^6.2.1",
     "babel-eslint": "^10.0.3",
-    "@babel/runtime": "^7.5.5",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "eslint": "^6.2.1",
     "nps": "^5.9.8",
     "nps-utils": "^1.7.0",
     "rollup": "^1.20.3",
@@ -48,7 +49,6 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-terser": "^5.1.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0"
+    "rollup-plugin-terser": "^5.1.1"
   }
 }

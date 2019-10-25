@@ -1,10 +1,11 @@
 // @flow
 
 import fetch from 'cross-fetch';
+import AppbaseAnalytics from '@appbaseio/analytics';
 import Results from './Results';
 import Observable from './observable';
 import { getSuggestions } from './utils';
-import type {
+import {
   DataField,
   MicStatusField,
   Options,
@@ -146,6 +147,8 @@ class Searchbase {
 
   highlightField: string | Array<string>;
 
+  analyticsInstance: Object;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
@@ -200,9 +203,6 @@ class Searchbase {
 
   _queryOptions: Object;
 
-  // search session id, required for analytics
-  _searchId: string;
-
   // mic status
   _micStatus: MicStatusField;
 
@@ -250,6 +250,13 @@ class Searchbase {
     this.index = index;
     this.url = url;
     this.analytics = analytics || false;
+    if (this.analytics) {
+      this.analyticsInstance = AppbaseAnalytics({
+        index,
+        url,
+        credentials
+      });
+    }
     this.dataField = dataField;
     this.credentials = credentials || '';
     this.nestedField = nestedField || '';
@@ -544,20 +551,6 @@ class Searchbase {
     }
   };
 
-  triggerClickAnalytics = (searchPosition: string | number) => {
-    if (!this.analytics || !this._searchId) return;
-    fetch(`${this.url}/${this.index}/_analytics`, {
-      method: 'POST',
-      headers: {
-        ...this.headers,
-        'X-Search-Id': this._searchId,
-        'X-Search-Click': true,
-        'X-Search-ClickPosition': searchPosition + 1,
-        'X-Search-Conversion': true
-      }
-    });
-  };
-
   // Method to execute the query
   triggerQuery(options?: Option = defaultOption): Promise<any> {
     const handleError = err => {
@@ -692,18 +685,10 @@ class Searchbase {
   }
 
   _fetchRequest(requestBody: Object): Promise<any> {
-    let analyticsHeaders = {};
     // Set analytics headers
-    if (this._searchId) {
-      analyticsHeaders = {
-        'X-Search-Id': this._searchId,
-        'X-Search-Query': this.value
-      };
-    } else if (this.value) {
-      analyticsHeaders = {
-        'X-Search-Query': this.value
-      };
-    }
+    let analyticsHeaders = this.analyticsInstance
+      .setSearchQuery(this.value)
+      .getAnalyticsHeaders();
 
     const requestOptions = {
       method: 'POST',
@@ -726,7 +711,9 @@ class Searchbase {
 
               // set search id
               if (res.headers) {
-                this._searchId = res.headers.get('X-Search-Id') || null;
+                this.analyticsInstance.setSearchID(
+                  res.headers.get('X-Search-Id') || null
+                );
               }
 
               if (res.status >= 500) {
