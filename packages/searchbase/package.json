@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/searchbase",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "private": false,
   "description": "Headless core + common utilities for search",
   "main": "dist/@appbaseio/searchbase.cjs.js",
@@ -34,7 +34,7 @@
     "search"
   ],
   "dependencies": {
-    "@appbaseio/analytics": "^1.0.0-alpha",
+    "@appbaseio/analytics": "^1.0.0-alpha.1",
     "cross-fetch": "^3.0.4"
   },
   "devDependencies": {
