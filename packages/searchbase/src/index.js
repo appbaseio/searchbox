@@ -685,17 +685,16 @@ class Searchbase {
   }
 
   _fetchRequest(requestBody: Object): Promise<any> {
-    // Set analytics headers
-    let analyticsHeaders = this.analyticsInstance
-      .setSearchQuery(this.value)
-      .getAnalyticsHeaders();
-
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
         ...this.headers,
-        ...analyticsHeaders
+        ...(this.analytics
+          ? this.analyticsInstance
+              .setSearchQuery(this.value)
+              .getAnalyticsHeaders()
+          : null)
       }
     };
 
@@ -710,7 +709,7 @@ class Searchbase {
               const responseHeaders = res.headers;
 
               // set search id
-              if (res.headers) {
+              if (res.headers && this.analytics) {
                 this.analyticsInstance.setSearchID(
                   res.headers.get('X-Search-Id') || null
                 );
