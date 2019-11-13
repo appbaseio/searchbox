@@ -7,26 +7,27 @@ import Searchbase from '@appbaseio/searchbase';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const index = 'gitxplore-latest-app';
+    const index = 'good-book-ds-latest';
     const url = 'https://scalr.api.appbase.io';
-    const credentials = 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38';
+    const credentials = 'IPM14ICqp:8e573e86-8802-4a27-a7a1-4c7d0c62c186';
 
     this.searchBase = new Searchbase({
       index,
       url,
-      dataField: [
-        'name',
-        'description',
-        'name.raw',
-        'fullname',
-        'owner',
-        'topics'
-      ],
+      dataField: 'original_title',
+      aggregationField: 'original_title.keyword',
       credentials
     });
 
     // Pre-load results
     this.searchBase.triggerQuery();
+
+    this.searchBase.onSuggestions = (next, prev) => {
+      console.log('sugges', next, prev);
+    };
+    this.searchBase.onAggregationData = (next, prev) => {
+      console.log('on aggs data', next, prev);
+    };
 
     this.searchBase.subscribeToStateChanges(() => {
       this.forceUpdate();

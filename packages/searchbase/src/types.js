@@ -52,6 +52,7 @@ type SearchBaseConfig = {
   size: number,
   from: number,
   dataField: string | Array<string | DataField>,
+  aggregationField: string,
   includeFields: Array<string>,
   excludeFields: Array<string>,
   sortBy: string,

@@ -141,3 +141,18 @@ export const getSuggestions = (
 
   return suggestionsList;
 };
+
+export function parseCompAggToHits(
+  aggFieldName: string,
+  buckets?: Array<Object> = []
+): Array<Object> {
+  return buckets.map(bucket => {
+    // eslint-disable-next-line camelcase
+    const { doc_count, key, [aggFieldName]: hitsData } = bucket;
+    return {
+      _doc_count: doc_count,
+      _key: key[aggFieldName],
+      ...hitsData.hits.hits[0]
+    };
+  });
+}

@@ -16,6 +16,7 @@ import type {
   Option,
   SearchBaseConfig
 } from './types';
+import CompositeAggregationResults from './CompositeAggregationResults';
 
 // mic constants
 const MIC_STATUS = {
@@ -68,9 +69,12 @@ class Searchbase {
     dataFields: string | Array<string | DataField>
   ) => Object;
 
+  static compositeAggsQuery: (aggregationField: string, size: number) => Object;
+
   static generateQueryOptions: (options: {
     size?: number,
     from?: number,
+    aggregationField?: string,
     includeFields?: Array<string>,
     excludeFields?: Array<string>,
     sortOptions?: Array<SortOption>,
@@ -98,6 +102,9 @@ class Searchbase {
 
   // suggestions
   suggestions: Results;
+
+  // composite aggregations
+  aggregationData: CompositeAggregationResults;
 
   // suggestions query error
   suggestionsError: any;
@@ -137,6 +144,8 @@ class Searchbase {
 
   dataField: string | Array<string | DataField>;
 
+  aggregationField: string;
+
   includeFields: Array<string>;
 
   excludeFields: Array<string>;
@@ -159,6 +168,9 @@ class Searchbase {
 
   // called when suggestions change
   onSuggestions: (next: string, prev: string) => void;
+
+  // called when composite aggregations change
+  onAggregationData: (next: Array<Object>, prev: Array<Object>) => void;
 
   // called when there is an error while fetching results
   onError: (error: any) => void;
@@ -224,6 +236,7 @@ class Searchbase {
     size,
     from,
     dataField,
+    aggregationField,
     includeFields,
     excludeFields,
     transformQuery,
@@ -258,6 +271,7 @@ class Searchbase {
       });
     }
     this.dataField = dataField;
+    this.aggregationField = aggregationField;
     this.credentials = credentials || '';
     this.nestedField = nestedField || '';
     this.queryFormat = queryFormat || 'or';
@@ -290,6 +304,9 @@ class Searchbase {
     // Add suggestions parser
     this.suggestions.parseResults = this._parseSuggestions;
     this.results = new Results(results);
+
+    // composite aggs instance
+    this.aggregationData = new CompositeAggregationResults();
 
     // Initialize headers
     this.headers = {
@@ -612,6 +629,13 @@ class Searchbase {
           this._fetchRequest(finalQuery)
             .then(suggestions => {
               this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
+              if (suggestions.aggregations) {
+                this._handleCompositeAggsResponse(
+                  this.aggregationField,
+                  suggestions.aggregations,
+                  options
+                );
+              }
               const prev = this.suggestions;
               this.suggestions.setRaw(suggestions);
               this._applyOptions(
@@ -666,6 +690,25 @@ class Searchbase {
     this._micStatus = status;
     this._applyOptions(options, 'micStatus', prevStatus, this._micStatus);
   };
+
+  _handleCompositeAggsResponse(
+    aggregationField: string,
+    aggsResponse: Object,
+    options?: Options = defaultOptions
+  ) {
+    const prev = this.aggregationData;
+    this.aggregationData.setRaw(aggsResponse[aggregationField]);
+    this.aggregationData.setData(
+      aggregationField,
+      aggsResponse[aggregationField].buckets
+    );
+    this._applyOptions(
+      { stateChanges: options.stateChanges },
+      'aggregations',
+      prev,
+      this.aggregationData
+    );
+  }
 
   _handleTransformResponse(res: any): Promise<any> {
     if (
@@ -857,6 +900,7 @@ class Searchbase {
   _updateSuggestionsQuery(query?: Object, queryOptions?: Object): void {
     // Set default suggestions query here
     const finalQueryOptions = Searchbase.generateQueryOptions({
+      aggregationField: this.aggregationField,
       size: 10
     });
     /**
@@ -943,6 +987,9 @@ class Searchbase {
     }
     if (key === 'suggestions' && this.onSuggestions) {
       this.onSuggestions(nextValue, prevValue);
+    }
+    if (key === 'aggregations' && this.onAggregationData) {
+      this.onAggregationData(nextValue, prevValue);
     }
     if (key === 'requestStatus' && this.onRequestStatusChange) {
       this.onRequestStatusChange(nextValue, prevValue);
@@ -1113,6 +1160,31 @@ Searchbase.highlightQuery = (highlight, highlightFields, dataFields) => {
   };
 };
 
+// helper function to generate composite aggregations query
+Searchbase.compositeAggsQuery = (aggregationField, size) => ({
+  aggs: {
+    [aggregationField]: {
+      composite: {
+        sources: [
+          {
+            [aggregationField]: {
+              terms: {
+                field: aggregationField
+              }
+            }
+          }
+        ],
+        size
+      },
+      aggs: {
+        [aggregationField]: {
+          top_hits: { size: 1 }
+        }
+      }
+    }
+  }
+});
+
 // function to generate the query DSL options
 Searchbase.generateQueryOptions = options => {
   const finalOptions = {};
@@ -1149,6 +1221,12 @@ Searchbase.generateQueryOptions = options => {
         }
       }
     ];
+  }
+  if (options.aggregationField) {
+    finalOptions.aggs = Searchbase.compositeAggsQuery(
+      options.aggregationField,
+      options.size || 0
+    ).aggs;
   }
   return finalOptions;
 };
