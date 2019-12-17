@@ -18,7 +18,7 @@ class CompositeAggregationResults {
 
   // An array of original hits obtained from the applied query.
   get rawData() {
-    return this.raw.buckets || [];
+    return (this.raw && this.raw.buckets) || [];
   }
 
   setRaw(rawResponse: Object) {
