@@ -107,6 +107,8 @@ export class SearchBase {
 
   dataField: string | Array<string | DataField>;
 
+  aggregationField: string;
+
   includeFields: Array<string>;
 
   excludeFields: Array<string>;
