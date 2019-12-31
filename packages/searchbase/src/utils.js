@@ -81,7 +81,7 @@ export const getSuggestions = (
           .toLowerCase()
           .includes(term)
       );
-    if (isWordMatch && !labelsList.includes(val)) {
+    if ((isWordMatch && !labelsList.includes(val)) || source._promoted) {
       const defaultOption = {
         label: val,
         value: val,
