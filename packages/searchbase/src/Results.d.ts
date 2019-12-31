@@ -16,6 +16,8 @@ export interface Results {
   // getters
   readonly numberOfResults: number;
   readonly time: number;
+  readonly promoted: number;
+  readonly hidden: number;
   readonly promotedData: Array<any>;
   readonly rawData: Array<any>;
 }

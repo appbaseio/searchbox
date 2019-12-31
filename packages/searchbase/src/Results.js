@@ -36,6 +36,22 @@ class Results {
     return 0;
   }
 
+  // no of hidden results found
+  get hidden() {
+    if (this.raw && this.raw.hits) {
+      return this.raw.hits.hidden;
+    }
+    return 0;
+  }
+
+  // no of promoted results found
+  get promoted() {
+    if (this.raw && this.raw.promoted) {
+      return this.raw.promoted.length;
+    }
+    return 0;
+  }
+
   // An array of promoted results obtained from the applied query.
   get promotedData() {
     if (this.raw && this.raw.promoted) {
@@ -73,7 +89,13 @@ class Results {
         );
       }
 
-      filteredResults = [...this.promotedData, ...filteredResults];
+      filteredResults = [
+        ...this.promotedData.map(dataItem => ({
+          ...dataItem,
+          _promoted: true
+        })),
+        ...filteredResults
+      ];
     }
 
     // set data
