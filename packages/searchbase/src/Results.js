@@ -39,7 +39,7 @@ class Results {
   // no of hidden results found
   get hidden() {
     if (this.raw && this.raw.hits) {
-      return this.raw.hits.hidden;
+      return this.raw.hits.hidden || 0;
     }
     return 0;
   }
