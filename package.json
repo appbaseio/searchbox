@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/*",
     "packages/searchbase/examples/*",
+    "packages/react-searchbox/example/",
     "packages/searchbox/test-example/"
   ],
   "scripts": {
