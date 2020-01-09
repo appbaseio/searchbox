@@ -1,0 +1,68 @@
+.appbase-autocomplete {
+	width: 100%;
+}
+
+.appbase-autocomplete .aa-input,
+.appbase-autocomplete .aa-hint {
+	width: 100%;
+}
+
+.appbase-autocomplete .aa-hint {
+	color: #999;
+}
+
+.appbase-autocomplete .aa-dropdown-menu {
+	width: 100%;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	border-top: none;
+}
+
+.appbase-autocomplete .aa-dropdown-menu .aa-suggestion {
+	cursor: pointer;
+	padding: 10px 6px;
+}
+
+.appbase-autocomplete .aa-dropdown-menu .aa-suggestion p {
+	margin: 0;
+}
+
+.appbase-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+	background-color: #f5f5f5;
+}
+
+.appbase-autocomplete .aa-dropdown-menu .aa-suggestion em {
+	font-weight: bold;
+	font-style: normal;
+}
+
+.input-container {
+	width: 100%;
+	position: relative;
+}
+
+.input-container img {
+	width: 15px;
+	position: absolute;
+	left: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 5;
+}
+
+.input-container .input {
+	padding: 10px;
+	box-sizing: border-box;
+	padding-left: 30px;
+	color: #424242;
+	border: 1px solid #ccc;
+	font-weight: 400;
+	background: #fafafa;
+	font-size: 15px;
+}
+
+.input-container .input:focus {
+	background: white;
+	outline: none;
+}

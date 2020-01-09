@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Searchbase with AutoComplete</title>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+			crossorigin="anonymous"
+		/>
+
+		<style>
+			.appbase-autocomplete {
+				width: 100%;
+			}
+
+			.appbase-autocomplete .aa-input,
+			.appbase-autocomplete .aa-hint {
+				width: 100%;
+			}
+
+			.appbase-autocomplete .aa-hint {
+				color: #999;
+			}
+
+			.appbase-autocomplete .aa-dropdown-menu {
+				width: 100%;
+				background-color: #fff;
+				outline: 1px solid #999;
+				border-top: none;
+			}
+
+			.appbase-autocomplete .aa-dropdown-menu .aa-suggestion {
+				cursor: pointer;
+				padding: 5px 4px;
+			}
+
+			.appbase-autocomplete .aa-dropdown-menu .aa-suggestion p {
+				margin: 5px 0;
+			}
+
+			.appbase-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+				background-color: #b2d7ff;
+			}
+
+			.appbase-autocomplete .aa-dropdown-menu .aa-suggestion em {
+				font-weight: bold;
+				font-style: normal;
+			}
+		</style>
+	</head>
+
+	<body class="container-fluid">
+		<div class="row">
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with templates</h6>
+				<input
+					id="git"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Random placeholder which explains Random title"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with no hint</h6>
+				<input
+					id="git2"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="No hint on input"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with autoselect</h6>
+				<input
+					id="git3"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="First suggestion gets focus"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with clearOnSelected</h6>
+				<input
+					id="git4"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Clears input on Selcting a suggestion"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with openOnFocus</h6>
+				<input
+					id="git5"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Select a value and get focus again to see menu"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with keyboardShortcuts</h6>
+				<input
+					id="git6"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Type a or s for getting focus"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>
+					AutoComplete with minLength ( min characters for searching )
+				</h6>
+				<input
+					id="git7"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Get Results from 3 characters"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with events</h6>
+				<input
+					id="git8"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Check console for all events"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with debounce of 1s</h6>
+				<input
+					id="git9"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Put a timer for 1s to ensure this"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with displayKey</h6>
+				<input
+					id="git10"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Value on input will be start with Awesome and end with Blossom"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with analytics</h6>
+				<input
+					id="git11"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Analytics is ON!"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with loader</h6>
+				<input
+					id="git12"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Custom Loader"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with promoted data</h6>
+				<input
+					id="git13"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Type harry potter"
+				/>
+			</div>
+
+			<div class="p-3 col-6 my-2">
+				<h6>AutoComplete with Custom Suggestions</h6>
+				<input
+					id="git14"
+					class="form-control"
+					name="git"
+					type="text"
+					placeholder="Custom Suggestions"
+				/>
+			</div>
+		</div>
+
+		<script src="./index.js"></script>
+	</body>
+</html>

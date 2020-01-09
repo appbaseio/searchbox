@@ -7,14 +7,14 @@ import Observable from './observable';
 import { getSuggestions } from './utils';
 import type {
   DataField,
-  MicStatusField,
-  Options,
-  QueryFormat,
-  RequestStatus,
-  SortOption,
-  Suggestion,
-  Option,
-  SearchBaseConfig
+    MicStatusField,
+    Options,
+    QueryFormat,
+    RequestStatus,
+    SortOption,
+    Suggestion,
+    Option,
+    SearchBaseConfig
 } from './types';
 import CompositeAggregationResults from './CompositeAggregationResults';
 
@@ -735,8 +735,8 @@ class Searchbase {
         ...this.headers,
         ...(this.analytics
           ? this.analyticsInstance
-              .setSearchQuery(this.value)
-              .getAnalyticsHeaders()
+            .setSearchQuery(this.value)
+            .getAnalyticsHeaders()
           : null)
       }
     };
@@ -1078,7 +1078,7 @@ Searchbase.shouldQuery = (
     if (typeof dataField === 'object') {
       return `${dataField.field}${
         dataField.weight ? `^${dataField.weight}` : ''
-      }`;
+        }`;
     }
     return dataField;
   });

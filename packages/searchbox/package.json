@@ -1,0 +1,61 @@
+{
+	"name": "@appbaseio/searchbox",
+	"version": "0.0.2-alpha",
+	"private": false,
+	"description": "Autocomplete for Searchbase",
+	"main": "dist/searchbox.cjs.js",
+	"jsnext:main": "dist/searchbox.es.js",
+	"browser": "dist/searchbox.umd.js",
+	"module": "dist/searchbox.es.js",
+	"scripts": {
+		"build": "rollup -c",
+		"dev": "concurrently --kill-others -n \"AUTOCOMPLETE\",\"EXAMPLE\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run example\"",
+		"watch": "rollup -c -w",
+		"example": "cd test-example && yarn start"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/appbaseio/searchbase.git"
+	},
+	"author": "jyash97@gmail.com",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/appbaseio/searchbase/issues"
+	},
+	"homepage": "https://github.com/appbaseio/searchbase#readme",
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"appbase",
+		"elasticsearch",
+		"search",
+		"vanilla js",
+		"searchbox"
+	],
+	"dependencies": {
+		"immediate": "^3.2.3"
+	},
+	"devDependencies": {
+		"concurrently": "^4.1.2",
+		"eslint": "^6.4.0",
+		"eslint-config-prettier": "^6.3.0",
+		"eslint-config-standard": "^14.1.0",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-node": "^10.0.0",
+		"eslint-plugin-prettier": "^3.1.1",
+		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-standard": "^4.0.1",
+		"husky": "^3.0.5",
+		"lint-staged": "^9.4.0",
+		"rollup": "^1.21.2",
+		"rollup-plugin-commonjs": "^10.1.0",
+		"rollup-plugin-node-resolve": "^5.2.0",
+		"rollup-plugin-terser": "^5.1.2"
+	},
+	"lint-staged": {
+		"*.js": [
+			"eslint"
+		]
+	}
+}
