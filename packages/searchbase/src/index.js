@@ -17,7 +17,7 @@ import type {
     SearchBaseConfig
 } from './types';
 import CompositeAggregationResults from './CompositeAggregationResults';
-console.log("Hey")
+
 // mic constants
 const MIC_STATUS = {
   inactive: 'INACTIVE',
