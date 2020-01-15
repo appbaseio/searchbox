@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "nps build",
-    "watch": "concurrently \"nps watch\" \"cd test-example && yarn serve\" "
+    "watch": "nps watch"
   },
   "repository": {
     "type": "git",
