@@ -13,7 +13,8 @@
     "test": "nps test",
     "precommit": "lint-staged",
     "lint": "nps lint",
-    "prepare": "nps validate"
+    "prepare": "nps validate",
+    "postpublish": "node ../../update-searchbase.js"
   },
   "repository": {
     "type": "git",
