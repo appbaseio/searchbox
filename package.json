@@ -5,11 +5,8 @@
   "workspaces": [
     "packages/*",
     "packages/searchbase/examples/*",
-    "packages/react-searchbox/example/",
-    "packages/searchbox/test-example/",
-    "packages/vue-searchbox/test-example/",
-    "packages/vue-searchbox/example/*",
-    "packages/react-searchbox/example/*",
+    "packages/vue-searchbox/examples/*",
+    "packages/react-searchbox/examples/*",
     "packages/searchbox/examples/*"
   ],
   "scripts": {
