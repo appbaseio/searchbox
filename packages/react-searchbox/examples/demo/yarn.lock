@@ -9,20 +9,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@^0.0.2-alpha":
-  version "0.0.2-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-0.0.2-alpha.tgz#059e79188b08993a23fc2957570b02523f07a096"
-  integrity sha512-4e/qiPm2CiXxWYFoZtPdBHHq+lbGHKJaQ1pi6/ayrsX5J0bf0IOT9I8p5c8DAQvpcA/VqEEx4p/1ELva+pz4pA==
+"@appbaseio/react-searchbox@^0.1.0-alpha":
+  version "0.1.0-alpha"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-0.1.0-alpha.tgz#2024b18dcb535246304f38bcc9f65e74e9cb2e98"
+  integrity sha512-dkDCIQ1soXQVhsT8wbBG8WJOpvDkuJrMi8DX2DecSDQx5HLy5cdEbheiX8sbz58CbUux7+c9q/W2eTyCENCQ2w==
   dependencies:
-    "@appbaseio/searchbase" "^1.0.0-alpha.5"
+    "@appbaseio/searchbase" "^1.0.1-alpha.5"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@^1.0.0-alpha.5":
-  version "1.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.0-alpha.5.tgz#8efedec4279cc11b5bf5c67c1ae58cec57ee55c7"
-  integrity sha512-tV/fYMn/+Mv1HDtWN+bM8kMMLKEx0ndDOc7y5ofqX/XgxyK/ZR385nXaulvjuPuGzQ5vactMTC2EP5/OEmhbfA==
+"@appbaseio/searchbase@^1.0.1-alpha.5":
+  version "1.0.1-alpha.5"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.1-alpha.5.tgz#2bca35ed94cec1d23593bc7921e6b460d28dfebd"
+  integrity sha512-fl5Z437TRbvItdgcUDAKRLbXWJpKkMbeUWDghjRnQRU7hoVHP3qkM+ZMzjG+phvTU8XbsykMs8mKNPnPP5u/+Q==
   dependencies:
     "@appbaseio/analytics" "^1.0.0-alpha.1"
     cross-fetch "^3.0.4"

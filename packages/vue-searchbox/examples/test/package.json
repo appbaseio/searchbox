@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "@appbaseio/vue-searchbox": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
