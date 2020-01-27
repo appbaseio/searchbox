@@ -30,7 +30,7 @@ We have baked some amazing features in libraries which helps getting insights fr
 
 ### Searchbox v/s ReactiveSearch
 
-We recommend using React Searchbox over DataSearch or CategorySearch components of ReactiveSearch when you only need to integrate a searchbox UI component into your app. If you are planning to user other UI filters or result components, it is ideal to use the ReactiveSearch library instead of this standalone component.
+We recommend using React Searchbox over DataSearch or CategorySearch components of ReactiveSearch when you only need to integrate a searchbox UI component into your app. If you are planning to use other UI filters or result components, it is ideal to use the ReactiveSearch library instead of this standalone component.
 
 **Key Differences**
 
