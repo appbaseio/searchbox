@@ -4,10 +4,19 @@
   "description": "Headless core + common utilities for search",
   "workspaces": [
     "packages/*",
-    "packages/searchbase/examples/*"
+    "packages/searchbase/examples/*",
+    "packages/vue-searchbox/examples/*",
+    "packages/react-searchbox/examples/*",
+    "packages/searchbox/examples/*"
   ],
   "scripts": {
-    "dev:watch": "npm run watch --prefix packages/searchbase"
+    "watch": "npm run watch --prefix packages/searchbase",
+    "vue": "npm run watch --prefix packages/vue-searchbox",
+    "js": "npm run dev --prefix packages/searchbox",
+    "react": "npm run start --prefix packages/react-searchbox",
+    "dev:vue": "concurrently --kill-others -n \"SEARCHBASE\",\"VUE\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run vue\"",
+    "dev:js": "concurrently --kill-others -n \"SEARCHBASE\",\"JS\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run js\"",
+    "dev:react": "concurrently --kill-others -n \"SEARCHBASE\",\"REACT\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run react\""
   },
   "repository": {
     "type": "git",
@@ -27,6 +36,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.4.2",
     "babel-polyfill": "^6.26.0",
+    "concurrently": "^5.0.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-flowtype-errors": "^4.1.0",

@@ -22,7 +22,7 @@ Currently the initial setup is a bit manual which we're planning to improve. We 
 yarn
 ```
 
-## Web
+## Searchbase
 
 1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
 
@@ -33,6 +33,36 @@ yarn dev:watch
 Alternatively the manual approach would be to open the sub-projects for `/searchbase` and start the watchers inside their respective directories.
 
 2. You can try the examples for the `searchbase` inside `/packages/searchbase/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` files.
+
+## Searchbox
+
+1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase` & `/searchbox`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+
+```bash
+yarn dev:js
+```
+
+2. You can try the examples for the `searchbox` inside `/packages/searchbox/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` & `/packages/searchbox/src` files.
+
+## React Searchbox
+
+1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase` & `/react-searchbox`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+
+```bash
+yarn dev:react
+```
+
+2. You can try the examples for the `react-searchbox` inside `/packages/react-searchbox/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` & `/packages/react-searchbox/src` files.
+
+## Vue Searchbox
+
+1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase` & `/vue-searchbox`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+
+```bash
+yarn dev:vue
+```
+
+2. You can try the examples for the `vue-searchbox` inside `/packages/vue-searchbox/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` & `/packages/vue-searchbox/src` files.
 
 **Note:** If you see any errors about missing dependencies, please try running `yarn` inside the sub-directory you're at.
 
