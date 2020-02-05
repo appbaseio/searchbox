@@ -901,7 +901,7 @@ class Searchbase {
     // Set default suggestions query here
     const finalQueryOptions = Searchbase.generateQueryOptions({
       aggregationField: this.aggregationField,
-      size: 10
+      size: this.size
     });
     /**
      * First priority goes to the custom query set by user otherwise execute the default query

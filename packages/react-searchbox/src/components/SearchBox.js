@@ -9,6 +9,7 @@ import {
   func,
   fuzziness,
   highlightField,
+  number,
   object,
   position,
   queryFormat,
@@ -141,7 +142,8 @@ class SearchBox extends Component {
       onError,
       onResults,
       aggregationField,
-      onAggregationData
+      onAggregationData,
+      size
     } = this.props;
 
     try {
@@ -157,6 +159,7 @@ class SearchBox extends Component {
         url,
         dataField,
         aggregationField,
+        size,
         credentials,
         analytics,
         headers,
@@ -466,9 +469,9 @@ class SearchBox extends Component {
       onKeyDown,
       autoFocus,
       value,
-      renderError
+      renderError,
+      size
     } = this.props;
-
     const { isOpen, currentValue, suggestionsList, initError } = this.state;
     if (initError) {
       if (renderError)
@@ -536,7 +539,7 @@ class SearchBox extends Component {
                     css={suggestionsCss}
                     className={getClassName(innerClass, 'list')}
                   >
-                    {suggestionsList.slice(0, 10).map((item, index) => (
+                    {suggestionsList.slice(0, size).map((item, index) => (
                       <li
                         {...getItemProps({ item })}
                         key={`${index + 1}-${item.value}`}
@@ -594,6 +597,7 @@ SearchBox.propTypes = {
   dataField: dataField,
   aggregationField: string,
   nestedField: string,
+  size: number,
   title: string,
   defaultValue: string,
   value: string,
@@ -645,6 +649,7 @@ SearchBox.propTypes = {
 };
 
 SearchBox.defaultProps = {
+  size: 10,
   url: 'https://scalr.api.appbase.io',
   placeholder: 'Search',
   analytics: false,

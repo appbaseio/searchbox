@@ -26,6 +26,7 @@ const VueSearchbox = {
     dataField: types.dataField,
     aggregationField: types.aggregationField,
     nestedField: types.nestedField,
+    size: types.size,
     title: types.title,
     defaultValue: types.defaultValue,
     placeholder: types.placeholder,
@@ -131,6 +132,7 @@ const VueSearchbox = {
         analytics,
         headers,
         nestedField,
+        size,
         defaultQuery,
         beforeValueChange,
         queryFormat,
@@ -151,6 +153,7 @@ const VueSearchbox = {
           url,
           dataField,
           aggregationField,
+          size,
           credentials,
           analytics,
           headers,
@@ -387,7 +390,8 @@ const VueSearchbox = {
       placeholder,
       autoFocus,
       innerRef,
-      renderError
+      renderError,
+      size,
     } = this.$props;
     const {
       currentValue,
@@ -479,7 +483,7 @@ const VueSearchbox = {
                         "list"
                       )}`}
                     >
-                      {suggestionsList.slice(0, 10).map((item, index) => (
+                      {suggestionsList.slice(0, size).map((item, index) => (
                         <li
                           {...{
                             domProps: getItemProps({ item })

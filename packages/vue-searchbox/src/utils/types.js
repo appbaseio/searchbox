@@ -20,6 +20,7 @@ export const types = {
   // aggregationData can be used by listening to event `aggregations`
   aggregationField: VueTypes.string,
   nestedField: VueTypes.string,
+  size: VueTypes.number.def(10),
   title: VueTypes.string,
   defaultValue: VueTypes.string,
   placeholder: VueTypes.string.def("Search"),
