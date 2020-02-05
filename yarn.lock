@@ -52,18 +52,6 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
-"@appbaseio/vue-searchbox@latest":
-  version "1.0.4-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.0.4-alpha.tgz#0d5153d4302932b88705bc9b045d85436dacbc80"
-  integrity sha512-sGk8Kpi0FjP0+5Pkf3N8XwBl5To6BIgZSw44jKBq2qDMOggUEwIe37aYPdmTdiQ3BXMixibtvlV8KUxixrV9xg==
-  dependencies:
-    "@appbaseio/searchbase" "^1.0.1-alpha.5"
-    "@appbaseio/vue-emotion" "^0.4.4"
-    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
-    compute-scroll-into-view "^1.0.11"
-    emotion "9.2.12"
-    vue-types "^1.6.0"
-
 "@babel/code-frame@7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"

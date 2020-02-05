@@ -27,7 +27,7 @@ yarn
 1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
 
 ```bash
-yarn dev:watch
+yarn watch
 ```
 
 Alternatively the manual approach would be to open the sub-projects for `/searchbase` and start the watchers inside their respective directories.
