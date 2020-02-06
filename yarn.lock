@@ -34,16 +34,6 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@latest":
-  version "0.1.1-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-0.1.1-alpha.tgz#b2a994ed7647e41100beeab402e3c6ead1febbef"
-  integrity sha512-zbyC2s+cC01MHds2FQNK75YBl60ReroaiSpT15+enN6IDI7lvvsT0jzICOLe21R3y8Xc7nouS/Th78MrF5ulIA==
-  dependencies:
-    "@appbaseio/searchbase" "^1.0.1-alpha.5"
-    "@emotion/core" "^10.0.17"
-    "@emotion/styled" "^10.0.17"
-    downshift "^3.3.1"
-
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"
