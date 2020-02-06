@@ -14,6 +14,7 @@ import { suggestions, suggestionsContainer } from "../styles/Suggestions";
 import SuggestionItem from "../addons/SuggestionItem.jsx";
 import Title from "../styles/Title";
 import Icons from "./Icons.jsx";
+import causes from '../utils/causes';
 
 const VueSearchbox = {
   name: "VueSearchbox", // vue component name
@@ -236,6 +237,9 @@ const VueSearchbox = {
         numberOfResults
       };
     },
+    onValueSelectedHandler(currentValue = this.$data.currentValue, ...cause) {
+      this.$emit('valueSelected', currentValue, ...cause);
+    },
     getSearchTerm(url = "") {
       const searchParams = getURLParameters(url);
       return searchParams && searchParams[this.searchTerm];
@@ -246,6 +250,11 @@ const VueSearchbox = {
     onSuggestionSelected(suggestion) {
       this.setValue({ value: suggestion && suggestion.value, isOpen: false });
       this.triggerClickAnalytics(suggestion && suggestion._click_id);
+      this.onValueSelectedHandler(
+        suggestion.value,
+        causes.SUGGESTION_SELECT,
+        suggestion.source,
+      );
     },
     setValue({ value, isOpen = true }) {
       const { debounce, searchTerm, URLParams } = this.$props;
@@ -278,8 +287,10 @@ const VueSearchbox = {
     handleKeyDown(event, highlightedIndex) {
       // if a suggestion was selected, delegate the handling
       // to suggestion handler
-      if (event.key === "Enter" && highlightedIndex === null)
+      if (event.key === "Enter" && highlightedIndex === null) {
         this.setValue({ value: event.target.value, isOpen: false });
+        this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
+      }
 
       this.$emit("keyDown", event);
     },
@@ -366,11 +377,13 @@ const VueSearchbox = {
     },
     clearValue() {
       this.setValue({ value: "", isOpen: false });
+      this.onValueSelectedHandler(null, causes.CLEAR_VALUE);
     },
     handleSearchIconClick() {
       const { currentValue } = this.$data;
       if (currentValue.trim()) {
         this.setValue({ value: currentValue, isOpen: false });
+        this.onValueSelectedHandler(currentValue, causes.SEARCH_ICON_CLICK);
       }
     },
     getBackgroundColor(highlightedIndex, index) {

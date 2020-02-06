@@ -40,6 +40,7 @@ import {
   suggestionsContainer
 } from '../styles/Suggestions';
 import SuggestionWrapper from '../addons/SuggestionsWrapper';
+import causes from '../utils/causes';
 
 class SearchBox extends Component {
   constructor(props) {
@@ -300,6 +301,13 @@ class SearchBox extends Component {
     }
   };
 
+  onValueSelected = (currentValue = this.state.currentValue, ...cause) => {
+    const { onValueSelected } = this.props;
+    if (onValueSelected) {
+      onValueSelected(currentValue, ...cause);
+    }
+  };
+
   triggerSuggestionsQuery = value => {
     this.searchBase &&
       this.searchBase.setValue(value || '', {
@@ -314,16 +322,23 @@ class SearchBox extends Component {
     const { currentValue } = this.state;
     if (currentValue.trim()) {
       this.setValue({ value: currentValue, isOpen: false });
+      this.onValueSelected(currentValue, causes.SEARCH_ICON_CLICK);
     }
   };
 
   clearValue = () => {
     this.setValue({ value: '', isOpen: false });
+    this.onValueSelected(null, causes.CLEAR_VALUE);
   };
 
   onSuggestionSelected = suggestion => {
     this.setValue({ value: suggestion && suggestion.value, isOpen: false });
     this.triggerClickAnalytics(suggestion && suggestion._click_id);
+    this.onValueSelected(
+      suggestion.value,
+      causes.SUGGESTION_SELECT,
+      suggestion.source
+    );
   };
 
   handleStateChange = changes => {
@@ -441,8 +456,10 @@ class SearchBox extends Component {
   handleKeyDown = (event, highlightedIndex) => {
     // if a suggestion was selected, delegate the handling
     // to suggestion handler
-    if (event.key === 'Enter' && highlightedIndex === null)
+    if (event.key === 'Enter' && highlightedIndex === null) {
       this.setValue({ value: event.target.value, isOpen: false });
+      this.onValueSelected(event.target.value, causes.ENTER_PRESS);
+    }
 
     if (this.props.onKeyDown) {
       this.props.onKeyDown(event, this.triggerQuery);
@@ -626,6 +643,7 @@ SearchBox.propTypes = {
   renderMic: func,
   onChange: func,
   onValueChange: func,
+  onValueSelected: func,
   onSuggestions: func,
   onAggregationData: func,
   onError: func,
