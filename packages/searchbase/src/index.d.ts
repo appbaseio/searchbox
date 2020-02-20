@@ -51,6 +51,9 @@ export class SearchBase {
   // es url
   url: string;
 
+  // use rs v3 api
+  enableAppbase: boolean;
+
   // auth credentials if any
   credentials: string;
 
@@ -219,6 +222,7 @@ export class SearchBase {
   constructor({
     index,
     url,
+    enableAppbase,
     credentials,
     analytics,
     headers,

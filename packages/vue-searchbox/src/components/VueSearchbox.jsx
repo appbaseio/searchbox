@@ -229,10 +229,11 @@ const VueSearchbox = {
       );
     },
     setStateValue({ suggestions = {} }) {
-      const { time, hidden, data, promoted, numberOfResults, promotedData } =
+      const { time, hidden, data, promoted, numberOfResults, promotedData, customData } =
         suggestions.next || {};
       this.suggestionsList = withClickIds(suggestions.next && data) || [];
       this.promotedData = promotedData;
+      this.customData = customData;
       this.resultStats = {
         time,
         hidden,
@@ -415,6 +416,7 @@ const VueSearchbox = {
       suggestionsList,
       initError,
       promotedData,
+      customData,
       resultStats
     } = this.$data;
     if (initError) {
@@ -489,6 +491,7 @@ const VueSearchbox = {
                       highlightedIndex,
                       parsedSuggestions: suggestionsList,
                       promotedData,
+                      customData,
                       resultStats
                     })}
                   {this.renderErrorComponent()}

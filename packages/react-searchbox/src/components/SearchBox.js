@@ -214,11 +214,19 @@ class SearchBox extends Component {
   };
 
   setStateValue = ({ suggestions = {} }) => {
-    const { time, hidden, data, promoted, numberOfResults, promotedData } =
-      suggestions.next || {};
+    const {
+      time,
+      hidden,
+      data,
+      promoted,
+      numberOfResults,
+      promotedData,
+      customData
+    } = suggestions.next || {};
     this.setState({
       suggestionsList: withClickIds(suggestions.next && data) || [],
       promotedData,
+      customData,
       resultStats: {
         time,
         hidden,
@@ -235,7 +243,8 @@ class SearchBox extends Component {
       error,
       loading,
       resultStats,
-      promotedData
+      promotedData,
+      customData
     } = this.state;
     const data = {
       error,
@@ -245,6 +254,7 @@ class SearchBox extends Component {
       value: currentValue,
       triggerClickAnalytics: this.triggerClickAnalytics,
       promotedData,
+      customData,
       resultStats
     };
     return getComponent(data, this.props);

@@ -40,6 +40,7 @@ type Observer = {
 type SearchBaseConfig = {
   index: string;
   url: string;
+  enableAppbase: boolean;
   credentials: string;
   analytics: boolean;
   headers: Object;
