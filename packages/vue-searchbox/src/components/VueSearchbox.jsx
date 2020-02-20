@@ -21,6 +21,7 @@ const VueSearchbox = {
   props: {
     app: types.app,
     url: types.url,
+    enableAppbase: types.enableAppbase,
     credentials: types.credentials,
     analytics: types.analytics,
     headers: types.headers,
@@ -128,6 +129,7 @@ const VueSearchbox = {
       const {
         app,
         url,
+        enableAppbase,
         dataField,
         credentials,
         analytics,
@@ -152,6 +154,7 @@ const VueSearchbox = {
         this.searchBase = new Searchbase({
           index: app,
           url,
+          enableAppbase,
           dataField,
           aggregationField,
           size,

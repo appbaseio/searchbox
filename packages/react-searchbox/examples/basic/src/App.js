@@ -4,27 +4,37 @@ import SearchBox from '@appbaseio/react-searchbox';
 import { FaMicrophone } from 'react-icons/fa';
 
 export default class App extends Component {
+  state = { value: '' };
+
+  handleChange = (value, triggerQuery) => {
+    this.setState({ value }, () => {
+      triggerQuery();
+    });
+  };
+
   render() {
+    const { value, results } = this.state;
     return (
-      <div>
+      <div style={{ width: '50%', margin: '100px' }}>
         <SearchBox
-          app="good-books-ds"
-          credentials="nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d"
+          app="movie-app"
+          url="http://localhost:8000"
+          credentials="foo:bar"
+          enableAppbase
           dataField={['original_title', 'original_title.search']}
-          showVoiceSearch
-          searchTerm="search"
-          URLParams
-          analytics
-          analyticsConfig={{
-            searchStateHeader: true,
-            suggestionAnalytics: true
-          }}
-          style={{ width: '50%', margin: '100px' }}
           showClear
-        // renderNoSuggestion={() => 'hello world'}
-        // showIcon={false}
-        // iconPosition="left"
+          value={value}
+          onChange={this.handleChange}
+          onResults={next => {
+            console.log({ next });
+            this.setState({ results: next.data });
+          }}
         />
+        <ul>
+          {(results || []).map(result => (
+            <li key={result.id}>{result.original_title}</li>
+          ))}
+        </ul>
       </div>
     );
   }

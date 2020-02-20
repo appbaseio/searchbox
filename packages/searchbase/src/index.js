@@ -88,6 +88,9 @@ class Searchbase {
   // es url
   url: string;
 
+  // use rs v3 api
+  enableAppbase: boolean;
+
   // auth credentials if any
   credentials: string;
 
@@ -224,6 +227,7 @@ class Searchbase {
   constructor({
     index,
     url,
+    enableAppbase,
     credentials,
     analytics,
     headers,
@@ -262,6 +266,7 @@ class Searchbase {
     }
     this.index = index;
     this.url = url;
+    this.enableAppbase = enableAppbase || false;
     this.analytics = analytics || false;
     if (this.analytics) {
       this.analyticsInstance = AppbaseAnalytics({
@@ -273,17 +278,17 @@ class Searchbase {
     this.dataField = dataField;
     this.aggregationField = aggregationField;
     this.credentials = credentials || '';
-    this.nestedField = nestedField || '';
+    this.nestedField = nestedField;
     this.queryFormat = queryFormat || 'or';
     this.fuzziness = fuzziness || 0;
     this.searchOperators = searchOperators || false;
     this.size = Number(size) || 10;
     this.from = Number(from) || 0;
-    this.sortBy = sortBy || '';
+    this.sortBy = sortBy;
     this.includeFields = includeFields || ['*'];
     this.excludeFields = excludeFields || [];
     this.sortOptions = sortOptions || null;
-    this.sortByField = sortByField || '';
+    this.sortByField = sortByField;
     this.highlight = highlight;
     this.highlightField = highlightField;
 
@@ -595,7 +600,9 @@ class Searchbase {
             .then(results => {
               this._setRequestStatus(REQUEST_STATUS.inactive);
               const prev = this.results;
-              this.results.setRaw(results);
+              let rawResults = results;
+              if (this.enableAppbase) rawResults = results.SearchResult;
+              this.results.setRaw(rawResults);
               this._applyOptions(
                 {
                   stateChanges: options.stateChanges
@@ -604,7 +611,7 @@ class Searchbase {
                 prev,
                 this.results
               );
-              return Promise.resolve(results);
+              return Promise.resolve(rawResults);
             })
             .catch(handleError);
         })
@@ -635,15 +642,17 @@ class Searchbase {
           this._fetchRequest(finalQuery)
             .then(suggestions => {
               this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
-              if (suggestions.aggregations) {
+              let rawSuggestions = suggestions;
+              if (this.enableAppbase) rawSuggestions = suggestions.DataSearch;
+              if (rawSuggestions.aggregations) {
                 this._handleCompositeAggsResponse(
                   this.aggregationField,
-                  suggestions.aggregations,
+                  rawSuggestions.aggregations,
                   options
                 );
               }
               const prev = this.suggestions;
-              this.suggestions.setRaw(suggestions);
+              this.suggestions.setRaw(rawSuggestions);
               this._applyOptions(
                 {
                   stateChanges: options.stateChanges
@@ -652,7 +661,7 @@ class Searchbase {
                 prev,
                 this.suggestions
               );
-              return Promise.resolve(suggestions);
+              return Promise.resolve(rawSuggestions);
             })
             .catch(handleError);
         })
@@ -753,7 +762,12 @@ class Searchbase {
           // set timestamp in request
           const timestamp = Date.now();
 
-          return fetch(`${this.url}/${this.index}/_search`, finalRequestOptions)
+          let suffix = '_search';
+          if (this.enableAppbase) suffix = '_reactivesearch.v3';
+          return fetch(
+            `${this.url}/${this.index}/${suffix}`,
+            finalRequestOptions
+          )
             .then(res => {
               const responseHeaders = res.headers;
 
@@ -857,6 +871,40 @@ class Searchbase {
 
   // Method to set the default query value
   _updateQuery(query?: Object, queryOptions?: Object): void {
+    let prevQuery;
+    if (this.enableAppbase) {
+      prevQuery = { ...this._query };
+      this._query = {
+        query: [
+          { ...this.getAppbaseSuggestionsQuery(), execute: false },
+          this.getAppbaseResultQuery()
+        ]
+      };
+    } else prevQuery = this.getPreviousQuery(query, queryOptions);
+    this._applyOptions(
+      {
+        stateChanges: false
+      },
+      'query',
+      prevQuery,
+      this._query
+    );
+  }
+
+  getAppbaseResultQuery() {
+    return {
+      id: 'SearchResult',
+      dataField: this.dataField,
+      from: this.from,
+      size: this.size,
+      sortBy: this.sortBy,
+      includeFields: this.includeFields,
+      excludeFields: this.excludeFields,
+      react: { and: 'DataSearch' }
+    };
+  }
+
+  getPreviousQuery(query?: Object, queryOptions?: Object) {
     // Set default query here
     const finalQueryOptions = Searchbase.generateQueryOptions({
       excludeFields: this.excludeFields,
@@ -893,17 +941,46 @@ class Searchbase {
       // Overrides the default options by the user defined options
       ...queryOptions
     };
+    return prevQuery;
+  }
+
+  _updateSuggestionsQuery(query?: Object, queryOptions?: Object): void {
+    let prevQuery;
+    if (this.enableAppbase) {
+      prevQuery = { ...this._suggestionsQuery };
+      this._suggestionsQuery = { query: [this.getAppbaseSuggestionsQuery()] };
+    } else prevQuery = this.getPreviousSuggestionsQuery(query, queryOptions);
     this._applyOptions(
       {
         stateChanges: false
       },
-      'query',
+      'suggestionsQuery',
       prevQuery,
-      this._query
+      this._suggestionsQuery
     );
   }
 
-  _updateSuggestionsQuery(query?: Object, queryOptions?: Object): void {
+  getAppbaseSuggestionsQuery() {
+    return {
+      id: 'DataSearch',
+      dataField: this.dataField,
+      value: this.value,
+      queryFormat: this.queryFormat,
+      nestedField: this.nestedField,
+      from: this.from,
+      size: this.size,
+      sortBy: this.sortBy,
+      aggregationField: this.aggregationField,
+      includeFields: this.includeFields,
+      excludeFields: this.excludeFields,
+      fuzziness: this.fuzziness,
+      searchOperators: this.searchOperators,
+      highlight: this.highlight,
+      highlightField: this.highlightField
+    };
+  }
+
+  getPreviousSuggestionsQuery(query?: Object, queryOptions?: Object) {
     // Set default suggestions query here
     const finalQueryOptions = Searchbase.generateQueryOptions({
       aggregationField: this.aggregationField,
@@ -923,7 +1000,7 @@ class Searchbase {
       }) || {
         match_all: {}
       };
-    const prevQuery = this._suggestionsQuery;
+    const prevQuery = { ...this._suggestionsQuery };
     this._suggestionsQuery = {
       query: finalQuery,
       ...Searchbase.highlightQuery(
@@ -935,14 +1012,7 @@ class Searchbase {
       // Overrides the default options by the user defined options
       ...queryOptions
     };
-    this._applyOptions(
-      {
-        stateChanges: false
-      },
-      'suggestionsQuery',
-      prevQuery,
-      this._suggestionsQuery
-    );
+    return prevQuery;
   }
 
   _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {

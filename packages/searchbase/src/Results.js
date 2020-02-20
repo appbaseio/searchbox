@@ -68,6 +68,15 @@ class Results {
     return [];
   }
 
+  // object of custom data applied through queryRules
+  // only works when `enableAppbase=true`
+  get customData() {
+    if (this.raw && this.raw.customData) {
+      return this.raw.customData || {};
+    }
+    return {};
+  }
+
   setRaw = (rawResponse: Object) => {
     // set response
     this.raw = rawResponse;
