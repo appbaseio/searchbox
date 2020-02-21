@@ -5,3 +5,4 @@ dist
 .cache
 .idea
 stats.html
+yarn-error.log

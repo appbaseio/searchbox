@@ -878,7 +878,8 @@ class Searchbase {
         query: [
           { ...this.getAppbaseSuggestionsQuery(), execute: false },
           this.getAppbaseResultQuery()
-        ]
+        ],
+        settings: this.getAppbaseSettings()
       };
     } else prevQuery = this.getPreviousQuery(query, queryOptions);
     this._applyOptions(
@@ -891,10 +892,23 @@ class Searchbase {
     );
   }
 
-  getAppbaseResultQuery() {
+  getAppbaseSettings(): {| recordAnalytics: boolean |} {
+    return { recordAnalytics: this.analytics };
+  }
+
+  getAppbaseResultQuery(): {|
+    dataField: Array<string>,
+    excludeFields: Array<string>,
+    from: number,
+    id: string,
+    includeFields: Array<string>,
+    react: {| and: string |},
+    size: number,
+    sortBy: string
+  |} {
     return {
       id: 'SearchResult',
-      dataField: this.dataField,
+      dataField: this.getDataFields(),
       from: this.from,
       size: this.size,
       sortBy: this.sortBy,
@@ -948,7 +962,10 @@ class Searchbase {
     let prevQuery;
     if (this.enableAppbase) {
       prevQuery = { ...this._suggestionsQuery };
-      this._suggestionsQuery = { query: [this.getAppbaseSuggestionsQuery()] };
+      this._suggestionsQuery = {
+        query: [this.getAppbaseSuggestionsQuery()],
+        settings: this.getAppbaseSettings()
+      };
     } else prevQuery = this.getPreviousSuggestionsQuery(query, queryOptions);
     this._applyOptions(
       {
@@ -960,10 +977,26 @@ class Searchbase {
     );
   }
 
-  getAppbaseSuggestionsQuery() {
+  getAppbaseSuggestionsQuery(): {|
+    aggregationField: string,
+    dataField: Array<string>,
+    excludeFields: Array<string>,
+    from: number,
+    fuzziness: number | string,
+    highlight: boolean,
+    highlightField: string | Array<string>,
+    id: string,
+    includeFields: Array<string>,
+    nestedField: string,
+    queryFormat: any,
+    searchOperators: boolean,
+    size: number,
+    sortBy: string,
+    value: string
+  |} {
     return {
       id: 'DataSearch',
-      dataField: this.dataField,
+      dataField: this.getDataFields(),
       value: this.value,
       queryFormat: this.queryFormat,
       nestedField: this.nestedField,
@@ -1016,6 +1049,11 @@ class Searchbase {
   }
 
   _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {
+    const fields = this.getDataFields();
+    return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
+  };
+
+  getDataFields(): Array<string> {
     let fields: Array<string> = [];
     if (this.dataField === 'string') {
       fields = [this.dataField];
@@ -1028,8 +1066,8 @@ class Searchbase {
         }
       });
     }
-    return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
-  };
+    return fields;
+  }
 
   // Method to apply the changed based on set options
   _applyOptions(
