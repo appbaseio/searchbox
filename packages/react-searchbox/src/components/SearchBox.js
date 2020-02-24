@@ -126,6 +126,7 @@ class SearchBox extends Component {
     const {
       app,
       url,
+      enableAppbase,
       dataField,
       credentials,
       analytics,
@@ -158,6 +159,7 @@ class SearchBox extends Component {
       this.searchBase = new Searchbase({
         index: app,
         url,
+        enableAppbase,
         dataField,
         aggregationField,
         size,
@@ -212,11 +214,19 @@ class SearchBox extends Component {
   };
 
   setStateValue = ({ suggestions = {} }) => {
-    const { time, hidden, data, promoted, numberOfResults, promotedData } =
-      suggestions.next || {};
+    const {
+      time,
+      hidden,
+      data,
+      promoted,
+      numberOfResults,
+      promotedData,
+      customData
+    } = suggestions.next || {};
     this.setState({
       suggestionsList: withClickIds(suggestions.next && data) || [],
       promotedData,
+      customData,
       resultStats: {
         time,
         hidden,
@@ -233,7 +243,8 @@ class SearchBox extends Component {
       error,
       loading,
       resultStats,
-      promotedData
+      promotedData,
+      customData
     } = this.state;
     const data = {
       error,
@@ -243,6 +254,7 @@ class SearchBox extends Component {
       value: currentValue,
       triggerClickAnalytics: this.triggerClickAnalytics,
       promotedData,
+      customData,
       resultStats
     };
     return getComponent(data, this.props);
@@ -282,10 +294,8 @@ class SearchBox extends Component {
 
   setValue = ({ value, isOpen = true, ...rest }) => {
     const { onChange, debounce, URLParams, searchTerm } = this.props;
-    if (this.props.value) {
-      if (onChange) {
-        onChange(value, this.triggerQuery, rest.event);
-      }
+    if (onChange) {
+      onChange(value, this.triggerQuery, rest.event);
     } else {
       this.setState({ isOpen });
       if (debounce > 0)
@@ -608,6 +618,7 @@ class SearchBox extends Component {
 SearchBox.propTypes = {
   app: string.isRequired,
   url: string,
+  enableAppbase: bool,
   credentials: string.isRequired,
   analytics: bool.isRequired,
   headers: object,
@@ -669,6 +680,7 @@ SearchBox.propTypes = {
 SearchBox.defaultProps = {
   size: 10,
   url: 'https://scalr.api.appbase.io',
+  enableAppbase: false,
   placeholder: 'Search',
   analytics: false,
   showIcon: true,

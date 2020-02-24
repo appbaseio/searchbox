@@ -10,6 +10,7 @@ const DataField = VueTypes.shape({
 export const types = {
   app: VueTypes.string.isRequired,
   url: VueTypes.string.def("https://scalr.api.appbase.io"),
+  enableAppbase: VueTypes.bool.def(false),
   credentials: VueTypes.string.isRequired,
   analytics: VueTypes.bool.def(false),
   headers: VueTypes.object,

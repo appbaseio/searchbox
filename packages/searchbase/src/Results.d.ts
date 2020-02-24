@@ -20,4 +20,5 @@ export interface Results {
   readonly hidden: number;
   readonly promotedData: Array<any>;
   readonly rawData: Array<any>;
+  readonly customData: Object;
 }

@@ -3,3 +3,6 @@ coverage
 dist
 .DS_Store
 .cache
+.idea
+stats.html
+yarn-error.log
