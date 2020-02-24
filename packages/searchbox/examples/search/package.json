@@ -8,7 +8,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@appbaseio/searchbase": "^1.0.1-alpha.5",
+    "@appbaseio/searchbase": "^1.1.0-alpha.0",
     "@appbaseio/searchbox": "^0.0.2-alpha"
   },
   "devDependencies": {
