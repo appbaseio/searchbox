@@ -1219,7 +1219,7 @@ Searchbase.shouldQuery = (
         multi_match: {
           query: value,
           fields,
-          type: 'phrase_prefix',
+          type: 'phrase',
           operator: 'and'
         }
       }
@@ -1240,7 +1240,7 @@ Searchbase.shouldQuery = (
       multi_match: {
         query: value,
         fields,
-        type: 'phrase_prefix',
+        type: 'phrase',
         operator: 'or'
       }
     }
