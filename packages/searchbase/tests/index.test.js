@@ -284,7 +284,7 @@ test('should query with and operator `and` field weight', () => {
       multi_match: {
         query: 'hello world',
         fields: ['original_title.search^50', '_id'],
-        type: 'phrase_prefix',
+        type: 'phrase',
         operator: 'and'
       }
     }
