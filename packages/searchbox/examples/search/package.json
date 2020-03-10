@@ -1,18 +1,18 @@
 {
-  "name": "autocomplete-example",
-  "description": "Autocomplete with Searchbase Example",
-  "main": "index.html",
-  "version": "0.0.1",
-  "scripts": {
-    "start": "parcel index.html --port 3000 --open",
-    "build": "parcel build index.html"
-  },
-  "dependencies": {
-    "@appbaseio/searchbase": "^1.1.0-alpha.0",
-    "@appbaseio/searchbox": "^0.0.2-alpha"
-  },
-  "devDependencies": {
-    "@babel/core": "7.2.0",
-    "parcel-bundler": "^1.6.1"
-  }
+    "name": "autocomplete-example",
+    "description": "Autocomplete with Searchbase Example",
+    "main": "index.html",
+    "version": "0.0.1",
+    "scripts": {
+        "start": "parcel index.html --port 3000 --open",
+        "build": "parcel build index.html"
+    },
+    "dependencies": {
+        "@appbaseio/searchbase": "1.1.0-alpha.1",
+        "@appbaseio/searchbox": "^0.0.2-alpha"
+    },
+    "devDependencies": {
+        "@babel/core": "7.2.0",
+        "parcel-bundler": "^1.6.1"
+    }
 }
