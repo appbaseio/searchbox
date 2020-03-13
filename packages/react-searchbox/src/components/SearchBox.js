@@ -221,12 +221,14 @@ class SearchBox extends Component {
       promoted,
       numberOfResults,
       promotedData,
-      customData
+      customData,
+      rawData
     } = suggestions.next || {};
     this.setState({
       suggestionsList: withClickIds(suggestions.next && data) || [],
       promotedData,
       customData,
+      rawData,
       resultStats: {
         time,
         hidden,
@@ -244,7 +246,8 @@ class SearchBox extends Component {
       loading,
       resultStats,
       promotedData,
-      customData
+      customData,
+      rawData
     } = this.state;
     const data = {
       error,
@@ -255,7 +258,8 @@ class SearchBox extends Component {
       triggerClickAnalytics: this.triggerClickAnalytics,
       promotedData,
       customData,
-      resultStats
+      resultStats,
+      rawData
     };
     return getComponent(data, this.props);
   };
