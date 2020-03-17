@@ -229,11 +229,12 @@ const VueSearchbox = {
       );
     },
     setStateValue({ suggestions = {} }) {
-      const { time, hidden, data, promoted, numberOfResults, promotedData, customData } =
+      const { time, hidden, data, promoted, numberOfResults, promotedData, customData, rawData } =
         suggestions.next || {};
       this.suggestionsList = withClickIds(suggestions.next && data) || [];
       this.promotedData = promotedData;
       this.customData = customData;
+      this.rawData = rawData;
       this.resultStats = {
         time,
         hidden,
@@ -417,7 +418,8 @@ const VueSearchbox = {
       initError,
       promotedData,
       customData,
-      resultStats
+      resultStats,
+      rawData
     } = this.$data;
     if (initError) {
       if (renderError)
@@ -492,7 +494,8 @@ const VueSearchbox = {
                       parsedSuggestions: suggestionsList,
                       promotedData,
                       customData,
-                      resultStats
+                      resultStats,
+                      rawData
                     })}
                   {this.renderErrorComponent()}
                   {!renderAllSuggestions && isOpen && suggestionsList.length ? (

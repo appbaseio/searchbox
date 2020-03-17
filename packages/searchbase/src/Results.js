@@ -60,12 +60,9 @@ class Results {
     return [];
   }
 
-  // An array of original hits obtained from the applied query.
+  // An object of raw response as-is from elasticsearch query
   get rawData() {
-    if (this.raw && this.raw.hits) {
-      return (this.raw.hits && this.raw.hits.hits) || [];
-    }
-    return [];
+    return this.raw || {};
   }
 
   // object of custom data applied through queryRules

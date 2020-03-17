@@ -16,9 +16,9 @@ class CompositeAggregationResults {
     this.data = data || [];
   }
 
-  // An array of original hits obtained from the applied query.
+  // An object of raw response as-is from elasticsearch query
   get rawData() {
-    return (this.raw && this.raw.buckets) || [];
+    return this.raw || {};
   }
 
   setRaw(rawResponse: Object) {
