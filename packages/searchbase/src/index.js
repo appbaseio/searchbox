@@ -161,6 +161,8 @@ class Searchbase {
 
   analyticsInstance: Object;
 
+  showDistinctSuggestions: boolean;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
@@ -253,7 +255,8 @@ class Searchbase {
     sortOptions,
     sortByField,
     highlight,
-    highlightField
+    highlightField,
+    showDistinctSuggestions
   }: SearchBaseConfig) {
     if (!index) {
       throw new Error('Please provide a valid index.');
@@ -291,6 +294,7 @@ class Searchbase {
     this.sortByField = sortByField;
     this.highlight = highlight;
     this.highlightField = highlightField;
+    this.showDistinctSuggestions = showDistinctSuggestions;
 
     this.requestStatus = REQUEST_STATUS.inactive;
     this.suggestionsRequestStatus = REQUEST_STATUS.inactive;
@@ -1050,7 +1054,12 @@ class Searchbase {
 
   _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {
     const fields = this.getDataFields();
-    return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
+    return getSuggestions(
+      fields,
+      suggestions,
+      this.value,
+      this.showDistinctSuggestions
+    ).slice(0, this.size);
   };
 
   getDataFields(): Array<string> {

@@ -65,32 +65,53 @@ export const extractSuggestion = (val: any) => {
 export const getSuggestions = (
   fields: Array<string> = [],
   suggestions: Array<Object>,
-  currentValue: string = ''
+  currentValue: string = '',
+  showDistinctSuggestions: boolean = true
 ) => {
+  /*
+		fields: DataFields passed on Search Components
+		suggestions: Raw Suggestions received from ES
+		currentValue: Search Term
+		skipWordMatch: Use to skip the word match logic, important for synonym
+		showDistinctSuggestions: When set to true will only return 1 suggestion per document
+  */
+
   let suggestionsList = [];
   let labelsList = [];
+  let skipWordMatch = false;
 
   const populateSuggestionsList = (val, parsedSource, source) => {
     // check if the suggestion includes the current value
     // and not already included in other suggestions
-    const isWordMatch = currentValue
-      .trim()
-      .split(' ')
-      .some(term =>
-        String(val)
-          .toLowerCase()
-          .includes(term)
-      );
+    const isWordMatch =
+      skipWordMatch ||
+      currentValue
+        .trim()
+        .split(' ')
+        .some(term =>
+          String(val)
+            .toLowerCase()
+            .includes(term)
+        );
+    // promoted results should always include in suggestions even there is no match
     if ((isWordMatch && !labelsList.includes(val)) || source._promoted) {
       const defaultOption = {
         label: val,
         value: val,
         source
       };
-
+      const option = {
+        ...defaultOption
+      };
       labelsList = [...labelsList, val];
-      suggestionsList = [...suggestionsList, defaultOption];
+      suggestionsList = [...suggestionsList, option];
+
+      if (showDistinctSuggestions) {
+        return true;
+      }
     }
+
+    return false;
   };
 
   const parseField = (parsedSource, field, source = parsedSource) => {
@@ -112,32 +133,50 @@ export const getSuggestions = (
           const val = extractSuggestion(label);
           if (val) {
             if (Array.isArray(val)) {
+              if (showDistinctSuggestions) {
+                return val.some(suggestion =>
+                  populateSuggestionsList(suggestion, parsedSource, source)
+                );
+              }
               val.forEach(suggestion =>
                 populateSuggestionsList(suggestion, parsedSource, source)
               );
-            } else {
-              populateSuggestionsList(val, parsedSource, source);
             }
+            return populateSuggestionsList(val, parsedSource, source);
           }
         }
       }
     }
+    return false;
   };
 
-  suggestions.forEach(item => {
-    const { _score, _index, _type, _id } = item;
+  const traverseSuggestions = () => {
+    if (showDistinctSuggestions) {
+      suggestions.forEach(item => {
+        fields.some(field => parseField(item, field));
+      });
+    } else {
+      suggestions.forEach(item => {
+        fields.forEach(field => {
+          parseField(item, field);
+        });
+      });
+    }
+  };
 
-    const source = {
-      ...item,
-      _id,
-      _index,
-      _score,
-      _type
-    };
-    fields.forEach(field => {
-      parseField(source, field);
-    });
-  });
+  traverseSuggestions();
+
+  if (suggestionsList.length < suggestions.length && !skipWordMatch) {
+    /*
+			When we have synonym we set skipWordMatch to false as it may discard
+			the suggestion if word doesnt match term.
+			For eg: iphone, ios are synonyms and on searching iphone isWordMatch
+			in  populateSuggestionList may discard ios source which decreases no.
+			of items in suggestionsList
+		*/
+    skipWordMatch = true;
+    traverseSuggestions();
+  }
 
   return suggestionsList;
 };

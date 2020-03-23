@@ -1,7 +1,7 @@
-import { types } from "../utils/types";
-import Input from "../styles/Input";
-import Searchbase from "@appbaseio/searchbase";
-import DownShift from "./DownShift.jsx";
+import { types } from '../utils/types';
+import Input from '../styles/Input';
+import Searchbase from '@appbaseio/searchbase';
+import DownShift from './DownShift.jsx';
 import {
   equals,
   getClassName,
@@ -9,15 +9,15 @@ import {
   isEmpty,
   getURLParameters,
   withClickIds
-} from "../utils/helper";
-import { suggestions, suggestionsContainer } from "../styles/Suggestions";
-import SuggestionItem from "../addons/SuggestionItem.jsx";
-import Title from "../styles/Title";
-import Icons from "./Icons.jsx";
+} from '../utils/helper';
+import { suggestions, suggestionsContainer } from '../styles/Suggestions';
+import SuggestionItem from '../addons/SuggestionItem.jsx';
+import Title from '../styles/Title';
+import Icons from './Icons.jsx';
 import causes from '../utils/causes';
 
 const VueSearchbox = {
-  name: "VueSearchbox", // vue component name
+  name: 'VueSearchbox', // vue component name
   props: {
     app: types.app,
     url: types.url,
@@ -62,11 +62,12 @@ const VueSearchbox = {
     currentURL: types.currentURL,
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
-    analyticsConfig: types.analyticsConfig
+    analyticsConfig: types.analyticsConfig,
+    showDistinctSuggestions: types.showDistinctSuggestions
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
-    const currentValue = value || defaultValue || "";
+    const currentValue = value || defaultValue || '';
 
     this.state = {
       currentValue,
@@ -94,16 +95,16 @@ const VueSearchbox = {
   },
   watch: {
     dataField: function(next, prev) {
-      return this._applySetter(prev, next, "setDataField");
+      return this._applySetter(prev, next, 'setDataField');
     },
     headers: function(next, prev) {
-      return this._applySetter(prev, next, "setHeaders");
+      return this._applySetter(prev, next, 'setHeaders');
     },
     fuzziness: function(next, prev) {
-      return this._applySetter(prev, next, "setFuzziness");
+      return this._applySetter(prev, next, 'setFuzziness');
     },
     nestedField: function(next, prev) {
-      return this._applySetter(prev, next, "setNestedField");
+      return this._applySetter(prev, next, 'setNestedField');
     },
     currentURL: function(next, prev) {
       const { URLParams } = this.$props;
@@ -142,7 +143,8 @@ const VueSearchbox = {
         defaultSuggestions,
         fuzziness,
         searchOperators,
-        aggregationField
+        aggregationField,
+        showDistinctSuggestions
       } = this.$props;
 
       try {
@@ -167,35 +169,36 @@ const VueSearchbox = {
           queryFormat,
           suggestions: defaultSuggestions,
           fuzziness,
-          searchOperators
+          searchOperators,
+          showDistinctSuggestions
         });
         this.searchBase.subscribeToStateChanges(this.setStateValue, [
-          "suggestions"
+          'suggestions'
         ]);
 
         this.searchBase.onQueryChange = (...args) => {
-          this.$emit("queryChange", ...args);
+          this.$emit('queryChange', ...args);
         };
         this.searchBase.onSuggestions = (...args) => {
-          this.$emit("suggestions", ...args);
+          this.$emit('suggestions', ...args);
         };
         this.searchBase.onAggregationData = (...args) => {
-          this.$emit("aggregations", ...args);
+          this.$emit('aggregations', ...args);
         };
         this.searchBase.onError = error => {
           this.error = error;
-          this.$emit("error", error);
+          this.$emit('error', error);
         };
         this.searchBase.onSuggestionsRequestStatusChange = next => {
-          this.loading = next === "PENDING";
+          this.loading = next === 'PENDING';
         };
         this.searchBase.onMicStatusChange = next => {
           this.micStatus = next;
-          this.isOpen = next === "INACTIVE" && !this.loading;
+          this.isOpen = next === 'INACTIVE' && !this.loading;
         };
         this.searchBase.onValueChange = nextValue => {
           this.currentValue = nextValue;
-          this.$emit("valueChange", nextValue);
+          this.$emit('valueChange', nextValue);
         };
       } catch (e) {
         this.initError = e;
@@ -229,8 +232,16 @@ const VueSearchbox = {
       );
     },
     setStateValue({ suggestions = {} }) {
-      const { time, hidden, data, promoted, numberOfResults, promotedData, customData, rawData } =
-        suggestions.next || {};
+      const {
+        time,
+        hidden,
+        data,
+        promoted,
+        numberOfResults,
+        promotedData,
+        customData,
+        rawData
+      } = suggestions.next || {};
       this.suggestionsList = withClickIds(suggestions.next && data) || [];
       this.promotedData = promotedData;
       this.customData = customData;
@@ -245,7 +256,7 @@ const VueSearchbox = {
     onValueSelectedHandler(currentValue = this.$data.currentValue, ...cause) {
       this.$emit('valueSelected', currentValue, ...cause);
     },
-    getSearchTerm(url = "") {
+    getSearchTerm(url = '') {
       const searchParams = getURLParameters(url);
       return searchParams && searchParams[this.searchTerm];
     },
@@ -258,7 +269,7 @@ const VueSearchbox = {
       this.onValueSelectedHandler(
         suggestion.value,
         causes.SUGGESTION_SELECT,
-        suggestion.source,
+        suggestion.source
       );
     },
     setValue({ value, isOpen = true }) {
@@ -277,13 +288,13 @@ const VueSearchbox = {
     },
     triggerSuggestionsQuery(value) {
       this.searchBase &&
-        this.searchBase.setValue(value || "", {
+        this.searchBase.setValue(value || '', {
           triggerSuggestionsQuery: true
         });
     },
     handleFocus(event) {
       this.isOpen = true;
-      this.$emit("focus", event);
+      this.$emit('focus', event);
     },
     handleStateChange(changes) {
       const { isOpen } = changes;
@@ -292,12 +303,12 @@ const VueSearchbox = {
     handleKeyDown(event, highlightedIndex) {
       // if a suggestion was selected, delegate the handling
       // to suggestion handler
-      if (event.key === "Enter" && highlightedIndex === null) {
+      if (event.key === 'Enter' && highlightedIndex === null) {
         this.setValue({ value: event.target.value, isOpen: false });
         this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
       }
 
-      this.$emit("keyDown", event);
+      this.$emit('keyDown', event);
     },
     handleMicClick() {
       this.searchBase &&
@@ -354,9 +365,9 @@ const VueSearchbox = {
       ) {
         return (
           <div
-            class={`no-suggestions ${getClassName(innerClass, "noSuggestion")}`}
+            class={`no-suggestions ${getClassName(innerClass, 'noSuggestion')}`}
           >
-            {typeof renderNoSuggestion === "function"
+            {typeof renderNoSuggestion === 'function'
               ? renderNoSuggestion(currentValue)
               : renderNoSuggestion}
           </div>
@@ -371,8 +382,8 @@ const VueSearchbox = {
       const { error, loading, currentValue } = this.$data;
       if (error && renderError && currentValue && !loading) {
         return (
-          <div class={getClassName(innerClass, "error")}>
-            {typeof renderError === "function"
+          <div class={getClassName(innerClass, 'error')}>
+            {typeof renderError === 'function'
               ? renderError(error)
               : renderError}
           </div>
@@ -381,7 +392,7 @@ const VueSearchbox = {
       return null;
     },
     clearValue() {
-      this.setValue({ value: "", isOpen: false });
+      this.setValue({ value: '', isOpen: false });
       this.onValueSelectedHandler(null, causes.CLEAR_VALUE);
     },
     handleSearchIconClick() {
@@ -392,7 +403,7 @@ const VueSearchbox = {
       }
     },
     getBackgroundColor(highlightedIndex, index) {
-      return highlightedIndex === index ? "#eee" : "#fff";
+      return highlightedIndex === index ? '#eee' : '#fff';
     }
   },
   render() {
@@ -409,7 +420,7 @@ const VueSearchbox = {
       autoFocus,
       innerRef,
       renderError,
-      size,
+      size
     } = this.$props;
     const {
       currentValue,
@@ -423,7 +434,7 @@ const VueSearchbox = {
     } = this.$data;
     if (initError) {
       if (renderError)
-        return typeof renderError === "function"
+        return typeof renderError === 'function'
           ? renderError(initError)
           : renderError;
       return <div>Error initializing SearchBase. Please try again.</div>;
@@ -434,7 +445,7 @@ const VueSearchbox = {
     return (
       <div class={className}>
         {title && (
-          <Title class={getClassName(innerClass, "title") || ""}>{title}</Title>
+          <Title class={getClassName(innerClass, 'title') || ''}>{title}</Title>
         )}
         {defaultSuggestions || autosuggest ? (
           <DownShift
@@ -459,27 +470,27 @@ const VueSearchbox = {
                     showIcon={showIcon}
                     showClear={showClear}
                     iconPosition={iconPosition}
-                    class={getClassName(innerClass, "input")}
+                    class={getClassName(innerClass, 'input')}
                     placeholder={placeholder}
                     {...{
                       on: getInputEvents({
                         onInput: this.onInputChange,
                         onBlur: e => {
-                          this.$emit("blur", e);
+                          this.$emit('blur', e);
                         },
                         onFocus: this.handleFocus,
                         onKeyPress: e => {
-                          this.$emit("keyPress", e);
+                          this.$emit('keyPress', e);
                         },
                         onKeyDown: e => this.handleKeyDown(e, highlightedIndex),
                         onKeyUp: e => {
-                          this.$emit("keyUp", e);
+                          this.$emit('keyUp', e);
                         }
                       })
                     }}
                     {...{
                       domProps: getInputProps({
-                        value: currentValue ? currentValue : ""
+                        value: currentValue ? currentValue : ''
                       })
                     }}
                   />
@@ -502,7 +513,7 @@ const VueSearchbox = {
                     <ul
                       class={`${suggestions} ${getClassName(
                         innerClass,
-                        "list"
+                        'list'
                       )}`}
                     >
                       {suggestionsList.slice(0, size).map((item, index) => (
@@ -540,32 +551,32 @@ const VueSearchbox = {
         ) : (
           <div class={suggestionsContainer}>
             <Input
-              class={getClassName(innerClass, "input") || ""}
+              class={getClassName(innerClass, 'input') || ''}
               placeholder={placeholder}
               {...{
                 on: {
                   blur: e => {
-                    this.$emit("blur", e);
+                    this.$emit('blur', e);
                   },
                   keypress: e => {
-                    this.$emit("keyPress", e);
+                    this.$emit('keyPress', e);
                   },
                   input: this.onInputChange,
                   focus: e => {
-                    this.$emit("focus", e);
+                    this.$emit('focus', e);
                   },
                   keydown: e => {
-                    this.$emit("keyDown", e);
+                    this.$emit('keyDown', e);
                   },
                   keyup: e => {
-                    this.$emit("keyUp", e);
+                    this.$emit('keyUp', e);
                   }
                 }
               }}
               {...{
                 domProps: {
                   autofocus: autoFocus,
-                  value: currentValue ? currentValue : ""
+                  value: currentValue ? currentValue : ''
                 }
               }}
               iconPosition={iconPosition}

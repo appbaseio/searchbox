@@ -141,6 +141,7 @@ class SearchBox extends Component {
       onQueryChange,
       onValueChange,
       onSuggestions,
+      showDistinctSuggestions,
       onError,
       onResults,
       aggregationField,
@@ -172,7 +173,8 @@ class SearchBox extends Component {
         queryFormat,
         suggestions: defaultSuggestions,
         fuzziness,
-        searchOperators
+        searchOperators,
+        showDistinctSuggestions,
       });
       this.searchBase.subscribeToStateChanges(this.setStateValue, [
         'suggestions'
@@ -677,7 +679,7 @@ SearchBox.propTypes = {
   onKeyDown: func,
   autoFocus: bool,
   searchTerm: string,
-  URLParams: bool,
+  URLParams: bool,showDistinctSuggestions: bool,
   analyticsConfig
 };
 
@@ -702,6 +704,7 @@ SearchBox.defaultProps = {
   downShiftProps: {},
   URLParams: false,
   searchTerm: 'search',
+showDistinctSuggestions: true,
   analyticsConfig: {
     searchStateHeader: true,
     suggestionAnalytics: true
