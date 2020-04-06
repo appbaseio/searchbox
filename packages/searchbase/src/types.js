@@ -37,11 +37,18 @@ type Observer = {
   properties?: string | Array<string>
 };
 
+type AnalyticsConfig = {
+  recordAnalytics: boolean,
+  enableQueryRules: boolean,
+  userId: string,
+  customEvents: Object
+};
+
 type SearchBaseConfig = {
   index: string,
   url: string,
   credentials: string,
-  analytics: boolean,
+  analyticsConfig: AnalyticsConfig,
   headers: Object,
   value: string,
   suggestions: Array<Suggestion>,
@@ -79,5 +86,6 @@ export {
   Option,
   SortOption,
   Observer,
-  SearchBaseConfig
+  SearchBaseConfig,
+  AnalyticsConfig
 };

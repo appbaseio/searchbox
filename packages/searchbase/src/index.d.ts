@@ -1,5 +1,6 @@
 import { Results } from './Results';
 import {
+  AnalyticsConfig,
   DataField,
   MicStatusField,
   Option,
@@ -58,7 +59,7 @@ export class SearchBase {
   credentials: string;
 
   // to enable the recording of analytics
-  analytics: boolean;
+  analyticsConfig: AnalyticsConfig;
 
   // input value i.e query term
   value: string;

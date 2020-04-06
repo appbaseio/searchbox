@@ -63,14 +63,13 @@ class SearchBox extends Component {
 
   componentDidMount() {
     this._initSearchBase();
-    const { URLParams, currentUrl, analytics, analyticsConfig } = this.props;
+    const { URLParams, currentUrl } = this.props;
     if (URLParams) {
       this.setValue({
         value: this.getSearchTerm(currentUrl),
         isOpen: false
       });
     }
-    if (analytics) this.setAnalytics(analyticsConfig);
   }
 
   componentDidUpdate(prevProps) {
@@ -80,9 +79,7 @@ class SearchBox extends Component {
       fuzziness,
       nestedField,
       currentUrl,
-      URLParams,
-      analytics,
-      analyticsConfig
+      URLParams
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
@@ -95,27 +92,11 @@ class SearchBox extends Component {
         isOpen: false
       });
     }
-    if (
-      analytics &&
-      JSON.stringify(prevProps.analyticsConfig) !==
-        JSON.stringify(analyticsConfig)
-    )
-      this.setAnalytics(analyticsConfig);
   }
 
   componentWillUnmount() {
     this.searchBase.unsubscribeToStateChanges(this.setStateValue);
   }
-
-  setAnalytics = config => {
-    if (!this.searchBase) return;
-    const { emptyQuery, userId, customEvents } = config;
-    const { analyticsInstance } = this.searchBase;
-    emptyQuery
-      ? analyticsInstance.enableEmptyQuery()
-      : analyticsInstance.disableEmptyQuery();
-    analyticsInstance.setUserID(userId).setCustomEvents(customEvents);
-  };
 
   getSearchTerm = (url = '') => {
     const searchParams = getURLParameters(url);
@@ -129,7 +110,6 @@ class SearchBox extends Component {
       enableAppbase,
       dataField,
       credentials,
-      analytics,
       headers,
       nestedField,
       defaultQuery,
@@ -145,7 +125,8 @@ class SearchBox extends Component {
       onResults,
       aggregationField,
       onAggregationData,
-      size
+      size,
+      analyticsConfig
     } = this.props;
 
     try {
@@ -164,7 +145,7 @@ class SearchBox extends Component {
         aggregationField,
         size,
         credentials,
-        analytics,
+        analyticsConfig,
         headers,
         nestedField,
         transformQuery,
@@ -264,14 +245,10 @@ class SearchBox extends Component {
     return getComponent(data, this.props);
   };
 
-  triggerClickAnalytics = (clickPosition, isSuggestion = true) => {
-    const { analytics, analyticsConfig } = this.props;
-    if (!analytics || !analyticsConfig.suggestionAnalytics || !this.searchBase)
-      return;
-    this.searchBase.analyticsInstance.registerClick(
-      clickPosition,
-      isSuggestion
-    );
+  triggerClickAnalytics = (clickPosition, isSuggestion = true, value) => {
+    const { analyticsConfig } = this.props;
+    if (!analyticsConfig.recordAnalytics || !this.searchBase) return;
+    this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
   };
 
   get hasCustomRenderer() {
@@ -347,7 +324,11 @@ class SearchBox extends Component {
 
   onSuggestionSelected = suggestion => {
     this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-    this.triggerClickAnalytics(suggestion && suggestion._click_id);
+    this.triggerClickAnalytics(
+      suggestion && suggestion._click_id,
+      true,
+      suggestion.value
+    );
     this.onValueSelected(
       suggestion.value,
       causes.SUGGESTION_SELECT,
@@ -624,7 +605,6 @@ SearchBox.propTypes = {
   url: string,
   enableAppbase: bool,
   credentials: string.isRequired,
-  analytics: bool.isRequired,
   headers: object,
   dataField: dataField,
   aggregationField: string,
@@ -686,7 +666,6 @@ SearchBox.defaultProps = {
   url: 'https://scalr.api.appbase.io',
   enableAppbase: false,
   placeholder: 'Search',
-  analytics: false,
   showIcon: true,
   iconPosition: 'right',
   showClear: false,
@@ -703,8 +682,7 @@ SearchBox.defaultProps = {
   URLParams: false,
   searchTerm: 'search',
   analyticsConfig: {
-    searchStateHeader: true,
-    suggestionAnalytics: true
+    recordAnalytics: false
   }
 };
 
