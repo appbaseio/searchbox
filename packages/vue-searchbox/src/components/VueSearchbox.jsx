@@ -240,7 +240,7 @@ const VueSearchbox = {
     },
     onSuggestionSelected(suggestion) {
       this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-      this.triggerClickAnalytics(suggestion && suggestion._click_id, true, suggestion.value);
+      this.triggerClickAnalytics(suggestion && suggestion._click_id, true, suggestion.source && suggestion.source._id);
       this.onValueSelectedHandler(
         suggestion.value,
         causes.SUGGESTION_SELECT,

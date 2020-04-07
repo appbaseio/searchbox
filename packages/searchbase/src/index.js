@@ -226,6 +226,9 @@ class Searchbase {
   // analytics instance
   _analyticsInstance: Object;
 
+  // query search ID
+  _queryId: string;
+
   constructor({
     index,
     url,
@@ -670,9 +673,9 @@ class Searchbase {
   */
 
   recordClick = (objects: Object, isSuggestionClick: boolean = false): void => {
-    if (this._analyticsInstance) {
+    if (this._analyticsInstance && this._queryId) {
       this._analyticsInstance.click({
-        query: this.value,
+        queryID: this._queryId,
         objects,
         isSuggestionClick
       });
@@ -680,9 +683,9 @@ class Searchbase {
   };
 
   recordConversions = (objects: Array<string>) => {
-    if (this._analyticsInstance) {
+    if (this._analyticsInstance && this._queryId) {
       this._analyticsInstance.conversion({
-        query: this.value,
+        queryID: this._queryId,
         objects
       });
     }
@@ -782,6 +785,11 @@ class Searchbase {
           )
             .then(res => {
               const responseHeaders = res.headers;
+
+              // set search id
+              if (res.headers) {
+                this._queryId = res.headers.get('X-Search-Id') || null;
+              }
 
               if (res.status >= 500) {
                 return reject(res);

@@ -327,7 +327,7 @@ class SearchBox extends Component {
     this.triggerClickAnalytics(
       suggestion && suggestion._click_id,
       true,
-      suggestion.value
+      suggestion.source && suggestion.source._id
     );
     this.onValueSelected(
       suggestion.value,
