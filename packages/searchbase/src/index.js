@@ -393,7 +393,7 @@ class Searchbase {
   }
 
   // Method to set the custom headers
-  setHeaders(headers: Object, options: Options = defaultOptions): void {
+  setHeaders(headers: Object, options?: Options = defaultOptions): void {
     const prev = this.headers;
     this.headers = {
       ...this.headers,
@@ -403,14 +403,14 @@ class Searchbase {
   }
 
   // Method to set the size option
-  setSize(size: number, options: Options = defaultOptions): void {
+  setSize(size: number, options?: Options = defaultOptions): void {
     const prev = this.size;
     this.size = size;
     this._applyOptions(options, 'size', prev, this.size);
   }
 
   // Method to set the from option
-  setFrom(from: number, options: Options = defaultOptions): void {
+  setFrom(from: number, options?: Options = defaultOptions): void {
     const prev = this.from;
     this.from = from;
     this._applyOptions(options, 'from', prev, this.from);
@@ -419,7 +419,7 @@ class Searchbase {
   // Method to set the fuzziness option
   setFuzziness(
     fuzziness: number | string,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ): void {
     const prev = this.fuzziness;
     this.fuzziness = fuzziness;
@@ -429,7 +429,7 @@ class Searchbase {
   // Method to set the includeFields option
   setIncludeFields(
     includeFields: Array<string>,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ): void {
     const prev = this.includeFields;
     this.includeFields = includeFields;
@@ -439,7 +439,7 @@ class Searchbase {
   // Method to set the excludeFields option
   setExcludeFields(
     excludeFields: Array<string>,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ): void {
     const prev = this.excludeFields;
     this.excludeFields = excludeFields;
@@ -447,21 +447,27 @@ class Searchbase {
   }
 
   // Method to set the sortBy option
-  setSortBy(sortBy: string, options: Options = defaultOptions): void {
+  setSortBy(sortBy: string, options?: Options = defaultOptions): void {
     const prev = this.sortBy;
     this.sortBy = sortBy;
     this._applyOptions(options, 'sortBy', prev, sortBy);
   }
 
   // Method to set the sortByField option
-  setSortByField(sortByField: string, options: Options = defaultOptions): void {
+  setSortByField(
+    sortByField: string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.sortByField;
     this.sortByField = sortByField;
     this._applyOptions(options, 'sortByField', prev, sortByField);
   }
 
   // Method to set the nestedField option
-  setNestedField(nestedField: string, options: Options = defaultOptions): void {
+  setNestedField(
+    nestedField: string,
+    options?: Options = defaultOptions
+  ): void {
     const prev = this.nestedField;
     this.nestedField = nestedField;
     this._applyOptions(options, 'nestedField', prev, nestedField);
@@ -470,7 +476,7 @@ class Searchbase {
   // Method to set the dataField option
   setDataField(
     dataField: string | Array<string | DataField>,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ): void {
     const prev = this.dataField;
     this.dataField = dataField;
@@ -478,7 +484,7 @@ class Searchbase {
   }
 
   // Method to set the custom results
-  setResults(results: Array<Object>, options: Option = defaultOption): void {
+  setResults(results: Array<Object>, options?: Option = defaultOption): void {
     if (results) {
       const prev = this.results;
       this.results = new Results(results);
@@ -496,7 +502,7 @@ class Searchbase {
   // Method to set the custom suggestions
   setSuggestions(
     suggestions: Array<Suggestion>,
-    options: Option = defaultOption
+    options?: Option = defaultOption
   ): void {
     if (suggestions) {
       const prev = this.suggestions;
@@ -514,7 +520,7 @@ class Searchbase {
   }
 
   // Method to set the value
-  setValue(value: string, options: Options = defaultOptions): void {
+  setValue(value: string, options?: Options = defaultOptions): void {
     const performUpdate = () => {
       const prev = this.value;
       this.value = value;
@@ -577,7 +583,7 @@ class Searchbase {
   };
 
   // Method to execute the query
-  triggerQuery(options: Option = defaultOption): Promise<any> {
+  triggerQuery(options?: Option = defaultOption): Promise<any> {
     const handleError = err => {
       this._setError(err, {
         stateChanges: options.stateChanges
@@ -619,7 +625,7 @@ class Searchbase {
   }
 
   // Method to execute the suggestions query
-  triggerSuggestionsQuery(options: Option = defaultOption): Promise<any> {
+  triggerSuggestionsQuery(options?: Option = defaultOption): Promise<any> {
     const handleError = err => {
       this._setSuggestionsError(err, {
         stateChanges: options.stateChanges
@@ -695,7 +701,7 @@ class Searchbase {
   // mic
   _handleVoiceResults = (
     { results }: Object,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ) => {
     if (
       results &&
@@ -729,7 +735,7 @@ class Searchbase {
   _handleCompositeAggsResponse(
     aggregationField: string,
     aggsResponse: Object,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ) {
     const prev = this.aggregationData;
     this.aggregationData.setRaw(aggsResponse[aggregationField]);
@@ -836,7 +842,7 @@ class Searchbase {
 
   _setSuggestionsError(
     suggestionsError: any,
-    options: Options = defaultOptions
+    options?: Options = defaultOptions
   ) {
     this._setSuggestionsRequestStatus(REQUEST_STATUS.error);
     const prev = this.suggestionsError;
@@ -849,7 +855,7 @@ class Searchbase {
     );
   }
 
-  _setError(error: any, options: Options = defaultOptions) {
+  _setError(error: any, options?: Options = defaultOptions) {
     this._setRequestStatus(REQUEST_STATUS.error);
     const prev = this.error;
     this.error = error;
