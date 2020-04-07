@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Component } from 'react';
 import {
-  analyticsConfig,
+  appbaseConfig,
   any,
   bool,
   dataField,
@@ -126,7 +126,7 @@ class SearchBox extends Component {
       aggregationField,
       onAggregationData,
       size,
-      analyticsConfig
+      appbaseConfig
     } = this.props;
 
     try {
@@ -145,7 +145,7 @@ class SearchBox extends Component {
         aggregationField,
         size,
         credentials,
-        analyticsConfig,
+        appbaseConfig,
         headers,
         nestedField,
         transformQuery,
@@ -246,8 +246,8 @@ class SearchBox extends Component {
   };
 
   triggerClickAnalytics = (clickPosition, isSuggestion = true, value) => {
-    const { analyticsConfig } = this.props;
-    if (!analyticsConfig.recordAnalytics || !this.searchBase) return;
+    const { appbaseConfig } = this.props;
+    if (!appbaseConfig.recordAnalytics || !this.searchBase) return;
     this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
   };
 
@@ -658,7 +658,7 @@ SearchBox.propTypes = {
   autoFocus: bool,
   searchTerm: string,
   URLParams: bool,
-  analyticsConfig
+  appbaseConfig: appbaseConfig
 };
 
 SearchBox.defaultProps = {
@@ -681,7 +681,7 @@ SearchBox.defaultProps = {
   downShiftProps: {},
   URLParams: false,
   searchTerm: 'search',
-  analyticsConfig: {
+  appbaseConfig: {
     recordAnalytics: false
   }
 };

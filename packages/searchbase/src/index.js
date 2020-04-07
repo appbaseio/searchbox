@@ -6,7 +6,7 @@ import Results from './Results';
 import Observable from './observable';
 import { getSuggestions } from './utils';
 import type {
-  AnalyticsConfig,
+  AppbaseConfig,
   DataField,
   MicStatusField,
   Options,
@@ -96,7 +96,7 @@ class Searchbase {
   credentials: string;
 
   // to enable the recording of analytics
-  analyticsConfig: AnalyticsConfig;
+  appbaseConfig: AppbaseConfig;
 
   // input value i.e query term
   value: string;
@@ -234,7 +234,7 @@ class Searchbase {
     url,
     enableAppbase,
     credentials,
-    analyticsConfig,
+    appbaseConfig,
     headers,
     value,
     suggestions,
@@ -272,7 +272,7 @@ class Searchbase {
     this.index = index;
     this.url = url;
     this.enableAppbase = enableAppbase || false;
-    this.analyticsConfig = analyticsConfig;
+    this.appbaseConfig = appbaseConfig;
     this._analyticsInstance = AppbaseAnalytics.init({
       index,
       url,
@@ -905,8 +905,8 @@ class Searchbase {
     );
   }
 
-  getAppbaseSettings(): AnalyticsConfig {
-    return this.analyticsConfig;
+  getAppbaseSettings(): AppbaseConfig {
+    return this.appbaseConfig;
   }
 
   getAppbaseResultQuery(): {|

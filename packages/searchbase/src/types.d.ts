@@ -37,7 +37,7 @@ type Observer = {
   properties?: string | Array<string>;
 };
 
-type AnalyticsConfig = {
+type AppbaseConfig = {
   recordAnalytics: boolean;
   enableQueryRules: boolean;
   userId: string;
@@ -49,7 +49,7 @@ type SearchBaseConfig = {
   url: string;
   enableAppbase: boolean;
   credentials: string;
-  analyticsConfig: AnalyticsConfig;
+  appbaseConfig: AppbaseConfig;
   headers: Object;
   highlight?: boolean;
   highlightField?: string | Array<string>;
@@ -87,5 +87,5 @@ export {
   SortOption,
   Observer,
   SearchBaseConfig,
-  AnalyticsConfig
+  AppbaseConfig
 };

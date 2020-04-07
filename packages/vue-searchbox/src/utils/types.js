@@ -59,7 +59,7 @@ export const types = {
   currentURL: VueTypes.string.def(""),
   searchTerm: VueTypes.string.def("search"),
   URLParams: VueTypes.bool.def(false),
-  analyticsConfig: VueTypes.shape({
+  appbaseConfig: VueTypes.shape({
     recordAnalytics: VueTypes.bool,
     enableQueryRules: VueTypes.bool,
     userId: VueTypes.string,

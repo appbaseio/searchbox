@@ -61,7 +61,7 @@ const VueSearchbox = {
     currentURL: types.currentURL,
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
-    analyticsConfig: types.analyticsConfig
+    appbaseConfig: types.appbaseConfig
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
@@ -136,7 +136,7 @@ const VueSearchbox = {
         fuzziness,
         searchOperators,
         aggregationField,
-        analyticsConfig,
+        appbaseConfig,
       } = this.$props;
 
       try {
@@ -153,7 +153,7 @@ const VueSearchbox = {
           aggregationField,
           size,
           credentials,
-          analyticsConfig,
+          appbaseConfig,
           headers,
           nestedField,
           transformQuery,
@@ -210,8 +210,8 @@ const VueSearchbox = {
       analyticsInstance.setUserID(userId).setCustomEvents(customEvents);
     },
     triggerClickAnalytics(clickPosition, isSuggestion = true, value) {
-      const { analyticsConfig } = this.$props;
-      if (!analyticsConfig.recordAnalytics || !this.searchBase) return;
+      const { appbaseConfig } = this.$props;
+      if (!appbaseConfig.recordAnalytics || !this.searchBase) return;
       this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
     },
     setStateValue({ suggestions = {} }) {

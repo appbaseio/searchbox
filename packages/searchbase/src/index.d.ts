@@ -1,6 +1,6 @@
 import { Results } from './Results';
 import {
-  AnalyticsConfig,
+  AppbaseConfig,
   DataField,
   MicStatusField,
   Option,
@@ -59,7 +59,7 @@ export class SearchBase {
   credentials: string;
 
   // to enable the recording of analytics
-  analyticsConfig: AnalyticsConfig;
+  appbaseConfig: AppbaseConfig;
 
   // input value i.e query term
   value: string;
@@ -225,7 +225,6 @@ export class SearchBase {
     url,
     enableAppbase,
     credentials,
-    analytics,
     headers,
     value,
     suggestions,
