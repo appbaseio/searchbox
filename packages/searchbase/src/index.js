@@ -7,6 +7,7 @@ import Observable from './observable';
 import { getSuggestions } from './utils';
 import type {
   AppbaseConfig,
+  AppbaseSettings,
   DataField,
   MicStatusField,
   Options,
@@ -675,9 +676,10 @@ class Searchbase {
   }
 
   /*
-   analytics methods
+   methods to record analytics
   */
 
+  // use this methods to record a search click event
   recordClick = (objects: Object, isSuggestionClick: boolean = false): void => {
     if (this._analyticsInstance && this._queryId) {
       this._analyticsInstance.click({
@@ -688,6 +690,7 @@ class Searchbase {
     }
   };
 
+  // use this methods to record a search conversion
   recordConversions = (objects: Array<string>) => {
     if (this._analyticsInstance && this._queryId) {
       this._analyticsInstance.conversion({
@@ -911,8 +914,14 @@ class Searchbase {
     );
   }
 
-  getAppbaseSettings(): AppbaseConfig {
-    return this.appbaseConfig;
+  getAppbaseSettings(): AppbaseSettings {
+    const {
+      recordAnalytics,
+      customEvents,
+      enableQueryRules,
+      userId
+    } = this.appbaseConfig;
+    return { recordAnalytics, customEvents, enableQueryRules, userId };
   }
 
   getAppbaseResultQuery(): {|

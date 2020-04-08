@@ -44,6 +44,13 @@ type AnalyticsConfig = {
   customEvents: Object
 };
 
+type AppbaseSettings = {
+  recordAnalytics: boolean,
+  enableQueryRules: boolean,
+  userId: string,
+  customEvents: Object
+};
+
 type SearchBaseConfig = {
   index: string,
   url: string,
@@ -87,5 +94,6 @@ export {
   SortOption,
   Observer,
   SearchBaseConfig,
-  AnalyticsConfig
+  AnalyticsConfig,
+  AppbaseSettings
 };
