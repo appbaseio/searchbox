@@ -113,6 +113,11 @@ const VueSearchbox = {
         });
       }
     },
+    appbaseConfig: function(next, prev) {
+      if (JSON.stringify(next) !== JSON.stringify(prev)) {
+        if (this.searchBase) this.searchBase.appbaseConfig = next;
+      }
+    }
   },
   beforeDestroy() {
     this.searchBase &&

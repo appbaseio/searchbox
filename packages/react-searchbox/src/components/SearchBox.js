@@ -79,7 +79,8 @@ class SearchBox extends Component {
       fuzziness,
       nestedField,
       currentUrl,
-      URLParams
+      URLParams,
+      appbaseConfig
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
@@ -91,6 +92,11 @@ class SearchBox extends Component {
         value: this.getSearchTerm(currentUrl),
         isOpen: false
       });
+    }
+    if (
+      JSON.stringify(prevProps.appbaseConfig) !== JSON.stringify(appbaseConfig)
+    ) {
+      if (this.searchBase) this.searchBase.appbaseConfig = appbaseConfig;
     }
   }
 
