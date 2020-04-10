@@ -27,10 +27,10 @@
   dependencies:
     "@ampproject/toolbox-core" "^1.1.1"
 
-"@appbaseio/analytics@^1.0.0-alpha.1":
-  version "1.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-1.0.0-alpha.1.tgz#8e9b5fb9dc121e7ef44f7d2df60c209d7bdbacd7"
-  integrity sha512-QJFneR/U0ANeUxV/5dZOaNmXZh4Z78VDxYRF8+Z9OISa4KLioTsIgO5rv9YBT99/cRzvO7zzjgGk0mhdBo+uUg==
+"@appbaseio/analytics@^2.1.0-beta":
+  version "2.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-2.1.0-beta.tgz#0633486e4bfd4a7760a3dd204a74505d0f5e3810"
+  integrity sha512-99e7SkDVoFW99PEVnpp9n+MM5u7ZTK9hwVAuOJN9fpR7EkftHYEmvCiPf7HzObweb3PwqFjCQT4597cGNNTOgQ==
   dependencies:
     cross-fetch "^3.0.4"
 

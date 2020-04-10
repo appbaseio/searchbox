@@ -23,7 +23,6 @@ const VueSearchbox = {
     url: types.url,
     enableAppbase: types.enableAppbase,
     credentials: types.credentials,
-    analytics: types.analytics,
     headers: types.headers,
     dataField: types.dataField,
     aggregationField: types.aggregationField,
@@ -62,7 +61,7 @@ const VueSearchbox = {
     currentURL: types.currentURL,
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
-    analyticsConfig: types.analyticsConfig
+    appbaseConfig: types.appbaseConfig
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
@@ -114,9 +113,9 @@ const VueSearchbox = {
         });
       }
     },
-    analyticsConfig: function(next, prev) {
-      if (this.analytics && JSON.stringify(next) !== JSON.stringify(prev)) {
-        this.setAnalytics(next);
+    appbaseConfig: function(next, prev) {
+      if (JSON.stringify(next) !== JSON.stringify(prev)) {
+        if (this.searchBase) this.searchBase.appbaseConfig = next;
       }
     }
   },
@@ -132,7 +131,6 @@ const VueSearchbox = {
         enableAppbase,
         dataField,
         credentials,
-        analytics,
         headers,
         nestedField,
         size,
@@ -142,7 +140,8 @@ const VueSearchbox = {
         defaultSuggestions,
         fuzziness,
         searchOperators,
-        aggregationField
+        aggregationField,
+        appbaseConfig,
       } = this.$props;
 
       try {
@@ -159,7 +158,7 @@ const VueSearchbox = {
           aggregationField,
           size,
           credentials,
-          analytics,
+          appbaseConfig,
           headers,
           nestedField,
           transformQuery,
@@ -215,18 +214,10 @@ const VueSearchbox = {
         : analyticsInstance.disableEmptyQuery();
       analyticsInstance.setUserID(userId).setCustomEvents(customEvents);
     },
-    triggerClickAnalytics(clickPosition, isSuggestion = true) {
-      const { analytics, analyticsConfig } = this.$props;
-      if (
-        !analytics ||
-        !analyticsConfig.suggestionAnalytics ||
-        !this.searchBase
-      )
-        return;
-      this.searchBase.analyticsInstance.registerClick(
-        clickPosition,
-        isSuggestion
-      );
+    triggerClickAnalytics(clickPosition, isSuggestion = true, value) {
+      const { appbaseConfig } = this.$props;
+      if (!appbaseConfig.recordAnalytics || !this.searchBase) return;
+      this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
     },
     setStateValue({ suggestions = {} }) {
       const { time, hidden, data, promoted, numberOfResults, promotedData, customData, rawData } =
@@ -254,7 +245,7 @@ const VueSearchbox = {
     },
     onSuggestionSelected(suggestion) {
       this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-      this.triggerClickAnalytics(suggestion && suggestion._click_id);
+      this.triggerClickAnalytics(suggestion && suggestion._click_id, true, suggestion.source && suggestion.source._id);
       this.onValueSelectedHandler(
         suggestion.value,
         causes.SUGGESTION_SELECT,

@@ -63,5 +63,5 @@ export const isEmpty = val => !(val && val.length && Object.keys(val).length);
 export const withClickIds = (results = []) =>
   results.map((result, index) => ({
     ...result,
-    _click_id: index
+    _click_id: index + 1
   }));

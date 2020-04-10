@@ -54,9 +54,9 @@ export const wholeNumber = function(props, propName, componentName) {
   }
 };
 
-export const analyticsConfig = PropTypes.shape({
-  emptyQuery: bool,
-  suggestionAnalytics: bool,
+export const appbaseConfig = PropTypes.shape({
+  recordAnalytics: bool,
+  enableQueryRules: bool,
   userId: string,
   customEvents: object
 });

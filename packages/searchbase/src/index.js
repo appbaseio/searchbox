@@ -6,6 +6,8 @@ import Results from './Results';
 import Observable from './observable';
 import { getSuggestions } from './utils';
 import type {
+  AppbaseConfig,
+  AppbaseSettings,
   DataField,
   MicStatusField,
   Options,
@@ -95,7 +97,7 @@ class Searchbase {
   credentials: string;
 
   // to enable the recording of analytics
-  analytics: boolean;
+  appbaseConfig: AppbaseConfig;
 
   // input value i.e query term
   value: string;
@@ -158,8 +160,6 @@ class Searchbase {
   highlight: boolean;
 
   highlightField: string | Array<string>;
-
-  analyticsInstance: Object;
 
   /* ------------- change events -------------------------------- */
 
@@ -224,12 +224,18 @@ class Searchbase {
   // mic instance
   _micInstance: any;
 
+  // analytics instance
+  _analyticsInstance: Object;
+
+  // query search ID
+  _queryId: string;
+
   constructor({
     index,
     url,
     enableAppbase,
     credentials,
-    analytics,
+    appbaseConfig,
     headers,
     value,
     suggestions,
@@ -267,14 +273,12 @@ class Searchbase {
     this.index = index;
     this.url = url;
     this.enableAppbase = enableAppbase || false;
-    this.analytics = analytics || false;
-    if (this.analytics) {
-      this.analyticsInstance = AppbaseAnalytics({
-        index,
-        url,
-        credentials
-      });
-    }
+    this.appbaseConfig = appbaseConfig;
+    this._analyticsInstance = AppbaseAnalytics.init({
+      index,
+      url,
+      credentials
+    });
     this.dataField = dataField;
     this.aggregationField = aggregationField;
     this.credentials = credentials || '';
@@ -671,6 +675,31 @@ class Searchbase {
     }
   }
 
+  /*
+   methods to record analytics
+  */
+
+  // use this methods to record a search click event
+  recordClick = (objects: Object, isSuggestionClick: boolean = false): void => {
+    if (this._analyticsInstance && this._queryId) {
+      this._analyticsInstance.click({
+        queryID: this._queryId,
+        objects,
+        isSuggestionClick
+      });
+    }
+  };
+
+  // use this methods to record a search conversion
+  recordConversions = (objects: Array<string>) => {
+    if (this._analyticsInstance && this._queryId) {
+      this._analyticsInstance.conversion({
+        queryID: this._queryId,
+        objects
+      });
+    }
+  };
+
   /* -------- Private methods only for the internal use -------- */
   // mic
   _handleVoiceResults = (
@@ -747,12 +776,7 @@ class Searchbase {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
-        ...this.headers,
-        ...(this.analytics
-          ? this.analyticsInstance
-              .setSearchQuery(this.value)
-              .getAnalyticsHeaders()
-          : null)
+        ...this.headers
       }
     };
 
@@ -772,10 +796,8 @@ class Searchbase {
               const responseHeaders = res.headers;
 
               // set search id
-              if (res.headers && this.analytics) {
-                this.analyticsInstance.setSearchID(
-                  res.headers.get('X-Search-Id') || null
-                );
+              if (res.headers) {
+                this._queryId = res.headers.get('X-Search-Id') || null;
               }
 
               if (res.status >= 500) {
@@ -892,8 +914,14 @@ class Searchbase {
     );
   }
 
-  getAppbaseSettings(): {| recordAnalytics: boolean |} {
-    return { recordAnalytics: this.analytics };
+  getAppbaseSettings(): AppbaseSettings {
+    const {
+      recordAnalytics,
+      customEvents,
+      enableQueryRules,
+      userId
+    } = this.appbaseConfig;
+    return { recordAnalytics, customEvents, enableQueryRules, userId };
   }
 
   getAppbaseResultQuery(): {|

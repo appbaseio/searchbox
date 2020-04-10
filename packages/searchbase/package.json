@@ -35,7 +35,7 @@
     "search"
   ],
   "dependencies": {
-    "@appbaseio/analytics": "^1.0.0-alpha.1",
+    "@appbaseio/analytics": "^2.1.0-beta",
     "cross-fetch": "^3.0.4"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Component } from 'react';
 import {
-  analyticsConfig,
+  appbaseConfig,
   any,
   bool,
   dataField,
@@ -63,14 +63,13 @@ class SearchBox extends Component {
 
   componentDidMount() {
     this._initSearchBase();
-    const { URLParams, currentUrl, analytics, analyticsConfig } = this.props;
+    const { URLParams, currentUrl } = this.props;
     if (URLParams) {
       this.setValue({
         value: this.getSearchTerm(currentUrl),
         isOpen: false
       });
     }
-    if (analytics) this.setAnalytics(analyticsConfig);
   }
 
   componentDidUpdate(prevProps) {
@@ -81,8 +80,7 @@ class SearchBox extends Component {
       nestedField,
       currentUrl,
       URLParams,
-      analytics,
-      analyticsConfig
+      appbaseConfig
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
@@ -96,26 +94,15 @@ class SearchBox extends Component {
       });
     }
     if (
-      analytics &&
-      JSON.stringify(prevProps.analyticsConfig) !==
-        JSON.stringify(analyticsConfig)
-    )
-      this.setAnalytics(analyticsConfig);
+      JSON.stringify(prevProps.appbaseConfig) !== JSON.stringify(appbaseConfig)
+    ) {
+      if (this.searchBase) this.searchBase.appbaseConfig = appbaseConfig;
+    }
   }
 
   componentWillUnmount() {
     this.searchBase.unsubscribeToStateChanges(this.setStateValue);
   }
-
-  setAnalytics = config => {
-    if (!this.searchBase) return;
-    const { emptyQuery, userId, customEvents } = config;
-    const { analyticsInstance } = this.searchBase;
-    emptyQuery
-      ? analyticsInstance.enableEmptyQuery()
-      : analyticsInstance.disableEmptyQuery();
-    analyticsInstance.setUserID(userId).setCustomEvents(customEvents);
-  };
 
   getSearchTerm = (url = '') => {
     const searchParams = getURLParameters(url);
@@ -129,7 +116,6 @@ class SearchBox extends Component {
       enableAppbase,
       dataField,
       credentials,
-      analytics,
       headers,
       nestedField,
       defaultQuery,
@@ -145,7 +131,8 @@ class SearchBox extends Component {
       onResults,
       aggregationField,
       onAggregationData,
-      size
+      size,
+      appbaseConfig
     } = this.props;
 
     try {
@@ -164,7 +151,7 @@ class SearchBox extends Component {
         aggregationField,
         size,
         credentials,
-        analytics,
+        appbaseConfig,
         headers,
         nestedField,
         transformQuery,
@@ -264,14 +251,10 @@ class SearchBox extends Component {
     return getComponent(data, this.props);
   };
 
-  triggerClickAnalytics = (clickPosition, isSuggestion = true) => {
-    const { analytics, analyticsConfig } = this.props;
-    if (!analytics || !analyticsConfig.suggestionAnalytics || !this.searchBase)
-      return;
-    this.searchBase.analyticsInstance.registerClick(
-      clickPosition,
-      isSuggestion
-    );
+  triggerClickAnalytics = (clickPosition, isSuggestion = true, value) => {
+    const { appbaseConfig } = this.props;
+    if (!appbaseConfig.recordAnalytics || !this.searchBase) return;
+    this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
   };
 
   get hasCustomRenderer() {
@@ -347,7 +330,11 @@ class SearchBox extends Component {
 
   onSuggestionSelected = suggestion => {
     this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-    this.triggerClickAnalytics(suggestion && suggestion._click_id);
+    this.triggerClickAnalytics(
+      suggestion && suggestion._click_id,
+      true,
+      suggestion.source && suggestion.source._id
+    );
     this.onValueSelected(
       suggestion.value,
       causes.SUGGESTION_SELECT,
@@ -624,7 +611,6 @@ SearchBox.propTypes = {
   url: string,
   enableAppbase: bool,
   credentials: string.isRequired,
-  analytics: bool.isRequired,
   headers: object,
   dataField: dataField,
   aggregationField: string,
@@ -678,7 +664,7 @@ SearchBox.propTypes = {
   autoFocus: bool,
   searchTerm: string,
   URLParams: bool,
-  analyticsConfig
+  appbaseConfig: appbaseConfig
 };
 
 SearchBox.defaultProps = {
@@ -686,7 +672,6 @@ SearchBox.defaultProps = {
   url: 'https://scalr.api.appbase.io',
   enableAppbase: false,
   placeholder: 'Search',
-  analytics: false,
   showIcon: true,
   iconPosition: 'right',
   showClear: false,
@@ -702,9 +687,8 @@ SearchBox.defaultProps = {
   downShiftProps: {},
   URLParams: false,
   searchTerm: 'search',
-  analyticsConfig: {
-    searchStateHeader: true,
-    suggestionAnalytics: true
+  appbaseConfig: {
+    recordAnalytics: false
   }
 };
 

@@ -37,12 +37,26 @@ type Observer = {
   properties?: string | Array<string>;
 };
 
+type AppbaseConfig = {
+  recordAnalytics: boolean;
+  enableQueryRules: boolean;
+  userId: string;
+  customEvents: Object;
+};
+
+type AppbaseSettings = {
+  recordAnalytics: boolean;
+  enableQueryRules: boolean;
+  userId: string;
+  customEvents: Object;
+};
+
 type SearchBaseConfig = {
   index: string;
   url: string;
   enableAppbase: boolean;
   credentials: string;
-  analytics: boolean;
+  appbaseConfig: AppbaseConfig;
   headers: Object;
   highlight?: boolean;
   highlightField?: string | Array<string>;
@@ -79,5 +93,7 @@ export {
   Option,
   SortOption,
   Observer,
-  SearchBaseConfig
+  SearchBaseConfig,
+  AppbaseConfig,
+  AppbaseSettings
 };
