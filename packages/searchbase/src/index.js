@@ -1082,6 +1082,7 @@ class Searchbase {
   ): Array<Object> => {
     let fields = this.getDataFields();
     if (
+      fields.length === 0 &&
       sourceSuggestions &&
       Array.isArray(sourceSuggestions) &&
       sourceSuggestions.length > 0 &&
