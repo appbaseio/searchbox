@@ -5,7 +5,6 @@ import {
   appbaseConfig,
   any,
   bool,
-  dataField,
   func,
   fuzziness,
   highlightField,
@@ -16,7 +15,8 @@ import {
   string,
   suggestions,
   title,
-  wholeNumber
+  wholeNumber,
+  dataFieldValidator
 } from '../utils/types';
 import Input from '../styles/Input';
 import Title from '../styles/Title';
@@ -612,7 +612,7 @@ SearchBox.propTypes = {
   enableAppbase: bool,
   credentials: string.isRequired,
   headers: object,
-  dataField: dataField,
+  dataField: dataFieldValidator,
   aggregationField: string,
   nestedField: string,
   size: number,
