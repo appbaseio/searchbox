@@ -8,7 +8,9 @@ import {
   debounce as debounceFunc,
   isEmpty,
   getURLParameters,
-  withClickIds
+  withClickIds,
+  hasQuerySuggestionsRenderer,
+  getQuerySuggestionsComponent
 } from "../utils/helper";
 import { suggestions, suggestionsContainer } from "../styles/Suggestions";
 import SuggestionItem from "../addons/SuggestionItem.jsx";
@@ -22,6 +24,7 @@ const VueSearchbox = {
     app: types.app,
     url: types.url,
     enableAppbase: types.enableAppbase,
+    enableQuerySuggestions: types.enableQuerySuggestions,
     credentials: types.credentials,
     headers: types.headers,
     dataField: types.dataField,
@@ -70,6 +73,7 @@ const VueSearchbox = {
     this.state = {
       currentValue,
       suggestionsList: defaultSuggestions || [],
+      querySuggestionsList: [],
       isOpen: false,
       error: null,
       loading: false,
@@ -142,6 +146,7 @@ const VueSearchbox = {
         searchOperators,
         aggregationField,
         appbaseConfig,
+        enableQuerySuggestions,
       } = this.$props;
 
       try {
@@ -154,6 +159,7 @@ const VueSearchbox = {
           index: app,
           url,
           enableAppbase,
+          enableQuerySuggestions,
           dataField,
           aggregationField,
           size,
@@ -196,6 +202,9 @@ const VueSearchbox = {
           this.currentValue = nextValue;
           this.$emit("valueChange", nextValue);
         };
+        this.searchBase.onQuerySuggestions = nextValue => {
+          this.querySuggestionsList = withClickIds(nextValue && nextValue.data) || [];
+        }
       } catch (e) {
         this.initError = e;
         console.error(e);
@@ -384,7 +393,19 @@ const VueSearchbox = {
     },
     getBackgroundColor(highlightedIndex, index) {
       return highlightedIndex === index ? "#eee" : "#fff";
-    }
+    },
+    getComponent(downshiftProps={}) {
+      return getQuerySuggestionsComponent(
+        {
+          downshiftProps,
+          data: this.querySuggestionsList,
+          value: this.currentValue,
+          loading: this.isLoading,
+          error: this.error,
+        },
+        this,
+      );
+    },
   },
   render() {
     const {
@@ -496,6 +517,42 @@ const VueSearchbox = {
                         "list"
                       )}`}
                     >
+                      {hasQuerySuggestionsRenderer(this)
+                        ? this.getComponent(
+                          {
+                            isOpen,
+                            getItemProps,
+                            getItemEvents,
+                            highlightedIndex,
+                          },
+                          true,
+                        )
+                        : this.querySuggestionsList.map((sugg, index) => (
+                          <li
+                            {...{
+                              domProps: getItemProps({
+                                item: sugg,
+                              }),
+                            }}
+                            {...{
+                              on: getItemEvents({
+                                item: sugg,
+                              }),
+                            }}
+                            key={`${index + 1}-${sugg.value}`}
+                            style={{
+                              backgroundColor: this.getBackgroundColor(
+                                highlightedIndex,
+                                index,
+                              ),
+                            }}
+                          >
+                            <SuggestionItem
+                              currentValue={this.currentValue}
+                              suggestion={sugg}
+                            />
+                          </li>
+                        ))}
                       {suggestionsList.slice(0, size).map((item, index) => (
                         <li
                           {...{
@@ -506,11 +563,11 @@ const VueSearchbox = {
                               item
                             })
                           }}
-                          key={`${index + 1}-${item.value}`}
+                          key={`${index + this.querySuggestionsList.length + 1}-${item.value}`}
                           style={{
                             backgroundColor: this.getBackgroundColor(
                               highlightedIndex,
-                              index
+                              index + this.querySuggestionsList.length
                             )
                           }}
                         >
