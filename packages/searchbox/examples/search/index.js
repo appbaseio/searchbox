@@ -330,3 +330,60 @@ searchbox(
     }
   ]
 );
+
+searchbox(
+  '#git16',
+  {
+    instance: querySuggestionsInstance
+  },
+  [
+    {
+      templates: {
+        render: function({
+                           data,
+                           getItemProps,
+                         }) {
+          const suggestionHTML = data
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Search Results
+						</div>
+						${suggestionHTML}
+					`;
+        },
+        renderQuerySuggestions: function({ data, getItemProps}) {
+          const suggestionHTML = (data || [])
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          if ((data||[]).length === 0) return '';
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Query Suggestion Results
+						</div>
+						${suggestionHTML}
+					`;
+        }
+      }
+    }
+  ]
+);

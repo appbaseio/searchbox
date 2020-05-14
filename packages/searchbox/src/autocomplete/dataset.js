@@ -238,6 +238,25 @@ _.mixin(Dataset.prototype, EventEmitter, {
 
 		function getSuggestionsHtml() {
 			if (that.templates.render) {
+			  let strigifiedQuerySuggestions = '';
+        if (that.templates.renderQuerySuggestions) {
+          const className =
+            this.cssClasses.prefix + this.cssClasses.suggestion;
+          strigifiedQuerySuggestions = that.templates.renderQuerySuggestions({
+            data: options.querySuggestions,
+            getItemProps: function(item) {
+              const id = [
+                'option',
+                Math.floor(Math.random() * 100000000)
+              ].join('-');
+              return `class=${className} role="option" id=${id} data-${customdatumKey}=${encodeURIComponent(
+                JSON.stringify(item)
+              )} data-${customvalueKey}=${encodeURIComponent(
+                that.displayFn(item)
+              ) || undefined} data-${customdatasetKey}=${that.name}`;
+            }
+          });
+        }
 				const className =
 					this.cssClasses.prefix + this.cssClasses.suggestion;
 				const stringifiedHTML = that.templates.render({
@@ -258,8 +277,8 @@ _.mixin(Dataset.prototype, EventEmitter, {
 						) || undefined} data-${customdatasetKey}=${that.name}`;
 					}
 				});
-				return stringifiedHTML;
-			}
+        return strigifiedQuerySuggestions + stringifiedHTML;
+      }
 			var args = [].slice.call(arguments, 0);
 			var $suggestions;
 			var nodes;
@@ -446,7 +465,8 @@ function getTemplates(templates, displayFn) {
 		header: templates.header && _.templatify(templates.header),
 		footer: templates.footer && _.templatify(templates.footer),
 		suggestion: templates.suggestion || suggestionTemplate,
-		render: templates.render || undefined
+		render: templates.render || undefined,
+    renderQuerySuggestions: templates.renderQuerySuggestions || undefined,
 	};
 
 	function suggestionTemplate(context) {
