@@ -507,7 +507,8 @@ const VueSearchbox = {
                       promotedData,
                       customData,
                       resultStats,
-                      rawData
+                      rawData,
+                      querySuggestions: this.querySuggestionsList,
                     })}
                   {this.renderErrorComponent()}
                   {!renderAllSuggestions && isOpen && suggestionsList.length ? (
