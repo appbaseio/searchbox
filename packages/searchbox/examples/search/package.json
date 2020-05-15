@@ -1,5 +1,5 @@
 {
-  "name": "autocomplete-example",
+  "name": "autocomplete-example-rs-api",
   "description": "Autocomplete with Searchbase Example",
   "main": "index.html",
   "version": "0.0.1",
