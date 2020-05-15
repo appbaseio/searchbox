@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "@appbaseio/vue-searchbox": "^1.2.0-alpha.0"
+    "@appbaseio/vue-searchbox": "1.1.0-beta"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.0",

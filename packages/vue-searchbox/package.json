@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/vue-searchbox",
-  "version": "1.0.0-beta",
+  "version": "1.1.0-beta",
   "private": false,
   "description": "Lightweight searchbox component for Vue",
   "author": "Anuj Shah <anujshah584@gmail.com>",
@@ -29,7 +29,7 @@
   ],
   "homepage": "https://github.com/appbaseio/searchbase/packages/vue-searchbox#readme",
   "dependencies": {
-    "@appbaseio/searchbase": "1.0.0-beta",
+    "@appbaseio/searchbase": "1.1.0-beta",
     "@appbaseio/vue-emotion": "^0.4.4",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "compute-scroll-into-view": "^1.0.11",
@@ -50,9 +50,9 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-stage-2": "^7.0.0",
     "@vue/babel-preset-jsx": "^1.1.0",
+    "@vue/eslint-plugin": "^4.2.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.1.0",
-    "@vue/eslint-plugin": "^4.2.0",
     "nps": "^5.9.3",
     "nps-utils": "^1.7.0",
     "rollup": "^1.20.3",
