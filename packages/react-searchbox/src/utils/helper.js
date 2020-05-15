@@ -65,3 +65,26 @@ export const withClickIds = (results = []) =>
     ...result,
     _click_id: index + 1
   }));
+
+/**
+ * To determine whether a component has renderQuerySuggestions prop defined or not
+ * @returns {Boolean}
+ */
+export const hasQuerySuggestionsRenderer = (props = {}) => {
+  const { renderQuerySuggestions } = props;
+  return isFunction(renderQuerySuggestions);
+};
+
+/**
+ * Extracts the renderQuerySuggestions prop from props and returns a valid React element
+ * @param {Object} data
+ * @param {Object} props
+ */
+export const getQuerySuggestionsComponent = (data = {}, props = {}) => {
+  const { renderQuerySuggestions } = props;
+  // Render function as render prop
+  if (isFunction(renderQuerySuggestions)) {
+    return renderQuerySuggestions(data);
+  }
+  return null;
+};
