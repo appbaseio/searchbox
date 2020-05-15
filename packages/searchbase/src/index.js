@@ -6,6 +6,8 @@ import Results from './Results';
 import Observable from './observable';
 import { getSuggestions } from './utils';
 import type {
+  AppbaseConfig,
+  AppbaseSettings,
   DataField,
   MicStatusField,
   Options,
@@ -91,11 +93,14 @@ class Searchbase {
   // use rs v3 api
   enableAppbase: boolean;
 
+  // get query suggestions from `.suggestions` index
+  enableQuerySuggestions: boolean;
+
   // auth credentials if any
   credentials: string;
 
   // to enable the recording of analytics
-  analytics: boolean;
+  appbaseConfig: AppbaseConfig;
 
   // input value i.e query term
   value: string;
@@ -105,6 +110,9 @@ class Searchbase {
 
   // suggestions
   suggestions: Results;
+
+  // query suggestions
+  querySuggestions: Results;
 
   // composite aggregations
   aggregationData: CompositeAggregationResults;
@@ -159,8 +167,6 @@ class Searchbase {
 
   highlightField: string | Array<string>;
 
-  analyticsInstance: Object;
-
   /* ------------- change events -------------------------------- */
 
   // called when value changes
@@ -171,6 +177,9 @@ class Searchbase {
 
   // called when suggestions change
   onSuggestions: (next: string, prev: string) => void;
+
+  // called when query suggestions change
+  onQuerySuggestions: (next: string, prev: string) => void;
 
   // called when composite aggregations change
   onAggregationData: (next: Array<Object>, prev: Array<Object>) => void;
@@ -224,15 +233,23 @@ class Searchbase {
   // mic instance
   _micInstance: any;
 
+  // analytics instance
+  _analyticsInstance: Object;
+
+  // query search ID
+  _queryId: string;
+
   constructor({
     index,
     url,
     enableAppbase,
+    enableQuerySuggestions,
     credentials,
-    analytics,
+    appbaseConfig,
     headers,
     value,
     suggestions,
+    querySuggestions,
     results,
     fuzziness,
     searchOperators,
@@ -261,20 +278,19 @@ class Searchbase {
     if (!url) {
       throw new Error('Please provide a valid url.');
     }
-    if (!dataField) {
+    if (!(enableAppbase || dataField)) {
       throw new Error('Please provide a valid data field.');
     }
     this.index = index;
     this.url = url;
     this.enableAppbase = enableAppbase || false;
-    this.analytics = analytics || false;
-    if (this.analytics) {
-      this.analyticsInstance = AppbaseAnalytics({
-        index,
-        url,
-        credentials
-      });
-    }
+    this.enableQuerySuggestions = enableQuerySuggestions || false;
+    this.appbaseConfig = appbaseConfig;
+    this._analyticsInstance = AppbaseAnalytics.init({
+      index,
+      url,
+      credentials
+    });
     this.dataField = dataField;
     this.aggregationField = aggregationField;
     this.credentials = credentials || '';
@@ -308,6 +324,12 @@ class Searchbase {
     this.suggestions = new Results(suggestions);
     // Add suggestions parser
     this.suggestions.parseResults = this._parseSuggestions;
+
+    // Initialize query suggestions
+    this.querySuggestions = new Results(querySuggestions);
+    // Add suggestions parser
+    this.querySuggestions.parseResults = this._parseQuerySuggestions;
+
     this.results = new Results(results);
 
     // composite aggs instance
@@ -641,9 +663,19 @@ class Searchbase {
         .then(finalQuery => {
           this._fetchRequest(finalQuery)
             .then(suggestions => {
-              this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
               let rawSuggestions = suggestions;
               if (this.enableAppbase) rawSuggestions = suggestions.DataSearch;
+              if (this.enableAppbase && this.enableQuerySuggestions) {
+                this._fetchRequest(this.getSuggestionsQuery(), true)
+                  .then(rawQuerySuggestions => {
+                    this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
+                    this._handleQuerySuggestionsResponse(
+                      rawQuerySuggestions,
+                      options
+                    );
+                  })
+                  .catch(handleError);
+              } else this._setSuggestionsRequestStatus(REQUEST_STATUS.inactive);
               if (rawSuggestions.aggregations) {
                 this._handleCompositeAggsResponse(
                   this.aggregationField,
@@ -670,6 +702,54 @@ class Searchbase {
       return handleError(err);
     }
   }
+
+  getSuggestionsQuery() {
+    return {
+      query: [
+        {
+          id: 'DataSearch__suggestions',
+          dataField: ['key', 'key.autosuggest', 'key.search'],
+          searchOperators: this.searchOperators,
+          size: 5,
+          value: this.value,
+          defaultQuery: {
+            sort: [
+              {
+                count: {
+                  order: 'desc'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    };
+  }
+
+  /*
+   methods to record analytics
+  */
+
+  // use this methods to record a search click event
+  recordClick = (objects: Object, isSuggestionClick: boolean = false): void => {
+    if (this._analyticsInstance && this._queryId) {
+      this._analyticsInstance.click({
+        queryID: this._queryId,
+        objects,
+        isSuggestionClick
+      });
+    }
+  };
+
+  // use this methods to record a search conversion
+  recordConversions = (objects: Array<string>) => {
+    if (this._analyticsInstance && this._queryId) {
+      this._analyticsInstance.conversion({
+        queryID: this._queryId,
+        objects
+      });
+    }
+  };
 
   /* -------- Private methods only for the internal use -------- */
   // mic
@@ -742,17 +822,33 @@ class Searchbase {
     return new Promise(resolve => resolve(requestOptions));
   }
 
-  _fetchRequest(requestBody: Object): Promise<any> {
+  _handleQuerySuggestionsResponse(
+    rawQuerySuggestions: Object,
+    options: Option
+  ) {
+    const prev = this.querySuggestions;
+    const querySuggestions =
+      rawQuerySuggestions && rawQuerySuggestions.DataSearch__suggestions;
+    this.querySuggestions.setRaw(querySuggestions);
+    this._applyOptions(
+      {
+        stateChanges: options.stateChanges
+      },
+      'querySuggestions',
+      prev,
+      this.querySuggestions
+    );
+  }
+
+  _fetchRequest(
+    requestBody: Object,
+    isQuerySuggestionsAPI: boolean = false
+  ): Promise<*> {
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
-        ...this.headers,
-        ...(this.analytics
-          ? this.analyticsInstance
-              .setSearchQuery(this.value)
-              .getAnalyticsHeaders()
-          : null)
+        ...this.headers
       }
     };
 
@@ -764,18 +860,14 @@ class Searchbase {
 
           let suffix = '_search';
           if (this.enableAppbase) suffix = '_reactivesearch.v3';
-          return fetch(
-            `${this.url}/${this.index}/${suffix}`,
-            finalRequestOptions
-          )
+          const index = isQuerySuggestionsAPI ? '.suggestions' : this.index;
+          return fetch(`${this.url}/${index}/${suffix}`, finalRequestOptions)
             .then(res => {
               const responseHeaders = res.headers;
 
               // set search id
-              if (res.headers && this.analytics) {
-                this.analyticsInstance.setSearchID(
-                  res.headers.get('X-Search-Id') || null
-                );
+              if (res.headers) {
+                this._queryId = res.headers.get('X-Search-Id') || null;
               }
 
               if (res.status >= 500) {
@@ -892,8 +984,14 @@ class Searchbase {
     );
   }
 
-  getAppbaseSettings(): {| recordAnalytics: boolean |} {
-    return { recordAnalytics: this.analytics };
+  getAppbaseSettings(): AppbaseSettings {
+    const {
+      recordAnalytics,
+      customEvents,
+      enableQueryRules,
+      userId
+    } = this.appbaseConfig;
+    return { recordAnalytics, customEvents, enableQueryRules, userId };
   }
 
   getAppbaseResultQuery(): {|
@@ -1048,9 +1146,28 @@ class Searchbase {
     return prevQuery;
   }
 
-  _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {
-    const fields = this.getDataFields();
+  _parseSuggestions = (
+    suggestions: Array<Object>,
+    sourceSuggestions?: Array<Object>
+  ): Array<Object> => {
+    let fields = this.getDataFields();
+    if (
+      fields.length === 0 &&
+      sourceSuggestions &&
+      Array.isArray(sourceSuggestions) &&
+      sourceSuggestions.length > 0 &&
+      sourceSuggestions[0] &&
+      sourceSuggestions[0]._source
+    ) {
+      // Extract fields from _source
+      fields = Object.keys(sourceSuggestions[0]._source);
+    }
     return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
+  };
+
+  _parseQuerySuggestions = (suggestions: Array<Object>): Array<Object> => {
+    const fields = ['key', 'key.autosuggest', 'key.search'];
+    return getSuggestions(fields, suggestions, this.value);
   };
 
   getDataFields(): Array<string> {
@@ -1101,6 +1218,9 @@ class Searchbase {
     }
     if (key === 'suggestions' && this.onSuggestions) {
       this.onSuggestions(nextValue, prevValue);
+    }
+    if (key === 'querySuggestions' && this.onQuerySuggestions) {
+      this.onQuerySuggestions(nextValue, prevValue);
     }
     if (key === 'aggregations' && this.onAggregationData) {
       this.onAggregationData(nextValue, prevValue);

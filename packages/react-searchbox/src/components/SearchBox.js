@@ -2,10 +2,9 @@
 import { jsx } from '@emotion/core';
 import { Component } from 'react';
 import {
-  analyticsConfig,
+  appbaseConfig,
   any,
   bool,
-  dataField,
   func,
   fuzziness,
   highlightField,
@@ -16,7 +15,8 @@ import {
   string,
   suggestions,
   title,
-  wholeNumber
+  wholeNumber,
+  dataFieldValidator
 } from '../utils/types';
 import Input from '../styles/Input';
 import Title from '../styles/Title';
@@ -25,8 +25,10 @@ import {
   equals,
   getClassName,
   getComponent,
+  getQuerySuggestionsComponent,
   getURLParameters,
   hasCustomRenderer,
+  hasQuerySuggestionsRenderer,
   isEmpty,
   isFunction,
   withClickIds
@@ -51,6 +53,7 @@ class SearchBox extends Component {
     this.state = {
       currentValue,
       suggestionsList: defaultSuggestions || [],
+      querySuggestionsList: [],
       isOpen: false,
       error: null,
       loading: false
@@ -63,14 +66,13 @@ class SearchBox extends Component {
 
   componentDidMount() {
     this._initSearchBase();
-    const { URLParams, currentUrl, analytics, analyticsConfig } = this.props;
+    const { URLParams, currentUrl } = this.props;
     if (URLParams) {
       this.setValue({
         value: this.getSearchTerm(currentUrl),
         isOpen: false
       });
     }
-    if (analytics) this.setAnalytics(analyticsConfig);
   }
 
   componentDidUpdate(prevProps) {
@@ -81,8 +83,7 @@ class SearchBox extends Component {
       nestedField,
       currentUrl,
       URLParams,
-      analytics,
-      analyticsConfig
+      appbaseConfig
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
@@ -96,26 +97,15 @@ class SearchBox extends Component {
       });
     }
     if (
-      analytics &&
-      JSON.stringify(prevProps.analyticsConfig) !==
-        JSON.stringify(analyticsConfig)
-    )
-      this.setAnalytics(analyticsConfig);
+      JSON.stringify(prevProps.appbaseConfig) !== JSON.stringify(appbaseConfig)
+    ) {
+      if (this.searchBase) this.searchBase.appbaseConfig = appbaseConfig;
+    }
   }
 
   componentWillUnmount() {
     this.searchBase.unsubscribeToStateChanges(this.setStateValue);
   }
-
-  setAnalytics = config => {
-    if (!this.searchBase) return;
-    const { emptyQuery, userId, customEvents } = config;
-    const { analyticsInstance } = this.searchBase;
-    emptyQuery
-      ? analyticsInstance.enableEmptyQuery()
-      : analyticsInstance.disableEmptyQuery();
-    analyticsInstance.setUserID(userId).setCustomEvents(customEvents);
-  };
 
   getSearchTerm = (url = '') => {
     const searchParams = getURLParameters(url);
@@ -129,7 +119,6 @@ class SearchBox extends Component {
       enableAppbase,
       dataField,
       credentials,
-      analytics,
       headers,
       nestedField,
       defaultQuery,
@@ -145,7 +134,9 @@ class SearchBox extends Component {
       onResults,
       aggregationField,
       onAggregationData,
-      size
+      size,
+      appbaseConfig,
+      enableQuerySuggestions
     } = this.props;
 
     try {
@@ -160,11 +151,12 @@ class SearchBox extends Component {
         index: app,
         url,
         enableAppbase,
+        enableQuerySuggestions,
         dataField,
         aggregationField,
         size,
         credentials,
-        analytics,
+        appbaseConfig,
         headers,
         nestedField,
         transformQuery,
@@ -200,6 +192,11 @@ class SearchBox extends Component {
             micStatus: next,
             isOpen: next === 'INACTIVE' && !loading
           };
+        });
+      };
+      this.searchBase.onQuerySuggestions = next => {
+        this.setState({
+          querySuggestionsList: withClickIds(next && next.data) || []
         });
       };
     } catch (e) {
@@ -238,7 +235,7 @@ class SearchBox extends Component {
     });
   };
 
-  getComponent = (downshiftProps = {}) => {
+  getComponent = (downshiftProps = {}, isQuerySuggestionsRender = false) => {
     const {
       currentValue,
       suggestionsList,
@@ -247,7 +244,8 @@ class SearchBox extends Component {
       resultStats,
       promotedData,
       customData,
-      rawData
+      rawData,
+      querySuggestionsList
     } = this.state;
     const data = {
       error,
@@ -259,19 +257,28 @@ class SearchBox extends Component {
       promotedData,
       customData,
       resultStats,
-      rawData
+      rawData,
+      querySuggestions: querySuggestionsList
     };
+    if (isQuerySuggestionsRender) {
+      return getQuerySuggestionsComponent(
+        {
+          downshiftProps,
+          data: querySuggestionsList,
+          value: currentValue,
+          loading,
+          error
+        },
+        this.props
+      );
+    }
     return getComponent(data, this.props);
   };
 
-  triggerClickAnalytics = (clickPosition, isSuggestion = true) => {
-    const { analytics, analyticsConfig } = this.props;
-    if (!analytics || !analyticsConfig.suggestionAnalytics || !this.searchBase)
-      return;
-    this.searchBase.analyticsInstance.registerClick(
-      clickPosition,
-      isSuggestion
-    );
+  triggerClickAnalytics = (clickPosition, isSuggestion = true, value) => {
+    const { appbaseConfig } = this.props;
+    if (!appbaseConfig.recordAnalytics || !this.searchBase) return;
+    this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
   };
 
   get hasCustomRenderer() {
@@ -347,7 +354,11 @@ class SearchBox extends Component {
 
   onSuggestionSelected = suggestion => {
     this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-    this.triggerClickAnalytics(suggestion && suggestion._click_id);
+    this.triggerClickAnalytics(
+      suggestion && suggestion._click_id,
+      true,
+      suggestion.source && suggestion.source._id
+    );
     this.onValueSelected(
       suggestion.value,
       causes.SUGGESTION_SELECT,
@@ -503,7 +514,13 @@ class SearchBox extends Component {
       renderError,
       size
     } = this.props;
-    const { isOpen, currentValue, suggestionsList, initError } = this.state;
+    const {
+      isOpen,
+      currentValue,
+      suggestionsList,
+      initError,
+      querySuggestionsList
+    } = this.state;
     if (initError) {
       if (renderError)
         return isFunction(renderError) ? renderError(initError) : renderError;
@@ -570,14 +587,44 @@ class SearchBox extends Component {
                     css={suggestionsCss}
                     className={getClassName(innerClass, 'list')}
                   >
+                    {hasQuerySuggestionsRenderer(this.props)
+                      ? this.getComponent(
+                          {
+                            getInputProps,
+                            getItemProps,
+                            isOpen,
+                            highlightedIndex,
+                            ...rest
+                          },
+                          true
+                        )
+                      : querySuggestionsList.map((sugg, index) => (
+                          <li
+                            {...getItemProps({ item: sugg })}
+                            key={`${index + 1}-${sugg.value}`}
+                            style={{
+                              backgroundColor: this.getBackgroundColor(
+                                highlightedIndex,
+                                index
+                              )
+                            }}
+                          >
+                            <SuggestionItem
+                              currentValue={currentValue}
+                              suggestion={sugg}
+                            />
+                          </li>
+                        ))}
                     {suggestionsList.slice(0, size).map((item, index) => (
                       <li
                         {...getItemProps({ item })}
-                        key={`${index + 1}-${item.value}`}
+                        key={`${index + querySuggestionsList.length + 1}-${
+                          item.value
+                        }`}
                         style={{
                           backgroundColor: this.getBackgroundColor(
                             highlightedIndex,
-                            index
+                            index + querySuggestionsList.length
                           )
                         }}
                       >
@@ -623,10 +670,10 @@ SearchBox.propTypes = {
   app: string.isRequired,
   url: string,
   enableAppbase: bool,
+  enableQuerySuggestions: bool,
   credentials: string.isRequired,
-  analytics: bool.isRequired,
   headers: object,
-  dataField: dataField,
+  dataField: dataFieldValidator,
   aggregationField: string,
   nestedField: string,
   size: number,
@@ -652,6 +699,7 @@ SearchBox.propTypes = {
   showVoiceSearch: bool,
   searchOperators: bool,
   render: func,
+  renderQuerySuggestions: func,
   renderError: func,
   renderNoSuggestion: title,
   getMicInstance: func,
@@ -678,15 +726,15 @@ SearchBox.propTypes = {
   autoFocus: bool,
   searchTerm: string,
   URLParams: bool,
-  analyticsConfig
+  appbaseConfig: appbaseConfig
 };
 
 SearchBox.defaultProps = {
   size: 10,
   url: 'https://scalr.api.appbase.io',
   enableAppbase: false,
+  enableQuerySuggestions: false,
   placeholder: 'Search',
-  analytics: false,
   showIcon: true,
   iconPosition: 'right',
   showClear: false,
@@ -702,9 +750,8 @@ SearchBox.defaultProps = {
   downShiftProps: {},
   URLParams: false,
   searchTerm: 'search',
-  analyticsConfig: {
-    searchStateHeader: true,
-    suggestionAnalytics: true
+  appbaseConfig: {
+    recordAnalytics: false
   }
 };
 

@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/searchbox",
-  "version": "0.0.2-alpha.1",
+  "version": "1.0.0-beta",
   "private": false,
   "description": "Autocomplete for Searchbase",
   "main": "dist/searchbox.cjs.js",
