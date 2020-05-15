@@ -94,3 +94,22 @@ export const hasQuerySuggestionsRenderer = (_ref = {}) => {
   const { renderQuerySuggestions } = _ref.$scopedSlots || _ref.$props;
   return Boolean(renderQuerySuggestions);
 };
+
+/**
+ * Extracts the render prop from props or slot and returns a valid JSX element
+ * @param {Object} data
+ * @param _ref
+ */
+export const getComponent = (data = {}, _ref = {}) => {
+  const { render } = _ref.$scopedSlots || _ref.$props;
+  if (render) return render(data);
+  return null;
+};
+/**
+ * To determine whether a component has render prop or slot defined or not
+ * @returns {Boolean}
+ */
+export const hasCustomRenderer = (_ref = {}) => {
+  const { render } = _ref.$scopedSlots || _ref.$props;
+  return Boolean(render);
+};

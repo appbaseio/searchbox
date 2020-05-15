@@ -49,7 +49,6 @@ export const types = {
   renderQuerySuggestions: VueTypes.func,
   renderError: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
   renderNoSuggestion: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
-  renderAllSuggestions: VueTypes.oneOfType([VueTypes.string, VueTypes.func]),
   renderMic: VueTypes.func,
   innerClass: VueTypes.object,
   style: VueTypes.object,
