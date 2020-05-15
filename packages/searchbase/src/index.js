@@ -267,7 +267,7 @@ class Searchbase {
     if (!url) {
       throw new Error('Please provide a valid url.');
     }
-    if (!dataField) {
+    if (!(enableAppbase || dataField)) {
       throw new Error('Please provide a valid data field.');
     }
     this.index = index;
@@ -1076,8 +1076,22 @@ class Searchbase {
     return prevQuery;
   }
 
-  _parseSuggestions = (suggestions: Array<Object>): Array<Object> => {
-    const fields = this.getDataFields();
+  _parseSuggestions = (
+    suggestions: Array<Object>,
+    sourceSuggestions?: Array<Object>
+  ): Array<Object> => {
+    let fields = this.getDataFields();
+    if (
+      fields.length === 0 &&
+      sourceSuggestions &&
+      Array.isArray(sourceSuggestions) &&
+      sourceSuggestions.length > 0 &&
+      sourceSuggestions[0] &&
+      sourceSuggestions[0]._source
+    ) {
+      // Extract fields from _source
+      fields = Object.keys(sourceSuggestions[0]._source);
+    }
     return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
   };
 

@@ -92,6 +92,12 @@ const VueSearchbox = {
     }
   },
   watch: {
+    $props: {
+      immediate: true,
+      handler() {
+        this.validateDataField();
+      },
+    },
     dataField: function(next, prev) {
       return this._applySetter(prev, next, "setDataField");
     },
@@ -124,6 +130,28 @@ const VueSearchbox = {
       this.searchBase.unsubscribeToStateChanges(this.setStateValue);
   },
   methods: {
+    validateDataField() {
+      const propName = 'dataField';
+      const componentName = VueSearchbox.name;
+      const props = this.$props;
+      const requiredError = `${propName} supplied to ${componentName} is required. Validation failed.`;
+      const propValue = props[propName];
+      if (!this.enableAppbase) {
+        if (!propValue) {
+          console.error(requiredError);
+          return;
+        }
+        if (typeof propValue !== 'string' && !Array.isArray(propValue)) {
+          console.error(
+            `Invalid ${propName} supplied to ${componentName}. Validation failed.`,
+          );
+          return;
+        }
+        if (Array.isArray(propValue) && propValue.length === 0) {
+          console.error(requiredError);
+        }
+      }
+    },
     _initSearchBase() {
       const {
         app,
