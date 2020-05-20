@@ -11,6 +11,7 @@ export const types = {
   app: VueTypes.string.isRequired,
   url: VueTypes.string.def('https://scalr.api.appbase.io'),
   enableAppbase: VueTypes.bool.def(false),
+  enableQuerySuggestions: VueTypes.bool.def(false),
   credentials: VueTypes.string.isRequired,
   analytics: VueTypes.bool.def(false),
   headers: VueTypes.object,
@@ -45,9 +46,9 @@ export const types = {
   showVoiceSearch: VueTypes.bool.def(false),
   searchOperators: VueTypes.bool.def(false),
   render: VueTypes.func,
+  renderQuerySuggestions: VueTypes.func,
   renderError: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
   renderNoSuggestion: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
-  renderAllSuggestions: VueTypes.oneOfType([VueTypes.string, VueTypes.func]),
   renderMic: VueTypes.func,
   innerClass: VueTypes.object,
   style: VueTypes.object,
@@ -59,12 +60,11 @@ export const types = {
   currentURL: VueTypes.string.def(''),
   searchTerm: VueTypes.string.def('search'),
   URLParams: VueTypes.bool.def(false),
-  analyticsConfig: VueTypes.shape({
-    searchStateHeader: VueTypes.bool,
-    emptyQuery: VueTypes.bool,
-    suggestionAnalytics: VueTypes.bool,
+  appbaseConfig: VueTypes.shape({
+    recordAnalytics: VueTypes.bool,
+    enableQueryRules: VueTypes.bool,
     userId: VueTypes.string,
     customEvents: VueTypes.object
-  }).def({ searchStateHeader: true, suggestionAnalytics: true }),
+  }).def({ recordAnalytics: false }),
   showDistinctSuggestions: VueTypes.bool.def(true)
 };

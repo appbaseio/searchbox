@@ -1,5 +1,6 @@
 import { Results } from './Results';
 import {
+  AppbaseConfig,
   DataField,
   MicStatusField,
   Option,
@@ -58,7 +59,7 @@ export class SearchBase {
   credentials: string;
 
   // to enable the recording of analytics
-  analytics: boolean;
+  appbaseConfig: AppbaseConfig;
 
   // input value i.e query term
   value: string;
@@ -71,6 +72,9 @@ export class SearchBase {
 
   // suggestions
   suggestions: Results;
+
+  // query suggestions
+  querySuggestions: Results;
 
   // suggestions query error
   suggestionsError: any;
@@ -132,6 +136,9 @@ export class SearchBase {
 
   // called when suggestions change
   onSuggestions: (next: string, prev: string) => void;
+
+  // called when query suggestions change
+  onQuerySuggestions: (next: string, prev: string) => void;
 
   // called when there is an error while fetching results
   onError: (error: any) => void;
@@ -224,10 +231,10 @@ export class SearchBase {
     url,
     enableAppbase,
     credentials,
-    analytics,
     headers,
     value,
     suggestions,
+    querySuggestions,
     results,
     fuzziness,
     searchOperators,

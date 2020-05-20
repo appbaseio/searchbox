@@ -62,23 +62,23 @@ export const extractSuggestion = (val: any) => {
   return val;
 };
 
+
+/**
+ *
+ * @param {array} fields DataFields passed on Search Components
+ * @param {array} suggestions Raw Suggestions received from ES
+ * @param {string} currentValue Search Term
+ * @param {boolean} showDistinctSuggestions When set to true will only return 1 suggestion per document
+ */
 export const getSuggestions = (
   fields: Array<string> = [],
   suggestions: Array<Object>,
   currentValue: string = '',
   showDistinctSuggestions: boolean = true
 ) => {
-  /*
-		fields: DataFields passed on Search Components
-		suggestions: Raw Suggestions received from ES
-		currentValue: Search Term
-		skipWordMatch: Use to skip the word match logic, important for synonym
-		showDistinctSuggestions: When set to true will only return 1 suggestion per document
-  */
-
   let suggestionsList = [];
   let labelsList = [];
-  let skipWordMatch = false;
+  let skipWordMatch = false; //  Use to skip the word match logic, important for synonym
 
   const populateSuggestionsList = (val, parsedSource, source) => {
     // check if the suggestion includes the current value
@@ -114,7 +114,7 @@ export const getSuggestions = (
     return false;
   };
 
-  const parseField = (parsedSource, field, source = parsedSource) => {
+  const parseField = (parsedSource, field = '', source = parsedSource) => {
     if (typeof parsedSource === 'object') {
       const fieldNodes = field.split('.');
       const label = parsedSource[fieldNodes[0]];

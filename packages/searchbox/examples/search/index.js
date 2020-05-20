@@ -16,6 +16,20 @@ const instance = new Searchbase({
 	]
 });
 
+const querySuggestionsInstance = new Searchbase({
+  index: 'good-books-clone',
+  url: 'https://arc-cluster-appbase-tryout-k8dsnj.searchbase.io',
+  credentials: 'IkwcRqior:cda6348c-37c9-40f6-a144-de3cb18b57a0',
+  size: 5,
+  dataField: [
+    'original_title',
+    'original_title.search',
+  ],
+  enableQuerySuggestions: true,
+  enableAppbase: true,
+  appbaseConfig: { recordAnalytics: false }
+});
+
 const analyticsInstance = new Searchbase({
 	index: 'movies-store-app',
 	credentials: 'ctWRp9QBE:fece5752-b478-452b-8173-00b278e5e0b0',
@@ -277,4 +291,99 @@ searchbox(
 			}
 		}
 	]
+);
+
+searchbox(
+  '#git15',
+  {
+    instance: querySuggestionsInstance
+  },
+  [
+    {
+      templates: {
+        render: function({
+                           data,
+                           getItemProps,
+                           querySuggestions
+                         }) {
+          const suggestionHTML = (querySuggestions || [])
+            .concat(data)
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Search Results
+						</div>
+						${suggestionHTML}
+					`;
+        }
+      }
+    }
+  ]
+);
+
+searchbox(
+  '#git16',
+  {
+    instance: querySuggestionsInstance
+  },
+  [
+    {
+      templates: {
+        render: function({
+                           data,
+                           getItemProps,
+                         }) {
+          const suggestionHTML = data
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Search Results
+						</div>
+						${suggestionHTML}
+					`;
+        },
+        renderQuerySuggestions: function({ data, getItemProps}) {
+          const suggestionHTML = (data || [])
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          if ((data||[]).length === 0) return '';
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Query Suggestion Results
+						</div>
+						${suggestionHTML}
+					`;
+        }
+      }
+    }
+  ]
 );

@@ -54,9 +54,26 @@ export const wholeNumber = function(props, propName, componentName) {
   }
 };
 
-export const analyticsConfig = PropTypes.shape({
-  emptyQuery: bool,
-  suggestionAnalytics: bool,
+export const appbaseConfig = PropTypes.shape({
+  recordAnalytics: bool,
+  enableQueryRules: bool,
   userId: string,
   customEvents: object
 });
+
+export const dataFieldValidator = (props, propName, componentName) => {
+  const requiredError = new Error(
+    `${propName} supplied to ${componentName} is required. Validation failed.`
+  );
+  const propValue = props[propName];
+  if (!props.enableAppbase) {
+    if (!propValue) return requiredError;
+    if (typeof propValue !== 'string' && !Array.isArray(propValue)) {
+      return new Error(
+        `Invalid ${propName} supplied to ${componentName}. Validation failed.`
+      );
+    }
+    if (Array.isArray(propValue) && propValue.length === 0)
+      return requiredError;
+  }
+};

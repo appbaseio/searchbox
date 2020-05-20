@@ -21,9 +21,9 @@ export default class App extends Component {
           }}
           style={{ width: '50%', margin: '100px' }}
           showClear
-        // renderNoSuggestion={() => 'hello world'}
-        // showIcon={false}
-        // iconPosition="left"
+          // renderNoSuggestion={() => 'hello world'}
+          // showIcon={false}
+          // iconPosition="left"
         />
       </div>
     );

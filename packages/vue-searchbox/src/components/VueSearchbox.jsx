@@ -8,7 +8,11 @@ import {
   debounce as debounceFunc,
   isEmpty,
   getURLParameters,
-  withClickIds
+  withClickIds,
+  hasQuerySuggestionsRenderer,
+  getQuerySuggestionsComponent,
+  hasCustomRenderer,
+  getComponent
 } from '../utils/helper';
 import { suggestions, suggestionsContainer } from '../styles/Suggestions';
 import SuggestionItem from '../addons/SuggestionItem.jsx';
@@ -22,8 +26,8 @@ const VueSearchbox = {
     app: types.app,
     url: types.url,
     enableAppbase: types.enableAppbase,
+    enableQuerySuggestions: types.enableQuerySuggestions,
     credentials: types.credentials,
-    analytics: types.analytics,
     headers: types.headers,
     dataField: types.dataField,
     aggregationField: types.aggregationField,
@@ -51,7 +55,7 @@ const VueSearchbox = {
     render: types.render,
     renderError: types.renderError,
     renderNoSuggestion: types.renderNoSuggestion,
-    renderAllSuggestions: types.renderAllSuggestions,
+    renderQuerySuggestions: types.renderQuerySuggestions,
     renderMic: types.renderMic,
     innerClass: types.innerClass,
     defaultQuery: types.defaultQuery,
@@ -62,8 +66,8 @@ const VueSearchbox = {
     currentURL: types.currentURL,
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
-    analyticsConfig: types.analyticsConfig,
-    showDistinctSuggestions: types.showDistinctSuggestions
+    showDistinctSuggestions: types.showDistinctSuggestions,
+    appbaseConfig: types.appbaseConfig
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
@@ -72,6 +76,7 @@ const VueSearchbox = {
     this.state = {
       currentValue,
       suggestionsList: defaultSuggestions || [],
+      querySuggestionsList: [],
       isOpen: false,
       error: null,
       loading: false,
@@ -94,6 +99,12 @@ const VueSearchbox = {
     }
   },
   watch: {
+    $props: {
+      immediate: true,
+      handler() {
+        this.validateDataField();
+      }
+    },
     dataField: function(next, prev) {
       return this._applySetter(prev, next, 'setDataField');
     },
@@ -115,9 +126,9 @@ const VueSearchbox = {
         });
       }
     },
-    analyticsConfig: function(next, prev) {
-      if (this.analytics && JSON.stringify(next) !== JSON.stringify(prev)) {
-        this.setAnalytics(next);
+    appbaseConfig: function(next, prev) {
+      if (JSON.stringify(next) !== JSON.stringify(prev)) {
+        if (this.searchBase) this.searchBase.appbaseConfig = next;
       }
     }
   },
@@ -126,6 +137,28 @@ const VueSearchbox = {
       this.searchBase.unsubscribeToStateChanges(this.setStateValue);
   },
   methods: {
+    validateDataField() {
+      const propName = 'dataField';
+      const componentName = VueSearchbox.name;
+      const props = this.$props;
+      const requiredError = `${propName} supplied to ${componentName} is required. Validation failed.`;
+      const propValue = props[propName];
+      if (!this.enableAppbase) {
+        if (!propValue) {
+          console.error(requiredError);
+          return;
+        }
+        if (typeof propValue !== 'string' && !Array.isArray(propValue)) {
+          console.error(
+            `Invalid ${propName} supplied to ${componentName}. Validation failed.`
+          );
+          return;
+        }
+        if (Array.isArray(propValue) && propValue.length === 0) {
+          console.error(requiredError);
+        }
+      }
+    },
     _initSearchBase() {
       const {
         app,
@@ -133,7 +166,6 @@ const VueSearchbox = {
         enableAppbase,
         dataField,
         credentials,
-        analytics,
         headers,
         nestedField,
         size,
@@ -144,6 +176,8 @@ const VueSearchbox = {
         fuzziness,
         searchOperators,
         aggregationField,
+        appbaseConfig,
+        enableQuerySuggestions,
         showDistinctSuggestions
       } = this.$props;
 
@@ -157,11 +191,12 @@ const VueSearchbox = {
           index: app,
           url,
           enableAppbase,
+          enableQuerySuggestions,
           dataField,
           aggregationField,
           size,
           credentials,
-          analytics,
+          appbaseConfig,
           headers,
           nestedField,
           transformQuery,
@@ -200,6 +235,10 @@ const VueSearchbox = {
           this.currentValue = nextValue;
           this.$emit('valueChange', nextValue);
         };
+        this.searchBase.onQuerySuggestions = nextValue => {
+          this.querySuggestionsList =
+            withClickIds(nextValue && nextValue.data) || [];
+        };
       } catch (e) {
         this.initError = e;
         console.error(e);
@@ -218,18 +257,10 @@ const VueSearchbox = {
         : analyticsInstance.disableEmptyQuery();
       analyticsInstance.setUserID(userId).setCustomEvents(customEvents);
     },
-    triggerClickAnalytics(clickPosition, isSuggestion = true) {
-      const { analytics, analyticsConfig } = this.$props;
-      if (
-        !analytics ||
-        !analyticsConfig.suggestionAnalytics ||
-        !this.searchBase
-      )
-        return;
-      this.searchBase.analyticsInstance.registerClick(
-        clickPosition,
-        isSuggestion
-      );
+    triggerClickAnalytics(clickPosition, isSuggestion = true, value) {
+      const { appbaseConfig } = this.$props;
+      if (!appbaseConfig.recordAnalytics || !this.searchBase) return;
+      this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
     },
     setStateValue({ suggestions = {} }) {
       const {
@@ -265,7 +296,11 @@ const VueSearchbox = {
     },
     onSuggestionSelected(suggestion) {
       this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-      this.triggerClickAnalytics(suggestion && suggestion._click_id);
+      this.triggerClickAnalytics(
+        suggestion && suggestion._click_id,
+        true,
+        suggestion.source && suggestion.source._id
+      );
       this.onValueSelectedHandler(
         suggestion.value,
         causes.SUGGESTION_SELECT,
@@ -404,6 +439,47 @@ const VueSearchbox = {
     },
     getBackgroundColor(highlightedIndex, index) {
       return highlightedIndex === index ? '#eee' : '#fff';
+    },
+    getComponent(downshiftProps = {}, isQuerySuggestionsRender = false) {
+      const {
+        currentValue,
+        suggestionsList,
+        promotedData,
+        customData,
+        resultStats,
+        rawData
+      } = this.$data;
+      const data = {
+        error: this.error,
+        loading: this.isLoading,
+        value: currentValue,
+        downshiftProps,
+        data: suggestionsList,
+        promotedData,
+        customData,
+        resultStats,
+        rawData,
+        querySuggestions: this.querySuggestionsList,
+        triggerClickAnalytics: this.triggerClickAnalytics
+      };
+      if (isQuerySuggestionsRender) {
+        return getQuerySuggestionsComponent(
+          {
+            downshiftProps,
+            data: this.querySuggestionsList,
+            value: currentValue,
+            loading: this.isLoading,
+            error: this.error
+          },
+          this
+        );
+      }
+      return getComponent(data, this);
+    }
+  },
+  computed: {
+    hasCustomRenderer() {
+      return hasCustomRenderer(this);
     }
   },
   render() {
@@ -422,16 +498,7 @@ const VueSearchbox = {
       renderError,
       size
     } = this.$props;
-    const {
-      currentValue,
-      isOpen,
-      suggestionsList,
-      initError,
-      promotedData,
-      customData,
-      resultStats,
-      rawData
-    } = this.$data;
+    const { currentValue, isOpen, suggestionsList, initError } = this.$data;
     if (initError) {
       if (renderError)
         return typeof renderError === 'function'
@@ -439,9 +506,7 @@ const VueSearchbox = {
           : renderError;
       return <div>Error initializing SearchBase. Please try again.</div>;
     }
-    const renderAllSuggestions =
-      this.$scopedSlots.renderAllSuggestions ||
-      this.$props.renderAllSuggestions;
+
     return (
       <div class={className}>
         {title && (
@@ -495,27 +560,59 @@ const VueSearchbox = {
                     }}
                   />
                   {this.renderIcons()}
-                  {renderAllSuggestions &&
-                    renderAllSuggestions({
-                      currentValue,
+                  {this.hasCustomRenderer &&
+                    this.getComponent({
                       isOpen,
                       getItemProps,
                       getItemEvents,
-                      highlightedIndex,
-                      parsedSuggestions: suggestionsList,
-                      promotedData,
-                      customData,
-                      resultStats,
-                      rawData
+                      highlightedIndex
                     })}
                   {this.renderErrorComponent()}
-                  {!renderAllSuggestions && isOpen && suggestionsList.length ? (
+                  {!this.hasCustomRenderer &&
+                  isOpen &&
+                  suggestionsList.length ? (
                     <ul
                       class={`${suggestions} ${getClassName(
                         innerClass,
                         'list'
                       )}`}
                     >
+                      {hasQuerySuggestionsRenderer(this)
+                        ? this.getComponent(
+                            {
+                              isOpen,
+                              getItemProps,
+                              getItemEvents,
+                              highlightedIndex
+                            },
+                            true
+                          )
+                        : this.querySuggestionsList.map((sugg, index) => (
+                            <li
+                              {...{
+                                domProps: getItemProps({
+                                  item: sugg
+                                })
+                              }}
+                              {...{
+                                on: getItemEvents({
+                                  item: sugg
+                                })
+                              }}
+                              key={`${index + 1}-${sugg.value}`}
+                              style={{
+                                backgroundColor: this.getBackgroundColor(
+                                  highlightedIndex,
+                                  index
+                                )
+                              }}
+                            >
+                              <SuggestionItem
+                                currentValue={this.currentValue}
+                                suggestion={sugg}
+                              />
+                            </li>
+                          ))}
                       {suggestionsList.slice(0, size).map((item, index) => (
                         <li
                           {...{
@@ -526,11 +623,13 @@ const VueSearchbox = {
                               item
                             })
                           }}
-                          key={`${index + 1}-${item.value}`}
+                          key={`${index +
+                            this.querySuggestionsList.length +
+                            1}-${item.value}`}
                           style={{
                             backgroundColor: this.getBackgroundColor(
                               highlightedIndex,
-                              index
+                              index + this.querySuggestionsList.length
                             )
                           }}
                         >
@@ -597,6 +696,7 @@ const VueSearchboxWrapper = {
     return (
       <VueSearchbox
         {...{ attrs: this.$attrs }}
+        {...{ scopedSlots: this.$scopedSlots }}
         currentURL={window.location.href}
       />
     );
