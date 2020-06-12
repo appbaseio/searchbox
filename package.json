@@ -7,7 +7,8 @@
     "packages/searchbase/examples/*",
     "packages/vue-searchbox/examples/*",
     "packages/react-searchbox/examples/*",
-    "packages/searchbox/examples/*"
+    "packages/searchbox/examples/*",
+    "site"
   ],
   "scripts": {
     "watch": "npm run watch --prefix packages/searchbase",
