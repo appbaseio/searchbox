@@ -49,6 +49,7 @@ class Searchbase {
     options: {
       dataField: string | Array<string | DataField>,
       searchOperators?: boolean,
+      queryString?: boolean,
       queryFormat?: QueryFormat,
       fuzziness?: string | number,
       nestedField?: string
@@ -167,6 +168,8 @@ class Searchbase {
 
   highlightField: string | Array<string>;
 
+  queryString: boolean;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
@@ -270,7 +273,8 @@ class Searchbase {
     sortOptions,
     sortByField,
     highlight,
-    highlightField
+    highlightField,
+    queryString
   }: SearchBaseConfig) {
     if (!index) {
       throw new Error('Please provide a valid index.');
@@ -307,6 +311,7 @@ class Searchbase {
     this.sortByField = sortByField;
     this.highlight = highlight;
     this.highlightField = highlightField;
+    this.queryString = queryString;
 
     this.requestStatus = REQUEST_STATUS.inactive;
     this.suggestionsRequestStatus = REQUEST_STATUS.inactive;
@@ -1090,7 +1095,8 @@ class Searchbase {
     searchOperators: boolean,
     size: number,
     sortBy: string,
-    value: string
+    value: string,
+    queryString: boolean
   |} {
     return {
       id: 'DataSearch',
@@ -1107,7 +1113,8 @@ class Searchbase {
       fuzziness: this.fuzziness,
       searchOperators: this.searchOperators,
       highlight: this.highlight,
-      highlightField: this.highlightField
+      highlightField: this.highlightField,
+      queryString: this.queryString
     };
   }
 
@@ -1127,7 +1134,8 @@ class Searchbase {
         searchOperators: this.searchOperators,
         queryFormat: this.queryFormat,
         fuzziness: this.fuzziness,
-        nestedField: this.nestedField
+        nestedField: this.nestedField,
+        queryString: this.queryString,
       }) || {
         match_all: {}
       };
@@ -1272,6 +1280,10 @@ Searchbase.defaultQuery = (value, options) => {
       finalQuery = {
         simple_query_string: Searchbase.shouldQuery(value, fields, options)
       };
+    } else if (options.queryString) {
+      finalQuery = {
+        query_string: Searchbase.shouldQuery(value, fields, options)
+      };
     } else {
       finalQuery = {
         bool: {
@@ -1305,7 +1317,8 @@ Searchbase.shouldQuery = (
   options = {
     searchOperators: false,
     queryFormat: 'or',
-    fuzziness: 0
+    fuzziness: 0,
+    queryString: false
   }
 ) => {
   const fields = dataFields.map((dataField: string | DataField) => {
@@ -1317,7 +1330,7 @@ Searchbase.shouldQuery = (
     return dataField;
   });
 
-  if (options.searchOperators) {
+  if (options.searchOperators || options.queryString) {
     return {
       query: value,
       fields,

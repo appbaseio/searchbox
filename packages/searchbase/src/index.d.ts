@@ -126,6 +126,8 @@ export class SearchBase {
 
   highlightField: string | Array<string>;
 
+  queryString: boolean;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
