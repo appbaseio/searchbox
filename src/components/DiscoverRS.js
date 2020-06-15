@@ -1,73 +1,86 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
-import { Grid as FlexGrid, Card, Flex } from '@appbaseio/designkit';
+import { Grid as FlexGrid,Card, Flex } from '@appbaseio/designkit';
 import { mediaKey, media } from '../utils';
-import { Section } from '../styles';
+import { Section, SecondaryLink } from '../styles';
 import H2 from '../styles/H2';
+import ImageCard from '../styles/ImageCard';
+import { Title } from '@appbaseio/designkit/lib/atoms/typography';
+
+const titleCls = css`
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 30px;
+  margin-left: 13px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+`;
 
 const cardCls = css`
-  max-width: 450px;
-  padding: 17px 33px !important;
-  text-align: left;
+  padding: 20px 10px;
   box-shadow: 1px 2px 5px 0 rgba(0, 0, 0, 0.05) !important;
   &:hover {
     box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.05) !important;
   }
-`;
-const imgCls = css`
-  height: 76px !important;
-  width: 76px !important;
-`;
-const titleCls = css`
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 30px;
-  margin-left: 13px;
-  ${media.large(css`
-    font-size: 16px;
-  `)};
+
+  img {
+    width: 100%;
+    height: auto;
+  }
 `;
 
+const linkCls = css`
+  padding: 15px 10px;
+  font-size: 0.8rem;
+  color: #74767e;
+
+  &:hover {
+    color: #424242;
+  }
+`;
+
+const imagePrefix = '../../searchbox/images/';
 const DiscoverRS = ({ cardConfig, currentSelected }) => (
   <Section css="max-width: 950px;margin: 0 auto;background-color: #fff">
-    <H2 css="margin-bottom: 20px;"> Other Searchbox libraries</H2>{' '}
+    <H2 css="margin-bottom: 20px;">Searchbox libraries</H2>{' '}
     <p css="max-width: 700px;margin: 0 auto 64px auto">
       Build consistent, cross-platform search UIs that delight your users.
     </p>
     <FlexGrid
-      size={2}
-      mdSize={2}
-      gutter="20px"
+      size={3}
+      lgSize={3}
       smSize={1}
-      style={{ marginTop: '38px' }}
-      css={{
-        [mediaKey.medium]: {
-          justifyContent: 'center'
-        }
+      gutter="20px"
+      lgGutter="12px"
+      smGutter="0px"
+      style={{
+        marginTop: '60px'
       }}
     >
-      {cardConfig
-        .filter(card => card.name !== currentSelected)
-        .map((card, index) => (
-          <Card
+      {cardConfig.map((card, index) => (
+        <Card css={cardCls}>
+          <img src={`${imagePrefix}/${card.src}`} alt={card.name} />
+          <Title css={titleCls}>{card.title}</Title>
+          <SecondaryLink
             target="_blank"
+            rel="noopener noreferrer"
             href={card.href}
-            // eslint-disable-next-line
-            key={index}
-            className={cardCls}
+            css={linkCls}
           >
-            <Flex>
-              <div>
-                <img className={imgCls} srcSet={card.srcSet} alt={card.title} />
-              </div>
+            Getting Started
+          </SecondaryLink>
 
-              <Flex justifyContent="center" alignItems="center">
-                <h4 css={titleCls}>{card.title}</h4>
-              </Flex>
-            </Flex>
-          </Card>
-        ))}
+          <SecondaryLink
+            target="_blank"
+            rel="noopener noreferrer"
+            href={card.demo}
+            css={linkCls}
+          >
+            Demo
+          </SecondaryLink>
+        </Card>
+      ))}
     </FlexGrid>
   </Section>
 );
@@ -86,25 +99,30 @@ DiscoverRS.propTypes = {
 DiscoverRS.defaultProps = {
   cardConfig: [
     {
-      title: 'Searchbox for React',
-      srcSet:
-        '../../reactivesearch/images/reactivesearch/Reactive%20Search@3x.svg 3x, images/reactivesearch/Reactive%20Search@2x.png 2x, images/reactivesearch/Reactive%20Search@1x.png',
-      href: '/searchbox/',
-      name: 'web'
+      title: 'React',
+      src: 'Searchbox_React@1x.png',
+      href:
+        'https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/',
+      name: 'web',
+      demo:
+        'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/react-searchbox/examples/basic'
     },
     {
-      title: 'Searchbox for Vue',
-      srcSet:
-        '../../reactivesearch/images/reactivesearch/Reactive%20Search%20for%20vue@3x.svg 3x, images/reactivesearch/Reactive%20Search%20for%20vue@2x.png 2x, images/reactivesearch/Reactive%20Search%20for%20vue@1x.png',
-      href: '/searchbox/vue/',
-      name: 'vue'
+      title: 'Vue',
+      src: 'Searchbox_Vue@3x.png',
+      href:
+        'https://docs.appbase.io/docs/reactivesearch/vue-searchbox/quickstart/',
+      name: 'vue',
+      demo:
+        'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/vue-searchbox/examples/basic'
     },
     {
-      title: 'Searchbox for Vanilla JS',
-      srcSet:
-        '../../reactivesearch/images/reactivesearch/Group%2029@3x.svg 3x, images/reactivesearch/Group%2029@2x.png 2x, images/reactivesearch/Group%2029@1x.png',
-      href: '/searchbox/js/',
-      name: 'vanilla'
+      title: 'Vanilla JS',
+      src: 'Searchbox_JS@3x.png',
+      href: 'https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/',
+      name: 'vanilla',
+      demo:
+        'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/searchbox/examples/searchbar-with-style'
     }
   ],
   currentSelected: ''

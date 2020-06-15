@@ -187,6 +187,8 @@ class HomePage extends Component {
               <div className="bg-image" />
             </Layout>
           </div>
+
+          <DiscoverRS currentSelected={config.name} />
           {config.banner2 ? (
             <Row style={{ backgroundColor: '#FEFEFE', marginTop: '50px' }}>
               <Layout>
@@ -288,12 +290,8 @@ class HomePage extends Component {
               </Grid>
             </Layout>
           </Section>
-          <BannerRow
-            configName={config.name}
-            config={config.banner5}
-            theme={this.props.theme}
-          />
-          <DiscoverRS currentSelected={config.name} />
+
+          <ComparsionSection theme={this.props.theme} />
           {/** Demos Section */}
           {config.banner6 && (
             <Section id="examples">
@@ -500,8 +498,12 @@ class HomePage extends Component {
               </Layout>
             </Section>
           )}
-          <ComparsionSection theme={this.props.theme} />
           <AppbaseUsers />
+          <BannerRow
+            configName={config.name}
+            config={config.banner5}
+            theme={this.props.theme}
+          />
           <Section>
             <Layout>
               <H2>Get started in minutes</H2>
@@ -525,6 +527,7 @@ class HomePage extends Component {
               <SupportGrid configName={config.name} />
             </Layout>
           </Section>
+
           <Footer configName={config.name} footerConfig={config.footer} />
           <a
             href={config.producthunt}
