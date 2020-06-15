@@ -13,16 +13,11 @@ export default {
     logo: {
       src: '../../searchbox/images/RSlogo.svg',
       title: {
-		  light: 'React',
         dark: 'Searchbox'
       },
       href: '/searchbox'
     },
     links: [
-      {
-        description: 'tools',
-        href: '/tools'
-      }
     ]
   },
   footer: [

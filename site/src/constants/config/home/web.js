@@ -11,9 +11,9 @@ export default {
   ...baseConfig,
   header: baseConfigHeader,
   banner1: {
-    title: 'React + ElasticSearch = ❤️',
+    title: 'JS + ElasticSearch = ❤️',
     description:
-      'Lightweight and performance oriented search box UI component library for React.',
+      'Lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It\'s available for React, Vue and Vanilla JS.',
     image: {
       src: '../../searchbox/images/browser@2x.png',
       alt: 'Reactive Search Components'
