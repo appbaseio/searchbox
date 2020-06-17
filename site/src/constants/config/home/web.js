@@ -11,9 +11,9 @@ export default {
   ...baseConfig,
   header: baseConfigHeader,
   banner1: {
-    title: 'JS + ElasticSearch = ❤️',
+    title: 'Searchbox for Elasticsearch',
     description:
-      'Lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It\'s available for React, Vue and Vanilla JS.',
+      'Lightweight and performance focused search UI library to query and display results from Elasticsearch.',
     image: {
       src: '../../searchbox/images/browser@2x.png',
       alt: 'Reactive Search Components'
@@ -30,9 +30,9 @@ export default {
     }
   },
   banner3: {
-    title: 'Features',
+    title: 'Benefits',
     description:
-      'We have baked some amazing features in libraries which helps getting insights from searches and also help beautify and enhance search experiences.',
+      'Lightweight, performance optimized and built for creating production grade search experiences',
     cards: [
       {
         image: {
@@ -41,7 +41,7 @@ export default {
         },
         title: 'Elasticsearch compatible',
         description:
-          'Connect to an ES index hosted anywhere. Supports v2, v5 and v6.'
+          'Connect to an ElasticSearch index hosted anywhere. Supports v5, v6 and v7.'
       },
       {
         image: {
@@ -50,16 +50,16 @@ export default {
         },
         title: 'Configurable styles',
         description:
-          'Styled components with rich theming and CSS class-injection support.'
+          'Styled searchbox component with rich theming and CSS class-injection support.'
       },
       {
         image: {
           src: '../../searchbox/icons/6.png',
-          alt: 'Search/Click Analytics'
+          alt: 'Search & Click Analytics'
         },
-        title: 'Search/Click Analytics',
+        title: 'Search & Click Analytics',
         description:
-          'Improve your search experience based on the analytics extracted by Appbase.io.'
+          'Record search and click analytics with appbase.io to understand the business impact of search.'
       },
       {
         image: {
@@ -67,34 +67,34 @@ export default {
           alt: 'Voice Search'
         },
         title: 'Voice Search',
-        description: 'Enable voice input for searching.'
+        description: 'Enable searching with voice input.'
       },
       {
         image: {
           src: '../../searchbox/icons/3.png',
           alt: 'Autosuggestions'
         },
-        title: 'Autosuggestions',
+        title: 'Auto suggestions',
         description:
-          'Built-in autosuggest functionality with keyboard accessibility.'
+          'Use built-in auto suggestions and highlighting with keyboard accessibility.'
       },
 
       {
         image: {
           src: '../../searchbox/icons/5.png',
-          alt: 'Feature Results'
+          alt: 'Promote Results'
         },
-        title: 'Feature Results',
-        description: 'Promote and hide your results for search queries.'
+        title: 'Promote Results',
+        description: 'use appbase.io to merchandise and feature banners or results on specific search terms.'
       }
     ]
   },
   banner5: [
     {
       backgroundColor: primary,
-      title: 'Build a live app in 5 easy steps',
+      title: 'Build a live search app in a minute',
       description:
-        'Go from scratch to creating a data-driven search app with our beginner friendly quick start guide.',
+        'Check out our 1-min interactive guide to get started with building your first search app.',
       button: {
         title: 'Get Started',
         href:
@@ -109,7 +109,7 @@ export default {
       backgroundColor: primaryDark,
       title: 'Get dedicated support',
       description:
-        'We offer production support for ReactiveSearch. Work with us to bring your dream project to life.',
+        'We offer dedicated support for Searchbox. Work with us to bring your dream project to life.',
       button: {
         title: 'SUPPORT PLANS',
         href: 'https://appbase.io/pricing#support'

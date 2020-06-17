@@ -16,7 +16,7 @@ export default ({ configName }) => {
 				marginTop: '60px',
 			}}
 		>
-			<Card big href="https://opensource.appbase.io/reactive-manual">
+			<Card big href="https://docs.appbase.io/docs/reactivesearch/gettingstarted/">
 				<img src={`${imagePrefix}/Documentation.svg`} alt="Documentation" />
 				<Title>Documentation</Title>
 				<p>
@@ -26,38 +26,28 @@ export default ({ configName }) => {
 							color: '#0033FF',
 						}}
 					>
-						Reactive X
+						Search UI
 					</span>{' '}
 					development for all platforms.
 				</p>
 			</Card>
-			<Card big href="https://medium.appbase.io">
+			<Card big href="https://medium.appbase.io/tagged/javascript">
 				<img src={`${imagePrefix}/Tutorials.svg`} alt="Tutorials" />
 				<Title>Tutorials</Title>
-				<p>Go from scratch to a full app with these tutorial guides.</p>
+				<p>Get inspiration with these tutorial guides.</p>
 			</Card>
 			<Card big href="https://appbase.io/support">
 				<img src={`${imagePrefix}/Support.png`} alt="Support" />
 				<Title>Support</Title>
 				<p>
-					Get first-class support from appbase.io for your{' '}
-					<span
-						style={{
-							color: '#0033FF',
-						}}
-					>
-						Reactive X
-					</span>{' '}
-					app.
+					Get first-class support from appbase.io for your search.
 				</p>
 			</Card>
 			<Card big href="https://gitter.im/appbaseio/reactivesearch">
 				<img src={`${imagePrefix}/Gitter.svg`} alt="Gitter" />
-				<Title>Gitter</Title>
+				<Title>Community</Title>
 				<p>
-					Join our community on Gitter. We
-					{"'"}
-					re always around and happy to help.
+					Join our community on Gitter.
 				</p>
 			</Card>
 		</Grid>

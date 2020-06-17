@@ -22,30 +22,30 @@ export default {
   },
   footer: [
     {
-      title: 'Reactive <x>',
+      title: 'ReactiveSearch',
       list: [
         {
           title: 'React',
           href:
-            'https://docs.appbase.io/docs/searchbox/v3/overview/quickstart/',
-          openWithTab: true
-        },
-        {
-          title: 'React Native',
-          href:
-            'https://docs.appbase.io/docs/searchbox/native/overview/QuickStart/',
+            'https://docs.appbase.io/docs/reactivesearch/v3/overview/quickstart/',
           openWithTab: true
         },
         {
           title: 'Vue.JS',
           href:
-            'https://docs.appbase.io/docs/searchbox/vue/overview/QuickStart/',
+            'https://docs.appbase.io/docs/reactivesearch/vue/overview/QuickStart/',
           openWithTab: true
         },
         {
-          title: 'ReactiveMaps',
+          title: 'Reactive Maps',
           href:
-            'https://docs.appbase.io/docs/searchbox/v3/overview/reactivemaps/',
+            'https://docs.appbase.io/docs/reactivesearch/v3/overview/reactivemaps/',
+          openWithTab: true
+        },
+        {
+          title: 'React Native',
+          href:
+            'https://docs.appbase.io/docs/reactivesearch/native/overview/QuickStart/',
           openWithTab: true
         }
       ]
@@ -66,7 +66,7 @@ export default {
           openWithTab: true
         },
         {
-          title: 'Vanilla Searchbox',
+          title: 'JavaScript Searchbox',
           href:
             'https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/',
           openWithTab: true
@@ -86,11 +86,6 @@ export default {
         {
           title: 'GitHub',
           href: 'https://github.com/appbaseio/searchbox/',
-          openWithTab: true
-        },
-        {
-          title: 'Gitter',
-          href: 'https://gitter.im/appbaseio/reactivesearch',
           openWithTab: true
         },
         {

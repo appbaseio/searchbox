@@ -291,7 +291,6 @@ class HomePage extends Component {
             </Layout>
           </Section>
 
-          <ComparsionSection theme={this.props.theme} />
           {/** Demos Section */}
           {config.banner6 && (
             <Section id="examples">
@@ -529,14 +528,6 @@ class HomePage extends Component {
           </Section>
 
           <Footer configName={config.name} footerConfig={config.footer} />
-          <a
-            href={config.producthunt}
-            // eslint-disable-next-line
-            target="_blank"
-            className="featured-post-link"
-          >
-            <span>Featured on Producthunt</span>🎉
-          </a>
         </Base>
       </ThemeProvider>
     );

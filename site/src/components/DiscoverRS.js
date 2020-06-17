@@ -45,7 +45,7 @@ const DiscoverRS = ({ cardConfig, currentSelected }) => (
   <Section css="max-width: 950px;margin: 0 auto;background-color: #fff">
     <H2 css="margin-bottom: 20px;">Searchbox libraries</H2>{' '}
     <p css="max-width: 700px;margin: 0 auto 64px auto">
-      Build consistent, cross-platform search UIs that delight your users.
+      Build consistent, cross-platform search UIs that delight your users
     </p>
     <FlexGrid
       size={3}
