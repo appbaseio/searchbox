@@ -15,8 +15,8 @@ export default {
     description:
       'Lightweight and performance focused search UI library to query and display results from Elasticsearch.',
     image: {
-      src: '../../searchbox/images/browser@2x.png',
-      alt: 'Reactive Search Components'
+      src: '../../searchbox/images/hero.svg',
+      alt: 'Searchbox In Action'
     },
     button: {
       title: 'Get Started',
@@ -36,7 +36,7 @@ export default {
     cards: [
       {
         image: {
-          src: '../../searchbox/icons/4.png',
+          src: '../../searchbox/icons/elasticsearch.svg',
           alt: 'Elasticsearch compatible'
         },
         title: 'Elasticsearch compatible',
@@ -45,7 +45,7 @@ export default {
       },
       {
         image: {
-          src: '../../searchbox/icons/2.png',
+          src: '../../searchbox/icons/color_pallete.svg',
           alt: 'Configurable styles'
         },
         title: 'Configurable styles',
@@ -54,7 +54,7 @@ export default {
       },
       {
         image: {
-          src: '../../searchbox/icons/6.png',
+          src: '../../searchbox/icons/search_click_analytics.svg',
           alt: 'Search & Click Analytics'
         },
         title: 'Search & Click Analytics',
@@ -63,7 +63,7 @@ export default {
       },
       {
         image: {
-          src: '../../searchbox/icons/1.png',
+          src: '../../searchbox/icons/voice_search.svg',
           alt: 'Voice Search'
         },
         title: 'Voice Search',
@@ -71,7 +71,7 @@ export default {
       },
       {
         image: {
-          src: '../../searchbox/icons/3.png',
+          src: '../../searchbox/icons/autosuggestions.svg',
           alt: 'Autosuggestions'
         },
         title: 'Auto suggestions',
@@ -81,7 +81,7 @@ export default {
 
       {
         image: {
-          src: '../../searchbox/icons/5.png',
+          src: '../../searchbox/icons/promote_results.svg',
           alt: 'Promote Results'
         },
         title: 'Promote Results',
