@@ -137,9 +137,9 @@ const banner = (image, bgColor) => css`
 	.bg-image {
 		position: absolute;
 		top: 100px;
-		right: 0;
+		right: 200px;
 		width: 50%;
-		height: calc(100% - 100px);
+		height: calc(100% - 250px);
 		background-image: url(${image});
 		background-size: contain;
 		background-position: top right;
@@ -213,9 +213,19 @@ const banner = (image, bgColor) => css`
 		margin-top: 20px;
 	}
 
+	@media all and (max-width: 1200px) {
+		.bg-image {
+			right: 100px;
+			height: calc(100% - 300px);
+		}
+	}
 	@media all and (max-width: 992px) {
 		align-items: center;
 		text-align: center;
+
+		.bg-image {
+			right: 100px;
+		}
 
 		.button-row {
 			justify-content: center;
