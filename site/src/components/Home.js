@@ -93,7 +93,16 @@ class HomePage extends Component {
     return (
       <ThemeProvider theme={this.props.theme}>
         <Base>
-          <Navbar style={{ backgroundColor: primary, color: '#fff' }} bold dark>
+          <Navbar
+            style={{ backgroundColor: primary, color: '#fff' }}
+            css={css`
+              > div {
+                max-width: 1200px;
+              }
+            `}
+            bold
+            dark
+          >
             <Navbar.Logo>
               <Logo css={navTitle} light href={config.header.logo.href}>
                 <Logo.Icon css="color: #fff;">
@@ -148,8 +157,8 @@ class HomePage extends Component {
               </li>
             </Navbar.List>
           </Navbar>
-          <div className={banner(config.banner1.image.src, primary)}>
-            <Layout>
+          <div className={banner(primary)}>
+            <Layout className="flex">
               <div className="content">
                 <H1 light>{config.banner1.title}</H1>
                 <p style={getLinkStyle(config.name)}>
@@ -184,7 +193,7 @@ class HomePage extends Component {
                   </SecondaryLink>
                 </div>
               </div>
-              <div className="bg-image" />
+              <img src={config.banner1.image.src} />
             </Layout>
           </div>
 

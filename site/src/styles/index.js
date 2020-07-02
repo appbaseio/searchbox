@@ -81,8 +81,11 @@ const Base = styled('div')`
 const Layout = styled('div')`
 	width: 100%;
 	max-width: 1200px;
-	padding: 0 15px;
 	margin: 0 auto;
+
+	@media (max-width: 1280px) {
+		padding: 0 15px;
+	}
 `;
 
 const Row = styled('div')`
@@ -122,7 +125,7 @@ const Row = styled('div')`
 		}
 	}
 `;
-const banner = (image, bgColor) => css`
+const banner = (bgColor) => css`
 	width: 100%;
 	min-height: 100vh;
 	display: flex;
@@ -131,78 +134,14 @@ const banner = (image, bgColor) => css`
 	position: relative;
 	flex-direction: column;
 	background-color: ${bgColor};
-	.content {
-		width: 50%;
+	.flex {
+		display:flex;
+		justify-content: space-between;
+		align-items: center;
 	}
-	.bg-image {
-		position: absolute;
-		top: 100px;
-		right: 0;
-		width: 50%;
-		height: calc(100% - 100px);
-		background-image: url(${image});
-		background-size: contain;
-		background-position: top right;
-		background-repeat: no-repeat;
 
-		.pulsating-circle {
-			position: absolute;
-			left: 20%;
-			bottom: 60px;
-			transform: translateX(-50%) translateY(-50%);
-			width: 20px;
-			height: 20px;
-
-			&:before {
-				content: '';
-				position: relative;
-				display: block;
-				width: 300%;
-				height: 300%;
-				box-sizing: border-box;
-				margin-left: -100%;
-				margin-top: -100%;
-				border-radius: 45px;
-				background-color: #01a4e9;
-				animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-			}
-
-			&:after {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				display: block;
-				width: 100%;
-				height: 100%;
-				background-color: white;
-				border-radius: 15px;
-				box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-				animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
-			}
-		}
-
-		@keyframes pulse-ring {
-			0% {
-				transform: scale(0.33);
-			}
-			80%,
-			100% {
-				opacity: 0;
-			}
-		}
-
-		@keyframes pulse-dot {
-			0% {
-				transform: scale(0.8);
-			}
-			50% {
-				transform: scale(1);
-			}
-			100% {
-				transform: scale(0.8);
-			}
-		}
+	img {
+		max-height: 500px;
 	}
 
 	p {
@@ -213,6 +152,14 @@ const banner = (image, bgColor) => css`
 		margin-top: 20px;
 	}
 
+	@media all and (max-width: 1200px) {
+		.flex {
+			justify-content: space-around;
+		}
+		img {
+			max-height: 350px;
+		}
+	}
 	@media all and (max-width: 992px) {
 		align-items: center;
 		text-align: center;
@@ -231,7 +178,7 @@ const banner = (image, bgColor) => css`
 			margin: 30px auto 50px;
 		}
 
-		.bg-image {
+		img {
 			display: none;
 		}
 		.content {

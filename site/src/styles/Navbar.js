@@ -14,6 +14,7 @@ const Navbar = styled('nav')`
 	position: absolute;
 	top: 0;
 	left: 0;
+	margin:0 auto;
 	width: 100%;
 	height: 90px;
 	padding: ${props => (props.small ? '0 6rem' : '0 2.5rem')};
