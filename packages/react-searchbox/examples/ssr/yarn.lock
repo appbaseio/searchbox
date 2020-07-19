@@ -51,20 +51,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@1.0.0-beta":
-  version "1.0.0-beta"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.0.0-beta.tgz#ec309f59894ada3cf0a920c174c03fb394944e06"
-  integrity sha512-O/s+iMkzX2QWOk1fieEfWh2gcJXjfCb8zzaymr8vKqWCRUZvinI7SN8Is2g3BHoK/kgz5GjXYiTcGYhCwKmFAw==
+"@appbaseio/react-searchbox@1.1.0-beta":
+  version "1.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.1.0-beta.tgz#03791a42a8bbef335be661af940ee481bc870685"
+  integrity sha512-SXjUkq3V29GDcpyD/dAXGs4PE5VBUaKd69/qluC1uw3WKaABnpBUhuqQmBNLVvhAYjWPKHZuOvLjCUUVWmSl6Q==
   dependencies:
-    "@appbaseio/searchbase" "1.0.0-beta"
+    "@appbaseio/searchbase" "1.1.0-beta"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@1.0.0-beta":
-  version "1.0.0-beta"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.0-beta.tgz#4cab97cbbb5d46dbf5c938805b8db895e0019dc4"
-  integrity sha512-X1G4oEz1SW81Dmc6E8hxaDXrh+2hWIrppqRUXuVYV+icTufjOPsWwH+F+JkRNOEmjgUelatsvAlGmXoAxpswvQ==
+"@appbaseio/searchbase@1.1.0-beta":
+  version "1.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.0-beta.tgz#358b553207f93099b7c1e55e4d9ce7091f4d4067"
+  integrity sha512-1yQMMfCr/NEcOr7oT50sqXSbyFi8uCF24zDZgkNqqUywJaocs65tPGwtxO7Jse5gAdJslgY+ZngDSxqRYTQ3BQ==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -3916,9 +3916,9 @@ lodash.templatesettings@^4.0.0:
     lodash._reinterpolate "^3.0.0"
 
 lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.4:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 log-symbols@^2.2.0:
   version "2.2.0"
