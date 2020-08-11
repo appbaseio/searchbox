@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Switch, BrowserRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import './styles.css';
 
 import createHistory from 'history/createBrowserHistory'; // eslint-disable-line
 
@@ -15,9 +16,7 @@ const HomePage = Loadable({
 ReactDOM.render(
   <BrowserRouter basename="/searchbox">
     <Switch>
-      <Route exact path="/" component={HomePage} />
-      <Route exact path="/searchbox" component={HomePage} />
-      <Route path="*" component={HomePage} />
+      <Route component={HomePage} />
     </Switch>
   </BrowserRouter>,
   document.getElementById('root')
