@@ -1,204 +1,186 @@
 import React from 'react';
-import { Footer, Title, Flex } from '@appbaseio/designkit';
-import { string, arrayOf, bool, shape } from 'prop-types';
-import { css } from 'react-emotion';
-import { mediaKey } from '../utils';
 
-const getTitleStyle = (configName) => {
-	if (configName === 'vue') {
-		return {
-			opacity: 0.5,
-			color: '#ffffff',
-		};
-	}
-	return {};
-};
-const getLinkStyle = (configName) => {
-	if (configName === 'vue') {
-		return {
-			color: '#ffffff',
-		};
-	}
-	return {};
-};
-const getInfoStyle = (configName) => {
-	const infoCls = {
-		color: '#fff',
-		fontSize: 13,
-		fontWeight: 600,
-	};
-	if (configName !== 'vue') {
-		infoCls.opacity = 0.45;
-	}
-	return infoCls;
-};
-
-const titleStyle = {
-	margin: '0.9rem 0px',
-};
-
-const mask = css`
-	height: 20px;
-	width: 20px;
-	border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.1);
-	margin: 20px 10px 0 0;
-	img {
-		width: 100%;
-	}
-`;
-
-const FooterBrand = ({ configName }) => (
-	<React.Fragment>
-		<img
-			width="100%"
-			src="https://opensource.appbase.io/reactivesearch/images/logo.svg"
-			alt="appbase.io"
-		/>
-		<div
-			className={css({
-				textAlign: 'left',
-				marginTop: '10px',
-				[mediaKey.large]: {
-					textAlign: 'center',
-					marginTop: '0',
-				},
-			})}
-		>
-			<a
-				target="_blank"
-				rel="noopener noreferrer"
-				href="mailto:info@appbase.io"
-				style={getInfoStyle(configName)}
-			>
-				info@appbase.io
-			</a>
-		</div>
-
-		<Flex
-			alignItems="center"
-			className={css({
-				[mediaKey.large]: {
-					justifyContent: 'center',
-				},
-			})}
-		>
-			<a target="_blank" rel="noopener noreferrer" href="https://github.com/appbaseio/">
-				<div className={mask}>
-					<img
-						alt="Github"
-						srcSet="images/footer/Github@3x.svg 3x, images/footer/Github@2x.png 2x, images/footer/Github@1x.png"
-					/>
-				</div>
-			</a>
-			<a target="_blank" rel="noopener noreferrer" href="https://medium.appbase.io/">
-				<div className={mask}>
-					<img
-						alt="Medium"
-						srcSet="images/footer/Medium@3x.svg 3x, images/footer/Medium@2x.png 2x, images/footer/Medium@1x.png"
-					/>
-				</div>
-			</a>
-			<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/appbaseio">
-				<div className={mask}>
-					<img
-						alt="Twitter"
-						srcSet="images/footer/Twitter%20Copy@3x.svg 3x, images/footer/Twitter%20Copy@2x.png 2x, images/footer/Twitter%20Copy@1x.png"
-					/>
-				</div>
-			</a>
-		</Flex>
-	</React.Fragment>
-);
-FooterBrand.propTypes = {
-	configName: string.isRequired,
-};
-
-const AppFooter = ({ configName, footerConfig }) => (
-	<div css="background-color: rgb(6, 32, 51)">
-		<Footer
-			className={css({
-				padding: '60px 0',
-				[mediaKey.medium]: {
-					paddingBottom: '0',
-				},
-			})}
-		>
-			<Footer.Brand
-				className={css({
-					[mediaKey.large]: {
-						display: 'none',
-					},
-				})}
-			>
-				<FooterBrand configName={configName} />
-			</Footer.Brand>
-			<Footer.Links
-				className={css({
-					[mediaKey.large]: {
-						width: '100%',
-					},
-				})}
-			>
-				{footerConfig.map(footerList => (
-					<Footer.List key={footerList.title}>
-						<Title
-							style={{ ...titleStyle, ...getTitleStyle(configName) }}
-							className="heading"
-						>
-							{footerList.title}
-						</Title>
-						{footerList.list.map((list, index) => (
-							// eslint-disable-next-line
-							<li key={index}>
-								<a
-									style={getLinkStyle(configName)}
-									{...(list.openWithTab
-										? {
-												target: '_blank',
-												rel: 'noopener noreferrer',
-										} // prettier-ignore
-										: {})}
-									href={list.href}
-								>
-									{list.title}
-								</a>
-							</li>
-						))}
-					</Footer.List>
-				))}
-			</Footer.Links>
-		</Footer>
-		<div
-			className={css({
-				width: 200,
-				margin: '0 auto',
-				paddingBottom: 100,
-				display: 'none',
-				[mediaKey.large]: {
-					display: 'block',
-				},
-			})}
-		>
-			<FooterBrand configName={configName} />
-		</div>
-	</div>
+const Footer = () => (
+  <div class="bg-gray-900">
+    <div class="max-w-screen-xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+      <div class="xl:grid xl:grid-cols-3 xl:gap-8 justify-center text-center lg:text-left lg:justify-start">
+        <div class="xl:col-span-1">
+          <img
+            class="h-10 mx-auto lg:mx-0"
+            src="https://opensource.appbase.io/reactivesearch/images/logo.svg"
+            alt="Appbase.io"
+          />
+          <p class="mt-8 text-gray-500 text-base leading-6">
+            Build the best app search experience.
+          </p>
+          <div class="mt-8 flex justify-center lg:justify-start">
+            <a href="#" class="text-gray-400 hover:text-gray-500">
+              <span class="sr-only">Twitter</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+              </svg>
+            </a>
+            <a href="#" class="ml-6 text-gray-400 hover:text-gray-500">
+              <span class="sr-only">GitHub</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  fill-rule="evenodd"
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="mt-12 grid grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h4 class="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
+                Reactivesearch
+              </h4>
+              <ul class="mt-4">
+                <li>
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    React
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Vue.JS
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Reactive Maps
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    React Native
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-12 md:mt-0">
+              <h4 class="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
+                Searchbox
+              </h4>
+              <ul class="mt-4">
+                <li>
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    React Searchbox
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Vue Searchbox
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Javascript Searchbox
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Searchbase
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h4 class="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
+                Community
+              </h4>
+              <ul class="mt-4">
+                <li>
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Github
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Stackoverflow
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Twitter
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-12 md:mt-0">
+              <h4 class="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
+                More
+              </h4>
+              <ul class="mt-4">
+                <li>
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Medium Publication
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Appbase.io Docs
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <a
+                    href="#"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900"
+                  >
+                    Support Email
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 );
 
-AppFooter.defaultProps = {
-	footerConfig: [],
-};
-
-AppFooter.propTypes = {
-	configName: string.isRequired,
-	footerConfig: arrayOf(shape({
-			title: string,
-			list: arrayOf(shape({
-					title: string,
-					href: string,
-					openWithTab: bool,
-				})),
-		})),
-};
-
-export default AppFooter;
+export default Footer;
