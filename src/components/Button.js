@@ -48,7 +48,9 @@ const Button = ({
   return (
     <a
       href={link}
-      class={`inline-flex items-center justify-center px-3 py-2 text-base font-medium rounded-md ${classFromProps}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center justify-center px-3 py-2 text-base font-medium rounded-md ${classFromProps}`}
     >
       {children}
     </a>

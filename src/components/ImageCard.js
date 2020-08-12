@@ -12,8 +12,8 @@ const ImageCard = ({ title, subtitle, description, cards }) => (
     <div className="mt-12 grid gap-10 mx-auto justify-center md:grid-cols-2 lg:justify-start lg:grid-cols-3 lg:max-w-none">
       {cards.map(card => (
         <div className="flex flex-col text-center lg:text-left rounded-sm border shadow-sm hover:shadow-md transition ease-in-out duration-150 overflow-hidden">
-          <div class="flex-shrink-0">
-            <img class="h-48 w-full object-cover" src={card.image} alt="" />
+          <div className="flex-shrink-0">
+            <img className="h-48 w-full object-cover" src={card.image} alt="" />
           </div>
           <div className="flex-1 bg-white p-6 flex flex-col justify-between">
             <div className="flex-1">
@@ -28,10 +28,13 @@ const ImageCard = ({ title, subtitle, description, cards }) => (
                 ) : null}
               </div>
               {card.links ? (
-                <div class="mt-2 sm:flex sm:justify-center lg:justify-start">
-                  <div class="mt-2 flex justify-center lg:justify-start">
+                <div className="mt-2 sm:flex sm:justify-center lg:justify-start">
+                  <div className="mt-2 flex justify-center lg:justify-start">
                     {card.links.map((info, index) => (
-                      <div class={index !== 0 ? 'ml-3' : ''} key={info.text}>
+                      <div
+                        className={index !== 0 ? 'ml-3' : ''}
+                        key={info.text}
+                      >
                         <Button inverse link={info.link}>
                           {info.text}
                         </Button>
