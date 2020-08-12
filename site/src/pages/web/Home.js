@@ -21,11 +21,13 @@ export default () => (
           links: [
             {
               text: 'Get Started',
-              link: '#'
+              link:
+                'https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/'
             },
             {
-              text: 'Docs',
-              link: '#'
+              text: 'Demo',
+              link:
+                'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/react-searchbox/examples/basic'
             }
           ]
         },
@@ -35,11 +37,13 @@ export default () => (
           links: [
             {
               text: 'Get Started',
-              link: '#'
+              link:
+                'https://docs.appbase.io/docs/reactivesearch/vue-searchbox/quickstart/'
             },
             {
-              text: 'Docs',
-              link: '#'
+              text: 'Demo',
+              link:
+                'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/vue-searchbox/examples/basic'
             }
           ]
         },
@@ -49,11 +53,13 @@ export default () => (
           links: [
             {
               text: 'Get Started',
-              link: '#'
+              link:
+                'https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/'
             },
             {
               text: 'Docs',
-              link: '#'
+              link:
+                'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/searchbox/examples/searchbar-with-style'
             }
           ]
         }
