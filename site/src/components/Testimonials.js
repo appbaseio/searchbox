@@ -36,26 +36,16 @@ const imageConfig = [
 ];
 
 const Testimonials = () => (
-  <Container className="bg-gray-100" showInfo={false}>
-    <div className="grid gap-8 text-center lg:text-left lg:grid-cols-2 lg:items-center">
-      <div>
-        <p className="text-base mb-2 leading-6 text-pink-500 font-semibold tracking-wide uppercase">
-          Testimonials
-        </p>
-        <h2 className="text-3xl leading-9 font-extrabold text-gray-900 sm:text-4xl sm:leading-10">
-          Trusted by these awesome folks
-        </h2>
-        <div className="mt-8 sm:flex justify-center lg:justify-start">
-          <Button link="https://dashboard.appbase.io/signup">Create Account</Button>
+  <Container
+    title="Trusted by these awesome folks"
+    className="bg-gray-100"
+  >
+    <div className="mt-10 gap-8 sm:gap-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+      {imageConfig.map(image => (
+        <div className="col-span-1 h-24 flex justify-center items-center">
+          <img className="h-100" {...image} />
         </div>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-        {imageConfig.map(image => (
-          <div className="col-span-1 h-24 flex justify-center items-center">
-            <img className="h-100" {...image} />
-          </div>
-        ))}
-      </div>
+      ))}
     </div>
   </Container>
 );

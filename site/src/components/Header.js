@@ -4,9 +4,11 @@ import GithubButton from './GithubButton';
 
 const Header = () => {
   return (
-    <main className="h-full">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-16 mx-auto max-w-7xl w-full pt-16 pb-20 text-center lg:text-left lg:py-32">
-        <div className="px-4 sm:px-8 xl:pr-16">
+    <main
+      className="header px-4 xs:px-6 lg:px-8 sm:max-h-full"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-16 mx-auto max-w-6xl w-full pt-16 pb-20 text-center lg:text-left lg:py-32">
+        <div className="pr-4 sm:pr-8 xl:pr-16">
           <h2 className="text-4xl tracking-tight leading-10 font-extrabold text-pink-500 sm:leading-none lg:text-5xl xl:text-6xl">
             Searchbox for Elasticsearch
           </h2>
@@ -16,7 +18,7 @@ const Header = () => {
           </p>
           <div className="mt-8 flex-wrap items-center flex lg:justify-start justify-center">
             <Button
-              link="https://github.com/appbaseio/searchbox/tree/master/packages/react-searchbox"
+              href="https://github.com/appbaseio/searchbox/tree/master/packages/react-searchbox"
               className="mr-3"
               big
             >
@@ -24,7 +26,7 @@ const Header = () => {
             </Button>
             <GithubButton />
             <Button
-              link="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
+              href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
               className="ml-3"
               inverse
               big
@@ -35,7 +37,7 @@ const Header = () => {
         </div>
         <div className="h-0 md:h-64">
           <img
-            className="hidden md:block object-cover mx-auto"
+            className="hidden mx-auto md:block object-cover lg:ml-auto"
             src="../../images/hero.svg"
             alt="Woman on her phone"
           />
