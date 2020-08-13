@@ -12,10 +12,10 @@ export default ({ features, title, subtitle, description }) => (
       {features ? (
         <div className="mt-5 lg:mt-10">
           <div className="py-10 lg:py-12 bg-white">
-            <div className="text-center lg:text-left grid grid-cols-1 gap-8 lg:gap-16 lg:grid-cols-3 md:grid-cols-2">
+            <div className="text-center grid grid-cols-1 gap-8 lg:gap-16 lg:grid-cols-3 md:grid-cols-2">
               {features.map(feature => (
                 <div className="mt-10 lg:mt-0">
-                  <div className="flex items-center justify-center h-12 w-12 mx-auto lg:m-0 rounded-md text-white">
+                  <div className="flex items-center justify-center h-12 w-12 mx-auto rounded-md text-white">
                     <img src={feature.image.src} alt={feature.image.alt} />
                   </div>
                   <div className="mt-5">

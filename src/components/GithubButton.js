@@ -24,7 +24,7 @@ class GithubButton extends React.Component {
         big
         inverse
         className="relative"
-        link="https://github.com/appbaseio"
+        href="https://github.com/appbaseio"
       >
         <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
           <path

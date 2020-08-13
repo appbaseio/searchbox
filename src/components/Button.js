@@ -5,7 +5,8 @@ const getButtonClass = ({
   theme,
   ghost,
   className: userClass,
-  inverse
+  inverse,
+  asLink
 }) => {
   let className = '';
 
@@ -14,7 +15,11 @@ const getButtonClass = ({
   }
 
   if (ghost) {
-    return `${className} bg-transparent shadow border border-white text-white hover:shadow-md hover:bg-white hover:text-${theme}-500 ${userClass}`;
+    return `${className} bg-transparent text-white hover:shadow-md hover:text-gray-300 ${userClass}`;
+  }
+
+  if (asLink) {
+    return `${className} shadow bg-transparent text-${theme}-400 hover:shadow-md hover:text-${theme}-200 ${userClass}`;
   }
 
   if (theme && inverse) {
@@ -34,7 +39,8 @@ const Button = ({
   theme = 'pink',
   inverse = false,
   ghost = false,
-  link = '#',
+  asLink = false,
+  href = '#',
   children
 }) => {
   const classFromProps = getButtonClass({
@@ -43,11 +49,12 @@ const Button = ({
     ghost,
     className,
     inverse,
+    asLink
   });
 
   return (
     <a
-      href={link}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className={`inline-flex items-center justify-center px-3 py-2 text-base font-medium rounded-md ${classFromProps}`}

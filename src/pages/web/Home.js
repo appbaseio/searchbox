@@ -6,13 +6,14 @@ import Testimonials from '../../components/Testimonials';
 import Support from '../../components/Support';
 import Layout from '../../components/Layout';
 import Community from '../../components/Community';
+import Button from '../../components/Button';
+import Container from '../../components/Container';
 
 export default () => (
   <Layout>
     <Header />
     <ImageCard
       title="Searchbox libraries"
-      subtitle="Framework Support"
       description="Build consistent, cross-platform search UIs that delight your users"
       cards={[
         {
@@ -22,7 +23,10 @@ export default () => (
             {
               text: 'Get Started',
               link:
-                'https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/'
+                'https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/',
+              buttonProps: {
+                inverse: true
+              }
             },
             {
               text: 'Demo',
@@ -38,7 +42,10 @@ export default () => (
             {
               text: 'Get Started',
               link:
-                'https://docs.appbase.io/docs/reactivesearch/vue-searchbox/quickstart/'
+                'https://docs.appbase.io/docs/reactivesearch/vue-searchbox/quickstart/',
+              buttonProps: {
+                inverse: true
+              }
             },
             {
               text: 'Demo',
@@ -54,7 +61,10 @@ export default () => (
             {
               text: 'Get Started',
               link:
-                'https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/'
+                'https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/',
+              buttonProps: {
+                inverse: true
+              }
             },
             {
               text: 'Docs',
@@ -66,8 +76,7 @@ export default () => (
       ]}
     />
     <Features
-      title="Better Search"
-      subtitle="Benefits"
+      title="Benefits"
       description="Lightweight, performance optimized and built for creating production grade search experiences"
       features={[
         {
@@ -128,6 +137,13 @@ export default () => (
     />
     <Testimonials />
     <Support />
+    <Container title="Get started in minutes">
+      <div className="text-center">
+        <Button href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/">
+          Build my first app
+        </Button>
+      </div>
+    </Container>
     <Community />
   </Layout>
 );

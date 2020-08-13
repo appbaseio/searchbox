@@ -9,11 +9,11 @@ const ImageCard = ({ title, subtitle, description, cards }) => (
     subtitle={subtitle}
     description={description}
   >
-    <div className="mt-12 grid gap-10 mx-auto justify-center md:grid-cols-2 lg:justify-start lg:grid-cols-3 lg:max-w-none">
+    <div className="mt-12 grid gap-10 mx-auto justify-center md:grid-cols-2 lg:grid-cols-3 lg:max-w-none">
       {cards.map(card => (
-        <div className="flex flex-col text-center lg:text-left rounded-sm border shadow-sm hover:shadow-md transition ease-in-out duration-150 overflow-hidden">
+        <div className="flex flex-col text-center rounded-sm border shadow-sm hover:shadow-md transition ease-in-out duration-150 overflow-hidden">
           <div className="flex-shrink-0">
-            <img className="h-48 w-full object-cover" src={card.image} alt="" />
+            <img className="w-full" src={card.image} alt="" />
           </div>
           <div className="flex-1 bg-white p-6 flex flex-col justify-between">
             <div className="flex-1">
@@ -28,14 +28,17 @@ const ImageCard = ({ title, subtitle, description, cards }) => (
                 ) : null}
               </div>
               {card.links ? (
-                <div className="mt-2 sm:flex sm:justify-center lg:justify-start">
-                  <div className="mt-2 flex justify-center lg:justify-start">
+                <div className="mt-2 sm:flex sm:justify-center">
+                  <div className="mt-2 flex justify-center">
                     {card.links.map((info, index) => (
                       <div
                         className={index !== 0 ? 'ml-3' : ''}
                         key={info.text}
                       >
-                        <Button inverse link={info.link}>
+                        <Button
+                          {...(info.buttonProps || { asLink: true })}
+                          href={info.link}
+                        >
                           {info.text}
                         </Button>
                       </div>
