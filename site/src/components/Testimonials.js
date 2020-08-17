@@ -1,109 +1,53 @@
 import React from 'react';
-import styled from 'react-emotion';
-import { Testimonial } from '@appbaseio/designkit';
+import Container from './Container';
+import Button from './Button';
 
-const Wrapper = styled('div')`
-	display: grid;
-	grid-template-rows: repeat(6, 60px);
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-gap: 30px;
-	margin-top: ${props => (props.small ? 0 : '50px')};
-`;
+const imageConfig = [
+  {
+    srcSet:
+      '../../searchbox/images/testimonials/dol/logo@1x.png 1x, ../../searchbox/images/testimonials/dol/logo@2x.png 2x,../../searchbox/images/testimonials/dol/logo@3x.png 3x',
+    alt: 'US Department of Labor'
+  },
+  {
+    srcSet:
+      '../../searchbox/images/testimonials/fbresearch/logo@1x.png 1x, ../../searchbox/images/testimonials/fbresearch/logo@2x.png 2x,../../searchbox/images/testimonials/fbresearch/logo@3x.png 3x',
+    alt: 'Facebook Research'
+  },
+  {
+    srcSet:
+      '../../searchbox/images/testimonials/rumbleon/rumbleon@1x.png 1x, ../../searchbox/images/testimonials/rumbleon/rumbleon@2x.png 2x,../../searchbox/images/testimonials/rumbleon/rumbleon@3x.png 3x',
+    alt: 'RumbleOn'
+  },
+  {
+    srcSet:
+      '../../searchbox/images/testimonials/betagov/logo@1x.png 1x, ../../searchbox/images/testimonials/betagov/logo@2x.png 2x,../../searchbox/images/testimonials/betagov/logo@3x.png 3x',
+    alt: 'beta.gouv.fr'
+  },
+  {
+    srcSet:
+      '../../searchbox/images/testimonials/nasa/Nasa@1x.png 1x, ../../searchbox/images/testimonials/nasa/Nasa@2x.png 2x,../../searchbox/images/testimonials/nasa/Nasa@3x.png 3x',
+    alt: 'Nasa'
+  },
+  {
+    srcSet:
+      '../../searchbox/images/testimonials/reactioncommerce/logo@1x.png 1x, ../../searchbox/images/testimonials/reactioncommerce/logo@2x.png 2x,../../searchbox/images/testimonials/reactioncommerce/logo@3x.png 3x',
+    alt: 'ReactionCommerce'
+  }
+];
 
-export default () => (
-	<Wrapper>
-		<Testimonial.Card row={6} background="#66A1FF" color="#fff">
-			<Testimonial.Author>
-				<img
-					src="https://appbase.io/static/images/customers/heitorcorrea.jpg"
-					alt="Heitor Correa"
-				/>
-				<div>
-					<h3>Heitor Correa</h3>
-					<p>CTO, Hariken</p>
-				</div>
-			</Testimonial.Author>
-			<p
-				style={{
-					fontSize: '1.3rem',
-					lineHeight: '2rem',
-				}}
-			>
-				Having appbase.io by our side has been like having a specialist inside the team. They are
-				saving us at least 40 hours every month.
-			</p>
-		</Testimonial.Card>
-
-		<Testimonial.Card row={3}>
-			<Testimonial.Author>
-				<img src="https://appbase.io/static/images/customers/charliewood.jpg" alt="Heitor Correa" />
-				<div>
-					<h3>Charlie Wood</h3>
-					<p>CTO, Numerous App</p>
-				</div>
-			</Testimonial.Author>
-			<p
-				style={{
-					fontSize: '1rem',
-					lineHeight: '1.5rem',
-				}}
-			>
-				Great customer support from @appbaseio, which we use for in-app search.
-			</p>
-		</Testimonial.Card>
-
-		<Testimonial.Card row={4} background="#893FF3" color="#fff">
-			<Testimonial.Author>
-				<img src="https://appbase.io/static/images/customers/kishanpatel.jpg" alt="Heitor Correa" />
-				<div>
-					<h3>Kishan Patel</h3>
-					<p>CTO, Lyearn</p>
-				</div>
-			</Testimonial.Author>
-			<p
-				style={{
-					fontSize: '1.2rem',
-					lineHeight: '1.8rem',
-				}}
-			>
-				We use Reactivesearch for powering our search at Lyearn. It has saved us at least a month of
-				work.
-			</p>
-		</Testimonial.Card>
-
-		<Testimonial.Card color="#fff" row={3} small background="#52D65B">
-			<p
-				style={{
-					fontSize: '1.1rem',
-					lineHeight: '1.6rem',
-				}}
-			>
-				The time savings have been off the charts in getting our search up and running!
-			</p>
-			<Testimonial.Author>
-				<p>Rob Whitley, Co-Founder, Salespipe</p>
-			</Testimonial.Author>
-		</Testimonial.Card>
-
-		<Testimonial.Card row={2}>
-			<Testimonial.Author>
-				<img
-					src="https://appbase.io/static/images/customers/patrickhogan.jpg"
-					alt="Heitor Correa"
-				/>
-				<div>
-					<h3>Patrick Hogan</h3>
-					<p>CEO, Tenfold</p>
-				</div>
-			</Testimonial.Author>
-			<p
-				style={{
-					fontSize: '1.1rem',
-					lineHeight: '1.6rem',
-				}}
-			>
-				Appbase is fast, like Usain Bolt.
-			</p>
-		</Testimonial.Card>
-	</Wrapper>
+const Testimonials = () => (
+  <Container
+    title="Trusted by these awesome folks"
+    className="bg-gray-100"
+  >
+    <div className="mt-10 gap-8 sm:gap-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+      {imageConfig.map(image => (
+        <div className="col-span-1 h-24 flex justify-center items-center">
+          <img className="h-100" {...image} />
+        </div>
+      ))}
+    </div>
+  </Container>
 );
+
+export default Testimonials;
