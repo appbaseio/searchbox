@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
+import GithubButton from './GithubButton';
+import MobileMenu from './MobileMenu';
 
 class Navbar extends React.Component {
   state = {
     isFixed: false,
-    navHeight: 0
+    navHeight: 0,
+    isMobileMenu: false
   };
 
   componentDidMount() {
@@ -29,8 +32,14 @@ class Navbar extends React.Component {
     }
   };
 
+  toggleMobileMenu = () => {
+    this.setState(state => ({
+      isMobileMenu: !state.isMobileMenu
+    }));
+  };
+
   render() {
-    const { isFixed, navHeight } = this.state;
+    const { isFixed, navHeight, isMobileMenu } = this.state;
     return (
       <React.Fragment>
         {isFixed ? <div style={{ height: navHeight }} /> : null}
@@ -52,11 +61,43 @@ class Navbar extends React.Component {
                   <span className="ml-2 text-xl text-gray-800">Searchbox</span>
                 </Link>
               </div>
-              <div className="md:flex items-center justify-end space-x-8 md:flex-1">
-                <span className="inline-flex rounded-md shadow-sm">
-                  <Button href="https://appbase.io/#support">Support</Button>
-                </span>
+              <div className="block xs:hidden">
+                <Button theme="gray" asLink onClick={this.toggleMobileMenu}>
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </Button>
               </div>
+
+              <div className="hidden items-center justify-end space-x-2 sm:space-x-4 xs:flex  xs:flex-1">
+                <GithubButton />
+                <Button href="https://appbase.io/#support">
+                  <svg
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="h-5 w-5 mr-2"
+                    fill="none"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      className="mr-2"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                  </svg>
+                  Support
+                </Button>
+              </div>
+              <MobileMenu visible={isMobileMenu} onToggle={this.toggleMobileMenu} />
             </div>
           </div>
         </div>

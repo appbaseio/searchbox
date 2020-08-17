@@ -17,7 +17,7 @@ const Support = () => (
             Get Started
           </Button>
         </div>
-        <div className="ml-3 inline-flex rounded-md shadow">
+        <div className="ml-3 inline-flex rounded-md">
           <Button href="https://docs.appbase.io/" ghost>
             Docs
           </Button>
@@ -38,7 +38,7 @@ const Support = () => (
             Support Plans
           </Button>
         </div>
-        <div className="ml-3 inline-flex rounded-md shadow">
+        <div className="ml-3 inline-flex rounded-md">
           <Button href="https://appbase.io/contact" ghost>
             Get in Touch
           </Button>
