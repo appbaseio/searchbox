@@ -11,9 +11,9 @@ const ImageCard = ({ title, subtitle, description, cards }) => (
   >
     <div className="mt-12 grid gap-10 mx-auto justify-center md:grid-cols-2 lg:grid-cols-3 lg:max-w-none">
       {cards.map(card => (
-        <div className="flex flex-col text-center rounded-sm border shadow-sm hover:shadow-md transition ease-in-out duration-150 overflow-hidden">
+        <div key={card.title} className="flex flex-col text-center rounded-sm border shadow-sm hover:shadow-md transition ease-in-out duration-150 overflow-hidden">
           <div className="flex-shrink-0 p-2 bg-white">
-            <img className="w-full" src={card.image} alt="" />
+            <img className="w-full" src={card.image} alt={card.title} />
           </div>
           <div className="flex-1 bg-white p-6 flex flex-col justify-between">
             <div className="flex-1">
