@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from './Button';
-import GithubButton from './GithubButton';
 
 const Header = () => {
   return (
@@ -24,11 +23,9 @@ const Header = () => {
             >
               Get Started
             </Button>
-            <GithubButton />
             <Button
               href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
-              className="ml-3"
-              inverse
+              asLink
               big
             >
               Docs

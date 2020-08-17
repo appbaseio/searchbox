@@ -15,11 +15,11 @@ const getButtonClass = ({
   }
 
   if (ghost) {
-    return `${className} bg-transparent text-white hover:shadow-md hover:text-gray-300 ${userClass}`;
+    return `${className} bg-transparent text-white hover:text-gray-300 ${userClass}`;
   }
 
   if (asLink) {
-    return `${className} shadow bg-transparent text-${theme}-400 hover:shadow-md hover:text-${theme}-200 ${userClass}`;
+    return `${className} bg-transparent text-${theme}-400 hover:text-${theme}-200 ${userClass}`;
   }
 
   if (theme && inverse) {
@@ -40,7 +40,8 @@ const Button = ({
   inverse = false,
   ghost = false,
   asLink = false,
-  href = '#',
+  href,
+  onClick,
   children
 }) => {
   const classFromProps = getButtonClass({
@@ -51,13 +52,21 @@ const Button = ({
     inverse,
     asLink
   });
+  const _elementClassName = `inline-flex items-center justify-center px-3 py-2 text-base font-medium rounded-md ${classFromProps}`;
+  if (!href) {
+    return (
+      <button tabIndex="0" className={_elementClassName} onClick={onClick}>
+        {children}
+      </button>
+    );
+  }
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center px-3 py-2 text-base font-medium rounded-md ${classFromProps}`}
+      className={_elementClassName}
     >
       {children}
     </a>
