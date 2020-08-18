@@ -55,7 +55,7 @@ class Navbar extends React.Component {
                 <Link to="/" className="flex items-center">
                   <img
                     className="h-8 w-auto sm:h-10"
-                    src="../../searchbox/images/RSlogo.svg"
+                    src="/searchbox/images/RSlogo.svg"
                     alt="Workflow"
                   />
                   <span className="ml-2 text-xl text-gray-800">Searchbox</span>

@@ -18,7 +18,7 @@ export default () => (
       cards={[
         {
           title: 'React',
-          image: 'images/Searchbox_React@1x.png',
+          image: '/searchbox/images/Searchbox_React@1x.png',
           links: [
             {
               text: 'Get Started',
@@ -37,7 +37,7 @@ export default () => (
         },
         {
           title: 'Vue',
-          image: '/images/Searchbox_Vue@3x.png',
+          image: '/searchbox/images/Searchbox_Vue@3x.png',
           links: [
             {
               text: 'Get Started',
@@ -56,7 +56,7 @@ export default () => (
         },
         {
           title: 'Javascript',
-          image: '/images/Searchbox_JS@3x.png',
+          image: '/searchbox/images/Searchbox_JS@3x.png',
           links: [
             {
               text: 'Get Started',
@@ -81,7 +81,7 @@ export default () => (
       features={[
         {
           image: {
-            src: '/icons/elasticsearch.svg',
+            src: '/searchbox/icons/elasticsearch.svg',
             alt: 'Elasticsearch compatible'
           },
           title: 'Elasticsearch compatible',
@@ -90,7 +90,7 @@ export default () => (
         },
         {
           image: {
-            src: '/icons/color_pallete.svg',
+            src: '/searchbox/icons/color_pallete.svg',
             alt: 'Configurable styles'
           },
           title: 'Configurable styles',
@@ -99,7 +99,7 @@ export default () => (
         },
         {
           image: {
-            src: '/icons/search_click_analytics.svg',
+            src: '/searchbox/icons/search_click_analytics.svg',
             alt: 'Search & Click Analytics'
           },
           title: 'Search & Click Analytics',
@@ -108,7 +108,7 @@ export default () => (
         },
         {
           image: {
-            src: '/icons/voice_search.svg',
+            src: '/searchbox/icons/voice_search.svg',
             alt: 'Voice Search'
           },
           title: 'Voice Search',
@@ -116,7 +116,7 @@ export default () => (
         },
         {
           image: {
-            src: '/icons/autosuggestions.svg',
+            src: '/searchbox/icons/autosuggestions.svg',
             alt: 'Autosuggestions'
           },
           title: 'Auto suggestions',
@@ -126,7 +126,7 @@ export default () => (
 
         {
           image: {
-            src: '/icons/promote_results.svg',
+            src: '/searchbox/icons/promote_results.svg',
             alt: 'Promote Results'
           },
           title: 'Promote Results',

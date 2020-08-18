@@ -18,7 +18,7 @@ const MobileMenu = ({ onToggle, visible }) => {
             <div>
               <img
                 className="h-8 w-auto"
-                src="../../searchbox/images/RSlogo.svg"
+                src="/searchbox/images/RSlogo.svg"
                 alt="Searchbox"
               />
             </div>

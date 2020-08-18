@@ -35,7 +35,7 @@ const Header = () => {
         <div className="h-0 md:h-64">
           <img
             className="hidden mx-auto md:block object-cover lg:ml-auto"
-            src="/images/hero.svg"
+            src="/searchbox/images/hero.svg"
             alt="Suggestions on phone"
           />
         </div>
