@@ -26,7 +26,7 @@ const Footer = () => (
               className="text-gray-400 hover:text-gray-500"
             >
               <span className="sr-only">GitHub</span>
-              <img srcSet="../../images/footer/Github@3x.svg 3x, ../../images/footer/Github@2x.png 2x, ../../images/footer/Github@1x.png" />
+              <img srcSet="/searchbox/images/footer/Github@3x.svg 3x, /searchbox/images/footer/Github@2x.png 2x, /searchbox/images/footer/Github@1x.png" />
             </a>
 
             <a
@@ -36,7 +36,7 @@ const Footer = () => (
               className="ml-2 text-gray-400 hover:text-gray-500"
             >
               <span className="sr-only">Medium</span>
-              <img srcSet="../../images/footer/Medium@3x.svg 3x, ../../images/footer/Medium@2x.png 2x, ../../images/footer/Medium@1x.png" />
+              <img srcSet="/searchbox/images/footer/Medium@3x.svg 3x, /searchbox/images/footer/Medium@2x.png 2x, /searchbox/images/footer/Medium@1x.png" />
             </a>
             <a
               href="https://twitter.com/appbaseio"
@@ -45,7 +45,7 @@ const Footer = () => (
               className="ml-2 text-gray-400 hover:text-gray-500"
             >
               <span className="sr-only">Twitter</span>
-              <img srcSet="../../images/footer/Twitter@3x.svg 3x, ../../images/footer/Twitter@2x.png 2x, ../../images/footer/Twitter@1x.png" />
+              <img srcSet="/searchbox/images/footer/Twitter@3x.svg 3x, /searchbox/images/footer/Twitter@2x.png 2x, /searchbox/images/footer/Twitter@1x.png" />
             </a>
           </div>
         </div>
