@@ -33,7 +33,7 @@ class GithubButton extends React.Component {
             clipRule="evenodd"
           />
         </svg>
-        <span className="mr-10">Github</span>
+        <span className="mr-12">Github</span>
         <div className="absolute right-0 top-0 h-full flex px-3 py-3 items-center align-center rounded-md font-medium bg-opacity-50 bg-pink-100 rounded-tl-none rounded-bl-none lg:px-4 md:py-0">
           {githubStarCount}
         </div>
