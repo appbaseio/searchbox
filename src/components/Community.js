@@ -4,7 +4,7 @@ import Container from './Container';
 const links = [
   {
     text: 'Documentation',
-    image: '/images/support/Documentation.svg',
+    image: '/searchbox/images/support/Documentation.svg',
     description:
       'Dive in to learn all about Search UI development for all platforms',
     link: 'https://docs.appbase.io/docs/reactivesearch/gettingstarted/'
@@ -12,19 +12,19 @@ const links = [
 
   {
     text: 'Tutorials',
-    image: '/images/support/Tutorials.svg',
+    image: '/searchbox/images/support/Tutorials.svg',
     description: 'Get inspiration with these tutorial guides.',
     link: 'https://medium.appbase.io/tagged/javascript'
   },
   {
     text: 'Support',
-    image: '/images/support/Support.png',
+    image: '/searchbox/images/support/Support.png',
     description: 'Get first-class support from appbase.io for your search.',
     link: 'https://appbase.io/support'
   },
   {
     text: 'Gitter',
-    image: '/images/support/Gitter.svg',
+    image: '/searchbox/images/support/Gitter.svg',
     description: 'Join our community on Gitter.',
     link: 'https://gitter.im/appbaseio/reactivesearch'
   }
