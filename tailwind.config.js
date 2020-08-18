@@ -1,7 +1,5 @@
 module.exports = {
-  purge: [
-    './src/**/*.js',
-  ],
+  purge: ['./src/**/*.js', './dist/**/*.js'],
   theme: {
     extend: {
       screens: {
