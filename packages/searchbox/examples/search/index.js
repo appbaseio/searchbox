@@ -18,13 +18,10 @@ const instance = new Searchbase({
 
 const querySuggestionsInstance = new Searchbase({
   index: 'good-books-clone',
-  url: 'https://arc-cluster-appbase-tryout-k8dsnj.searchbase.io',
-  credentials: 'IkwcRqior:cda6348c-37c9-40f6-a144-de3cb18b57a0',
+  url: 'https://arc-cluster-appbase-demo-6pjy6z.searchbase.io',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
   size: 5,
-  dataField: [
-    'original_title',
-    'original_title.search',
-  ],
+  dataField: ['original_title', 'original_title.search'],
   enableQuerySuggestions: true,
   enableAppbase: true,
   appbaseConfig: { recordAnalytics: false }
