@@ -1135,7 +1135,7 @@ class Searchbase {
         queryFormat: this.queryFormat,
         fuzziness: this.fuzziness,
         nestedField: this.nestedField,
-        queryString: this.queryString,
+        queryString: this.queryString
       }) || {
         match_all: {}
       };
@@ -1276,13 +1276,13 @@ Searchbase.defaultQuery = (value, options) => {
       fields = [options.dataField];
     }
 
-    if (options.searchOperators) {
-      finalQuery = {
-        simple_query_string: Searchbase.shouldQuery(value, fields, options)
-      };
-    } else if (options.queryString) {
+    if (options.queryString) {
       finalQuery = {
         query_string: Searchbase.shouldQuery(value, fields, options)
+      };
+    } else if (options.searchOperators) {
+      finalQuery = {
+        simple_query_string: Searchbase.shouldQuery(value, fields, options)
       };
     } else {
       finalQuery = {
