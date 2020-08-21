@@ -7,7 +7,8 @@
     "packages/searchbase/examples/*",
     "packages/vue-searchbox/examples/*",
     "packages/react-searchbox/examples/*",
-    "packages/searchbox/examples/*"
+    "packages/searchbox/examples/*",
+    "site"
   ],
   "scripts": {
     "watch": "npm run watch --prefix packages/searchbase",
@@ -16,7 +17,8 @@
     "react": "npm run start --prefix packages/react-searchbox",
     "dev:vue": "concurrently --kill-others -n \"SEARCHBASE\",\"VUE\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run vue\"",
     "dev:js": "concurrently --kill-others -n \"SEARCHBASE\",\"JS\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run js\"",
-    "dev:react": "concurrently --kill-others -n \"SEARCHBASE\",\"REACT\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run react\""
+    "dev:react": "concurrently --kill-others -n \"SEARCHBASE\",\"REACT\", -c \"green\",\"magenta\", \"npm run watch\" \"npm run react\"",
+    "deploy-site": "scripts/deploy-site.sh"
   },
   "repository": {
     "type": "git",
