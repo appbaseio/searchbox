@@ -136,7 +136,8 @@ class SearchBox extends Component {
       onAggregationData,
       size,
       appbaseConfig,
-      enableQuerySuggestions
+      enableQuerySuggestions,
+      queryString
     } = this.props;
 
     try {
@@ -164,7 +165,8 @@ class SearchBox extends Component {
         queryFormat,
         suggestions: defaultSuggestions,
         fuzziness,
-        searchOperators
+        searchOperators,
+        queryString
       });
       this.searchBase.subscribeToStateChanges(this.setStateValue, [
         'suggestions'
@@ -726,7 +728,8 @@ SearchBox.propTypes = {
   autoFocus: bool,
   searchTerm: string,
   URLParams: bool,
-  appbaseConfig: appbaseConfig
+  appbaseConfig: appbaseConfig,
+  queryString: bool
 };
 
 SearchBox.defaultProps = {
@@ -752,7 +755,8 @@ SearchBox.defaultProps = {
   searchTerm: 'search',
   appbaseConfig: {
     recordAnalytics: false
-  }
+  },
+  queryString: false
 };
 
 export default SearchBox;

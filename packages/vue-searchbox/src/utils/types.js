@@ -65,5 +65,6 @@ export const types = {
     enableQueryRules: VueTypes.bool,
     userId: VueTypes.string,
     customEvents: VueTypes.object
-  }).def({ recordAnalytics: false })
+  }).def({ recordAnalytics: false }),
+  queryString: VueTypes.queryString,
 };

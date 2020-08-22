@@ -66,7 +66,8 @@ const VueSearchbox = {
     currentURL: types.currentURL,
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
-    appbaseConfig: types.appbaseConfig
+    appbaseConfig: types.appbaseConfig,
+    queryString: types.queryString
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
@@ -177,6 +178,7 @@ const VueSearchbox = {
         aggregationField,
         appbaseConfig,
         enableQuerySuggestions,
+        queryString,
       } = this.$props;
 
       try {
@@ -202,7 +204,8 @@ const VueSearchbox = {
           queryFormat,
           suggestions: defaultSuggestions,
           fuzziness,
-          searchOperators
+          searchOperators,
+          queryString,
         });
         this.searchBase.subscribeToStateChanges(this.setStateValue, [
           "suggestions"
