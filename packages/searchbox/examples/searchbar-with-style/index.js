@@ -3,9 +3,9 @@ import Searchbase from '@appbaseio/searchbase';
 
 const instance = new Searchbase({
   index: 'good-books-ds',
-  credentials: 'nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://arc-cluster-appbase-demo-6pjy6z.searchbase.io',
   dataField: ['original_title', 'original_title.search'],
-  url: 'https://scalr.api.appbase.io',
   size: 5
 });
 
