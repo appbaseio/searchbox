@@ -31,7 +31,7 @@ export default () => (
             {
               text: 'Demo',
               link:
-                'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/react-searchbox/examples/basic'
+                'https://codesandbox.io/s/github/appbaseio/searchbox/tree/master/packages/react-searchbox/examples/basic'
             }
           ]
         },
@@ -50,7 +50,7 @@ export default () => (
             {
               text: 'Demo',
               link:
-                'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/vue-searchbox/examples/basic'
+                'https://codesandbox.io/s/github/appbaseio/searchbox/tree/master/packages/vue-searchbox/examples/basic'
             }
           ]
         },

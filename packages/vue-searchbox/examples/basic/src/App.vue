@@ -1,5 +1,14 @@
 <template>
   <div id="app">
+    <h2>
+      Vue Searchbox Demo
+      <span style="font-size:1rem;">
+        <a
+          href="https://docs.appbase.io/docs/reactivesearch/vue-searchbox/apireference/"
+          target="_blank"
+        >API reference</a>
+      </span>
+    </h2>
     <VueSearchbox
       app="good-books-ds"
       credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
