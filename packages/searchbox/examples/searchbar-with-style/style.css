@@ -1,68 +1,119 @@
+body {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .appbase-autocomplete {
-	width: 100%;
+  width: 100%;
 }
 
 .appbase-autocomplete .aa-input,
 .appbase-autocomplete .aa-hint {
-	width: 100%;
+  width: 100%;
 }
 
 .appbase-autocomplete .aa-hint {
-	color: #999;
+  color: gray !important;
 }
 
 .appbase-autocomplete .aa-dropdown-menu {
-	width: 100%;
-	background-color: #fff;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	border-top: none;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-top: none;
 }
 
 .appbase-autocomplete .aa-dropdown-menu .aa-suggestion {
-	cursor: pointer;
-	padding: 10px 6px;
+  cursor: pointer;
+  padding: 10px 6px;
 }
 
 .appbase-autocomplete .aa-dropdown-menu .aa-suggestion p {
-	margin: 0;
+  margin: 0;
 }
 
 .appbase-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
-	background-color: #f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .appbase-autocomplete .aa-dropdown-menu .aa-suggestion em {
-	font-weight: bold;
-	font-style: normal;
+  font-weight: bold;
+  font-style: normal;
 }
 
 .input-container {
-	width: 100%;
-	position: relative;
-}
-
-.input-container img {
-	width: 15px;
-	position: absolute;
-	left: 8px;
-	top: 50%;
-	transform: translateY(-50%);
-	z-index: 5;
+  width: 100%;
+  position: relative;
 }
 
 .input-container .input {
-	padding: 10px;
-	box-sizing: border-box;
-	padding-left: 30px;
-	color: #424242;
-	border: 1px solid #ccc;
-	font-weight: 400;
-	background: #fafafa;
-	font-size: 15px;
+  padding: 10px;
+  box-sizing: border-box;
+  padding-left: 30px;
+  color: #424242;
+  border: 1px solid #ccc;
+  font-weight: 400;
+  background: #fafafa;
+  font-size: 15px;
 }
 
 .input-container .input:focus {
-	background: white;
-	outline: none;
+  background: white;
+  outline: none;
+}
+
+.loader {
+  padding: 10px;
+}
+
+.search {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+svg {
+  width: 16px;
+  height: 16px;
+  stroke: #424242;
+}
+
+.voice {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  z-index: 5;
+  outline: none;
+  cursor: pointer;
+}
+
+@keyframes listening {
+  0% {
+    stroke: #424242;
+    transform: rotateZ(5deg);
+  }
+  50% {
+    transform: rotateZ(-5deg);
+    stroke: blue;
+  }
+  100% {
+    transform: rotateZ(0);
+    stroke: #424242;
+  }
+}
+
+.voice.active svg {
+  animation: listening 0.4s infinite;
 }
