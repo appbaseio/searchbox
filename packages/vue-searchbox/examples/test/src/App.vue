@@ -7,6 +7,7 @@
       :showVoiceSearch="true"
       :analytics="true"
       :showLoader="true"
+      :queryString="true"
     />
   </div>
 </template>

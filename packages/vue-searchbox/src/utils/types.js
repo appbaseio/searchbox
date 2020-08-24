@@ -66,5 +66,6 @@ export const types = {
     userId: VueTypes.string,
     customEvents: VueTypes.object
   }).def({ recordAnalytics: false }),
-  showDistinctSuggestions: VueTypes.bool.def(true)
+  showDistinctSuggestions: VueTypes.bool.def(true),
+  queryString: VueTypes.queryString,
 };

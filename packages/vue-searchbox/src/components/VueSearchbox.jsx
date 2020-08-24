@@ -67,7 +67,8 @@ const VueSearchbox = {
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
     showDistinctSuggestions: types.showDistinctSuggestions,
-    appbaseConfig: types.appbaseConfig
+    appbaseConfig: types.appbaseConfig,
+    queryString: types.queryString
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
@@ -178,7 +179,8 @@ const VueSearchbox = {
         aggregationField,
         appbaseConfig,
         enableQuerySuggestions,
-        showDistinctSuggestions
+        showDistinctSuggestions,
+        queryString,
       } = this.$props;
 
       try {
@@ -205,7 +207,8 @@ const VueSearchbox = {
           suggestions: defaultSuggestions,
           fuzziness,
           searchOperators,
-          showDistinctSuggestions
+          showDistinctSuggestions,
+          queryString,
         });
         this.searchBase.subscribeToStateChanges(this.setStateValue, [
           'suggestions'
