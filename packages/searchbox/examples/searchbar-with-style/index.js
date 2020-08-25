@@ -9,15 +9,10 @@ const instance = new Searchbase({
   size: 5
 });
 
-instance.triggerQuery();
-
 const micButton = document.getElementById('voice');
-const input = document.getElementById('input');
 
 micButton.addEventListener('click', () => {
-  instance.onMicClick(null, {
-    triggerSuggestionsQuery: true
-  });
+  instance.onMicClick(null);
 });
 
 instance.onMicStatusChange = status => {
@@ -33,12 +28,7 @@ instance.onMicStatusChange = status => {
   }
 };
 
-instance.onValueChange = value => {
-  input.value = value.toLowerCase();
-  micButton.className = 'voice';
-};
-
-searchbox('#input', { instance, openOnFocus: true }, [
+const sbInstance = searchbox('#input', { instance, openOnFocus: true }, [
   {
     templates: {
       suggestion: function(suggestion) {
@@ -53,3 +43,10 @@ searchbox('#input', { instance, openOnFocus: true }, [
     }
   }
 ]);
+
+instance.onValueChange = value => {
+  sbInstance.autocomplete.setVal(value.toLowerCase());
+  const input = sbInstance[0];
+  input.focus();
+  micButton.className = 'voice';
+};
