@@ -130,7 +130,7 @@ const Footer = () => (
                     href="https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/"
                     className="text-base leading-6 text-gray-500 hover:text-gray-400 hover:underline"
                   >
-                    Javascript Searchbox
+                    JavaScript Searchbox
                   </a>
                 </li>
                 <li className="mt-4">

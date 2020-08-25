@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
-
 import SearchBox from '@appbaseio/react-searchbox';
+
+import './styles.css';
 
 export default class App extends Component {
   render() {
     return (
       <div>
+        <h2>
+          React Searchbox Demo{" "}
+          <span style={{ fontSize: "1rem" }}>
+            <a
+              href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              API reference
+            </a>
+          </span>
+        </h2>
         <SearchBox
           app="good-books-ds"
-          credentials="nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d"
+          credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
+          url="https://arc-cluster-appbase-demo-6pjy6z.searchbase.io"
           dataField={['original_title', 'original_title.search']}
           showVoiceSearch
         />

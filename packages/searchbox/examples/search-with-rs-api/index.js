@@ -2,18 +2,19 @@ import searchbox from '@appbaseio/searchbox';
 import Searchbase from '@appbaseio/searchbase';
 
 const instance = new Searchbase({
-  index: 'business',
-  credentials: 'foo:bar',
-  url: 'http://localhost:8000',
+  index: 'movie-app',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
   size: 5,
   dataField: ['original_title', 'original_title.raw'],
-  enableAppbase: true
+  enableAppbase: true,
+  appbaseConfig: {},
 });
 
 const analyticsInstance = new Searchbase({
   index: 'movies-store-app',
-  credentials: 'ctWRp9QBE:fece5752-b478-452b-8173-00b278e5e0b0',
-  url: 'https://scalr.api.appbase.io',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
   size: 5,
   analytics: true,
   dataField: [
