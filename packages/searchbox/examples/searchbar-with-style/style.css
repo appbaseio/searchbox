@@ -1,7 +1,15 @@
 body {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h2 {
+  text-align: center;
+}
+
+h2 > span {
+  font-size: 1rem;
 }
 
 .appbase-autocomplete {
