@@ -168,6 +168,8 @@ class Searchbase {
 
   highlightField: string | Array<string>;
 
+  showDistinctSuggestions: boolean;
+
   queryString: boolean;
 
   /* ------------- change events -------------------------------- */
@@ -274,6 +276,7 @@ class Searchbase {
     sortByField,
     highlight,
     highlightField,
+    showDistinctSuggestions,
     queryString
   }: SearchBaseConfig) {
     if (!index) {
@@ -311,6 +314,7 @@ class Searchbase {
     this.sortByField = sortByField;
     this.highlight = highlight;
     this.highlightField = highlightField;
+    this.showDistinctSuggestions = showDistinctSuggestions;
     this.queryString = queryString;
 
     this.requestStatus = REQUEST_STATUS.inactive;
@@ -1170,12 +1174,22 @@ class Searchbase {
       // Extract fields from _source
       fields = Object.keys(sourceSuggestions[0]._source);
     }
-    return getSuggestions(fields, suggestions, this.value).slice(0, this.size);
+    return getSuggestions(
+      fields,
+      suggestions,
+      this.value,
+      this.showDistinctSuggestions
+    ).slice(0, this.size);
   };
 
   _parseQuerySuggestions = (suggestions: Array<Object>): Array<Object> => {
     const fields = ['key', 'key.autosuggest', 'key.search'];
-    return getSuggestions(fields, suggestions, this.value);
+    return getSuggestions(
+      fields,
+      suggestions,
+      this.value,
+      this.showDistinctSuggestions
+    );
   };
 
   getDataFields(): Array<string> {

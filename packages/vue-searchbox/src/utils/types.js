@@ -1,4 +1,4 @@
-import VueTypes from "vue-types";
+import VueTypes from 'vue-types';
 
 VueTypes.sensibleDefaults = false;
 
@@ -9,7 +9,7 @@ const DataField = VueTypes.shape({
 
 export const types = {
   app: VueTypes.string.isRequired,
-  url: VueTypes.string.def("https://scalr.api.appbase.io"),
+  url: VueTypes.string.def('https://scalr.api.appbase.io'),
   enableAppbase: VueTypes.bool.def(false),
   enableQuerySuggestions: VueTypes.bool.def(false),
   credentials: VueTypes.string.isRequired,
@@ -25,9 +25,9 @@ export const types = {
   size: VueTypes.number.def(10),
   title: VueTypes.string,
   defaultValue: VueTypes.string,
-  placeholder: VueTypes.string.def("Search"),
+  placeholder: VueTypes.string.def('Search'),
   showIcon: VueTypes.bool.def(true),
-  iconPosition: VueTypes.oneOf(["left", "right"]).def("right"),
+  iconPosition: VueTypes.oneOf(['left', 'right']).def('right'),
   icon: VueTypes.any,
   showClear: VueTypes.bool.def(false),
   clearIcon: VueTypes.any,
@@ -41,8 +41,8 @@ export const types = {
     VueTypes.arrayOf(VueTypes.string)
   ]),
   customHighlight: VueTypes.func,
-  queryFormat: VueTypes.oneOf(["and", "or"]).def("or"),
-  fuzziness: VueTypes.oneOf([0, 1, 2, "AUTO"]),
+  queryFormat: VueTypes.oneOf(['and', 'or']).def('or'),
+  fuzziness: VueTypes.oneOf([0, 1, 2, 'AUTO']),
   showVoiceSearch: VueTypes.bool.def(false),
   searchOperators: VueTypes.bool.def(false),
   render: VueTypes.func,
@@ -54,11 +54,11 @@ export const types = {
   style: VueTypes.object,
   defaultQuery: VueTypes.func,
   beforeValueChange: VueTypes.func,
-  className: VueTypes.string.def(""),
+  className: VueTypes.string.def(''),
   loader: VueTypes.object,
   autoFocus: VueTypes.bool.def(false),
-  currentURL: VueTypes.string.def(""),
-  searchTerm: VueTypes.string.def("search"),
+  currentURL: VueTypes.string.def(''),
+  searchTerm: VueTypes.string.def('search'),
   URLParams: VueTypes.bool.def(false),
   appbaseConfig: VueTypes.shape({
     recordAnalytics: VueTypes.bool,
@@ -66,5 +66,6 @@ export const types = {
     userId: VueTypes.string,
     customEvents: VueTypes.object
   }).def({ recordAnalytics: false }),
+  showDistinctSuggestions: VueTypes.bool.def(true),
   queryString: VueTypes.queryString,
 };

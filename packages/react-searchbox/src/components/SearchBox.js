@@ -130,6 +130,7 @@ class SearchBox extends Component {
       onQueryChange,
       onValueChange,
       onSuggestions,
+      showDistinctSuggestions,
       onError,
       onResults,
       aggregationField,
@@ -166,6 +167,7 @@ class SearchBox extends Component {
         suggestions: defaultSuggestions,
         fuzziness,
         searchOperators,
+        showDistinctSuggestions,
         queryString
       });
       this.searchBase.subscribeToStateChanges(this.setStateValue, [
@@ -729,6 +731,7 @@ SearchBox.propTypes = {
   searchTerm: string,
   URLParams: bool,
   appbaseConfig: appbaseConfig,
+  showDistinctSuggestions: bool,
   queryString: bool
 };
 
@@ -756,6 +759,7 @@ SearchBox.defaultProps = {
   appbaseConfig: {
     recordAnalytics: false
   },
+  showDistinctSuggestions: true,
   queryString: false
 };
 
