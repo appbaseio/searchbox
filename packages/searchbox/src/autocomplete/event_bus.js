@@ -9,24 +9,24 @@ var DOM = require('../common/dom.js');
 // -----------
 
 function EventBus(o) {
-	if (!o || !o.el) {
-		_.error('EventBus initialized without el');
-	}
+  if (!o || !o.el) {
+    _.error('EventBus initialized without el');
+  }
 
-	this.$el = DOM.element(o.el);
+  this.$el = DOM.element(o.el);
 }
 
 // instance methods
 // ----------------
 
 _.mixin(EventBus.prototype, {
-	// ### public
+  // ### public
 
-	trigger: function(type, suggestion, dataset, context) {
-		var event = _.Event(namespace + type);
-		this.$el.trigger(event, [suggestion, dataset, context]);
-		return event;
-	}
+  trigger: function(type, suggestion, dataset, context) {
+    var event = _.Event(namespace + type);
+    this.$el.trigger(event, [suggestion, dataset, context]);
+    return event;
+  }
 });
 
 module.exports = EventBus;

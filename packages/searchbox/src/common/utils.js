@@ -4,158 +4,155 @@ var DOM = require('./dom.js');
 var zepto = require('./zepto');
 
 function escapeRegExp(str) {
-	// eslint-disable-next-line
-	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+  // eslint-disable-next-line
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 }
 
 module.exports = {
-	// those methods are implemented differently
-	// depending on which build it is, using
-	// $... or angular... or Zepto... or require(...)
-	isArray: zepto.isArray,
-	isFunction: zepto.isFunction,
-	isObject: zepto.isPlainObject,
-	bind: zepto.proxy,
-	each: function(collection, cb) {
-		// stupid argument order for jQuery.each
-		zepto.each(collection, reverseArgs);
-		function reverseArgs(index, value) {
-			return cb(value, index);
-		}
-	},
-	map: zepto.map,
-	mixin: zepto.extend,
-	Event: zepto.Event,
-	zepto: zepto,
+  // those methods are implemented differently
+  // depending on which build it is, using
+  // $... or angular... or Zepto... or require(...)
+  isArray: zepto.isArray,
+  isFunction: zepto.isFunction,
+  isObject: zepto.isPlainObject,
+  bind: zepto.proxy,
+  each: function(collection, cb) {
+    // stupid argument order for jQuery.each
+    zepto.each(collection, reverseArgs);
+    function reverseArgs(index, value) {
+      return cb(value, index);
+    }
+  },
+  map: zepto.map,
+  mixin: zepto.extend,
+  Event: zepto.Event,
+  zepto: zepto,
 
-	isMsie: function(agentString) {
-		if (agentString === undefined) {
-			agentString = navigator.userAgent;
-		}
-		// from https://github.com/ded/bowser/blob/master/bowser.js
-		if (/(msie|trident)/i.test(agentString)) {
-			var match = agentString.match(/(msie |rv:)(\d+(.\d+)?)/i);
-			if (match) {
-				return match[2];
-			}
-		}
-		return false;
-	},
+  isMsie: function(agentString) {
+    if (agentString === undefined) {
+      agentString = navigator.userAgent;
+    }
+    // from https://github.com/ded/bowser/blob/master/bowser.js
+    if (/(msie|trident)/i.test(agentString)) {
+      var match = agentString.match(/(msie |rv:)(\d+(.\d+)?)/i);
+      if (match) {
+        return match[2];
+      }
+    }
+    return false;
+  },
 
-	// http://stackoverflow.com/a/6969486
-	escapeRegExChars: function(str) {
-		// eslint-disable-next-line
-		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-	},
+  // http://stackoverflow.com/a/6969486
+  escapeRegExChars: function(str) {
+    // eslint-disable-next-line
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+  },
 
-	isNumber: function(obj) {
-		return typeof obj === 'number';
-	},
+  isNumber: function(obj) {
+    return typeof obj === 'number';
+  },
 
-	toStr: function toStr(s) {
-		return s === undefined || s === null ? '' : s + '';
-	},
+  toStr: function toStr(s) {
+    return s === undefined || s === null ? '' : s + '';
+  },
 
-	cloneDeep: function cloneDeep(obj) {
-		var clone = this.mixin({}, obj);
-		var self = this;
-		this.each(clone, function(value, key) {
-			if (value) {
-				if (self.isArray(value)) {
-					clone[key] = [].concat(value);
-				} else if (self.isObject(value)) {
-					clone[key] = self.cloneDeep(value);
-				}
-			}
-		});
-		return clone;
-	},
+  cloneDeep: function cloneDeep(obj) {
+    var clone = this.mixin({}, obj);
+    var self = this;
+    this.each(clone, function(value, key) {
+      if (value) {
+        if (self.isArray(value)) {
+          clone[key] = [].concat(value);
+        } else if (self.isObject(value)) {
+          clone[key] = self.cloneDeep(value);
+        }
+      }
+    });
+    return clone;
+  },
 
-	error: function(msg) {
-		throw new Error(msg);
-	},
+  error: function(msg) {
+    throw new Error(msg);
+  },
 
-	every: function(obj, test) {
-		var result = true;
-		if (!obj) {
-			return result;
-		}
-		this.each(obj, function(val, key) {
-			if (result) {
-				// eslint-disable-next-line
-				result = test.call(null, val, key, obj) && result;
-			}
-		});
-		return !!result;
-	},
+  every: function(obj, test) {
+    var result = true;
+    if (!obj) {
+      return result;
+    }
+    this.each(obj, function(val, key) {
+      if (result) {
+        // eslint-disable-next-line
+        result = test.call(null, val, key, obj) && result;
+      }
+    });
+    return !!result;
+  },
 
-	any: function(obj, test) {
-		var found = false;
-		if (!obj) {
-			return found;
-		}
-		this.each(obj, function(val, key) {
-			// eslint-disable-next-line
-			if (test.call(null, val, key, obj)) {
-				found = true;
-				return false;
-			}
-		});
-		return found;
-	},
+  any: function(obj, test) {
+    var found = false;
+    if (!obj) {
+      return found;
+    }
+    this.each(obj, function(val, key) {
+      // eslint-disable-next-line
+      if (test.call(null, val, key, obj)) {
+        found = true;
+        return false;
+      }
+    });
+    return found;
+  },
 
-	getUniqueId: (function() {
-		var counter = 0;
-		return function() {
-			return counter++;
-		};
-	})(),
+  getUniqueId: (function() {
+    var counter = 0;
+    return function() {
+      return counter++;
+    };
+  })(),
 
-	templatify: function templatify(obj) {
-		if (this.isFunction(obj)) {
-			return obj;
-		}
-		var $template = DOM.element(obj);
-		if ($template.prop('tagName') === 'SCRIPT') {
-			return function template() {
-				return $template.text();
-			};
-		}
-		return function template() {
-			return String(obj);
-		};
-	},
+  templatify: function templatify(obj) {
+    if (this.isFunction(obj)) {
+      return obj;
+    }
+    var $template = DOM.element(obj);
+    if ($template.prop('tagName') === 'SCRIPT') {
+      return function template() {
+        return $template.text();
+      };
+    }
+    return function template() {
+      return String(obj);
+    };
+  },
 
-	defer: function(fn) {
-		setTimeout(fn, 0);
-	},
+  defer: function(fn) {
+    setTimeout(fn, 0);
+  },
 
-	noop: function() {},
+  noop: function() {},
 
-	formatPrefix: function(prefix, noPrefix) {
-		return noPrefix ? '' : prefix + '-';
-	},
+  formatPrefix: function(prefix, noPrefix) {
+    return noPrefix ? '' : prefix + '-';
+  },
 
-	className: function(prefix, clazz, skipDot) {
-		return (skipDot ? '' : '.') + prefix + clazz;
-	},
+  className: function(prefix, clazz, skipDot) {
+    return (skipDot ? '' : '.') + prefix + clazz;
+  },
 
-	escapeHighlightedString: function(str, highlightPreTag, highlightPostTag) {
-		highlightPreTag = highlightPreTag || '<em>';
-		var pre = document.createElement('div');
-		pre.appendChild(document.createTextNode(highlightPreTag));
+  escapeHighlightedString: function(str, highlightPreTag, highlightPostTag) {
+    highlightPreTag = highlightPreTag || '<em>';
+    var pre = document.createElement('div');
+    pre.appendChild(document.createTextNode(highlightPreTag));
 
-		highlightPostTag = highlightPostTag || '</em>';
-		var post = document.createElement('div');
-		post.appendChild(document.createTextNode(highlightPostTag));
+    highlightPostTag = highlightPostTag || '</em>';
+    var post = document.createElement('div');
+    post.appendChild(document.createTextNode(highlightPostTag));
 
-		var div = document.createElement('div');
-		div.appendChild(document.createTextNode(str));
-		return div.innerHTML
-			.replace(RegExp(escapeRegExp(pre.innerHTML), 'g'), highlightPreTag)
-			.replace(
-				RegExp(escapeRegExp(post.innerHTML), 'g'),
-				highlightPostTag
-			);
-	}
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML
+      .replace(RegExp(escapeRegExp(pre.innerHTML), 'g'), highlightPreTag)
+      .replace(RegExp(escapeRegExp(post.innerHTML), 'g'), highlightPostTag);
+  }
 };
