@@ -10,7 +10,10 @@ class Results {
   raw: Object;
 
   // Results parser
-  parseResults: (results: Array<Object>) => Array<Object>;
+  parseResults: (
+    results: Array<Object>,
+    sourceData?: Array<Object>
+  ) => Array<Object>;
 
   constructor(data: Array<Object>) {
     this.data = data || [];
@@ -106,7 +109,7 @@ class Results {
 
     // set data
     if (this.parseResults) {
-      this.data = this.parseResults(filteredResults);
+      this.data = this.parseResults(filteredResults, data);
     } else {
       this.data = filteredResults;
     }

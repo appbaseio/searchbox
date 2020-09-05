@@ -1,5 +1,5 @@
 {
-  "name": "autocomplete-example",
+  "name": "autocomplete-example-rs-api",
   "description": "Autocomplete with Searchbase Example",
   "main": "index.html",
   "version": "0.0.1",
@@ -8,8 +8,8 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@appbaseio/searchbase": "1.0.0-beta",
-    "@appbaseio/searchbox": "1.0.0-beta"
+    "@appbaseio/searchbase": "1.1.0-beta",
+    "@appbaseio/searchbox": "1.1.0-beta"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",

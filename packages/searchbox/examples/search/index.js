@@ -2,17 +2,28 @@ import searchbox from '@appbaseio/searchbox';
 import Searchbase from '@appbaseio/searchbase';
 
 const instance = new Searchbase({
-  index: 'gitxplore-latest-app',
-  credentials: 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38',
-  url: 'https://scalr.api.appbase.io',
+  index: 'gitxplore-app',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
   size: 5,
   dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics']
 });
 
+const querySuggestionsInstance = new Searchbase({
+  index: 'good-books-clone',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
+  size: 5,
+  dataField: ['original_title', 'original_title.search'],
+  enableQuerySuggestions: true,
+  enableAppbase: true,
+  appbaseConfig: { recordAnalytics: false }
+});
+
 const analyticsInstance = new Searchbase({
   index: 'movies-store-app',
-  credentials: 'ctWRp9QBE:fece5752-b478-452b-8173-00b278e5e0b0',
-  url: 'https://scalr.api.appbase.io',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
   size: 5,
   analytics: true,
   dataField: [
@@ -260,6 +271,94 @@ searchbox(
 						<div class="shadow-sm p-2 text-muted bg-light">
 							Found ${resultStats.numberOfResults} in ${resultStats.time}ms
 						</div>
+					`;
+        }
+      }
+    }
+  ]
+);
+
+searchbox(
+  '#git15',
+  {
+    instance: querySuggestionsInstance
+  },
+  [
+    {
+      templates: {
+        render: function({ data, getItemProps, querySuggestions }) {
+          const suggestionHTML = (querySuggestions || [])
+            .concat(data)
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Search Results
+						</div>
+						${suggestionHTML}
+					`;
+        }
+      }
+    }
+  ]
+);
+
+searchbox(
+  '#git16',
+  {
+    instance: querySuggestionsInstance
+  },
+  [
+    {
+      templates: {
+        render: function({ data, getItemProps }) {
+          const suggestionHTML = data
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Search Results
+						</div>
+						${suggestionHTML}
+					`;
+        },
+        renderQuerySuggestions: function({ data, getItemProps }) {
+          const suggestionHTML = (data || [])
+            .filter(i => !i.source._promoted)
+            .reduce((agg, i) => {
+              return (
+                agg +
+                `
+									<div ${getItemProps(i)}>
+										${i.label}
+									</div>
+								`
+              );
+            }, '');
+          if ((data || []).length === 0) return '';
+          return `
+						<div class="shadow-sm p-2 text-light bg-primary">
+							Query Suggestion Results
+						</div>
+						${suggestionHTML}
 					`;
         }
       }

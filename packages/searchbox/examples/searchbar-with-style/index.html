@@ -1,26 +1,73 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Searchbase with AutoComplete</title>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1, shrink-to-fit=no"
-		/>
-		<link rel="stylesheet" type="text/css" href="style.css" />
-	</head>
+  <head>
+    <title>Searchbase with AutoComplete</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
 
-	<body class="container-fluid">
-		<div class="input-container">
-			<img src="https://image.flaticon.com/icons/svg/149/149309.svg" />
-			<input
-				id="git"
-				class="input"
-				name="git"
-				type="text"
-				placeholder="Random placeholder which explains Random title"
-			/>
-		</div>
-		<script src="./index.js"></script>
-	</body>
+  <body class="container-fluid">
+    <h2>
+      Searchbox Demo
+      <span>
+        <a
+          href="https://docs.appbase.io/docs/reactivesearch/searchbox/api/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          API reference
+        </a>
+      </span>
+    </h2>
+    <div class="input-container">
+      <div class="search">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="css-i6dzq1"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+
+      <input
+        id="input"
+        class="input"
+        name="input"
+        type="text"
+        placeholder="Search"
+      />
+      <button class="voice" id="voice">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-mic"
+        >
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <line x1="12" y1="19" x2="12" y2="23" />
+          <line x1="8" y1="23" x2="16" y2="23" />
+        </svg>
+      </button>
+    </div>
+    <script src="./index.js"></script>
+  </body>
 </html>

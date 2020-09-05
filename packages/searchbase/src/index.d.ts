@@ -73,6 +73,9 @@ export class SearchBase {
   // suggestions
   suggestions: Results;
 
+  // query suggestions
+  querySuggestions: Results;
+
   // suggestions query error
   suggestionsError: any;
 
@@ -123,6 +126,8 @@ export class SearchBase {
 
   highlightField: string | Array<string>;
 
+  queryString: boolean;
+
   /* ------------- change events -------------------------------- */
 
   // called when value changes
@@ -133,6 +138,9 @@ export class SearchBase {
 
   // called when suggestions change
   onSuggestions: (next: string, prev: string) => void;
+
+  // called when query suggestions change
+  onQuerySuggestions: (next: string, prev: string) => void;
 
   // called when there is an error while fetching results
   onError: (error: any) => void;
@@ -228,6 +236,7 @@ export class SearchBase {
     headers,
     value,
     suggestions,
+    querySuggestions,
     results,
     fuzziness,
     searchOperators,

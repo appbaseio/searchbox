@@ -1,16 +1,14 @@
-# Searchbase Contribution Guide 🔍
+# Searchbox Contribution Guide 🔍
 
-Welcome to the contribution guide! We welcome all contributions. A list of issues is present [here](https://github.com/appbaseio/searchbase/issues). If you're interested in picking up something, feel free to start a discussion 😺
+Welcome to the contribution guide! We welcome all contributions. You can see the list of open issues over [here](https://github.com/appbaseio/searchbox/issues). If you're interested in picking up something, feel free to start a discussion 😺
 
-The searchbase monorepo contains the code for headless core. Project specific readme files are available inside each package.
+The searchbox monorepo contains the code for the headless core and the searchbox UI components for React, Vue and vanilla JavaScript. Project specific README files are available inside each package.
 
 ## Initial setup
 
-Currently the initial setup is a bit manual which we're planning to improve. We also recommend to have [SSH setup](https://help.github.com/articles/connecting-to-github-with-ssh/) for GitHub.
+1. Fork the repository in order to send PRs
 
-1. Fork the repo in order to send PRs
-
-2. Clone the repo from your profile, use SSH if possible
+2. Clone the repo from your profile, use SSH if possible. Read more about it over [here](https://help.github.com/articles/connecting-to-github-with-ssh/).
 
 3. `cd` into the project directory
 
@@ -24,48 +22,46 @@ yarn
 
 ## Searchbase
 
-1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+- You can run the following command from `searchbox` project's root directory which will start the watchers for the `searchbase` package located under the `packages` directory. This will let you make changes to the searchbase package on the fly and the changes you make will be transpiled live:
 
 ```bash
 yarn watch
 ```
 
-Alternatively the manual approach would be to open the sub-projects for `/searchbase` and start the watchers inside their respective directories.
-
-2. You can try the examples for the `searchbase` inside `/packages/searchbase/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` files.
+- You can try the examples for the `searchbase` package by going to `packages/searchbase/examples` directory.
 
 ## Searchbox
 
-1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase` & `/searchbox`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+- You can run the following command from `searchbox` project's root directory which will start the watchers for `searchbase` and `searchbox` packages located under the `packages` directory. This will let you make changes to these projects on the fly and the changes you make will be transpiled live:
 
 ```bash
 yarn dev:js
 ```
 
-2. You can try the examples for the `searchbox` inside `/packages/searchbox/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` & `/packages/searchbox/src` files.
+- You can try the examples for the `searchbox` inside `packages/searchbox/examples` directory.
 
 ## React Searchbox
 
-1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase` & `/react-searchbox`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+- You can run the following command from `searchbox` project's root directory which will start the watchers for `searchbase` and `react-searchbox` packages located under the `packages` directory. This will let you make changes to these projects on the fly and the changes you make will be transpiled live:
+
 
 ```bash
 yarn dev:react
 ```
 
-2. You can try the examples for the `react-searchbox` inside `/packages/react-searchbox/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` & `/packages/react-searchbox/src` files.
+- You can try the examples for the `react-searchbox` inside `packages/react-searchbox/examples` directory.
 
 ## Vue Searchbox
 
-1. You can run the following command from `searchbase` root which will start the watchers inside `/searchbase` & `/vue-searchbox`. This will let you make changes to these projects on the fly and the files will be transpiled and updated instantly:
+- You can run the following command from `searchbox` project's root directory which will start the watchers for `searchbase` and `vue-searchbox` packages located under the `packages` directory. This will let you make changes to these projects on the fly and the changes you make will be transpiled live:
+
 
 ```bash
 yarn dev:vue
 ```
 
-2. You can try the examples for the `vue-searchbox` inside `/packages/vue-searchbox/examples` which will also pick the updated code as and when you make changes to the `/packages/searchbase/src` & `/packages/vue-searchbox/src` files.
+- You can try the examples for the `vue-searchbox` inside `packages/vue-searchbox/examples` directory.
 
-**Note:** If you see any errors about missing dependencies, please try running `yarn` inside the sub-directory you're at.
+**Note:** If you see any errors about missing dependencies, please try running `yarn` inside the example's directory that you're trying to run.
 
 <hr />
-
-If you run into any problems please feel free to reach out to us 🙂

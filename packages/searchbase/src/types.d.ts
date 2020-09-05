@@ -62,6 +62,7 @@ type SearchBaseConfig = {
   highlightField?: string | Array<string>;
   value: string;
   suggestions: Array<Suggestion>;
+  querySuggestions: Array<Suggestion>;
   results: Array<Object>;
   fuzziness: string | number;
   searchOperators: boolean;

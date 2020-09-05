@@ -4,77 +4,86 @@ import searchbox from '@appbaseio/searchbox';
 import './styles.css';
 
 const instance = new Searchbase({
-	index: 'gitxplore-latest-app',
-	credentials: 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38',
-	url: 'https://scalr.api.appbase.io',
-	size: 5,
-	dataField: [
-		'name',
-		'name.keyword',
-		'name.search',
-		'description',
-		'name.raw',
-		'fullname',
-		'owner',
-		'topics'
-	],
-	analytics: true
+  index: 'gitxplore-app',
+  credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
+  size: 5,
+  dataField: [
+    'fullname',
+    'fullname.autosuggest',
+    'fullname.keyword',
+    'fullname.lang',
+    'fullname.search',
+    'fullname.synonyms',
+    'name',
+    'name.autosuggest',
+    'name.keyword',
+    'name.lang',
+    'name.search',
+    'name.synonyms',
+    'owner',
+    'owner.autosuggest',
+    'owner.keyword',
+    'owner.lang',
+    'owner.search',
+    'owner.synonyms'
+  ]
 });
 
-instance.triggerQuery();
-
 const micButton = document.getElementById('voice');
-const input = document.getElementById('git');
 
 micButton.addEventListener('click', () => {
-	instance.onMicClick(null, { triggerSuggestionsQuery: true });
+  instance.onMicClick(null);
 });
 
 instance.onMicStatusChange = status => {
-	switch (status) {
-		case 'ACTIVE':
-			micButton.innerText = 'Listening';
-			micButton.className = 'btn btn-primary';
-
-			break;
-		case 'DENIED':
-			micButton.innerText = 'Enable Voice';
-			micButton.className = 'btn btn-info btn-disable';
-			break;
-		default:
-			micButton.innerText = 'Voice Search';
-	}
+  switch (status) {
+    case 'ACTIVE':
+      micButton.innerText = 'Listening';
+      micButton.className = 'btn btn-primary';
+      break;
+    case 'DENIED':
+      micButton.innerText = 'Enable Voice';
+      micButton.className = 'btn btn-info btn-disable';
+      break;
+    default:
+      micButton.innerText = 'Voice Search';
+  }
 };
 
-instance.onValueChange = value => {
-	input.value = value.toLowerCase();
-	micButton.className = 'btn btn-light';
-};
-
-searchbox('#git', { instance }, [
-	{
-		templates: {
-			suggestion: function(suggestion) {
-				return `<p class="is-4">${suggestion.label}</p>`;
-			},
-			empty: function() {
-				return `<div>No Results</div>`;
-			},
-			loader: function() {
-				return `<div>Loader</div>`;
-			},
-			footer: function({ query, isEmpty }) {
-				return `
+const sbInstance = searchbox('#git', { instance, openOnFocus: true }, [
+  {
+    templates: {
+      suggestion: function(suggestion) {
+        return `<p class="is-4">${suggestion.label}</p>`;
+      },
+      empty: function() {
+        return `<div>No Results</div>`;
+      },
+      loader: function() {
+        return `<div>Loader</div>`;
+      },
+      footer: function({ query, isEmpty }) {
+        return `
                     <div style="background: #eaeaea; padding: 10px;">Footer</div>
                 `;
-			},
-			header: function({ query, isEmpty }) {
-				return `
+      },
+      header: function({ query, isEmpty }) {
+        return `
                     <div style="background: #efefef; padding: 10px;">
                         Hello From Header
                     </div>
                 `;
-			}
-		}
-	}
+      }
+    }
+  }
 ]);
+
+
+instance.onValueChange = value => {
+  sbInstance.autocomplete.setVal(value.toLowerCase());
+  const input = sbInstance[0];
+  input.focus();
+  micButton.innerText = 'Voice Search';
+  micButton.className = 'btn btn-light';
+};

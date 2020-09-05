@@ -17,9 +17,9 @@ export default class App extends Component {
     return (
       <div style={{ width: '50%', margin: '100px' }}>
         <SearchBox
-          app="business"
-          url="http://localhost:8000"
-          credentials="foo:bar"
+          app="good-books-ds"
+          credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
+          url="https://arc-cluster-appbase-demo-6pjy6z.searchbase.io"
           enableAppbase
           dataField={['original_title', 'original_title.search']}
           showClear

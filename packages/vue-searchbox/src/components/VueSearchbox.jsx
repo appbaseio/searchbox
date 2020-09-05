@@ -1,27 +1,32 @@
-import { types } from "../utils/types";
-import Input from "../styles/Input";
-import Searchbase from "@appbaseio/searchbase";
-import DownShift from "./DownShift.jsx";
+import { types } from '../utils/types';
+import Input from '../styles/Input';
+import Searchbase from '@appbaseio/searchbase';
+import DownShift from './DownShift.jsx';
 import {
   equals,
   getClassName,
   debounce as debounceFunc,
   isEmpty,
   getURLParameters,
-  withClickIds
-} from "../utils/helper";
-import { suggestions, suggestionsContainer } from "../styles/Suggestions";
-import SuggestionItem from "../addons/SuggestionItem.jsx";
-import Title from "../styles/Title";
-import Icons from "./Icons.jsx";
+  withClickIds,
+  hasQuerySuggestionsRenderer,
+  getQuerySuggestionsComponent,
+  hasCustomRenderer,
+  getComponent
+} from '../utils/helper';
+import { suggestions, suggestionsContainer } from '../styles/Suggestions';
+import SuggestionItem from '../addons/SuggestionItem.jsx';
+import Title from '../styles/Title';
+import Icons from './Icons.jsx';
 import causes from '../utils/causes';
 
 const VueSearchbox = {
-  name: "VueSearchbox", // vue component name
+  name: 'VueSearchbox', // vue component name
   props: {
     app: types.app,
     url: types.url,
     enableAppbase: types.enableAppbase,
+    enableQuerySuggestions: types.enableQuerySuggestions,
     credentials: types.credentials,
     headers: types.headers,
     dataField: types.dataField,
@@ -50,7 +55,7 @@ const VueSearchbox = {
     render: types.render,
     renderError: types.renderError,
     renderNoSuggestion: types.renderNoSuggestion,
-    renderAllSuggestions: types.renderAllSuggestions,
+    renderQuerySuggestions: types.renderQuerySuggestions,
     renderMic: types.renderMic,
     innerClass: types.innerClass,
     defaultQuery: types.defaultQuery,
@@ -61,15 +66,18 @@ const VueSearchbox = {
     currentURL: types.currentURL,
     searchTerm: types.searchTerm,
     URLParams: types.URLParams,
-    appbaseConfig: types.appbaseConfig
+    showDistinctSuggestions: types.showDistinctSuggestions,
+    appbaseConfig: types.appbaseConfig,
+    queryString: types.queryString
   },
   data() {
     const { value, defaultValue, defaultSuggestions } = this.$props;
-    const currentValue = value || defaultValue || "";
+    const currentValue = value || defaultValue || '';
 
     this.state = {
       currentValue,
       suggestionsList: defaultSuggestions || [],
+      querySuggestionsList: [],
       isOpen: false,
       error: null,
       loading: false,
@@ -92,17 +100,23 @@ const VueSearchbox = {
     }
   },
   watch: {
+    $props: {
+      immediate: true,
+      handler() {
+        this.validateDataField();
+      }
+    },
     dataField: function(next, prev) {
-      return this._applySetter(prev, next, "setDataField");
+      return this._applySetter(prev, next, 'setDataField');
     },
     headers: function(next, prev) {
-      return this._applySetter(prev, next, "setHeaders");
+      return this._applySetter(prev, next, 'setHeaders');
     },
     fuzziness: function(next, prev) {
-      return this._applySetter(prev, next, "setFuzziness");
+      return this._applySetter(prev, next, 'setFuzziness');
     },
     nestedField: function(next, prev) {
-      return this._applySetter(prev, next, "setNestedField");
+      return this._applySetter(prev, next, 'setNestedField');
     },
     currentURL: function(next, prev) {
       const { URLParams } = this.$props;
@@ -124,6 +138,28 @@ const VueSearchbox = {
       this.searchBase.unsubscribeToStateChanges(this.setStateValue);
   },
   methods: {
+    validateDataField() {
+      const propName = 'dataField';
+      const componentName = VueSearchbox.name;
+      const props = this.$props;
+      const requiredError = `${propName} supplied to ${componentName} is required. Validation failed.`;
+      const propValue = props[propName];
+      if (!this.enableAppbase) {
+        if (!propValue) {
+          console.error(requiredError);
+          return;
+        }
+        if (typeof propValue !== 'string' && !Array.isArray(propValue)) {
+          console.error(
+            `Invalid ${propName} supplied to ${componentName}. Validation failed.`
+          );
+          return;
+        }
+        if (Array.isArray(propValue) && propValue.length === 0) {
+          console.error(requiredError);
+        }
+      }
+    },
     _initSearchBase() {
       const {
         app,
@@ -142,6 +178,9 @@ const VueSearchbox = {
         searchOperators,
         aggregationField,
         appbaseConfig,
+        enableQuerySuggestions,
+        showDistinctSuggestions,
+        queryString,
       } = this.$props;
 
       try {
@@ -154,6 +193,7 @@ const VueSearchbox = {
           index: app,
           url,
           enableAppbase,
+          enableQuerySuggestions,
           dataField,
           aggregationField,
           size,
@@ -166,35 +206,41 @@ const VueSearchbox = {
           queryFormat,
           suggestions: defaultSuggestions,
           fuzziness,
-          searchOperators
+          searchOperators,
+          showDistinctSuggestions,
+          queryString,
         });
         this.searchBase.subscribeToStateChanges(this.setStateValue, [
-          "suggestions"
+          'suggestions'
         ]);
 
         this.searchBase.onQueryChange = (...args) => {
-          this.$emit("queryChange", ...args);
+          this.$emit('queryChange', ...args);
         };
         this.searchBase.onSuggestions = (...args) => {
-          this.$emit("suggestions", ...args);
+          this.$emit('suggestions', ...args);
         };
         this.searchBase.onAggregationData = (...args) => {
-          this.$emit("aggregations", ...args);
+          this.$emit('aggregations', ...args);
         };
         this.searchBase.onError = error => {
           this.error = error;
-          this.$emit("error", error);
+          this.$emit('error', error);
         };
         this.searchBase.onSuggestionsRequestStatusChange = next => {
-          this.loading = next === "PENDING";
+          this.loading = next === 'PENDING';
         };
         this.searchBase.onMicStatusChange = next => {
           this.micStatus = next;
-          this.isOpen = next === "INACTIVE" && !this.loading;
+          this.isOpen = next === 'INACTIVE' && !this.loading;
         };
         this.searchBase.onValueChange = nextValue => {
           this.currentValue = nextValue;
-          this.$emit("valueChange", nextValue);
+          this.$emit('valueChange', nextValue);
+        };
+        this.searchBase.onQuerySuggestions = nextValue => {
+          this.querySuggestionsList =
+            withClickIds(nextValue && nextValue.data) || [];
         };
       } catch (e) {
         this.initError = e;
@@ -220,8 +266,16 @@ const VueSearchbox = {
       this.searchBase.recordClick({ [value]: clickPosition }, isSuggestion);
     },
     setStateValue({ suggestions = {} }) {
-      const { time, hidden, data, promoted, numberOfResults, promotedData, customData, rawData } =
-        suggestions.next || {};
+      const {
+        time,
+        hidden,
+        data,
+        promoted,
+        numberOfResults,
+        promotedData,
+        customData,
+        rawData
+      } = suggestions.next || {};
       this.suggestionsList = withClickIds(suggestions.next && data) || [];
       this.promotedData = promotedData;
       this.customData = customData;
@@ -236,7 +290,7 @@ const VueSearchbox = {
     onValueSelectedHandler(currentValue = this.$data.currentValue, ...cause) {
       this.$emit('valueSelected', currentValue, ...cause);
     },
-    getSearchTerm(url = "") {
+    getSearchTerm(url = '') {
       const searchParams = getURLParameters(url);
       return searchParams && searchParams[this.searchTerm];
     },
@@ -245,11 +299,15 @@ const VueSearchbox = {
     },
     onSuggestionSelected(suggestion) {
       this.setValue({ value: suggestion && suggestion.value, isOpen: false });
-      this.triggerClickAnalytics(suggestion && suggestion._click_id, true, suggestion.source && suggestion.source._id);
+      this.triggerClickAnalytics(
+        suggestion && suggestion._click_id,
+        true,
+        suggestion.source && suggestion.source._id
+      );
       this.onValueSelectedHandler(
         suggestion.value,
         causes.SUGGESTION_SELECT,
-        suggestion.source,
+        suggestion.source
       );
     },
     setValue({ value, isOpen = true }) {
@@ -268,13 +326,13 @@ const VueSearchbox = {
     },
     triggerSuggestionsQuery(value) {
       this.searchBase &&
-        this.searchBase.setValue(value || "", {
+        this.searchBase.setValue(value || '', {
           triggerSuggestionsQuery: true
         });
     },
     handleFocus(event) {
       this.isOpen = true;
-      this.$emit("focus", event);
+      this.$emit('focus', event);
     },
     handleStateChange(changes) {
       const { isOpen } = changes;
@@ -283,12 +341,12 @@ const VueSearchbox = {
     handleKeyDown(event, highlightedIndex) {
       // if a suggestion was selected, delegate the handling
       // to suggestion handler
-      if (event.key === "Enter" && highlightedIndex === null) {
+      if (event.key === 'Enter' && highlightedIndex === null) {
         this.setValue({ value: event.target.value, isOpen: false });
         this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
       }
 
-      this.$emit("keyDown", event);
+      this.$emit('keyDown', event);
     },
     handleMicClick() {
       this.searchBase &&
@@ -345,9 +403,9 @@ const VueSearchbox = {
       ) {
         return (
           <div
-            class={`no-suggestions ${getClassName(innerClass, "noSuggestion")}`}
+            class={`no-suggestions ${getClassName(innerClass, 'noSuggestion')}`}
           >
-            {typeof renderNoSuggestion === "function"
+            {typeof renderNoSuggestion === 'function'
               ? renderNoSuggestion(currentValue)
               : renderNoSuggestion}
           </div>
@@ -362,8 +420,8 @@ const VueSearchbox = {
       const { error, loading, currentValue } = this.$data;
       if (error && renderError && currentValue && !loading) {
         return (
-          <div class={getClassName(innerClass, "error")}>
-            {typeof renderError === "function"
+          <div class={getClassName(innerClass, 'error')}>
+            {typeof renderError === 'function'
               ? renderError(error)
               : renderError}
           </div>
@@ -372,7 +430,7 @@ const VueSearchbox = {
       return null;
     },
     clearValue() {
-      this.setValue({ value: "", isOpen: false });
+      this.setValue({ value: '', isOpen: false });
       this.onValueSelectedHandler(null, causes.CLEAR_VALUE);
     },
     handleSearchIconClick() {
@@ -383,7 +441,48 @@ const VueSearchbox = {
       }
     },
     getBackgroundColor(highlightedIndex, index) {
-      return highlightedIndex === index ? "#eee" : "#fff";
+      return highlightedIndex === index ? '#eee' : '#fff';
+    },
+    getComponent(downshiftProps = {}, isQuerySuggestionsRender = false) {
+      const {
+        currentValue,
+        suggestionsList,
+        promotedData,
+        customData,
+        resultStats,
+        rawData
+      } = this.$data;
+      const data = {
+        error: this.error,
+        loading: this.isLoading,
+        value: currentValue,
+        downshiftProps,
+        data: suggestionsList,
+        promotedData,
+        customData,
+        resultStats,
+        rawData,
+        querySuggestions: this.querySuggestionsList,
+        triggerClickAnalytics: this.triggerClickAnalytics
+      };
+      if (isQuerySuggestionsRender) {
+        return getQuerySuggestionsComponent(
+          {
+            downshiftProps,
+            data: this.querySuggestionsList,
+            value: currentValue,
+            loading: this.isLoading,
+            error: this.error
+          },
+          this
+        );
+      }
+      return getComponent(data, this);
+    }
+  },
+  computed: {
+    hasCustomRenderer() {
+      return hasCustomRenderer(this);
     }
   },
   render() {
@@ -400,32 +499,21 @@ const VueSearchbox = {
       autoFocus,
       innerRef,
       renderError,
-      size,
+      size
     } = this.$props;
-    const {
-      currentValue,
-      isOpen,
-      suggestionsList,
-      initError,
-      promotedData,
-      customData,
-      resultStats,
-      rawData
-    } = this.$data;
+    const { currentValue, isOpen, suggestionsList, initError } = this.$data;
     if (initError) {
       if (renderError)
-        return typeof renderError === "function"
+        return typeof renderError === 'function'
           ? renderError(initError)
           : renderError;
       return <div>Error initializing SearchBase. Please try again.</div>;
     }
-    const renderAllSuggestions =
-      this.$scopedSlots.renderAllSuggestions ||
-      this.$props.renderAllSuggestions;
+
     return (
       <div class={className}>
         {title && (
-          <Title class={getClassName(innerClass, "title") || ""}>{title}</Title>
+          <Title class={getClassName(innerClass, 'title') || ''}>{title}</Title>
         )}
         {defaultSuggestions || autosuggest ? (
           <DownShift
@@ -450,52 +538,84 @@ const VueSearchbox = {
                     showIcon={showIcon}
                     showClear={showClear}
                     iconPosition={iconPosition}
-                    class={getClassName(innerClass, "input")}
+                    class={getClassName(innerClass, 'input')}
                     placeholder={placeholder}
                     {...{
                       on: getInputEvents({
                         onInput: this.onInputChange,
                         onBlur: e => {
-                          this.$emit("blur", e);
+                          this.$emit('blur', e);
                         },
                         onFocus: this.handleFocus,
                         onKeyPress: e => {
-                          this.$emit("keyPress", e);
+                          this.$emit('keyPress', e);
                         },
                         onKeyDown: e => this.handleKeyDown(e, highlightedIndex),
                         onKeyUp: e => {
-                          this.$emit("keyUp", e);
+                          this.$emit('keyUp', e);
                         }
                       })
                     }}
                     {...{
                       domProps: getInputProps({
-                        value: currentValue ? currentValue : ""
+                        value: currentValue ? currentValue : ''
                       })
                     }}
                   />
                   {this.renderIcons()}
-                  {renderAllSuggestions &&
-                    renderAllSuggestions({
-                      currentValue,
+                  {this.hasCustomRenderer &&
+                    this.getComponent({
                       isOpen,
                       getItemProps,
                       getItemEvents,
-                      highlightedIndex,
-                      parsedSuggestions: suggestionsList,
-                      promotedData,
-                      customData,
-                      resultStats,
-                      rawData
+                      highlightedIndex
                     })}
                   {this.renderErrorComponent()}
-                  {!renderAllSuggestions && isOpen && suggestionsList.length ? (
+                  {!this.hasCustomRenderer &&
+                  isOpen &&
+                  suggestionsList.length ? (
                     <ul
                       class={`${suggestions} ${getClassName(
                         innerClass,
-                        "list"
+                        'list'
                       )}`}
                     >
+                      {hasQuerySuggestionsRenderer(this)
+                        ? this.getComponent(
+                            {
+                              isOpen,
+                              getItemProps,
+                              getItemEvents,
+                              highlightedIndex
+                            },
+                            true
+                          )
+                        : this.querySuggestionsList.map((sugg, index) => (
+                            <li
+                              {...{
+                                domProps: getItemProps({
+                                  item: sugg
+                                })
+                              }}
+                              {...{
+                                on: getItemEvents({
+                                  item: sugg
+                                })
+                              }}
+                              key={`${index + 1}-${sugg.value}`}
+                              style={{
+                                backgroundColor: this.getBackgroundColor(
+                                  highlightedIndex,
+                                  index
+                                )
+                              }}
+                            >
+                              <SuggestionItem
+                                currentValue={this.currentValue}
+                                suggestion={sugg}
+                              />
+                            </li>
+                          ))}
                       {suggestionsList.slice(0, size).map((item, index) => (
                         <li
                           {...{
@@ -506,11 +626,13 @@ const VueSearchbox = {
                               item
                             })
                           }}
-                          key={`${index + 1}-${item.value}`}
+                          key={`${index +
+                            this.querySuggestionsList.length +
+                            1}-${item.value}`}
                           style={{
                             backgroundColor: this.getBackgroundColor(
                               highlightedIndex,
-                              index
+                              index + this.querySuggestionsList.length
                             )
                           }}
                         >
@@ -531,32 +653,32 @@ const VueSearchbox = {
         ) : (
           <div class={suggestionsContainer}>
             <Input
-              class={getClassName(innerClass, "input") || ""}
+              class={getClassName(innerClass, 'input') || ''}
               placeholder={placeholder}
               {...{
                 on: {
                   blur: e => {
-                    this.$emit("blur", e);
+                    this.$emit('blur', e);
                   },
                   keypress: e => {
-                    this.$emit("keyPress", e);
+                    this.$emit('keyPress', e);
                   },
                   input: this.onInputChange,
                   focus: e => {
-                    this.$emit("focus", e);
+                    this.$emit('focus', e);
                   },
                   keydown: e => {
-                    this.$emit("keyDown", e);
+                    this.$emit('keyDown', e);
                   },
                   keyup: e => {
-                    this.$emit("keyUp", e);
+                    this.$emit('keyUp', e);
                   }
                 }
               }}
               {...{
                 domProps: {
                   autofocus: autoFocus,
-                  value: currentValue ? currentValue : ""
+                  value: currentValue ? currentValue : ''
                 }
               }}
               iconPosition={iconPosition}
@@ -577,6 +699,7 @@ const VueSearchboxWrapper = {
     return (
       <VueSearchbox
         {...{ attrs: this.$attrs }}
+        {...{ scopedSlots: this.$scopedSlots }}
         currentURL={window.location.href}
       />
     );

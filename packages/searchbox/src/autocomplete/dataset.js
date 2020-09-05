@@ -24,8 +24,11 @@ function sourceFn(query, cb, that) {
   // eslint-disable-next-line
   cb([], that.instance.suggestionsRequestPending);
 
+  var parsedSuggestions;
+  var querySuggestions;
+
   that.instance.onSuggestions = function(suggestions) {
-    var parsedSuggestions = suggestions.data;
+    parsedSuggestions = suggestions.data;
     for (var j = 0; j < parsedSuggestions.length; j++) {
       Object.assign(parsedSuggestions[j], {
         _click_id: j + 1
@@ -39,7 +42,28 @@ function sourceFn(query, cb, that) {
         numberOfResults: suggestions.numberOfResults
       },
       rawData: suggestions.rawData || [],
-      promotedData: suggestions.promotedData || []
+      promotedData: suggestions.promotedData || [],
+      querySuggestions
+    });
+  };
+
+  that.instance.onQuerySuggestions = function(suggestions) {
+    querySuggestions = suggestions.data;
+    for (var j = 0; j < querySuggestions.length; j++) {
+      Object.assign(querySuggestions[j], {
+        _click_id: j + 1
+      });
+    }
+    cb(parsedSuggestions, that.instance.suggestionsRequestPending, {
+      resultStats: {
+        time: suggestions.time,
+        hidden: suggestions.hidden || 0,
+        promoted: suggestions.promoted || 0,
+        numberOfResults: suggestions.numberOfResults
+      },
+      rawData: suggestions.rawData || [],
+      promotedData: suggestions.promotedData || [],
+      querySuggestions
     });
   };
 }
@@ -200,10 +224,28 @@ _.mixin(Dataset.prototype, EventEmitter, {
 
     function getSuggestionsHtml() {
       if (that.templates.render) {
+        let strigifiedQuerySuggestions = '';
+        if (that.templates.renderQuerySuggestions) {
+          const className = this.cssClasses.prefix + this.cssClasses.suggestion;
+          strigifiedQuerySuggestions = that.templates.renderQuerySuggestions({
+            data: options.querySuggestions,
+            getItemProps: function(item) {
+              const id = ['option', Math.floor(Math.random() * 100000000)].join(
+                '-'
+              );
+              return `class=${className} role="option" id=${id} data-${customdatumKey}=${encodeURIComponent(
+                JSON.stringify(item)
+              )} data-${customvalueKey}=${encodeURIComponent(
+                that.displayFn(item)
+              ) || undefined} data-${customdatasetKey}=${that.name}`;
+            }
+          });
+        }
         const className = this.cssClasses.prefix + this.cssClasses.suggestion;
         const stringifiedHTML = that.templates.render({
           data: suggestions,
           promotedData: options.promotedData,
+          querySuggestions: options.querySuggestions,
           resultStats: options.resultStats,
           rawData: options.rawData,
           getItemProps: function(item) {
@@ -217,7 +259,7 @@ _.mixin(Dataset.prototype, EventEmitter, {
             ) || undefined} data-${customdatasetKey}=${that.name}`;
           }
         });
-        return stringifiedHTML;
+        return strigifiedQuerySuggestions + stringifiedHTML;
       }
       var args = [].slice.call(arguments, 0);
       var $suggestions;
@@ -397,7 +439,8 @@ function getTemplates(templates, displayFn) {
     header: templates.header && _.templatify(templates.header),
     footer: templates.footer && _.templatify(templates.footer),
     suggestion: templates.suggestion || suggestionTemplate,
-    render: templates.render || undefined
+    render: templates.render || undefined,
+    renderQuerySuggestions: templates.renderQuerySuggestions || undefined
   };
 
   function suggestionTemplate(context) {
