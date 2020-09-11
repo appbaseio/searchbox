@@ -11,13 +11,16 @@ document.body.innerHTML = `
     <input class="autocomplete-input" id="input" />
     <ul class="autocomplete-result-list"></ul>
   </div>
-  <div id="selected">
-
+  <div class="layout">
+    <div class="filter" id="language-filter">
+    </div>
+    <div id="results">
+    </div>
   </div>
 `;
 
 const input = document.getElementById('input');
-const selectedSuggestion = document.getElementById('selected');
+const resultElement = document.getElementById('results');
 
 const searchbase = new SearchBase({
   index,
@@ -30,11 +33,20 @@ searchbase.register('search-component', {
   dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics']
 });
 
-// Register result component with react dependency on search component => To render the results
+// Register filter component with dependency on search component
+searchbase.register('language-filter', {
+  type: 'term',
+  dataField: 'language.keyword',
+  react: {
+    and: 'search-component'
+  }
+});
+
+// Register result component with react dependency on search and filter component => To render the results
 searchbase.register('result-component', {
   dataField: 'name',
   react: {
-    and: 'search-component'
+    and: ['search-component', 'language-filter']
   }
 });
 
@@ -43,6 +55,9 @@ const searchComponent = searchbase.getComponent('search-component');
 
 // Get the result component controller by component id
 const resultComponent = searchbase.getComponent('result-component');
+
+// Get the filter component controller by component id
+const filterComponent = searchbase.getComponent('language-filter');
 
 const handleInput = e => {
   // Set the value to fetch the suggestions
@@ -53,13 +68,6 @@ input.addEventListener('input', handleInput);
 
 // Fetch initial results
 resultComponent.triggerDefaultQuery();
-
-searchComponent.subscribeToStateChanges(
-  change => {
-    console.log('Track State Updates', change);
-  },
-  ['value', 'results']
-);
 
 resultComponent.onResults = results => {
   const items = results.data.map(i => {
@@ -74,8 +82,67 @@ resultComponent.onResults = results => {
       </div>`;
   });
 
-  selectedSuggestion.innerHTML = items.join('<br>');
+  resultElement.innerHTML = items.join('<br>');
 };
+
+// Fetch initial filter options
+filterComponent.triggerDefaultQuery();
+
+filterComponent.onAggregationData = aggregations => {
+  const container = document.getElementById('language-filter');
+  container.innerHTML = '';
+  aggregations.data.forEach(i => {
+    if (i._key) {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = i._key;
+      checkbox.value = i._key;
+      checkbox.id = i._key;
+      checkbox.onclick = () => {
+        const values = filterComponent.value || [];
+        if (values && values.includes(i._key)) {
+          values.splice(values.indexOf(i._key), 1);
+        } else {
+          values.push(i._key);
+        }
+        // Set filter value and trigger custom query
+        filterComponent.setValue(values, {
+          triggerDefaultQuery: false,
+          triggerCustomQuery: true
+        });
+      };
+      const label = document.createElement('label');
+      label.htmlFor = i._key;
+      label.innerHTML = `${i._key}(${i._doc_count})`;
+      container.appendChild(checkbox);
+      container.appendChild(label);
+      container.appendChild(document.createElement('br'));
+    }
+  });
+};
+
+resultComponent.onResults = results => {
+  const items = results.data.map(i => {
+    return `<div class="suggestion">
+        <div>
+          <img src=${i.avatar} alt=${i.name} />
+        </div>
+        <div>
+        <h4>${i.name}</h4>
+        <p>${i.description}</p>
+        </div>
+      </div>`;
+  });
+
+  resultElement.innerHTML = items.join('<br>');
+};
+
+searchComponent.subscribeToStateChanges(
+  change => {
+    console.log('Track State Updates', change);
+  },
+  ['value', 'results']
+);
 
 searchComponent.onValueChange = value => {
   console.log('Value Updated to', value);

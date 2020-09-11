@@ -1,4 +1,4 @@
-export interface Results {
+export default interface Results {
   // An array of results obtained from the applied query.
   data: Array<Object>;
 

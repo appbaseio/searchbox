@@ -27,7 +27,8 @@ module.exports = {
           'build.es',
           'build.cjs',
           'build.umd.main',
-          'build.umd.min'
+          'build.umd.min',
+          'copyTypes'
         )
       ),
       esWatch: {
@@ -58,7 +59,7 @@ module.exports = {
       },
       andTest: series.nps('build')
     },
-    copyTypes: series(npsUtils.copy('dist')),
+    copyTypes: series(npsUtils.copy('src/*.d.ts dist/@appbaseio')),
     lint: {
       description: 'lint the entire project',
       script: 'eslint .'

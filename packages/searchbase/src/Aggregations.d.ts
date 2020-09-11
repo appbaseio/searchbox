@@ -1,4 +1,4 @@
-export interface CompositeAggregationResults {
+export default interface Aggregations {
   // An array of results obtained from the applied query.
   data: Array<Object>;
 

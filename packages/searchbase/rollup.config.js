@@ -4,6 +4,7 @@ import { terser } from 'rollup-plugin-terser';
 import replace from 'rollup-plugin-replace';
 import builtins from 'rollup-plugin-node-builtins';
 import babel from 'rollup-plugin-babel';
+import flow from 'rollup-plugin-flow';
 import pkg from './package.json';
 
 const minify = process.env.MINIFY;
@@ -71,7 +72,10 @@ export default {
         ['@babel/preset-env', { loose: true, modules: false }],
         '@babel/preset-flow'
       ],
-      plugins: ['@babel/plugin-proposal-class-properties']
+      plugins: [
+        '@babel/plugin-transform-flow-strip-types',
+        '@babel/plugin-proposal-class-properties'
+      ]
     }),
     umd ? builtins() : {},
     umd
@@ -81,6 +85,7 @@ export default {
           )
         })
       : null,
-    minify ? terser() : null
+    minify ? terser() : null,
+    flow()
   ].filter(Boolean)
 };

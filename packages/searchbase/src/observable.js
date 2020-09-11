@@ -1,5 +1,4 @@
 // @flow
-
 import type { Observer } from './types';
 
 export default class Observable {

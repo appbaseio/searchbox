@@ -2,7 +2,7 @@
 
 import { parseCompAggToHits } from './utils';
 
-class CompositeAggregationResults {
+class Aggregations {
   // An array of composite aggregations obtained from the applied aggs in options.
   data: Array<Object>;
 
@@ -38,4 +38,4 @@ class CompositeAggregationResults {
   }
 }
 
-export default CompositeAggregationResults;
+export default Aggregations;

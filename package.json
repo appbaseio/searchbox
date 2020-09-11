@@ -60,5 +60,8 @@
     "appbase",
     "elasticsearch",
     "search"
-  ]
+  ],
+  "dependencies": {
+    "jest-environment-jsdom": "24"
+  }
 }

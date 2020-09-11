@@ -1,6 +1,6 @@
 // @flow
 
-import { parseHits } from './utils';
+import { parseHits, withClickIds } from './utils';
 
 class Results {
   // An array of results obtained from the applied query.
@@ -47,20 +47,17 @@ class Results {
     return 0;
   }
 
-  // no of promoted results found
-  get promoted() {
-    if (this.raw && this.raw.promoted) {
-      return this.raw.promoted.length;
-    }
-    return 0;
-  }
-
   // An array of promoted results obtained from the applied query.
   get promotedData() {
     if (this.raw && this.raw.promoted) {
       return this.raw.promoted || [];
     }
     return [];
+  }
+
+  // no of promoted results found
+  get promoted() {
+    return this.promotedData.length || 0;
   }
 
   // An object of raw response as-is from elasticsearch query
@@ -113,6 +110,8 @@ class Results {
     } else {
       this.data = filteredResults;
     }
+    // Add click ids in data
+    this.data = withClickIds(this.data);
   }
 }
 

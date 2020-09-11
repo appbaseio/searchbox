@@ -1,6 +1,6 @@
 import { Observer } from './types';
 
-export interface Observable {
+export default interface Observable {
   observers: Array<Observer>;
 
   subscribe: (

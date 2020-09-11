@@ -1,4 +1,44 @@
-// @flow
+import type { DataField } from './types';
+
+export function getErrorMessage(msg: string): string {
+  return `SearchBase: ${msg}`;
+}
+
+export const errorMessages = {
+  invalidIndex: getErrorMessage('Please provide a valid index.'),
+  invalidURL: getErrorMessage('Please provide a valid url.'),
+  invalidComponentId: getErrorMessage('Please provide component id.'),
+  invalidDataField: getErrorMessage('Please provide data field.'),
+  dataFieldAsArray: getErrorMessage(
+    'Only components with `search` type supports the multiple data fields. Please define `dataField` as a string.'
+  )
+};
+
+export const querySuggestionFields = ['key', 'key.autosuggest', 'key.search'];
+
+export const queryTypes = {
+  Search: 'search',
+  Term: 'term',
+  Geo: 'geo',
+  Range: 'range'
+};
+
+export const queryFormats = {
+  Or: 'or',
+  And: 'and'
+};
+
+export const sortOptions = {
+  Asc: 'asc',
+  Desc: 'desc',
+  Count: 'count'
+};
+
+export const withClickIds = (results: Array<Object> = []): Array<Object> =>
+  results.map((result, index) => ({
+    ...result,
+    _click_id: index + 1
+  }));
 
 export const highlightResults = (result: Object): Object => {
   const data = { ...result };
@@ -15,26 +55,17 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
   let results: Array<Object> = [];
   if (hits) {
     results = [...hits].map(item => {
-      const streamProps = {};
-
-      if (item._updated) {
-        streamProps._updated = item._updated;
-      } else if (item._deleted) {
-        streamProps._deleted = item._deleted;
-      }
-
       const data = highlightResults(item);
       const result = Object.keys(data)
         .filter(key => key !== '_source')
         .reduce(
           (obj: { [key: string]: any }, key: string) => {
             // eslint-disable-next-line
-            obj[key] = data[key];
+              obj[key] = data[key];
             return obj;
           },
           {
-            ...data._source,
-            ...streamProps
+            ...data._source
           }
         );
       return result;
@@ -43,6 +74,75 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
   return results;
 };
 
+export const getNormalizedField = (
+  field: string | Array<string | DataField>
+): Array<string> => {
+  if (field) {
+    // if data field is string
+    if (!Array.isArray(field)) {
+      return [field];
+    }
+    if (field.length) {
+      let fields = [];
+      field.forEach(dataField => {
+        if (typeof dataField === 'string') {
+          fields.push(dataField);
+        } else if (dataField.field) {
+          // if data field is an array of objects
+          fields.push(dataField.field);
+        }
+      });
+      return fields;
+    }
+  }
+  return undefined;
+};
+
+export function isNumber(n) {
+  return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
+}
+
+export const getNormalizedWeights = (
+  field: string | Array<string | DataField>
+): Array<string> => {
+  if (field && Array.isArray(field) && field.length) {
+    let weights = [];
+    field.forEach(dataField => {
+      if (isNumber(dataField.weight)) {
+        // if data field is an array of objects
+        weights.push(dataField.weight);
+      } else {
+        // Add default weight as 1 to maintain order
+        weights.push(1);
+      }
+    });
+    return weights;
+  }
+  return undefined;
+};
+
+export function flatReactProp(reactProp: Object, componentID): Array<string> {
+  let flattenReact = [];
+  const flatReact = react => {
+    if (react && Object.keys(react)) {
+      Object.keys(react).forEach(r => {
+        if (react[r]) {
+          if (typeof react[r] === 'string') {
+            flattenReact = [...flattenReact, react[r]];
+          } else if (Array.isArray(react[r])) {
+            flattenReact = [...flattenReact, ...react[r]];
+          } else if (typeof react[r] === 'object') {
+            flatReact(react[r]);
+          }
+        }
+      });
+    }
+  };
+  flatReact(reactProp);
+  // Remove cyclic dependencies i.e dependencies on it's own
+  flattenReact = flattenReact.filter(react => react !== componentID);
+  return flattenReact;
+}
 // flattens a nested array
 export const flatten = (arr: Array<any>) =>
   arr.reduce(
@@ -61,7 +161,6 @@ export const extractSuggestion = (val: any) => {
   }
   return val;
 };
-
 
 /**
  *
@@ -187,11 +286,12 @@ export function parseCompAggToHits(
 ): Array<Object> {
   return buckets.map(bucket => {
     // eslint-disable-next-line camelcase
-    const { doc_count, key, [aggFieldName]: hitsData } = bucket;
+    const { doc_count, key, [aggFieldName]: data } = bucket;
     return {
       _doc_count: doc_count,
-      _key: key[aggFieldName],
-      ...hitsData.hits.hits[0]
+      // To handle the aggregation results for term and composite aggs
+      _key: key[aggFieldName] !== undefined ? key[aggFieldName] : key,
+      ...data
     };
   });
 }
