@@ -1,3 +1,7 @@
+import React from 'react';
+
+export const SearchContext = React.createContext();
+
 export const getClassName = (classMap, component) =>
   (classMap && classMap[component]) || '';
 
@@ -48,23 +52,7 @@ export const debounce = (fn, delay) => {
   };
 };
 
-export const getURLParameters = url => {
-  const keyVal = {};
-  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-    key = decodeURIComponent(key);
-    value = decodeURIComponent(value);
-    keyVal[key] = value;
-  });
-  return keyVal;
-};
-
 export const isEmpty = val => !(val && val.length && Object.keys(val).length);
-
-export const withClickIds = (results = []) =>
-  results.map((result, index) => ({
-    ...result,
-    _click_id: index + 1
-  }));
 
 /**
  * To determine whether a component has renderQuerySuggestions prop defined or not
@@ -87,4 +75,12 @@ export const getQuerySuggestionsComponent = (data = {}, props = {}) => {
     return renderQuerySuggestions(data);
   }
   return null;
+};
+
+export const checkValidValue = value => {
+  if (value) {
+    if (Array.isArray(value) && !value.length) return false;
+    return true;
+  }
+  return false;
 };

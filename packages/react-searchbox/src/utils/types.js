@@ -8,6 +8,12 @@ export const number = PropTypes.number;
 export const func = PropTypes.func;
 export const any = PropTypes.any;
 
+export const queryTypes = PropTypes.oneOf(['search', 'term', 'geo', 'range']);
+
+export const sourceFields = PropTypes.arrayOf(string);
+
+export const sortType = PropTypes.oneOf(['asc', 'desc', 'count']);
+
 const DataField = PropTypes.shape({
   field: string,
   weight: number

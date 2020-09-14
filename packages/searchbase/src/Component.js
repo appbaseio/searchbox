@@ -24,7 +24,8 @@ import {
   getNormalizedWeights,
   flatReactProp,
   getSuggestions,
-  querySuggestionFields
+  querySuggestionFields,
+  isEqual
 } from './utils';
 
 type QueryType =
@@ -122,9 +123,9 @@ class Component extends Base {
 
   showMissing: boolean;
 
-  defaultQuery: Object;
+  defaultQuery: (component: Component) => void;
 
-  customQuery: Object;
+  customQuery: (component: Component) => void;
 
   execute: boolean;
 
@@ -211,6 +212,13 @@ class Component extends Base {
     transformRequest,
     transformResponse,
     beforeValueChange,
+    onValueChange,
+    onResults,
+    onAggregationData,
+    onError,
+    onRequestStatusChange,
+    onQueryChange,
+    onMicStatusChange,
     enableQuerySuggestions,
     results,
     ...rsAPIConfig
@@ -297,14 +305,21 @@ class Component extends Base {
     this.aggregations = aggregations;
     this.missingLabel = missingLabel;
     this.showMissing = showMissing;
-    this.defaultQuery = defaultQuery;
-    this.customQuery = customQuery;
     this.execute = execute;
     this.enableSynonyms = enableSynonyms;
     this.selectAllLabel = selectAllLabel;
     this.pagination = pagination;
     this.queryString = queryString;
+    this.defaultQuery = defaultQuery;
+    this.customQuery = customQuery;
     this.beforeValueChange = beforeValueChange;
+    this.onValueChange = onValueChange;
+    this.onResults = onResults;
+    this.onAggregationData = onAggregationData;
+    this.onError = onError;
+    this.onRequestStatusChange = onRequestStatusChange;
+    this.onQueryChange = onQueryChange;
+    this.onMicStatusChange = onMicStatusChange;
 
     // other properties
     this.enableQuerySuggestions = enableQuerySuggestions;
@@ -320,6 +335,8 @@ class Component extends Base {
       this.setValue(value, {
         stateChanges: true
       });
+    } else {
+      this.value = value;
     }
   }
 
@@ -384,8 +401,8 @@ class Component extends Base {
       nestedField: this.nestedField,
       interval: this.interval,
       customHighlight: this.customHighlight,
-      customQuery: this.customQuery,
-      defaultQuery: this.defaultQuery,
+      customQuery: this.customQuery ? this.customQuery(this) : undefined,
+      defaultQuery: this.defaultQuery ? this.defaultQuery(this) : undefined,
       value: this.value,
       categoryValue: this.categoryValue,
       after: this.after,
@@ -457,22 +474,22 @@ class Component extends Base {
   };
 
   // Method to set the dataField option
-  setDataField(
+  setDataField = (
     dataField: string | Array<string | DataField>,
     options?: Options = defaultOptions
-  ): void {
+  ): void => {
     const prev = this.dataField;
     this.dataField = dataField;
     this._applyOptions(options, 'dataField', prev, dataField);
-  }
+  };
 
   // To set the parent (SearchBase) instance for the component
-  setParent(parent: SearchBase) {
+  setParent = (parent: SearchBase) => {
     this._parent = parent;
-  }
+  };
 
   // Method to set the value
-  setValue(value: any, options?: Options = defaultOptions): void {
+  setValue = (value: any, options?: Options = defaultOptions): void => {
     const performUpdate = () => {
       const prev = this.value;
       this.value = value;
@@ -487,68 +504,92 @@ class Component extends Base {
     } else {
       performUpdate();
     }
-  }
+  };
 
   // Method to set the size option
-  setSize(size: number, options?: Options = defaultOptions): void {
+  setSize = (size: number, options?: Options = defaultOptions): void => {
     const prev = this.size;
     this.size = size;
     this._applyOptions(options, 'size', prev, this.size);
-  }
+  };
 
   // Method to set the from option
-  setFrom(from: number, options?: Options = defaultOptions): void {
+  setFrom = (from: number, options?: Options = defaultOptions): void => {
     const prev = this.from;
     this.from = from;
     this._applyOptions(options, 'from', prev, this.from);
-  }
+  };
 
   // Method to set the fuzziness option
-  setFuzziness(
+  setFuzziness = (
     fuzziness: number | string,
     options?: Options = defaultOptions
-  ): void {
+  ): void => {
     const prev = this.fuzziness;
     this.fuzziness = fuzziness;
     this._applyOptions(options, 'fuzziness', prev, this.fuzziness);
-  }
+  };
 
   // Method to set the includeFields option
-  setIncludeFields(
+  setIncludeFields = (
     includeFields: Array<string>,
     options?: Options = defaultOptions
-  ): void {
+  ): void => {
     const prev = this.includeFields;
     this.includeFields = includeFields;
     this._applyOptions(options, 'includeFields', prev, includeFields);
-  }
+  };
 
   // Method to set the excludeFields option
-  setExcludeFields(
+  setExcludeFields = (
     excludeFields: Array<string>,
     options?: Options = defaultOptions
-  ): void {
+  ): void => {
     const prev = this.excludeFields;
     this.excludeFields = excludeFields;
     this._applyOptions(options, 'excludeFields', prev, excludeFields);
-  }
+  };
 
   // Method to set the sortBy option
-  setSortBy(sortBy: string, options?: Options = defaultOptions): void {
+  setSortBy = (sortBy: string, options?: Options = defaultOptions): void => {
     const prev = this.sortBy;
     this.sortBy = sortBy;
     this._applyOptions(options, 'sortBy', prev, sortBy);
-  }
+  };
 
   // Method to set the sortBy option
-  setReact(react: Object, options?: Options = defaultOptions): void {
+  setReact = (react: Object, options?: Options = defaultOptions): void => {
     const prev = this.react;
     this.react = react;
     this._applyOptions(options, 'react', prev, react);
-  }
+  };
+
+  // Method to set the default query
+  setDefaultQuery = (
+    defaultQuery: (component: Component) => void,
+    options?: Options = defaultOptions
+  ): void => {
+    const prev = this.defaultQuery;
+    this.defaultQuery = defaultQuery;
+    this._applyOptions(options, 'defaultQuery', prev, defaultQuery);
+  };
+
+  // Method to set the custom query
+  setCustomQuery = (
+    customQuery: (component: Component) => void,
+    options?: Options = defaultOptions
+  ): void => {
+    const prev = this.customQuery;
+    this.customQuery = customQuery;
+    this._applyOptions(options, 'customQuery', prev, customQuery);
+  };
 
   // Method to execute the component's own query i.e default query
   triggerDefaultQuery = (options?: Option = defaultOption): Promise<any> => {
+    // To prevent duplicate queries
+    if (isEqual(this._query, this.componentQuery)) {
+      return Promise.resolve(true);
+    }
     const handleError = err => {
       this._setError(err, {
         stateChanges: options.stateChanges
@@ -600,7 +641,11 @@ class Component extends Base {
                   rawResults.hits.hits
                 ) {
                   rawResults.hits.hits = [
-                    ...querySuggestionsData.hits.hits,
+                    ...(querySuggestionsData.hits.hits || []).map(hit => ({
+                      ...hit,
+                      // Set the query suggestion tag for suggestion hits
+                      _query_suggestion: true
+                    })),
                     ...rawResults.hits.hits
                   ];
                 }
@@ -625,6 +670,9 @@ class Component extends Base {
   triggerCustomQuery = (options?: Option = defaultOption): Promise<any> => {
     const { requestBody, orderOfQueries } = this._generateQuery();
     if (requestBody.length) {
+      if (isEqual(this._query, requestBody)) {
+        return Promise.resolve(true);
+      }
       const handleError = err => {
         this._setError(err, {
           stateChanges: options.stateChanges
@@ -771,17 +819,17 @@ class Component extends Base {
   };
 
   // Method to subscribe the state changes
-  subscribeToStateChanges(
+  subscribeToStateChanges = (
     fn: Function,
     propertiesToSubscribe?: string | Array<string>
-  ) {
+  ) => {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
-  }
+  };
 
   // Method to unsubscribe the state changes
-  unsubscribeToStateChanges(fn?: Function) {
+  unsubscribeToStateChanges = (fn?: Function) => {
     this.stateChanges.unsubscribe(fn);
-  }
+  };
 
   /* -------- Private methods only for the internal use -------- */
   // Method to apply the changed based on set options

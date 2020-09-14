@@ -59,9 +59,9 @@ export class Component extends Base {
 
   showMissing: boolean;
 
-  defaultQuery: Object;
+  defaultQuery: (component: Component) => void;
 
-  customQuery: Object;
+  customQuery: (component: Component) => void;
 
   execute: boolean;
 
@@ -211,6 +211,18 @@ export class Component extends Base {
 
   // Method to set the sortBy option
   setReact(react: Object, options?: types.Options): void;
+
+  // Method to set the default query
+  setDefaultQuery(
+    defaultQuery: (component: Component) => void,
+    options?: types.Options
+  ): void
+
+  // Method to set the custom query
+  setCustomQuery(
+    customQuery: (component: Component) => void,
+    options?: types.Options
+  ): void
 
   // Method to execute the component's own query i.e default query
   triggerDefaultQuery(options?: types.Option): Promise<any>;

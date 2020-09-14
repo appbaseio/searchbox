@@ -172,13 +172,13 @@ export const extractSuggestion = (val: any) => {
 export const getSuggestions = (
   fields: Array<string> = [],
   suggestions: Array<Object>,
-  currentValue: string = '',
+  value: string = '',
   showDistinctSuggestions: boolean = true
 ) => {
   let suggestionsList = [];
   let labelsList = [];
   let skipWordMatch = false; //  Use to skip the word match logic, important for synonym
-
+  const currentValue = value || '';
   const populateSuggestionsList = (val, parsedSource, source) => {
     // check if the suggestion includes the current value
     // and not already included in other suggestions
@@ -294,4 +294,25 @@ export function parseCompAggToHits(
       ...data
     };
   });
+}
+
+export function isEqual(x, y): boolean {
+  if (x === y) return true;
+  if (!(x instanceof Object) || !(y instanceof Object)) return false;
+  if (x.constructor !== y.constructor) return false;
+
+  /* eslint-disable */
+	for (const p in x) {
+		if (!x.hasOwnProperty(p)) continue;
+		if (!y.hasOwnProperty(p)) return false;
+		if (x[p] === y[p]) continue;
+		if (typeof x[p] !== 'object') return false;
+		if (!isEqual(x[p], y[p])) return false;
+	}
+
+	for (const p in y) {
+		if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
+	}
+	/* eslint-enable */
+  return true;
 }

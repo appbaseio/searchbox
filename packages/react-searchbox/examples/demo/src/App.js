@@ -1,32 +1,148 @@
-import React, { Component } from 'react';
-import SearchBox from '@appbaseio/react-searchbox';
+import React from 'react';
 
+import { SearchBox, SearchBase, Component } from '@appbaseio/react-searchbox';
 import './styles.css';
 
-export default class App extends Component {
-  render() {
-    return (
-      <div>
-        <h2>
-          React Searchbox Demo{" "}
-          <span style={{ fontSize: "1rem" }}>
-            <a
-              href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              API reference
-            </a>
-          </span>
-        </h2>
-        <SearchBox
-          app="good-books-ds"
-          credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
-          url="https://arc-cluster-appbase-demo-6pjy6z.searchbase.io"
-          dataField={['original_title', 'original_title.search']}
-          showVoiceSearch
-        />
-      </div>
-    );
-  }
-}
+export default () => (
+  <SearchBase
+    index="good-books-ds"
+    credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
+    url="https://arc-cluster-appbase-demo-6pjy6z.searchbase.io"
+    analyticsConfig={{
+      recordAnalytics: true,
+      enableQueryRules: true,
+      userId: 'jon@appbase.io',
+      customEvents: {
+        platform: 'ios',
+        device: 'iphoneX'
+      }
+    }}
+  >
+    <div>
+      <h2>
+        React Searchbox Demo{' '}
+        <span style={{ fontSize: '1rem' }}>
+          <a
+            href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            API reference
+          </a>
+        </span>
+      </h2>
+      <SearchBox
+        id="search-component"
+        dataField={[
+          {
+            field: 'original_title',
+            weight: 1
+          },
+          {
+            field: 'original_title.search',
+            weight: 3
+          }
+        ]}
+        title="Search"
+        placeholder="Search for Books"
+        autosuggest={true}
+        defaultSuggestions={[
+          {
+            label: 'Songwriting',
+            value: 'Songwriting'
+          },
+          {
+            label: 'Musicians',
+            value: 'Musicians'
+          }
+        ]}
+        size={10}
+        queryFormat="or"
+        fuzziness="AUTO"
+        showClear
+        showVoiceSearch
+        URLParams
+        className="custom-class"
+        enableQuerySuggestions
+        iconPosition="left"
+        style={{ padding: 10 }}
+      />
+    </div>
+    <Component
+      id="result-component"
+      highlight
+      dataField="original_title"
+      react={{
+        and: 'search-component'
+      }}
+      URLParams
+    >
+      {({ results, requestPending }) => {
+        return (
+          <div className="result-list-container">
+            {requestPending ? (
+              <div>Loading Results ...</div>
+            ) : (
+              <div>
+                {!results.data.length ? (
+                  <div>No results found</div>
+                ) : (
+                  <p>
+                    {results.numberOfResults} results found in {results.time}ms
+                  </p>
+                )}
+                {results.data.map(item => (
+                  <div className="flex book-content" key={item._id}>
+                    <img
+                      src={item.image}
+                      alt="Book Cover"
+                      className="book-image"
+                    />
+                    <div
+                      className="flex column justify-center"
+                      style={{ marginLeft: 20 }}
+                    >
+                      <div
+                        className="book-header"
+                        dangerouslySetInnerHTML={{
+                          __html: item.original_title
+                        }}
+                      />
+                      <div className="flex column justify-space-between">
+                        <div>
+                          <div>
+                            by{' '}
+                            <span className="authors-list">{item.authors}</span>
+                          </div>
+                          <div className="ratings-list flex align-center">
+                            <span className="stars">
+                              {Array(item.average_rating_rounded)
+                                .fill('x')
+                                .map((i, index) => (
+                                  <i
+                                    className="fas fa-star"
+                                    key={item._id + `_${index}`}
+                                  />
+                              )) // eslint-disable-line
+                              }
+                            </span>
+                            <span className="avg-rating">
+                              ({item.average_rating} avg)
+                            </span>
+                          </div>
+                        </div>
+                        <span className="pub-year">
+                          Pub {item.original_publication_year}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }}
+    </Component>
+  </SearchBase>
+);

@@ -1,5 +1,8 @@
 import React from 'react';
-import SearchBox from './components/SearchBox';
+import SearchBoxDefault from './components/SearchBox';
+import SearchBase from './components/SearchBase';
+import Component from './components/Component';
+import { SearchContext } from './utils/helper';
 import { Global, css } from '@emotion/core';
 
 class SearchBoxWithStyle extends React.Component {
@@ -23,11 +26,16 @@ class SearchBoxWithStyle extends React.Component {
           `}
         />
         {this.state.mount && (
-          <SearchBox currentUrl={window.location.href} {...this.props} />
+          <SearchBoxDefault currentUrl={window.location.href} {...this.props} />
         )}
       </div>
     );
   }
 }
 
-export default SearchBoxWithStyle;
+export  {
+  SearchContext,
+  SearchBoxWithStyle as SearchBox,
+  SearchBase,
+  Component
+};

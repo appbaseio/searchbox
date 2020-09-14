@@ -36,15 +36,17 @@ class SearchBase extends Base {
       throw new Error(errorMessages.invalidComponentId);
     }
     let componentInstance = component;
-    if (!(component instanceof Component)) {
+    if (component && !(component instanceof Component)) {
       // create instance from object with all the options
       componentInstance = new Component({
+        ...component,
         id: componentId,
-        index: this.index,
-        url: this.url,
-        credentials: this.credentials,
-        headers: this.headers,
-        ...component
+        index: component.index || this.index,
+        url: component.url || this.url,
+        credentials: component.credentials || this.credentials,
+        headers: component.headers || this.headers,
+        transformRequest: component.transformRequest || this.transformRequest,
+        transformResponse: component.transformResponse || this.transformResponse
       });
     } else {
       // set the id property on instance

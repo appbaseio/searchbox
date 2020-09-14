@@ -2,6 +2,7 @@ module.exports = {
   parser: 'babel-eslint',
   extends: [
     'airbnb-base/legacy',
+    'react-app',
     'prettier',
     'plugin:flowtype-errors/recommended'
   ],
@@ -18,6 +19,8 @@ module.exports = {
     indent: 0,
     'no-tabs': 0,
     'eol-last': ['error', 'always'],
-    'no-underscore-dangle': 0
+    'no-underscore-dangle': 0,
+    // allow specifying true explicitly for boolean props
+    "react/jsx-boolean-value": 0,
   }
 };

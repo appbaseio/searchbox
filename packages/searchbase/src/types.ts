@@ -47,8 +47,97 @@ export type BaseConfig = {
 
 export type ComponentConfig = BaseConfig & {
   enableQuerySuggestions?: boolean;
+
   results?: Array<Object>;
+
   beforeValueChange?: (value: string) => Promise<any>;
+
+  // called when value changes
+  onValueChange: (next: string, prev: string) => void;
+
+  // called when results change
+  onResults: (next: string, prev: string) => void;
+
+  // called when composite aggregations change
+  onAggregationData: (next: Array<Object>, prev: Array<Object>) => void;
+
+  // called when there is an error while fetching results
+  onError: (error: any) => void;
+
+  // called when request status changes
+  onRequestStatusChange: (next: string, prev: string) => void;
+
+  // called when query changes
+  onQueryChange: (next: string, prev: string) => void;
+
+  // called when mic status changes
+  onMicStatusChange: (next: string, prev: string) => void;
+
+  id: string;
+
+  type?: QueryType;
+
+  react?: Object;
+
+  queryFormat?: QueryFormat;
+
+  dataField?: string | Array<string | DataField>;
+
+  categoryField?: string;
+
+  categoryValue?: string;
+
+  nestedField?: string;
+
+  from?: number;
+
+  size?: number;
+
+  sortBy?: SortType;
+
+  value?: any;
+
+  aggregationField?: string;
+
+  after?: Object;
+
+  includeNullValues?: Boolean;
+
+  includeFields?: Array<string>;
+
+  excludeFields?: Array<string>;
+
+  fuzziness?: string | number;
+
+  searchOperators?: boolean;
+
+  highlight?: boolean;
+
+  highlightField?: string | Array<string>;
+
+  customHighlight?: Object;
+
+  interval?: number;
+
+  aggregations?: Array<string>;
+
+  missingLabel?: string;
+
+  showMissing?: boolean;
+
+  defaultQuery?: Object;
+
+  customQuery?: Object;
+
+  execute?: boolean;
+
+  enableSynonyms?: boolean;
+
+  selectAllLabel?: string;
+
+  pagination?: boolean;
+
+  queryString?: boolean;
 };
 
 export type MIC_STATUS = {
