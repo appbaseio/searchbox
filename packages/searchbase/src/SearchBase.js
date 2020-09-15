@@ -31,7 +31,10 @@ class SearchBase extends Base {
   }
 
   // To register a component
-  register = (componentId: string, component: Component | Object) => {
+  register = (
+    componentId: string,
+    component: Component | Object
+  ): Component => {
     if (!componentId) {
       throw new Error(errorMessages.invalidComponentId);
     }
@@ -56,6 +59,7 @@ class SearchBase extends Base {
     this._components[componentId] = componentInstance;
     // set the search base instance as parent
     componentInstance.setParent(this);
+    return componentInstance;
   };
 
   // To un-register a component

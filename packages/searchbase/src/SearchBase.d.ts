@@ -12,7 +12,7 @@ export default class SearchBase extends Base {
       }: BaseConfig)
 
       // To register a component
-  register(componentId: string, component: Component | ComponentConfig): void
+  register(componentId: string, component: Component | ComponentConfig): Component
 
   // To un-register a component
   unregister(componentId: string): void
