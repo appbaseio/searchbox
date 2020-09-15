@@ -99,7 +99,7 @@ class Component extends Base {
 
   after: Object;
 
-  includeNullValues: Boolean;
+  includeNullValues: boolean;
 
   includeFields: Array<string>;
 
@@ -221,6 +221,7 @@ class Component extends Base {
     onMicStatusChange,
     enableQuerySuggestions,
     results,
+    showDistinctSuggestions,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -323,6 +324,8 @@ class Component extends Base {
 
     // other properties
     this.enableQuerySuggestions = enableQuerySuggestions;
+
+    this.showDistinctSuggestions = showDistinctSuggestions;
 
     // Initialize the state changes observable
     this.stateChanges = new Observable();
