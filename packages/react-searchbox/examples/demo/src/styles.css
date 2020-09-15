@@ -151,3 +151,16 @@ body {
 .col .meetup-list-image {
   background-size: cover;
 }
+
+.list-item {
+  display: flex;
+  align-items: center;
+}
+
+.list-item-label {
+  margin-left: 10px;
+}
+
+.filter-container {
+  line-height: 1.8;
+}

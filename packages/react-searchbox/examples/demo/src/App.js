@@ -31,6 +31,7 @@ export default () => (
           </a>
         </span>
       </h2>
+
       <SearchBox
         id="search-component"
         dataField={[
@@ -67,82 +68,139 @@ export default () => (
         iconPosition="left"
         style={{ padding: 10 }}
       />
-    </div>
-    <Component
-      id="result-component"
-      highlight
-      dataField="original_title"
-      react={{
-        and: 'search-component'
-      }}
-      URLParams
-    >
-      {({ results, requestPending }) => {
-        return (
-          <div className="result-list-container">
-            {requestPending ? (
-              <div>Loading Results ...</div>
-            ) : (
-              <div>
-                {!results.data.length ? (
-                  <div>No results found</div>
-                ) : (
-                  <p>
-                    {results.numberOfResults} results found in {results.time}ms
-                  </p>
-                )}
-                {results.data.map(item => (
-                  <div className="flex book-content" key={item._id}>
-                    <img
-                      src={item.image}
-                      alt="Book Cover"
-                      className="book-image"
-                    />
-                    <div
-                      className="flex column justify-center"
-                      style={{ marginLeft: 20 }}
-                    >
-                      <div
-                        className="book-header"
-                        dangerouslySetInnerHTML={{
-                          __html: item.original_title
-                        }}
-                      />
-                      <div className="flex column justify-space-between">
-                        <div>
-                          <div>
-                            by{' '}
-                            <span className="authors-list">{item.authors}</span>
-                          </div>
-                          <div className="ratings-list flex align-center">
-                            <span className="stars">
-                              {Array(item.average_rating_rounded)
-                                .fill('x')
-                                .map((i, index) => (
-                                  <i
-                                    className="fas fa-star"
-                                    key={item._id + `_${index}`}
-                                  />
+      <div className="row">
+        <div className="col">
+          <Component
+            id="author-filter"
+            type="term"
+            dataField="authors.keyword"
+            subscribeTo={['aggregationData', 'requestStatus', 'value']}
+            URLParams
+            react={{
+              and: ['search-component']
+            }}
+            // To initialize with default value
+            value={[]}
+            render={({ aggregationData, requestPending, value, setValue }) => {
+              return (
+                <div className="filter-container">
+                  {requestPending ? (
+                    <div>Loading Filters ...</div>
+                  ) : (
+                    aggregationData.data.map(item => (
+                      <div className="list-item" key={item._key}>
+                        <input
+                          type="checkbox"
+                          checked={value ? value.includes(item._key) : false}
+                          value={item._key}
+                          onChange={e => {
+                            const values = value || [];
+                            if (values && values.includes(e.target.value)) {
+                              values.splice(values.indexOf(e.target.value), 1);
+                            } else {
+                              values.push(e.target.value);
+                            }
+                            // Set filter value and trigger custom query
+                            setValue(values, {
+                              triggerDefaultQuery: false,
+                              triggerCustomQuery: true,
+                              stateChanges: true
+                            });
+                          }}
+                        />
+                        <label className="list-item-label" htmlFor={item._key}>
+                          {item._key} ({item._doc_count})
+                        </label>
+                      </div>
+                    ))
+                  )}
+                </div>
+              );
+            }}
+          />
+        </div>
+
+        <div className="col">
+          <Component
+            id="result-component"
+            highlight
+            dataField="original_title"
+            react={{
+              and: ['search-component', 'author-filter']
+            }}
+          >
+            {({ results, requestPending }) => {
+              return (
+                <div className="result-list-container">
+                  {requestPending ? (
+                    <div>Loading Results ...</div>
+                  ) : (
+                    <div>
+                      {!results.data.length ? (
+                        <div>No results found</div>
+                      ) : (
+                        <p>
+                          {results.numberOfResults} results found in{' '}
+                          {results.time}ms
+                        </p>
+                      )}
+                      {results.data.map(item => (
+                        <div className="flex book-content" key={item._id}>
+                          <img
+                            src={item.image}
+                            alt="Book Cover"
+                            className="book-image"
+                          />
+                          <div
+                            className="flex column justify-center"
+                            style={{ marginLeft: 20 }}
+                          >
+                            <div
+                              className="book-header"
+                              dangerouslySetInnerHTML={{
+                                __html: item.original_title
+                              }}
+                            />
+                            <div className="flex column justify-space-between">
+                              <div>
+                                <div>
+                                  by{' '}
+                                  <span className="authors-list">
+                                    {item.authors}
+                                  </span>
+                                </div>
+                                <div className="ratings-list flex align-center">
+                                  <span className="stars">
+                                    {Array(item.average_rating_rounded)
+                                      .fill('x')
+                                      .map((i, index) => (
+                                        <i
+                                          className="fas fa-star"
+                                          key={item._id + `_${index}`}
+                                        />
                               )) // eslint-disable-line
-                              }
-                            </span>
-                            <span className="avg-rating">
-                              ({item.average_rating} avg)
-                            </span>
+                                    }
+                                  </span>
+                                  <span className="avg-rating">
+                                    ({item.average_rating} avg)
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="pub-year">
+                                Pub {item.original_publication_year}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <span className="pub-year">
-                          Pub {item.original_publication_year}
-                        </span>
-                      </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      }}
-    </Component>
+                  )}
+                </div>
+              );
+            }}
+          </Component>
+        </div>
+      </div>
+    </div>
   </SearchBase>
 );

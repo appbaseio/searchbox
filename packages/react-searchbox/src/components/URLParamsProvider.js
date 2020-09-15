@@ -1,6 +1,6 @@
 import React from 'react';
 import { string } from 'prop-types';
-import { SearchContext, checkValidValue } from '../utils/helper';
+import { SearchContext, checkValidValue, isEqual } from '../utils/helper';
 
 class URLParamsProvider extends React.Component {
   static contextType = SearchContext;
@@ -28,7 +28,7 @@ class URLParamsProvider extends React.Component {
         }
       }
 
-      window.onpopstate = () => {
+      window.addEventListener('popstate', () => {
         const options = {
           triggerCustomQuery: true,
           triggerDefaultQuery: true,
@@ -38,10 +38,10 @@ class URLParamsProvider extends React.Component {
         if (this.params.has(id)) {
           // Set component value
           try {
-            this.componentInstance.setValue(
-              JSON.parse(this.params.get(id)),
-              options
-            );
+            const paramValue = JSON.parse(this.params.get(id));
+            if (!isEqual(this.componentInstance.value, paramValue)) {
+              this.componentInstance.setValue(paramValue, options);
+            }
           } catch (e) {
             console.error(e);
             // Do not set value if JSON parsing fails.
@@ -50,7 +50,7 @@ class URLParamsProvider extends React.Component {
           // Remove inactive component
           this.componentInstance.setValue(null, options);
         }
-      };
+      });
 
       this.componentInstance.subscribeToStateChanges(
         change => {

@@ -188,7 +188,7 @@ class Component extends Base {
   // called when results change
   onResults: (next: string, prev: string) => void;
 
-  // called when composite aggregations change
+  // called when composite aggregationData change
   onAggregationData: (next: Array<Object>, prev: Array<Object>) => void;
 
   // called when there is an error while fetching results
@@ -711,15 +711,18 @@ class Component extends Base {
                   triggerCustomQuery: false
                 });
                 // Set results
-                componentInstance.results.setRaw(rawResults);
-                componentInstance._applyOptions(
-                  {
-                    stateChanges: options.stateChanges
-                  },
-                  'results',
-                  prev,
-                  componentInstance.results
-                );
+                if (rawResults.hits) {
+                  componentInstance.results.setRaw(rawResults);
+                  componentInstance._applyOptions(
+                    {
+                      stateChanges: options.stateChanges
+                    },
+                    'results',
+                    prev,
+                    componentInstance.results
+                  );
+                }
+
                 if (rawResults.aggregations) {
                   componentInstance._handleAggregationResponse(
                     rawResults.aggregations,
@@ -856,7 +859,7 @@ class Component extends Base {
     if (key === 'results' && this.onResults) {
       this.onResults(nextValue, prevValue);
     }
-    if (key === 'aggregations' && this.onAggregationData) {
+    if (key === 'aggregationData' && this.onAggregationData) {
       this.onAggregationData(nextValue, prevValue);
     }
     if (key === 'requestStatus' && this.onRequestStatusChange) {
@@ -1055,7 +1058,7 @@ class Component extends Base {
     );
     this._applyOptions(
       { stateChanges: options.stateChanges },
-      'aggregations',
+      'aggregationData',
       prev,
       this.aggregationData
     );
