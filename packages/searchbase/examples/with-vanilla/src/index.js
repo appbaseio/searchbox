@@ -84,7 +84,7 @@ searchComponent.onValueChange = value => {
 // eslint-disable-next-line
 new Autocomplete('#autocomplete', {
   search: () => {
-    return searchComponent.getSuggestions();
+    return searchComponent.suggestions;
   },
   getResultValue: result => result.label,
   renderResult: (result, props) => `

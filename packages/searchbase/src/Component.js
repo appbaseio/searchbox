@@ -378,6 +378,38 @@ class Component extends Base {
     return { recordAnalytics, customEvents, enableQueryRules, userId };
   }
 
+  // To get the parsed suggestions from the results
+  get suggestions(): Array<Object> {
+    if (this.type && this.type !== queryTypes.Search) {
+      return [];
+    }
+    if (this.results) {
+      let fields = getNormalizedField(this.dataField);
+      if (
+        fields.length === 0 &&
+        this.results.data &&
+        Array.isArray(this.results.data) &&
+        this.results.data.length > 0 &&
+        this.results.data[0] &&
+        this.results.data[0]._source
+      ) {
+        // Extract fields from _source
+        fields = Object.keys(this.results.data[0]._source);
+      }
+      if (this.enableQuerySuggestions) {
+        // extract suggestions from query suggestion fields too
+        fields = [...fields, ...querySuggestionFields];
+      }
+      return getSuggestions(
+        fields,
+        this.results.data,
+        this.value,
+        this.showDistinctSuggestions
+      ).slice(0, this.size);
+    }
+    return [];
+  }
+
   // Method to get the raw query based on the current state
   get componentQuery(): Object {
     return {
@@ -746,38 +778,6 @@ class Component extends Base {
     } else {
       return Promise.resolve({});
     }
-  };
-
-  // To get the parsed suggestions from the results
-  getSuggestions = (): Array<Object> => {
-    if (this.type && this.type !== queryTypes.Search) {
-      return [];
-    }
-    if (this.results) {
-      let fields = getNormalizedField(this.dataField);
-      if (
-        fields.length === 0 &&
-        this.results.data &&
-        Array.isArray(this.results.data) &&
-        this.results.data.length > 0 &&
-        this.results.data[0] &&
-        this.results.data[0]._source
-      ) {
-        // Extract fields from _source
-        fields = Object.keys(this.results.data[0]._source);
-      }
-      if (this.enableQuerySuggestions) {
-        // extract suggestions from query suggestion fields too
-        fields = [...fields, ...querySuggestionFields];
-      }
-      return getSuggestions(
-        fields,
-        this.results.data,
-        this.value,
-        this.showDistinctSuggestions
-      ).slice(0, this.size);
-    }
-    return [];
   };
 
   getSuggestionsQuery(): Object {

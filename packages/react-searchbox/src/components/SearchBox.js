@@ -99,7 +99,7 @@ class SearchBox extends React.Component {
   }
 
   get querySuggestionsList() {
-    const suggestions = this.componentInstance.getSuggestions();
+    const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
       suggestion => suggestion._query_suggestion
     );
@@ -110,7 +110,7 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance.getSuggestions();
+    const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
       suggestion => !suggestion._query_suggestion
     );

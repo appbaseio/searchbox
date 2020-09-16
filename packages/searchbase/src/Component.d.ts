@@ -170,6 +170,9 @@ export class Component extends Base {
 
   appbaseSettings: types.AppbaseSettings;
 
+  // To get the parsed suggestions from the results
+  suggestions: Array<Object>;
+
   // Method to get the raw query based on the current state
   componentQuery: Object;
 
@@ -229,9 +232,6 @@ export class Component extends Base {
 
   // Method to execute the query for watcher components
   triggerCustomQuery(options?: types.Option): Promise<any>;
-
-  // To get the parsed suggestions from the results
-  getSuggestions(): Array<Object>;
 
   getSuggestionsQuery(): Object;
 

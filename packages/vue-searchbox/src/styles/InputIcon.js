@@ -1,5 +1,5 @@
-import styled from "@appbaseio/vue-emotion";
-import { css } from "emotion";
+import styled from '@appbaseio/vue-emotion';
+import { css } from 'emotion';
 
 const left = css`
   padding-left: 12px;
@@ -14,11 +14,11 @@ const right = css`
 const clear = css`
   padding-right: 32px;
   right: 0;
-  top: 12px;
+  top: 9px;
 `;
 
 const topClear = css`
-  top: 12px;
+  top: 9px;
 `;
 
 const topSearch = css`
@@ -29,17 +29,18 @@ const paddingRight = css`
   padding-right: 10px;
 `;
 
-const InputIcon = styled("div")`
+const InputIcon = styled('div')`
   position: absolute;
   ${({ isClearIcon }) => {
-    if (isClearIcon) return topClear;
-    return topSearch;
-  }}
+		if (isClearIcon) return topClear;
+		return topSearch;
+	}}
   cursor: pointer;
   ${({ iconPosition }) => {
-    if (iconPosition === "left") {
+    if (iconPosition === 'left') {
       return left;
-    } else if (iconPosition === "right") {
+    }
+		if (iconPosition === 'right') {
       return right;
     }
     return null;

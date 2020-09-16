@@ -104,7 +104,7 @@ class App extends React.Component {
           {this.searchComponent.requestPending ? (
             <div>Loading suggestions...</div>
           ) : (
-            this.searchComponent.getSuggestions().map(i => {
+            this.searchComponent.suggestions.map(i => {
               return (
                 <div onClick={() => this.handleSelect(i.value)} key={i.label}>
                   {i.label}

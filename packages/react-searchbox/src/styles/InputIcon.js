@@ -13,17 +13,18 @@ const right = `
 const clear = `
   padding-right: 32px;
   right: 0;
-  top: 12px;
+  top: 9px;
 `;
 
 const InputIcon = styled.div`
   position: absolute;
-  top: ${({ isClearIcon }) => (isClearIcon ? '12px' : '13px')};
+  top: ${({ isClearIcon }) => (isClearIcon ? '10px' : '13px')};
   cursor: pointer;
   ${({ iconPosition }) => {
     if (iconPosition === 'left') {
       return left;
-    } else if (iconPosition === 'right') {
+    }
+    if (iconPosition === 'right') {
       return right;
     }
     return null;
