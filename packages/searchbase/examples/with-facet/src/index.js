@@ -85,7 +85,7 @@ filterComponent.triggerDefaultQuery();
 
 filterComponent.subscribeToStateChanges(
   change => {
-    const aggregations = change.aggregations.next;
+    const aggregations = change.aggregationData.next;
     const container = document.getElementById('language-filter');
     container.innerHTML = '';
     aggregations.data.forEach(i => {
