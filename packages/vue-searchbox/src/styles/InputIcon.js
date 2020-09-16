@@ -32,19 +32,19 @@ const paddingRight = css`
 const InputIcon = styled('div')`
   position: absolute;
   ${({ isClearIcon }) => {
-		if (isClearIcon) return topClear;
-		return topSearch;
-	}}
+    if (isClearIcon) return topClear;
+    return topSearch;
+  }}
   cursor: pointer;
   ${({ iconPosition }) => {
-    if (iconPosition === 'left') {
-      return left;
-    }
-		if (iconPosition === 'right') {
-      return right;
-    }
-    return null;
-  }};
+		if (iconPosition === 'left') {
+			return left;
+		}
+    if (iconPosition === 'right') {
+			return right;
+		}
+		return null;
+	}};
   ${({ clearIcon }) => clearIcon && clear};
   ${({ showIcon }) => !showIcon && paddingRight};
 
