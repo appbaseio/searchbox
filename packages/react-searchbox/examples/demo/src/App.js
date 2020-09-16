@@ -44,7 +44,7 @@ export default () => (
             weight: 3
           }
         ]}
-        title="Search"
+        title="Search Books"
         placeholder="Search for Books"
         autosuggest={true}
         defaultSuggestions={[
