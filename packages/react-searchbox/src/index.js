@@ -33,7 +33,7 @@ class SearchBoxWithStyle extends React.Component {
   }
 }
 
-export  {
+export {
   SearchContext,
   SearchBoxWithStyle as SearchBox,
   SearchBase,

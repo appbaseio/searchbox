@@ -59,9 +59,9 @@ export class Component extends Base {
 
   showMissing: boolean;
 
-  defaultQuery: (component: Component) => void;
+  defaultQuery: (component: Component) => Object;
 
-  customQuery: (component: Component) => void;
+  customQuery: (component: Component) => Object;
 
   execute: boolean;
 
