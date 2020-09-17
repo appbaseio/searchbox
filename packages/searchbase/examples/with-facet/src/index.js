@@ -78,7 +78,7 @@ resultComponent.subscribeToStateChanges(
       </div>
     </div>`;
     });
-    resultElement.innerHTML = items.join('<br>');
+    resultElement.innerHTML = items.join('');
   },
   ['results']
 );
