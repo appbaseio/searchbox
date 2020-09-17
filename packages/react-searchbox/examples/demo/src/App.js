@@ -58,6 +58,7 @@ export default () => (
           }
         ]}
         size={10}
+        debounce={100}
         queryFormat="or"
         fuzziness="AUTO"
         showClear

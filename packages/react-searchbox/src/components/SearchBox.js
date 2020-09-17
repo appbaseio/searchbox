@@ -206,12 +206,19 @@ class SearchBox extends React.Component {
       onChange(value, this.triggerQuery, rest.event);
     } else {
       this.setState({ isOpen });
-      if (debounce > 0)
+      if (debounce > 0) {
         this.componentInstance.setValue(value, {
           triggerDefaultQuery: false,
-          triggerCustomQuery: rest.triggerCustomQuery,
+          triggerCustomQuery: false,
           stateChanges: true
         });
+        debounceFunc(() => {
+          this.componentInstance.triggerDefaultQuery();
+          if (rest.triggerCustomQuery) {
+            this.componentInstance.triggerCustomQuery();
+          }
+        }, debounce);
+      }
       this.triggerSuggestionsQuery(value, rest.triggerCustomQuery);
     }
   };
