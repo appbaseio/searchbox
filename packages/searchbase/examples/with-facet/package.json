@@ -4,7 +4,7 @@
   "description": "Searchbase example with a facet",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html --open  --port 8010",
+    "start": "parcel index.html --open  --port 8000",
     "build": "parcel build index.html"
   },
   "dependencies": {
