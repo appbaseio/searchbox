@@ -110,3 +110,8 @@ p {
   margin: 0;
   color: #9d9d9d;
 }
+
+.loading {
+  text-align: center;
+  padding: 10px;
+}

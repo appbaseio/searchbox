@@ -17,6 +17,7 @@ document.body.innerHTML = `
       <div class="filter" id="language-filter">
       </div>
       <div id="results">
+        <div class="loading">Loading results... </div>
       </div>
     </div>
   </div>
