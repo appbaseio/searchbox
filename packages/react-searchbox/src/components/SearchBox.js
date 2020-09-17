@@ -18,7 +18,7 @@ import {
   wholeNumber,
   dataFieldValidator
 } from '../utils/types';
-import Component from './Component';
+import SearchComponent from './SearchComponent';
 import Input from '../styles/Input';
 import Title from '../styles/Title';
 import {
@@ -107,7 +107,7 @@ class SearchBox extends React.Component {
 
   get suggestionsList() {
     const { defaultSuggestions } = this.props;
-    if (!this.componentInstance.value) {
+    if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
     const suggestions = this.componentInstance.suggestions;
@@ -419,6 +419,7 @@ class SearchBox extends React.Component {
       size
     } = this.props;
     const currentValue = this.componentInstance.value || '';
+    console.log('THIS IS SUGGESTOIS', this.suggestionsList);
     return (
       <div style={style} className={className}>
         {title && (
@@ -643,7 +644,7 @@ SearchBox.defaultProps = {
 };
 
 export default props => (
-  <Component
+  <SearchComponent
     subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
     triggerQueryOnInit={false}
     value="" // Init value as empty
@@ -657,5 +658,5 @@ export default props => (
         results={results}
       />
     )}
-  </Component>
+  </SearchComponent>
 );

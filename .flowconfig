@@ -1,5 +1,6 @@
 [ignore]
 .*/node_modules/@parcel.*
+packages/react-searchbox
 
 [include]
 packages/searchbase/src

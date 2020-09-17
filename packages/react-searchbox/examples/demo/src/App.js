@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SearchBox, SearchBase, Component } from '@appbaseio/react-searchbox';
+import { SearchBox, SearchBase, SearchComponent } from '@appbaseio/react-searchbox';
 import './styles.css';
 
 export default () => (
@@ -70,7 +70,7 @@ export default () => (
       />
       <div className="row">
         <div className="col">
-          <Component
+          <SearchComponent
             id="author-filter"
             type="term"
             dataField="authors.keyword"
@@ -121,7 +121,7 @@ export default () => (
         </div>
 
         <div className="col">
-          <Component
+          <SearchComponent
             id="result-component"
             highlight
             dataField="original_title"
@@ -198,7 +198,7 @@ export default () => (
                 </div>
               );
             }}
-          </Component>
+          </SearchComponent>
         </div>
       </div>
     </div>

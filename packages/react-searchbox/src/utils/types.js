@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 export const string = PropTypes.string;
+export const stringRequired = PropTypes.string.isRequired;
 export const bool = PropTypes.bool;
 export const object = PropTypes.object;
 export const array = PropTypes.array;
@@ -24,12 +25,18 @@ export const dataField = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.oneOfType([string, DataField]))
 ]);
 
-export const reactType = PropTypes.oneOfType([
+const reactKeyType = PropTypes.oneOfType([
   string,
   PropTypes.arrayOf(string),
   object,
   PropTypes.arrayOf(object)
 ]);
+
+export const reactType = PropTypes.shape({
+  and: reactKeyType,
+  or: reactKeyType,
+  not: reactKeyType
+});
 
 export const react = PropTypes.shape({
   and: reactType,

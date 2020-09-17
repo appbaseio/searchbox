@@ -14,7 +14,8 @@ import {
   reactType,
   fuzziness as fuzzinessDef,
   bool,
-  number
+  number,
+  stringRequired
 } from '../utils/types';
 import {
   getComponent,
@@ -23,7 +24,7 @@ import {
 } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider';
 
-class Component extends React.Component {
+class SearchComponent extends React.Component {
   static contextType = SearchContext;
 
   constructor(props, context) {
@@ -178,7 +179,7 @@ class Component extends React.Component {
   }
 }
 
-Component.defaultProps = {
+SearchComponent.defaultProps = {
   subscribeTo: [
     'results',
     'aggregationData',
@@ -191,7 +192,7 @@ Component.defaultProps = {
   URLParams: false
 };
 
-Component.propTypes = {
+SearchComponent.propTypes = {
   index: string,
   url: string,
   credentials: string,
@@ -203,7 +204,7 @@ Component.propTypes = {
   enableQuerySuggestions: bool,
   URLParams: bool,
   // RS API properties
-  id: string.isRequired,
+  id: stringRequired,
   value: any,
   type: queryTypes,
   react: reactType,
@@ -262,4 +263,4 @@ Component.propTypes = {
   onMicStatusChange: func
 };
 
-export default Component;
+export default SearchComponent;

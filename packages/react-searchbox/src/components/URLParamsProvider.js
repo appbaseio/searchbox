@@ -1,6 +1,6 @@
 import React from 'react';
-import { string } from 'prop-types';
 import { SearchContext, checkValidValue, isEqual } from '../utils/helper';
+import { stringRequired } from '../utils/types';
 
 class URLParamsProvider extends React.Component {
   static contextType = SearchContext;
@@ -127,7 +127,7 @@ class URLParamsProvider extends React.Component {
 }
 
 URLParamsProvider.propTypes = {
-  id: string.isRequired
+  id: stringRequired
 };
 
 export default URLParamsProvider;

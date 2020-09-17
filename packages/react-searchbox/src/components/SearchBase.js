@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchBase as Headless } from '@appbaseio/searchbase';
-import { appbaseConfig, func, object, string } from '../utils/types';
+import { appbaseConfig, func, object, stringRequired } from '../utils/types';
 import { SearchContext } from '../utils/helper';
 
 class SearchBase extends React.Component {
@@ -41,9 +41,9 @@ class SearchBase extends React.Component {
 }
 
 SearchBase.propTypes = {
-  index: string.isRequired,
-  url: string,
-  credentials: string.isRequired,
+  index: stringRequired,
+  url: stringRequired,
+  credentials: stringRequired,
   headers: object,
   appbaseConfig: appbaseConfig,
   transformRequest: func,
