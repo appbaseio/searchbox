@@ -25,7 +25,8 @@ import {
   flatReactProp,
   getSuggestions,
   querySuggestionFields,
-  isEqual
+  isEqual,
+  searchBaseMappings
 } from './utils';
 
 type QueryType =
@@ -63,13 +64,13 @@ const REQUEST_STATUS = {
 const suggestionQueryID = 'DataSearch__suggestions';
 
 /**
- * Component class is responsible for the following things:
+ * SearchComponent class is responsible for the following things:
  * - It provides the methods to trigger the query
  * - It maintains the request state for e.g loading, error etc.
  * - It handles the `custom` and `default` queries
- * - Basically the Component class provides all the utilities to build any ReactiveSearch component
+ * - Basically the SearchComponent class provides all the utilities to build any ReactiveSearch component
  */
-class Component extends Base {
+class SearchComponent extends Base {
   // RS API properties
   id: string;
 
@@ -123,9 +124,9 @@ class Component extends Base {
 
   showMissing: boolean;
 
-  defaultQuery: (component: Component) => void;
+  defaultQuery: (component: SearchComponent) => void;
 
-  customQuery: (component: Component) => void;
+  customQuery: (component: SearchComponent) => void;
 
   execute: boolean;
 
@@ -384,7 +385,7 @@ class Component extends Base {
       return [];
     }
     if (this.results) {
-      let fields = getNormalizedField(this.dataField);
+      let fields = getNormalizedField(this.dataField) || [];
       if (
         fields.length === 0 &&
         this.results.data &&
@@ -459,6 +460,15 @@ class Component extends Base {
       return this._queryId;
     }
     return '';
+  }
+
+  get mappedProps(): Object {
+    const mappedProps = {};
+    Object.keys(searchBaseMappings).forEach(key => {
+      // $FlowFixMe
+      mappedProps[searchBaseMappings[key]] = this[key];
+    });
+    return mappedProps;
   }
 
   /* -------- Public methods -------- */
@@ -601,7 +611,7 @@ class Component extends Base {
 
   // Method to set the default query
   setDefaultQuery = (
-    defaultQuery: (component: Component) => void,
+    defaultQuery: (component: SearchComponent) => void,
     options?: Options = defaultOptions
   ): void => {
     const prev = this.defaultQuery;
@@ -611,7 +621,7 @@ class Component extends Base {
 
   // Method to set the custom query
   setCustomQuery = (
-    customQuery: (component: Component) => void,
+    customQuery: (component: SearchComponent) => void,
     options?: Options = defaultOptions
   ): void => {
     const prev = this.customQuery;
@@ -1138,4 +1148,4 @@ class Component extends Base {
   };
 }
 
-export default Component;
+export default SearchComponent;

@@ -1,6 +1,6 @@
 // @flow
 
 import SearchBase from './SearchBase';
-import Component from './Component';
+import SearchComponent from './SearchComponent';
 
-export { SearchBase, Component };
+export { SearchBase, SearchComponent };

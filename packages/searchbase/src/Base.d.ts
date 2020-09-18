@@ -1,7 +1,7 @@
 import { AppbaseSettings, BaseConfig } from './types';
 
 /**
- * Base class is the abstract class for SearchBase and Component classes.
+ * Base class is the abstract class for SearchBase and SearchComponent classes.
  */
 
 declare abstract class Base {

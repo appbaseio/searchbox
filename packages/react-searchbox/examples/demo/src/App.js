@@ -82,10 +82,10 @@ export default () => (
             }}
             // To initialize with default value
             value={[]}
-            render={({ aggregationData, requestPending, value, setValue }) => {
+            render={({ aggregationData, loading, value, setValue }) => {
               return (
                 <div className="filter-container">
-                  {requestPending ? (
+                  {loading ? (
                     <div>Loading Filters ...</div>
                   ) : (
                     aggregationData.data.map(item => (
@@ -130,10 +130,10 @@ export default () => (
               and: ['search-component', 'author-filter']
             }}
           >
-            {({ results, requestPending }) => {
+            {({ results, loading }) => {
               return (
                 <div className="result-list-container">
-                  {requestPending ? (
+                  {loading ? (
                     <div>Loading Results ...</div>
                   ) : (
                     <div>

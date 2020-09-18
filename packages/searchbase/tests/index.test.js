@@ -1,6 +1,6 @@
 const {
   SearchBase,
-  Component
+  SearchComponent
 } = require('./../dist/@appbaseio/searchbase.cjs');
 
 const index = 'gitxplore-latest-app';
@@ -31,10 +31,10 @@ describe('SearchBase instance: Error reporting', () => {
   });
 });
 
-describe('Component instance: inheritance testing', () => {
+describe('SearchComponent instance: inheritance testing', () => {
   test('component credentials (index, url, credentials)', () => {
     /* eslint-disable-next-line */
-    const component = new Component({
+    const component = new SearchComponent({
       index,
       url,
       credentials,
@@ -76,7 +76,7 @@ describe('Component instance: inheritance testing', () => {
   });
 });
 
-describe('Component: test query generation', () => {
+describe('SearchComponent: test query generation', () => {
   test('RS API: test raw(default) query generation', () => {
     const searchbase = new SearchBase({
       index,
