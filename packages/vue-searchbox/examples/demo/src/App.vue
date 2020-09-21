@@ -107,7 +107,7 @@
             >
               <div
                 class="result-list-container"
-                slot-scope="{ loading, error, results, size, setFrom }"
+                slot-scope="{ loading, error, results, size, from, setFrom }"
               >
                 <div v-if="loading">Fetching Results ....</div>
                 <div v-if="Boolean(error)">
@@ -161,6 +161,7 @@
                   <div class="pagination-wrapper">
                     <paginate
                       v-if="results.numberOfResults"
+                      :value="Math.ceil(from / size) + 1"
                       :page-count="Math.ceil(results.numberOfResults / size)"
                       :click-handler="page => setFrom((page - 1) * size)"
                       :prev-text="'Prev'"
