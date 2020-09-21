@@ -73,7 +73,7 @@ export default () => (
         className="custom-class"
         enableQuerySuggestions
         iconPosition="left"
-        style={{ padding: 10 }}
+        style={{ paddingBottom: 10 }}
       />
       <div className="row">
         <div className="col">
