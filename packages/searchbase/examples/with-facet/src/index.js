@@ -79,7 +79,8 @@ resultComponent.subscribeToStateChanges(
       </div>
     </div>`;
     });
-    resultElement.innerHTML = items.join('');
+    const resultStats = `<p class="results-stats">Showing ${results.numberOfResults} in ${results.time}ms <p>`;
+    resultElement.innerHTML = `${resultStats} <br/ >${items.join('')}`;
   },
   ['results']
 );

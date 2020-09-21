@@ -115,3 +115,8 @@ p {
   text-align: center;
   padding: 10px;
 }
+
+.results-stats {
+  text-align: center;
+  padding-top: 20px;
+}
