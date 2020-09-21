@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { SearchBox, SearchBase, SearchComponent } from '@appbaseio/react-searchbox';
+import {
+  SearchBox,
+  SearchBase,
+  SearchComponent
+} from '@appbaseio/react-searchbox';
+import ReactPaginate from 'react-paginate';
+
 import './styles.css';
 
 export default () => (
@@ -126,11 +132,12 @@ export default () => (
             id="result-component"
             highlight
             dataField="original_title"
+            size={10}
             react={{
               and: ['search-component', 'author-filter']
             }}
           >
-            {({ results, requestPending }) => {
+            {({ results, requestPending, size, setValue, setFrom }) => {
               return (
                 <div className="result-list-container">
                   {requestPending ? (
@@ -196,6 +203,28 @@ export default () => (
                       ))}
                     </div>
                   )}
+                  <ReactPaginate
+                    pageCount={Math.floor(results.numberOfResults / size)}
+                    onPageChange={({ selected }) =>
+                      setFrom((selected + 1) * size)
+                    }
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    subContainerClassName={'pages pagination'}
+                    breakLinkClassName={'page-link'}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    pageLinkClassName={'page-link'}
+                    previousClassName={'page-item'}
+                    previousLinkClassName={'page-link'}
+                    nextClassName={'page-item'}
+                    nextLinkClassName={'page-link'}
+                    activeClassName={'active'}
+                  />
                 </div>
               );
             }}
