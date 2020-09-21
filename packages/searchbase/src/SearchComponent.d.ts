@@ -200,6 +200,10 @@ export class SearchComponent extends Base {
 
   // Method to set the from option
   setFrom(from: number, options?: types.Options): void;
+
+  // Method to set the after key for composite aggs pagination
+  setAfter(after: Object, options?: types.Options): void;
+
   // Method to set the fuzziness option
   setFuzziness(fuzziness: number | string, options?: types.Options): void;
 

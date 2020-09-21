@@ -629,6 +629,13 @@ class SearchComponent extends Base {
     this._applyOptions(options, 'customQuery', prev, customQuery);
   };
 
+  // Method to set the after key for composite aggs pagination
+  setAfter = (after: Object, options?: Options = defaultOptions): void => {
+    const prev = this.after;
+    this.after = after;
+    this._applyOptions(options, 'after', prev, after);
+  };
+
   // Method to execute the component's own query i.e default query
   triggerDefaultQuery = (options?: Option = defaultOption): Promise<any> => {
     // To prevent duplicate queries
@@ -713,6 +720,7 @@ class SearchComponent extends Base {
 
   // Method to execute the query for watcher components
   triggerCustomQuery = (options?: Option = defaultOption): Promise<any> => {
+    // Generate query again after resetting changes
     const { requestBody, orderOfQueries } = this._generateQuery();
     if (requestBody.length) {
       if (isEqual(this._query, requestBody)) {
@@ -730,13 +738,34 @@ class SearchComponent extends Base {
         orderOfQueries.forEach(id => {
           const componentInstance = this._parent.getComponent(id);
           if (componentInstance) {
+            // Reset value for dependent components
+            componentInstance.setValue(undefined, {
+              stateChanges: true,
+              triggerDefaultQuery: false,
+              triggerCustomQuery: false
+            });
+            // Reset `from` and `after` values
+            componentInstance.setFrom(0, {
+              stateChanges: true,
+              triggerDefaultQuery: false,
+              triggerCustomQuery: false
+            });
+
+            componentInstance.setAfter(undefined, {
+              stateChanges: true,
+              triggerDefaultQuery: false,
+              triggerCustomQuery: false
+            });
+
             componentInstance._setRequestStatus(REQUEST_STATUS.pending);
             // Update the query
             componentInstance._updateQuery();
           }
         });
+        // Re-generate query after changes
+        const { requestBody: finalRequest } = this._generateQuery();
         return this._fetchRequest({
-          query: requestBody,
+          query: finalRequest,
           settings: this.appbaseSettings
         })
           .then(results => {
@@ -749,12 +778,6 @@ class SearchComponent extends Base {
                 const prev = componentInstance.results;
                 // Collect results from the response for a particular component
                 let rawResults = results && results[id];
-                // Reset value for dependent components
-                componentInstance.setValue(undefined, {
-                  stateChanges: true,
-                  triggerDefaultQuery: false,
-                  triggerCustomQuery: false
-                });
                 // Set results
                 if (rawResults.hits) {
                   componentInstance.results.setRaw(rawResults);
