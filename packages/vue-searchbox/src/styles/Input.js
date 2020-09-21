@@ -1,5 +1,5 @@
-import { css } from "emotion";
-import styled from "@appbaseio/vue-emotion";
+import { css } from 'emotion';
+import styled from '@appbaseio/vue-emotion';
 
 const input = css`
   width: 100%;
@@ -20,32 +20,32 @@ const Input = styled('input')`
   ${input}
 
   ${props =>
-    props.showIcon &&
-    props.iconPosition === "left" &&
-    css`
+		props.showIcon
+    && props.iconPosition === 'left'
+    && css`
       padding-left: 32px;
     `};
 
   ${props =>
-    props.showIcon &&
-    props.iconPosition === "right" &&
-    css`
+		props.showIcon
+    && props.iconPosition === 'right'
+    && css`
       padding-right: 32px;
     `};
 
   ${props =>
-    // for clear icon
-    props.showClear &&
-    css`
+	// for clear icon
+		props.showClear
+    && css`
       padding-right: 32px;
     `};
 
   ${props =>
-    // for clear icon with search icon
-    props.showClear &&
-    props.showIcon &&
-    props.iconPosition === "right" &&
-    css`
+	// for clear icon with search icon
+		props.showClear
+    && props.showIcon
+    && props.iconPosition === 'right'
+    && css`
       padding-right: 48px;
     `};
 `;

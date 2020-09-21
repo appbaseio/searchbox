@@ -9,7 +9,8 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-paginate": "^6.5.0",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^1.1.4",
+    "@appbaseio/react-searchbox": "1.1.0-beta.4"
   },
   "scripts": {
     "start": "react-scripts start",

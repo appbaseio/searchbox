@@ -4,7 +4,7 @@ import { errorMessages } from './utils';
 import type { AppbaseSettings, BaseConfig } from './types';
 
 /**
- * Base class is the abstract class for SearchBase and Component classes.
+ * Base class is the abstract class for SearchBase and SearchComponent classes.
  */
 
 class Base {

@@ -1,7 +1,7 @@
-import computeScrollIntoView from "compute-scroll-into-view";
+import computeScrollIntoView from 'compute-scroll-into-view';
 
 export const getClassName = (classMap, component) =>
-  (classMap && classMap[component]) || "";
+	(classMap && classMap[component]) || '';
 
 /**
  * To determine wether an element is a function
@@ -9,26 +9,26 @@ export const getClassName = (classMap, component) =>
  */
 
 export const equals = (a, b) => {
-  if (a === b) return true;
-  if (!a || !b || (typeof a !== "object" && typeof b !== "object"))
-    return a === b;
-  if (a === null || a === undefined || b === null || b === undefined)
-    return false;
-  if (a.prototype !== b.prototype) return false;
-  let keys = Object.keys(a);
-  if (keys.length !== Object.keys(b).length) return false;
-  return keys.every(k => equals(a[k], b[k]));
+	if (a === b) return true;
+	if (!a || !b || (typeof a !== 'object' && typeof b !== 'object'))
+		return a === b;
+	if (a === null || a === undefined || b === null || b === undefined)
+		return false;
+	if (a.prototype !== b.prototype) return false;
+	const keys = Object.keys(a);
+	if (keys.length !== Object.keys(b).length) return false;
+	return keys.every(k => equals(a[k], b[k]));
 };
 
 export const debounce = (fn, delay) => {
-  let timer = null;
-  return function(...args) {
-    const context = this;
-    timer && clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn.apply(context, args);
-    }, delay);
-  };
+	let timer = null;
+	return function(...args) {
+		const context = this;
+		timer && clearTimeout(timer);
+		timer = setTimeout(() => {
+			fn.apply(context, args);
+		}, delay);
+	};
 };
 
 /**
@@ -38,43 +38,25 @@ export const debounce = (fn, delay) => {
  */
 // eslint-disable-next-line // for downshift
 export const scrollIntoView = (node, rootNode) => {
-  if (node === null) {
-    return;
-  }
+	if (node === null) {
+		return;
+	}
 
-  const actions = computeScrollIntoView(node, {
-    boundary: rootNode,
-    block: "nearest",
-    scrollMode: "if-needed"
-  });
-  actions.forEach(({ el, top, left }) => {
-    el.scrollTop = top;
-    el.scrollLeft = left;
-  });
+	const actions = computeScrollIntoView(node, {
+		boundary: rootNode,
+		block: 'nearest',
+		scrollMode: 'if-needed'
+	});
+	actions.forEach(({ el, top, left }) => {
+		el.scrollTop = top;
+		el.scrollLeft = left;
+	});
 };
 
 // escapes regex for special characters: \ => \\, $ => \$
 export function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
-
-export const getURLParameters = url => {
-  const keyVal = {};
-  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-    key = decodeURIComponent(key);
-    value = decodeURIComponent(value);
-    keyVal[key] = value;
-  });
-  return keyVal;
-};
-
-export const isEmpty = val => !(val && val.length && Object.keys(val).length);
-
-export const withClickIds = (results = []) =>
-  results.map((result, index) => ({
-    ...result,
-    _click_id: index + 1
-  }));
 
 /**
  * Extracts the renderQuerySuggestions prop from props or slot and returns a valid JSX element
@@ -82,17 +64,17 @@ export const withClickIds = (results = []) =>
  * @param _ref
  */
 export const getQuerySuggestionsComponent = (data = {}, _ref = {}) => {
-  const { renderQuerySuggestions } = _ref.$scopedSlots || _ref.$props;
-  if (renderQuerySuggestions) return renderQuerySuggestions(data);
-  return null;
+	const { renderQuerySuggestions } = _ref.$scopedSlots || _ref.$props;
+	if (renderQuerySuggestions) return renderQuerySuggestions(data);
+	return null;
 };
 /**
  * To determine whether a component has renderQuerySuggestions prop or slot defined or not
  * @returns {Boolean}
  */
 export const hasQuerySuggestionsRenderer = (_ref = {}) => {
-  const { renderQuerySuggestions } = _ref.$scopedSlots || _ref.$props;
-  return Boolean(renderQuerySuggestions);
+	const { renderQuerySuggestions } = _ref.$scopedSlots || _ref.$props;
+	return Boolean(renderQuerySuggestions);
 };
 
 /**
@@ -101,15 +83,58 @@ export const hasQuerySuggestionsRenderer = (_ref = {}) => {
  * @param _ref
  */
 export const getComponent = (data = {}, _ref = {}) => {
-  const { render } = _ref.$scopedSlots || _ref.$props;
-  if (render) return render(data);
-  return null;
+	const { render } = _ref.$scopedSlots || _ref.$props;
+	if (render) return render(data);
+	return null;
 };
 /**
  * To determine whether a component has render prop or slot defined or not
  * @returns {Boolean}
  */
 export const hasCustomRenderer = (_ref = {}) => {
-  const { render } = _ref.$scopedSlots || _ref.$props;
-  return Boolean(render);
+	const { render } = _ref.$scopedSlots || _ref.$props;
+	return Boolean(render);
+};
+
+export function isEqual(x, y) {
+	if (x === y) return true;
+	if (!(x instanceof Object) || !(y instanceof Object)) return false;
+	if (x.constructor !== y.constructor) return false;
+
+	/* eslint-disable */
+  for (const p in x) {
+    if (!x.hasOwnProperty(p)) continue;
+    if (!y.hasOwnProperty(p)) return false;
+    if (x[p] === y[p]) continue;
+    if (typeof x[p] !== 'object') return false;
+    if (!isEqual(x[p], y[p])) return false;
+  }
+
+  for (const p in y) {
+    if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
+  }
+  /* eslint-enable */
+	return true;
+}
+
+export const checkValidValue = value => {
+	if (value) {
+		if (Array.isArray(value) && !value.length) return false;
+		return true;
+	}
+	return false;
+};
+
+/**
+ * To get the camel case string from kebab case
+ * @returns {string}
+ */
+export const getCamelCase = (str = '') => {
+	const arr = str.split('-');
+	const capital = arr.map((item, index) =>
+		index ? item.charAt(0).toUpperCase() + item.slice(1).toLowerCase() : item
+	);
+	// ^-- change here.
+	const capitalString = capital.join('');
+	return capitalString || '';
 };

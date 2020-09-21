@@ -25,6 +25,18 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
+"@appbaseio/vue-searchbox@1.1.0-beta":
+  version "1.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.1.0-beta.tgz#d6b176d55fc7c7e5a437fd4c648f306c3164f886"
+  integrity sha512-gJu71s1kUAmg3NJMaK14a+DUgGQtraxhuYEDHnIjHtO8G27gKVR8WedadBDpXEgiEOrO8TiQrdj0s6DfQGa/Mg==
+  dependencies:
+    "@appbaseio/searchbase" "1.1.0-beta"
+    "@appbaseio/vue-emotion" "^0.4.4"
+    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
+    compute-scroll-into-view "^1.0.11"
+    emotion "9.2.12"
+    vue-types "^1.6.0"
+
 "@babel/code-frame@7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
@@ -20444,6 +20456,11 @@ vue@^2.6.10:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+
+vuejs-paginate@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/vuejs-paginate/-/vuejs-paginate-2.1.0.tgz#93e1ad1539b713a688c7a2d3080bda60fcc6c77d"
+  integrity sha512-gnwyXlmCiDOu9MLWxN5UJ4PGijKGNOMpHG8ujsrynCzTJljn/rp7Jq0WiDGDAMi5/u0AHuYIHhced+tUW4jblA==
 
 w3c-hr-time@^1.0.1, w3c-hr-time@^1.0.2:
   version "1.0.2"

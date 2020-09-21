@@ -88,10 +88,10 @@ export default () => (
             }}
             // To initialize with default value
             value={[]}
-            render={({ aggregationData, requestPending, value, setValue }) => {
+            render={({ aggregationData, loading, value, setValue }) => {
               return (
                 <div className="filter-container">
-                  {requestPending ? (
+                  {loading ? (
                     <div>Loading Filters ...</div>
                   ) : (
                     aggregationData.data.map(item => (
@@ -137,10 +137,17 @@ export default () => (
               and: ['search-component', 'author-filter']
             }}
           >
-            {({ results, requestPending, size, setValue, setFrom }) => {
+            {({
+              results,
+              loading,
+              requestPending,
+              size,
+              setValue,
+              setFrom
+            }) => {
               return (
                 <div className="result-list-container">
-                  {requestPending ? (
+                  {loading ? (
                     <div>Loading Results ...</div>
                   ) : (
                     <div>
@@ -186,7 +193,7 @@ export default () => (
                                           className="fas fa-star"
                                           key={item._id + `_${index}`}
                                         />
-                              )) // eslint-disable-line
+                                      )) // eslint-disable-line
                                     }
                                   </span>
                                   <span className="avg-rating">

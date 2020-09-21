@@ -1,5 +1,5 @@
 // @flow
-import Component from './Component';
+import SearchComponent from './SearchComponent';
 import Base from './Base';
 import { errorMessages } from './utils';
 import type { SearchBaseConfig } from './types.js.flow';
@@ -11,7 +11,7 @@ import type { SearchBaseConfig } from './types.js.flow';
 class SearchBase extends Base {
   /* ------ Private properties only for the internal use ----------- */
   // active components
-  _components: { [string]: Component };
+  _components: { [string]: SearchComponent };
 
   constructor({
     index,
@@ -33,15 +33,15 @@ class SearchBase extends Base {
   // To register a component
   register = (
     componentId: string,
-    component: Component | Object
-  ): Component => {
+    component: SearchComponent | Object
+  ): SearchComponent => {
     if (!componentId) {
       throw new Error(errorMessages.invalidComponentId);
     }
     let componentInstance = component;
-    if (component && !(component instanceof Component)) {
+    if (component && !(component instanceof SearchComponent)) {
       // create instance from object with all the options
-      componentInstance = new Component({
+      componentInstance = new SearchComponent({
         ...component,
         id: componentId,
         index: component.index || this.index,
@@ -70,12 +70,12 @@ class SearchBase extends Base {
   };
 
   // To get component instance
-  getComponent = (componentId: string): Component => {
+  getComponent = (componentId: string): SearchComponent => {
     return this._components[componentId];
   };
 
   // To get the list of registered components
-  getComponents = (): { [string]: Component } => {
+  getComponents = (): { [string]: SearchComponent } => {
     return this._components;
   };
 }

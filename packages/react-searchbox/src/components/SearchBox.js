@@ -245,7 +245,11 @@ class SearchBox extends React.Component {
   handleSearchIconClick = () => {
     const currentValue = this.componentInstance.value;
     if (currentValue.trim()) {
-      this.setValue({ value: currentValue, isOpen: false });
+      this.setValue({
+        value: currentValue,
+        isOpen: false,
+        triggerCustomQuery: true
+      });
       this.onValueSelected(currentValue, causes.SEARCH_ICON_CLICK);
     }
   };
@@ -652,10 +656,10 @@ SearchBox.defaultProps = {
 
 export default props => (
   <SearchComponent
-    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
     triggerQueryOnInit={false}
     value="" // Init value as empty
     {...props}
+    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
   >
     {({ error, requestPending, results, value }) => (
       <SearchBox

@@ -5,7 +5,7 @@ import Results from './Results';
 import Aggregations from './Aggregations';
 import SearchBase from './SearchBase';
 
-export class Component extends Base {
+export class SearchComponent extends Base {
   // RS API properties
   id: string;
 
@@ -59,9 +59,9 @@ export class Component extends Base {
 
   showMissing: boolean;
 
-  defaultQuery: (component: Component) => Object;
+  defaultQuery: (component: SearchComponent) => Object;
 
-  customQuery: (component: Component) => Object;
+  customQuery: (component: SearchComponent) => Object;
 
   execute: boolean;
 
@@ -176,7 +176,7 @@ export class Component extends Base {
   // Method to get the raw query based on the current state
   componentQuery: Object;
 
-  queryId(): string;
+  queryId: string;
 
   /* -------- Public methods -------- */
 
@@ -200,6 +200,10 @@ export class Component extends Base {
 
   // Method to set the from option
   setFrom(from: number, options?: types.Options): void;
+
+  // Method to set the after key for composite aggs pagination
+  setAfter(after: Object, options?: types.Options): void;
+
   // Method to set the fuzziness option
   setFuzziness(fuzziness: number | string, options?: types.Options): void;
 
@@ -217,13 +221,13 @@ export class Component extends Base {
 
   // Method to set the default query
   setDefaultQuery(
-    defaultQuery: (component: Component) => void,
+    defaultQuery: (component: SearchComponent) => void,
     options?: types.Options
   ): void
 
   // Method to set the custom query
   setCustomQuery(
-    customQuery: (component: Component) => void,
+    customQuery: (component: SearchComponent) => void,
     options?: types.Options
   ): void
 
@@ -251,4 +255,4 @@ export class Component extends Base {
   unsubscribeToStateChanges(fn?: Function): void;
 }
 
-export default Component;
+export default SearchComponent;

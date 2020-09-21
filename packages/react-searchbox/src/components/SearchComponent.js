@@ -165,28 +165,21 @@ class SearchComponent extends React.Component {
 
   render() {
     const { id, URLParams } = this.props;
-    if (this.hasCustomRenderer) {
+    if (this.hasCustomRenderer && this.componentInstance) {
       if (URLParams) {
         return (
           <URLParamsProvider id={id}>
-            {getComponent(this.componentInstance, this.props)}
+            {getComponent(this.componentInstance.mappedProps, this.props)}
           </URLParamsProvider>
         );
       }
-      return getComponent(this.componentInstance, this.props);
+      return getComponent(this.componentInstance.mappedProps, this.props);
     }
     return null;
   }
 }
 
 SearchComponent.defaultProps = {
-  subscribeTo: [
-    'results',
-    'aggregationData',
-    'value',
-    'error',
-    'requestStatus'
-  ],
   // Triggers the default query on init
   triggerQueryOnInit: true,
   URLParams: false

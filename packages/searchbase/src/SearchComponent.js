@@ -25,7 +25,8 @@ import {
   flatReactProp,
   getSuggestions,
   querySuggestionFields,
-  isEqual
+  isEqual,
+  searchBaseMappings
 } from './utils';
 
 type QueryType =
@@ -63,13 +64,13 @@ const REQUEST_STATUS = {
 const suggestionQueryID = 'DataSearch__suggestions';
 
 /**
- * Component class is responsible for the following things:
+ * SearchComponent class is responsible for the following things:
  * - It provides the methods to trigger the query
  * - It maintains the request state for e.g loading, error etc.
  * - It handles the `custom` and `default` queries
- * - Basically the Component class provides all the utilities to build any ReactiveSearch component
+ * - Basically the SearchComponent class provides all the utilities to build any ReactiveSearch component
  */
-class Component extends Base {
+class SearchComponent extends Base {
   // RS API properties
   id: string;
 
@@ -123,9 +124,9 @@ class Component extends Base {
 
   showMissing: boolean;
 
-  defaultQuery: (component: Component) => void;
+  defaultQuery: (component: SearchComponent) => void;
 
-  customQuery: (component: Component) => void;
+  customQuery: (component: SearchComponent) => void;
 
   execute: boolean;
 
@@ -384,7 +385,7 @@ class Component extends Base {
       return [];
     }
     if (this.results) {
-      let fields = getNormalizedField(this.dataField);
+      let fields = getNormalizedField(this.dataField) || [];
       if (
         fields.length === 0 &&
         this.results.data &&
@@ -459,6 +460,15 @@ class Component extends Base {
       return this._queryId;
     }
     return '';
+  }
+
+  get mappedProps(): Object {
+    const mappedProps = {};
+    Object.keys(searchBaseMappings).forEach(key => {
+      // $FlowFixMe
+      mappedProps[searchBaseMappings[key]] = this[key];
+    });
+    return mappedProps;
   }
 
   /* -------- Public methods -------- */
@@ -601,7 +611,7 @@ class Component extends Base {
 
   // Method to set the default query
   setDefaultQuery = (
-    defaultQuery: (component: Component) => void,
+    defaultQuery: (component: SearchComponent) => void,
     options?: Options = defaultOptions
   ): void => {
     const prev = this.defaultQuery;
@@ -611,12 +621,19 @@ class Component extends Base {
 
   // Method to set the custom query
   setCustomQuery = (
-    customQuery: (component: Component) => void,
+    customQuery: (component: SearchComponent) => void,
     options?: Options = defaultOptions
   ): void => {
     const prev = this.customQuery;
     this.customQuery = customQuery;
     this._applyOptions(options, 'customQuery', prev, customQuery);
+  };
+
+  // Method to set the after key for composite aggs pagination
+  setAfter = (after: Object, options?: Options = defaultOptions): void => {
+    const prev = this.after;
+    this.after = after;
+    this._applyOptions(options, 'after', prev, after);
   };
 
   // Method to execute the component's own query i.e default query
@@ -703,6 +720,7 @@ class Component extends Base {
 
   // Method to execute the query for watcher components
   triggerCustomQuery = (options?: Option = defaultOption): Promise<any> => {
+    // Generate query again after resetting changes
     const { requestBody, orderOfQueries } = this._generateQuery();
     if (requestBody.length) {
       if (isEqual(this._query, requestBody)) {
@@ -720,13 +738,34 @@ class Component extends Base {
         orderOfQueries.forEach(id => {
           const componentInstance = this._parent.getComponent(id);
           if (componentInstance) {
+            // Reset value for dependent components
+            componentInstance.setValue(undefined, {
+              stateChanges: true,
+              triggerDefaultQuery: false,
+              triggerCustomQuery: false
+            });
+            // Reset `from` and `after` values
+            componentInstance.setFrom(0, {
+              stateChanges: true,
+              triggerDefaultQuery: false,
+              triggerCustomQuery: false
+            });
+
+            componentInstance.setAfter(undefined, {
+              stateChanges: true,
+              triggerDefaultQuery: false,
+              triggerCustomQuery: false
+            });
+
             componentInstance._setRequestStatus(REQUEST_STATUS.pending);
             // Update the query
             componentInstance._updateQuery();
           }
         });
+        // Re-generate query after changes
+        const { requestBody: finalRequest } = this._generateQuery();
         return this._fetchRequest({
-          query: requestBody,
+          query: finalRequest,
           settings: this.appbaseSettings
         })
           .then(results => {
@@ -739,12 +778,6 @@ class Component extends Base {
                 const prev = componentInstance.results;
                 // Collect results from the response for a particular component
                 let rawResults = results && results[id];
-                // Reset value for dependent components
-                componentInstance.setValue(undefined, {
-                  stateChanges: true,
-                  triggerDefaultQuery: false,
-                  triggerCustomQuery: false
-                });
                 // Set results
                 if (rawResults.hits) {
                   componentInstance.results.setRaw(rawResults);
@@ -1138,4 +1171,4 @@ class Component extends Base {
   };
 }
 
-export default Component;
+export default SearchComponent;
