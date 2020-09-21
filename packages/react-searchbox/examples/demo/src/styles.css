@@ -164,3 +164,33 @@ body {
 .filter-container {
   line-height: 1.8;
 }
+
+.pagination {
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  border-radius: 0.25rem;
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #007bff;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.page-link:hover {
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+
+li.page-item.active > a {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
