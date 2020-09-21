@@ -164,7 +164,7 @@ const SearchBox = {
 				component.recordClick({ [value]: clickPosition }, isSuggestion);
 			}
 		},
-		onValueSelectedHandler(currentValue = this.$data.currentValue, ...cause) {
+		onValueSelectedHandler(currentValue = this.$props.instanceValue, ...cause) {
 			this.$emit('valueSelected', currentValue, ...cause);
 		},
 		onInputChange(event) {
@@ -248,7 +248,7 @@ const SearchBox = {
 				icon,
 				showIcon
 			} = this.$props;
-			const { instanceValue, micStatus } = this.$data;
+			const { instanceValue, micStatus } = this.$props;
 			return (
 				<Icons
 					clearValue={this.clearValue}
@@ -409,6 +409,7 @@ const SearchBox = {
 										iconPosition={iconPosition}
 										class={getClassName(innerClass, 'input')}
 										placeholder={placeholder}
+										currentValue={instanceValue}
 										{...{
 											on: getInputEvents({
 												onInput: this.onInputChange,
@@ -480,7 +481,7 @@ const SearchBox = {
 															}}
 														>
 															<SuggestionItem
-																currentValue={this.currentValue}
+																currentValue={instanceValue}
 																suggestion={sugg}
 															/>
 														</li>

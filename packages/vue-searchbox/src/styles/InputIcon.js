@@ -14,7 +14,7 @@ const right = css`
 const clear = css`
   padding-right: 32px;
   right: 0;
-  top: 9px;
+  top: 12px;
 `;
 
 const topClear = css`
@@ -32,15 +32,15 @@ const paddingRight = css`
 const InputIcon = styled('div')`
   position: absolute;
   ${({ isClearIcon }) => {
-    if (isClearIcon) return topClear;
-    return topSearch;
-  }}
+		if (isClearIcon) return topClear;
+		return topSearch;
+	}}
   cursor: pointer;
   ${({ iconPosition }) => {
 		if (iconPosition === 'left') {
 			return left;
 		}
-    if (iconPosition === 'right') {
+		if (iconPosition === 'right') {
 			return right;
 		}
 		return null;
