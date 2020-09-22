@@ -8,16 +8,19 @@ const credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
 document.body.innerHTML = `
   <div id="root">
-    <h2>Searchbase Demo with Facet</h2>
+    <h2 class="text-center">Searchbase Demo with Facet</h2>
     <div id="autocomplete" class="autocomplete">
       <input class="autocomplete-input" id="input" />
       <ul class="autocomplete-result-list"></ul>
     </div>
-    <div class="layout">
-      <div class="filter" id="language-filter">
+    <div class="row">
+      <div class="col">
+        <div class="filter" id="language-filter"></div>
       </div>
-      <div id="results">
-        <div class="loading">Loading results... </div>
+      <div class="col">
+        <div id="results">
+          <div class="loading">Loading results... </div>
+        </div>
       </div>
     </div>
   </div>
@@ -79,8 +82,10 @@ resultComponent.subscribeToStateChanges(
       </div>
     </div>`;
     });
-    const resultStats = `<p class="results-stats">Showing ${results.numberOfResults} in ${results.time}ms <p>`;
-    resultElement.innerHTML = `${resultStats} <br/ >${items.join('')}`;
+    const resultStats = `<p class="results-stats">
+                          Showing ${results.numberOfResults} in ${results.time}ms
+                        <p>`;
+    resultElement.innerHTML = `${resultStats}${items.join('')}`;
   },
   ['results']
 );

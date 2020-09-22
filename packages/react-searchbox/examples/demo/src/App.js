@@ -137,14 +137,7 @@ export default () => (
               and: ['search-component', 'author-filter']
             }}
           >
-            {({
-              results,
-              loading,
-              requestPending,
-              size,
-              setValue,
-              setFrom
-            }) => {
+            {({ results, loading, size, setValue, setFrom }) => {
               return (
                 <div className="result-list-container">
                   {loading ? (
@@ -215,22 +208,22 @@ export default () => (
                     onPageChange={({ selected }) =>
                       setFrom((selected + 1) * size)
                     }
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'break-me'}
+                    previousLabel="previous"
+                    nextLabel="next"
+                    breakLabel="..."
+                    breakClassName="break-me"
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
-                    subContainerClassName={'pages pagination'}
-                    breakLinkClassName={'page-link'}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    pageLinkClassName={'page-link'}
-                    previousClassName={'page-item'}
-                    previousLinkClassName={'page-link'}
-                    nextClassName={'page-item'}
-                    nextLinkClassName={'page-link'}
-                    activeClassName={'active'}
+                    subContainerClassName="pages pagination"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    activeClassName="active"
                   />
                 </div>
               );
