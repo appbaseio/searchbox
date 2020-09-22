@@ -18,7 +18,6 @@ class URLParamsProvider extends React.Component {
       if (this.params.has(id)) {
         try {
           this.componentInstance.setValue(JSON.parse(this.params.get(id)), {
-            triggerCustomQuery: true,
             triggerDefaultQuery: true,
             stateChanges: true
           });

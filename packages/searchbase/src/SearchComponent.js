@@ -474,7 +474,14 @@ class SearchComponent extends Base {
   /* -------- Public methods -------- */
 
   // mic click handler
-  onMicClick = (micOptions: Object = {}, options: Options = defaultOptions) => {
+  onMicClick = (
+    micOptions: Object = {},
+    options: Options = {
+      triggerDefaultQuery: false,
+      triggerCustomQuery: false,
+      stateChanges: true
+    }
+  ) => {
     const prevStatus = this._micStatus;
     if (typeof window !== 'undefined') {
       window.SpeechRecognition =
@@ -738,12 +745,6 @@ class SearchComponent extends Base {
         orderOfQueries.forEach(id => {
           const componentInstance = this._parent.getComponent(id);
           if (componentInstance) {
-            // Reset value for dependent components
-            componentInstance.setValue(undefined, {
-              stateChanges: true,
-              triggerDefaultQuery: false,
-              triggerCustomQuery: false
-            });
             // Reset `from` and `after` values
             componentInstance.setFrom(0, {
               stateChanges: true,
@@ -774,6 +775,12 @@ class SearchComponent extends Base {
               const componentInstance = this._parent.getComponent(id);
               if (componentInstance) {
                 componentInstance._setRequestStatus(REQUEST_STATUS.inactive);
+                // Reset value for dependent components
+                componentInstance.setValue(undefined, {
+                  stateChanges: true,
+                  triggerDefaultQuery: false,
+                  triggerCustomQuery: false
+                });
                 // Update the results
                 const prev = componentInstance.results;
                 // Collect results from the response for a particular component
@@ -1124,8 +1131,20 @@ class SearchComponent extends Base {
   _updateQuery(query?: Object): void {
     let prevQuery;
     prevQuery = { ...this._query };
-    // TODO: Generate query based on react prop
-    this._query = query || this.componentQuery;
+    const finalQuery = [this.componentQuery];
+    const flattenReact = flatReactProp(this.react, this.id);
+    flattenReact.forEach(id => {
+      // only add if not present
+      const watcherComponent = this._parent.getComponent(id);
+      if (watcherComponent && watcherComponent.value) {
+        // Set the execute to `false` for watcher components
+        const watcherQuery = watcherComponent.componentQuery;
+        watcherQuery.execute = false;
+        // Add the query to request payload
+        finalQuery.push(watcherQuery);
+      }
+    });
+    this._query = query || finalQuery;
     this._applyOptions(
       {
         stateChanges: false
@@ -1149,7 +1168,11 @@ class SearchComponent extends Base {
       results[0][0].transcript &&
       results[0][0].transcript.trim()
     ) {
-      this.setValue(results[0][0].transcript.trim(), options);
+      this.setValue(results[0][0].transcript.trim(), {
+        ...options,
+        triggerCustomQuery: true,
+        triggerDefaultQuery: true
+      });
     }
   };
 

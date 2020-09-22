@@ -20,15 +20,12 @@ export const equals = (a, b) => {
 	return keys.every(k => equals(a[k], b[k]));
 };
 
-export const debounce = (fn, delay) => {
-	let timer = null;
-	return function(...args) {
-		const context = this;
-		timer && clearTimeout(timer);
-		timer = setTimeout(() => {
-			fn.apply(context, args);
-		}, delay);
-	};
+export const debounce = (method, delay) => {
+	clearTimeout(method._tId);
+	// eslint-disable-next-line
+	method._tId = setTimeout(() => {
+		method();
+	}, delay);
 };
 
 /**
@@ -36,7 +33,7 @@ export const debounce = (fn, delay) => {
  * @param {HTMLElement} node the element that should scroll into view
  * @param {HTMLElement} rootNode the root element of the component
  */
-// eslint-disable-next-line // for downshift
+// eslint-disable-next-line
 export const scrollIntoView = (node, rootNode) => {
 	if (node === null) {
 		return;

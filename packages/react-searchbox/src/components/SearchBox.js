@@ -47,7 +47,7 @@ class SearchBox extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    const { value, defaultValue, debounce } = props;
+    const { value, defaultValue } = props;
     let currentValue = value || defaultValue || '';
 
     this.state = {
@@ -61,11 +61,6 @@ class SearchBox extends React.Component {
         stateChanges: true
       });
     }
-
-    this.triggerSuggestionsQuery = debounceFunc(
-      this.triggerSuggestionsQuery,
-      debounce
-    );
   }
 
   componentDidUpdate(prevProps) {
@@ -196,6 +191,10 @@ class SearchBox extends React.Component {
       });
   };
 
+  triggerDefaultQuery = () => {
+    this.componentInstance && this.componentInstance.triggerDefaultQuery();
+  };
+
   onInputChange = event => {
     this.setValue({ value: event.target.value, event });
   };
@@ -212,14 +211,17 @@ class SearchBox extends React.Component {
           triggerCustomQuery: false,
           stateChanges: true
         });
-        debounceFunc(() => {
-          this.componentInstance.triggerDefaultQuery();
-          if (rest.triggerCustomQuery) {
-            this.componentInstance.triggerCustomQuery();
-          }
-        }, debounce);
+        debounceFunc(this.triggerDefaultQuery, debounce);
+        if (rest.triggerCustomQuery) {
+          debounceFunc(this.triggerQuery, debounce);
+        }
+      } else {
+        this.componentInstance.setValue(value || '', {
+          triggerCustomQuery: rest.triggerCustomQuery,
+          triggerDefaultQuery: true,
+          stateChanges: true
+        });
       }
-      this.triggerSuggestionsQuery(value, rest.triggerCustomQuery);
     }
   };
 
@@ -228,15 +230,6 @@ class SearchBox extends React.Component {
     if (onValueSelected) {
       onValueSelected(currentValue, ...cause);
     }
-  };
-
-  triggerSuggestionsQuery = (value, triggerCustomQuery) => {
-    this.componentInstance &&
-      this.componentInstance.setValue(value || '', {
-        triggerCustomQuery: !!triggerCustomQuery,
-        triggerDefaultQuery: true,
-        stateChanges: true
-      });
   };
 
   getBackgroundColor = (highlightedIndex, index) =>
@@ -430,7 +423,6 @@ class SearchBox extends React.Component {
       size
     } = this.props;
     const currentValue = this.componentInstance.value || '';
-    console.log('THIS IS SUGGESTOIS', this.suggestionsList);
     return (
       <div style={style} className={className}>
         {title && (
