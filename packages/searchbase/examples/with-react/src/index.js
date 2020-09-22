@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import './styles.css';
 import { SearchBase } from '@appbaseio/searchbase';
 
 // eslint-disable-next-line
@@ -91,38 +91,57 @@ class App extends React.Component {
   };
 
   render() {
+    // const { showSuggestions } = this.state;
+    const suggestionsList = (list, showSuggestions) => {
+      if (!list.length || !showSuggestions) return null;
+      return (
+        <div className="suggestion-list">
+          {list.map(i => {
+            return (
+              <div
+                className="suggestion-item"
+                onClick={() => this.handleSelect(i.value)}
+                key={i.label}
+              >
+                {i.label}
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
     return (
       <div className="App">
-        <input
-          type="text"
-          value={this.searchComponent.value}
-          onChange={this.handleChange}
-        />
-
-        <section style={{ margin: 20 }}>
-          <b>Suggestions</b>
-          {this.searchComponent.requestPending ? (
-            <div>Loading suggestions...</div>
-          ) : (
-            this.searchComponent.suggestions.map(i => {
-              return (
-                <div onClick={() => this.handleSelect(i.value)} key={i.label}>
-                  {i.label}
-                </div>
-              );
-            })
-          )}
-        </section>
-
-        <section style={{ margin: 20 }}>
-          <b>Results</b>
-          {this.resultComponent.requestPending ? (
-            <div>Loading results...</div>
-          ) : (
-            this.resultComponent.results.data.map(i => {
-              return <div key={i._id}>{i.name}</div>;
-            })
-          )}
+        <div className="autocomplete">
+          <input
+            type="text"
+            value={this.searchComponent.value}
+            onChange={this.handleChange}
+            className="autocomplete-input"
+            placeholder="Type to search"
+          />
+          <section className="suggestion">
+            {this.searchComponent.requestPending ? (
+              <div className="request-status">Loading suggestions...</div>
+            ) : (
+              suggestionsList(
+                this.searchComponent.suggestions,
+                !!this.searchComponent.value
+              )
+            )}
+          </section>
+        </div>
+        <section>
+          <div className="results">
+            <p className="header">Results</p>
+            {this.resultComponent.requestPending ? (
+              <p>Loading results...</p>
+            ) : (
+              this.resultComponent.results.data.map(i => {
+                return <div key={i._id}>{i.name}</div>;
+              })
+            )}
+          </div>
         </section>
       </div>
     );
