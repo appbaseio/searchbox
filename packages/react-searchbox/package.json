@@ -30,7 +30,7 @@
     "react-dom": "^15.0.0 || ^16.0.0"
   },
   "dependencies": {
-    "@appbaseio/searchbase": "1.1.0-beta.5",
+    "@appbaseio/searchbase": "1.1.0-beta.6",
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
     "downshift": "^3.3.1"
