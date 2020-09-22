@@ -191,6 +191,12 @@ class SearchBox extends React.Component {
       });
   };
 
+  triggerCustomQuery = () => {
+    if (this.componentInstance) {
+      this.componentInstance.triggerCustomQuery();
+    }
+  };
+
   triggerDefaultQuery = () => {
     this.componentInstance && this.componentInstance.triggerDefaultQuery();
   };
@@ -213,7 +219,7 @@ class SearchBox extends React.Component {
         });
         debounceFunc(this.triggerDefaultQuery, debounce);
         if (rest.triggerCustomQuery) {
-          debounceFunc(this.triggerQuery, debounce);
+          this.triggerCustomQuery();
         }
       } else {
         this.componentInstance.setValue(value || '', {
