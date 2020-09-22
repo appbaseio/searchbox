@@ -57,6 +57,16 @@ const handleInput = e => {
 
 input.addEventListener('input', handleInput);
 
+const handleKeyPress = e => {
+  // Fetch the results
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    searchComponent.triggerCustomQuery();
+  }
+};
+
+input.addEventListener('keydown', handleKeyPress);
+
 // Fetch initial results
 resultComponent.triggerDefaultQuery();
 
