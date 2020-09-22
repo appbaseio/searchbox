@@ -1,3 +1,29 @@
+#root {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  max-width: 1200px;
+  padding-top: 15px;
+  margin: 0 auto;
+}
+
+.autocomplete-input {
+  width: 100%;
+  height: 42px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  font-size: 0.9rem;
+  outline: none;
+  box-sizing: border-box;
+  padding-left: 32px;
+  padding-right: 32px;
+  border-radius: 0;
+  background-size: 18px;
+  margin-bottom: 20px;
+}
+
 .autocomplete-result {
   border-top: 1px solid #eee;
   padding: 16px;
@@ -7,11 +33,6 @@
 .suggestion {
   display: flex;
   align-items: flex-start;
-}
-
-.suggestion h4,
-p {
-  margin: 0;
 }
 
 .suggesttion h4 {
@@ -28,12 +49,126 @@ p {
   margin-top: 20px;
 }
 
-.layout {
-  display: flex;
-  margin-top: 20px;
-}
-
 .filter {
   min-width: 300px;
   line-height: 1.5;
+}
+
+#language-filter label {
+  font-weight: 200;
+  padding-left: 5px;
+}
+
+#language-filter input {
+  position: relative;
+  top: 2px;
+}
+#language-filter div {
+  padding-bottom: 5px;
+}
+
+#results {
+  padding: 10px;
+  background: #fafafa;
+  width: 100%;
+  min-height: 50px;
+}
+.result-set {
+  display: flex;
+  background: white;
+  margin: 10px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.result-set:first {
+  padding-top: 0;
+}
+
+.result-set img {
+  height: 150px;
+  width: 150px;
+  background-size: cover;
+}
+
+.result-set .details {
+  padding-left: 20px;
+}
+
+.result-set h4 {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.suggestion h4,
+p {
+  margin: 0;
+  color: #9d9d9d;
+}
+
+.loading {
+  text-align: center;
+  padding: 10px;
+}
+
+.results-stats {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.col {
+  flex: 1;
+  padding: 15px;
+}
+
+.row > .col:first-child {
+  border-right: 1px solid #ccc;
+  max-width: 400px;
+}
+
+.row > .col:last-child {
+  background: #fafafa;
+}
+
+.flex {
+  display: flex;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .row > .col:first-child {
+    border-right: none;
+    max-width: none;
+  }
 }

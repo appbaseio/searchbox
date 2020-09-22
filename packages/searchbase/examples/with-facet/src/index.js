@@ -7,14 +7,21 @@ const url = 'https://@arc-cluster-appbase-demo-6pjy6z.searchbase.io';
 const credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
 document.body.innerHTML = `
-  <div id="autocomplete" class="autocomplete">
-    <input class="autocomplete-input" id="input" />
-    <ul class="autocomplete-result-list"></ul>
-  </div>
-  <div class="layout">
-    <div class="filter" id="language-filter">
+  <div id="root">
+    <h2 class="text-center">Searchbase Demo with Facet</h2>
+    <div id="autocomplete" class="autocomplete">
+      <input class="autocomplete-input" id="input" />
+      <ul class="autocomplete-result-list"></ul>
     </div>
-    <div id="results">
+    <div class="row">
+      <div class="col">
+        <div class="filter" id="language-filter"></div>
+      </div>
+      <div class="col">
+        <div id="results">
+          <div class="loading">Loading results... </div>
+        </div>
+      </div>
     </div>
   </div>
 `;
@@ -75,17 +82,20 @@ resultComponent.subscribeToStateChanges(
     const results = change.results.next;
     const items = results.data.map(i => {
       return `
-    <div>
-      <div>
+    <div class="result-set">
+      <div class="image">
         <img src=${i.avatar} alt=${i.name} />
       </div>
-      <div>
+      <div class="details">
         <h4>${i.name}</h4>
         <p>${i.description}</p>
       </div>
     </div>`;
     });
-    resultElement.innerHTML = items.join('<br>');
+    const resultStats = `<p class="results-stats">
+                          Showing ${results.numberOfResults} in ${results.time}ms
+                        <p>`;
+    resultElement.innerHTML = `${resultStats}${items.join('')}`;
   },
   ['results']
 );
@@ -121,9 +131,10 @@ filterComponent.subscribeToStateChanges(
         const label = document.createElement('label');
         label.htmlFor = i._key;
         label.innerHTML = `${i._key}(${i._doc_count})`;
-        container.appendChild(checkbox);
-        container.appendChild(label);
-        container.appendChild(document.createElement('br'));
+        const div = document.createElement('div');
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        container.appendChild(div);
       }
     });
   },
