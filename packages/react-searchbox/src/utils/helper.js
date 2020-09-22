@@ -41,15 +41,12 @@ export const equals = (a, b) => {
   return keys.every(k => equals(a[k], b[k]));
 };
 
-export const debounce = (fn, delay) => {
-  let timer = null;
-  return function(...args) {
-    const context = this;
-    timer && clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn.apply(context, args);
-    }, delay);
-  };
+export const debounce = (method, delay) => {
+  clearTimeout(method._tId);
+  // eslint-disable-next-line
+	method._tId = setTimeout(() => {
+    method();
+  }, delay);
 };
 
 export const isEmpty = val => !(val && val.length && Object.keys(val).length);

@@ -187,6 +187,18 @@ const SearchBox = {
 				suggestion.source
 			);
 		},
+		triggerDefaultQuery() {
+			const componentInstance = this.getComponentInstance();
+			if(componentInstance) {
+				componentInstance.triggerDefaultQuery();
+			}
+		},
+		triggerCustomQuery() {
+			const componentInstance = this.getComponentInstance();
+			if(componentInstance) {
+				componentInstance.triggerCustomQuery();
+			}
+		},
 		setValue({ value, isOpen = true, ...rest }) {
 			const { debounce } = this.$props;
 			this.isOpen = isOpen;
@@ -197,20 +209,19 @@ const SearchBox = {
 					triggerCustomQuery: false,
 					stateChanges: true
 				});
-				debounceFunc(() => {
-					componentInstance.triggerDefaultQuery();
-					if (rest.triggerCustomQuery) {
-						componentInstance.triggerCustomQuery();
-					}
-				}, debounce);
+				debounceFunc(this.triggerDefaultQuery, debounce);
+				if(rest.triggerCustomQuery) {
+					debounceFunc(this.triggerCustomQuery, debounce);
+				}
+			} else {
+				this.triggerSuggestionsQuery(value, rest.triggerCustomQuery);
 			}
-			this.triggerSuggestionsQuery(value, rest.triggerCustomQuery);
 		},
 		triggerSuggestionsQuery(value, triggerCustomQuery) {
 			const componentInstance = this.getComponentInstance();
 			if (componentInstance) {
 				componentInstance.setValue(value || '', {
-					triggerCustomQuery: !!triggerCustomQuery,
+					triggerCustomQuery,
 					triggerDefaultQuery: true,
 					stateChanges: true
 				});
@@ -228,7 +239,7 @@ const SearchBox = {
 			// if a suggestion was selected, delegate the handling
 			// to suggestion handler
 			if (event.key === 'Enter' && highlightedIndex === null) {
-				this.setValue({ value: event.target.value, isOpen: false });
+				this.setValue({ value: event.target.value, isOpen: false, triggerCustomQuery: true });
 				this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
 			}
 

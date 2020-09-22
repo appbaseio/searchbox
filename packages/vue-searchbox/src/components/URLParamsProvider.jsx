@@ -15,7 +15,6 @@ const URLParamsProvider = {
 			if (this.params.has(id)) {
 				try {
 					this.getComponentInstance().setValue(JSON.parse(this.params.get(id)), {
-						triggerCustomQuery: true,
 						triggerDefaultQuery: true,
 						stateChanges: true
 					});

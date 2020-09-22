@@ -18,7 +18,7 @@ const clear = css`
 `;
 
 const topClear = css`
-  top: 9px;
+  top: 11px;
 `;
 
 const topSearch = css`
