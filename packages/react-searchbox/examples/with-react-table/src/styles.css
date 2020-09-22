@@ -221,3 +221,8 @@ tbody {
 tr:nth-child(even) {
   background-color: #f6f6f6;
 }
+
+.result-stat {
+  padding: 10px;
+  font-weight: bold;
+}

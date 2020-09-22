@@ -157,7 +157,7 @@ export default () => (
                     {!loading && !results.data.length ? (
                       <div>No results found</div>
                     ) : (
-                      <p>
+                      <p class="result-stat">
                         {results.numberOfResults} results found in{' '}
                         {results.time}ms
                       </p>
@@ -166,7 +166,6 @@ export default () => (
                       <DataTable data={results.data} />
                     ) : null}
                   </div>
-                  {console.log(loading)}
                   {results.data.length ? (
                     <ReactPaginate
                       pageCount={Math.floor(results.numberOfResults / size)}
