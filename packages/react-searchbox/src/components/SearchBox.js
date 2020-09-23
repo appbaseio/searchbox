@@ -607,7 +607,6 @@ SearchBox.propTypes = {
   onChange: func,
   onValueChange: func,
   onValueSelected: func,
-  onSuggestions: func,
   onAggregationData: func,
   onError: func,
   onResults: func,
