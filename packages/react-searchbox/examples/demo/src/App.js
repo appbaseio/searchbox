@@ -153,7 +153,10 @@ export default () => (
                         </p>
                       )}
                       {results.data.map(item => (
-                        <div className="flex book-content" key={item._id}>
+                        <div
+                          className="flex book-content text-left"
+                          key={item._id}
+                        >
                           <img
                             src={item.image}
                             alt="Book Cover"
