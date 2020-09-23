@@ -150,17 +150,9 @@ export default () => (
               and: ['search-component', 'author-filter']
             }}
           >
-            {({ results, loading, size, setValue, from, setFrom }) => {
+            {({ results, loading, size, from, setFrom }) => {
               return (
                 <div className="result-list-container">
-                  {console.log({
-                    results,
-                    loading,
-                    size,
-                    setValue,
-                    from,
-                    setFrom
-                  })}
                   {loading ? <div>Loading Results ...</div> : null}
                   <div>
                     {!loading && !results.data.length ? (
