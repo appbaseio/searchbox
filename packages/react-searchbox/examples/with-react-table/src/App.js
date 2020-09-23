@@ -145,13 +145,22 @@ export default () => (
             highlight
             dataField="original_title"
             size={10}
+            from={0}
             react={{
               and: ['search-component', 'author-filter']
             }}
           >
-            {({ results, loading, size, setValue, setFrom }) => {
+            {({ results, loading, size, setValue, from, setFrom }) => {
               return (
                 <div className="result-list-container">
+                  {console.log({
+                    results,
+                    loading,
+                    size,
+                    setValue,
+                    from,
+                    setFrom
+                  })}
                   {loading ? <div>Loading Results ...</div> : null}
                   <div>
                     {!loading && !results.data.length ? (
@@ -166,12 +175,17 @@ export default () => (
                       <DataTable data={results.data} />
                     ) : null}
                   </div>
-                  {results.data.length ? (
+                  {results.numberOfResults > size ? (
                     <ReactPaginate
                       pageCount={Math.floor(results.numberOfResults / size)}
                       onPageChange={({ selected }) =>
                         setFrom((selected + 1) * size)
                       }
+                      forcePage={
+                        from !== undefined ? Math.ceil(from / size) : 0
+                      }
+                      disabledClassName="disabled"
+                      initialPage={1}
                       previousLabel="previous"
                       nextLabel="next"
                       breakLabel="..."

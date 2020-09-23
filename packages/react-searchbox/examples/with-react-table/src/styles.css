@@ -226,3 +226,7 @@ tr:nth-child(even) {
   padding: 10px;
   font-weight: bold;
 }
+
+.disabled > a {
+  color: #e6e6e6;
+}
