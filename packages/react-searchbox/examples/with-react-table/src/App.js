@@ -178,9 +178,7 @@ export default () => (
                   {results.numberOfResults > size ? (
                     <ReactPaginate
                       pageCount={Math.floor(results.numberOfResults / size)}
-                      onPageChange={({ selected }) =>
-                        setFrom((selected + 1) * size)
-                      }
+                      onPageChange={({ selected }) => setFrom(selected * size)}
                       forcePage={
                         from !== undefined ? Math.ceil(from / size) : 0
                       }
