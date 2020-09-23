@@ -55,8 +55,9 @@
 }
 
 #language-filter label {
-  font-weight: 200;
   padding-left: 5px;
+  height: 30px;
+  line-height: 2;
 }
 
 #language-filter input {

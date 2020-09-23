@@ -59,6 +59,10 @@ body {
   text-align: center;
 }
 
+.text-left {
+  text-align: left;
+}
+
 @media all and (max-width: 767px) {
   .row {
     flex-direction: column;
@@ -83,7 +87,6 @@ body {
 
 .avg-rating {
   color: #6b6b6b;
-  margin-left: 5px;
 }
 
 .stars {
@@ -154,15 +157,15 @@ body {
 
 .list-item {
   display: flex;
+  height: 30px;
+  height: 30px;
   align-items: center;
 }
 
 .list-item-label {
   margin-left: 10px;
-}
-
-.filter-container {
-  line-height: 1.8;
+  height: 30px;
+  line-height: 2;
 }
 
 .pagination {
