@@ -105,16 +105,16 @@
 </template>
 
 <script>
-import Paginate from "vuejs-paginate";
+import Paginate from 'vuejs-paginate';
 import {
   SearchBase,
   SearchComponent,
   SearchBox
-} from "@appbaseio/vue-searchbox";
-import "./styles.css";
+} from '@appbaseio/vue-searchbox';
+import './styles.css';
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     SearchBase,
     SearchBox,
@@ -124,16 +124,13 @@ export default {
   data() {
     return {
       columns: [
-        "title",
-        "authors",
-        "average_rating",
-        "language_code",
-        "isbn",
-        "ratings_count"
-      ],
-      options: {
-        // see the options API
-      }
+        'title',
+        'authors',
+        'average_rating',
+        'language_code',
+        'isbn',
+        'ratings_count'
+      ]
     };
   },
   methods: {
@@ -147,7 +144,6 @@ export default {
       } else {
         values.push(e.target.value);
       }
-      // Set filter value and trigger custom query
       setValue(values, {
         triggerDefaultQuery: false,
         triggerCustomQuery: true,
@@ -160,7 +156,7 @@ export default {
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
