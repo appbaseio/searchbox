@@ -132,21 +132,6 @@ export default {
         'ratings_count'
       ]
     };
-  },
-  methods: {
-    handleChange(e, value, setValue) {
-      const values = value || [];
-      if (values && values.includes(e.target.value)) {
-        values.splice(values.indexOf(e.target.value), 1);
-      } else {
-        values.push(e.target.value);
-      }
-      setValue(values, {
-        triggerDefaultQuery: false,
-        triggerCustomQuery: true,
-        stateChanges: true
-      });
-    }
   }
 };
 </script>
