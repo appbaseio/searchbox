@@ -134,9 +134,6 @@ export default {
     };
   },
   methods: {
-    isChecked(value, key) {
-      return value ? value.includes(key) : false;
-    },
     handleChange(e, value, setValue) {
       const values = value || [];
       if (values && values.includes(e.target.value)) {
