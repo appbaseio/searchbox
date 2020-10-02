@@ -67,7 +67,7 @@ export default () => (
               }
             },
             {
-              text: 'Docs',
+              text: 'Demo',
               link:
                 'https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/searchbox/examples/searchbar-with-style'
             }
