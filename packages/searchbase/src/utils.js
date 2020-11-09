@@ -14,7 +14,7 @@ export const errorMessages = {
   )
 };
 
-export const popularSuggestionFields = ['key', 'key.autosuggest', 'key.search'];
+export const popularSuggestionFields = ['key', 'key.autosuggest'];
 
 export const queryTypes = {
   Search: 'search',

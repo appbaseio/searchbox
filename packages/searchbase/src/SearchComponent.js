@@ -826,17 +826,50 @@ class SearchComponent extends Base {
         {
           id: suggestionQueryID,
           dataField: popularSuggestionFields,
-          searchOperators: this.searchOperators,
           size: 5,
           value: this.value,
           defaultQuery: {
-            sort: [
-              {
-                count: {
-                  order: 'desc'
-                }
+            query: {
+              bool: {
+                minimum_should_match: 1,
+                should: [
+                  {
+                    function_score: {
+                      field_value_factor: {
+                        field: 'count',
+                        modifier: 'sqrt',
+                        missing: 1
+                      }
+                    }
+                  },
+                  {
+                    multi_match: {
+                      fields: ['key^9', 'key.autosuggest^1', 'key.keyword^10'],
+                      fuzziness: 0,
+                      operator: 'or',
+                      query: this.value,
+                      type: 'best_fields'
+                    }
+                  },
+                  {
+                    multi_match: {
+                      fields: ['key^9', 'key.autosuggest^1', 'key.keyword^10'],
+                      operator: 'or',
+                      query: this.value,
+                      type: 'phrase'
+                    }
+                  },
+                  {
+                    multi_match: {
+                      fields: ['key^9'],
+                      operator: 'or',
+                      query: this.value,
+                      type: 'phrase_prefix'
+                    }
+                  }
+                ]
               }
-            ]
+            }
           }
         }
       ]
