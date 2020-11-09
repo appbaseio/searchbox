@@ -24,7 +24,7 @@ import {
   getNormalizedWeights,
   flatReactProp,
   getSuggestions,
-  querySuggestionFields,
+  popularSuggestionFields,
   isEqual,
   searchBaseMappings
 } from './utils';
@@ -140,8 +140,8 @@ class SearchComponent extends Base {
 
   // other properties
 
-  // To enable the query suggestions
-  enableQuerySuggestions: boolean;
+  // To enable the popular suggestions
+  enablePopularSuggestions: boolean;
 
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
@@ -220,7 +220,7 @@ class SearchComponent extends Base {
     onRequestStatusChange,
     onQueryChange,
     onMicStatusChange,
-    enableQuerySuggestions,
+    enablePopularSuggestions,
     results,
     showDistinctSuggestions,
     ...rsAPIConfig
@@ -324,7 +324,7 @@ class SearchComponent extends Base {
     this.onMicStatusChange = onMicStatusChange;
 
     // other properties
-    this.enableQuerySuggestions = enableQuerySuggestions;
+    this.enablePopularSuggestions = enablePopularSuggestions;
 
     this.showDistinctSuggestions = showDistinctSuggestions;
 
@@ -397,9 +397,9 @@ class SearchComponent extends Base {
         // Extract fields from _source
         fields = Object.keys(this.results.data[0]._source);
       }
-      if (this.enableQuerySuggestions) {
-        // extract suggestions from query suggestion fields too
-        fields = [...fields, ...querySuggestionFields];
+      if (this.enablePopularSuggestions) {
+        // extract suggestions from popular suggestion fields too
+        fields = [...fields, ...popularSuggestionFields];
       }
       return getSuggestions(
         fields,
@@ -685,25 +685,25 @@ class SearchComponent extends Base {
           };
           if (
             (!this.type || this.type === queryTypes.Search) &&
-            this.enableQuerySuggestions
+            this.enablePopularSuggestions
           ) {
             this._fetchRequest(this.getSuggestionsQuery(), true)
-              .then(rawQuerySuggestions => {
-                const querySuggestionsData =
-                  rawQuerySuggestions[suggestionQueryID];
-                // Merge query suggestions as the top suggestions
+              .then(rawPopularSuggestions => {
+                const popularSuggestionsData =
+                  rawPopularSuggestions[suggestionQueryID];
+                // Merge popular suggestions as the top suggestions
                 if (
-                  querySuggestionsData &&
-                  querySuggestionsData.hits &&
-                  querySuggestionsData.hits.hits &&
+                  popularSuggestionsData &&
+                  popularSuggestionsData.hits &&
+                  popularSuggestionsData.hits.hits &&
                   rawResults.hits &&
                   rawResults.hits.hits
                 ) {
                   rawResults.hits.hits = [
-                    ...(querySuggestionsData.hits.hits || []).map(hit => ({
+                    ...(popularSuggestionsData.hits.hits || []).map(hit => ({
                       ...hit,
-                      // Set the query suggestion tag for suggestion hits
-                      _query_suggestion: true
+                      // Set the popular suggestion tag for suggestion hits
+                      _popular_suggestion: true
                     })),
                     ...rawResults.hits.hits
                   ];
@@ -825,7 +825,7 @@ class SearchComponent extends Base {
       query: [
         {
           id: suggestionQueryID,
-          dataField: querySuggestionFields,
+          dataField: popularSuggestionFields,
           searchOperators: this.searchOperators,
           size: 5,
           value: this.value,
@@ -929,7 +929,7 @@ class SearchComponent extends Base {
 
   _fetchRequest(
     requestBody: Object,
-    isQuerySuggestionsAPI: boolean = false
+    isPopularSuggestionsAPI: boolean = false
   ): Promise<any> {
     // remove undefined properties from request body
     const requestOptions = {
@@ -947,7 +947,7 @@ class SearchComponent extends Base {
           const timestamp = Date.now();
 
           let suffix = '_reactivesearch.v3';
-          const index = isQuerySuggestionsAPI ? '.suggestions' : this.index;
+          const index = isPopularSuggestionsAPI ? '.suggestions' : this.index;
           return fetch(`${this.url}/${index}/${suffix}`, finalRequestOptions)
             .then(res => {
               const responseHeaders = res.headers;

@@ -26,9 +26,9 @@ import {
   equals,
   getClassName,
   getComponent,
-  getQuerySuggestionsComponent,
+  getPopularSuggestionsComponent,
   hasCustomRenderer,
-  hasQuerySuggestionsRenderer,
+  hasPopularSuggestionsRenderer,
   isFunction,
   SearchContext
 } from '../utils/helper';
@@ -93,10 +93,10 @@ class SearchBox extends React.Component {
     return this.context.getComponent(id);
   }
 
-  get querySuggestionsList() {
+  get () {
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
-      suggestion => suggestion._query_suggestion
+      suggestion => suggestion._popular_suggestion
     );
   }
 
@@ -107,7 +107,7 @@ class SearchBox extends React.Component {
     }
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
-      suggestion => !suggestion._query_suggestion
+      suggestion => !suggestion._popular_suggestion
     );
   }
 
@@ -129,7 +129,7 @@ class SearchBox extends React.Component {
       this.componentInstance && this.componentInstance[setterFunc](next);
   };
 
-  getComponent = (downshiftProps = {}, isQuerySuggestionsRender = false) => {
+  getComponent = (downshiftProps = {}, isPopularSuggestionsRender = false) => {
     const { error, loading } = this.props;
     const data = {
       error,
@@ -142,13 +142,13 @@ class SearchBox extends React.Component {
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
       rawData: this.componentInstance.results.rawData,
-      querySuggestions: this.querySuggestionsList
+      popularSuggestions: this.popularSuggestionsList
     };
-    if (isQuerySuggestionsRender) {
-      return getQuerySuggestionsComponent(
+    if (isPopularSuggestionsRender) {
+      return getPopularSuggestionsComponent(
         {
           downshiftProps,
-          data: this.querySuggestionsList,
+          data: this.popularSuggestionsList,
           value: this.componentInstance.value,
           loading,
           error
@@ -492,7 +492,7 @@ class SearchBox extends React.Component {
                     css={suggestionsCss}
                     className={getClassName(innerClass, 'list')}
                   >
-                    {hasQuerySuggestionsRenderer(this.props)
+                    {hasPopularSuggestionsRenderer(this.props)
                       ? this.getComponent(
                           {
                             getInputProps,
@@ -503,7 +503,7 @@ class SearchBox extends React.Component {
                           },
                           true
                         )
-                      : this.querySuggestionsList.map((sugg, index) => (
+                      : this.popularSuggestionsList.map((sugg, index) => (
                           <li
                             {...getItemProps({ item: sugg })}
                             key={`${index + 1}-${sugg.value}`}
@@ -523,13 +523,13 @@ class SearchBox extends React.Component {
                     {this.suggestionsList.slice(0, size).map((item, index) => (
                       <li
                         {...getItemProps({ item })}
-                        key={`${index + this.querySuggestionsList.length + 1}-${
+                        key={`${index + this.popularSuggestionsList.length + 1}-${
                           item.value
                         }`}
                         style={{
                           backgroundColor: this.getBackgroundColor(
                             highlightedIndex,
-                            index + this.querySuggestionsList.length
+                            index + this.popularSuggestionsList.length
                           )
                         }}
                       >
@@ -572,7 +572,7 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.propTypes = {
-  enableQuerySuggestions: bool,
+  enablePopularSuggestions: bool,
   dataField: dataFieldValidator,
   aggregationField: string,
   nestedField: string,
@@ -599,7 +599,7 @@ SearchBox.propTypes = {
   showVoiceSearch: bool,
   searchOperators: bool,
   render: func,
-  renderQuerySuggestions: func,
+  renderPopularSuggestions: func,
   renderError: func,
   renderNoSuggestion: titleDef,
   getMicInstance: func,
@@ -635,7 +635,7 @@ SearchBox.propTypes = {
 };
 
 SearchBox.defaultProps = {
-  enableQuerySuggestions: false,
+  enablePopularSuggestions: false,
   placeholder: 'Search',
   showIcon: true,
   iconPosition: 'right',

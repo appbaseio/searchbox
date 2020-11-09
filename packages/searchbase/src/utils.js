@@ -14,7 +14,7 @@ export const errorMessages = {
   )
 };
 
-export const querySuggestionFields = ['key', 'key.autosuggest', 'key.search'];
+export const popularSuggestionFields = ['key', 'key.autosuggest', 'key.search'];
 
 export const queryTypes = {
   Search: 'search',
@@ -348,7 +348,7 @@ export const searchBaseMappings = {
   selectAllLabel: 'selectAllLabel',
   pagination: 'pagination',
   queryString: 'queryString',
-  enableQuerySuggestions: 'enableQuerySuggestions',
+  enablePopularSuggestions: 'enablePopularSuggestions',
   showDistinctSuggestions: 'showDistinctSuggestions',
   error: 'error',
   defaultQuery: 'defaultQuery',

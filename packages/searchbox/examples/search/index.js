@@ -9,13 +9,13 @@ const instance = new Searchbase({
   dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics']
 });
 
-const querySuggestionsInstance = new Searchbase({
+const popularSuggestionsInstance = new Searchbase({
   index: 'good-books-clone',
   credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
   url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
   size: 5,
   dataField: ['original_title', 'original_title.search'],
-  enableQuerySuggestions: true,
+  enablePopularSuggestions: true,
   enableAppbase: true,
   appbaseConfig: { recordAnalytics: false }
 });
@@ -281,13 +281,13 @@ searchbox(
 searchbox(
   '#git15',
   {
-    instance: querySuggestionsInstance
+    instance: popularSuggestionsInstance
   },
   [
     {
       templates: {
-        render: function({ data, getItemProps, querySuggestions }) {
-          const suggestionHTML = (querySuggestions || [])
+        render: function({ data, getItemProps, popularSuggestions }) {
+          const suggestionHTML = (popularSuggestions || [])
             .concat(data)
             .filter(i => !i.source._promoted)
             .reduce((agg, i) => {
@@ -315,7 +315,7 @@ searchbox(
 searchbox(
   '#git16',
   {
-    instance: querySuggestionsInstance
+    instance: popularSuggestionsInstance
   },
   [
     {
@@ -340,7 +340,7 @@ searchbox(
 						${suggestionHTML}
 					`;
         },
-        renderQuerySuggestions: function({ data, getItemProps }) {
+        renderPopularSuggestions: function({ data, getItemProps }) {
           const suggestionHTML = (data || [])
             .filter(i => !i.source._promoted)
             .reduce((agg, i) => {
@@ -356,7 +356,7 @@ searchbox(
           if ((data || []).length === 0) return '';
           return `
 						<div class="shadow-sm p-2 text-light bg-primary">
-							Query Suggestion Results
+							Popular Suggestion Results
 						</div>
 						${suggestionHTML}
 					`;

@@ -134,7 +134,7 @@ export default () => (
         showVoiceSearch
         URLParams
         className="custom-class"
-        enableQuerySuggestions
+        enablePopularSuggestions
         iconPosition="left"
         style={{ paddingBottom: 10 }}
       />

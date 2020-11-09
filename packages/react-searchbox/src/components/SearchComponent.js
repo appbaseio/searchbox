@@ -77,7 +77,7 @@ class SearchComponent extends React.Component {
       onRequestStatusChange,
       onQueryChange,
       onMicStatusChange,
-      enableQuerySuggestions
+      enablePopularSuggestions
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -126,7 +126,7 @@ class SearchComponent extends React.Component {
       onRequestStatusChange,
       onQueryChange,
       onMicStatusChange,
-      enableQuerySuggestions
+      enablePopularSuggestions
     });
   }
 
@@ -194,7 +194,7 @@ SearchComponent.propTypes = {
   transformRequest: func,
   transformResponse: func,
   beforeValueChange: func,
-  enableQuerySuggestions: bool,
+  enablePopularSuggestions: bool,
   URLParams: bool,
   // RS API properties
   id: stringRequired,

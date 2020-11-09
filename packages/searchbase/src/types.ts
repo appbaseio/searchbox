@@ -46,7 +46,7 @@ export type BaseConfig = {
 };
 
 export type ComponentConfig = BaseConfig & {
-  enableQuerySuggestions?: boolean;
+  enablePopularSuggestions?: boolean;
 
   results?: Array<Object>;
 

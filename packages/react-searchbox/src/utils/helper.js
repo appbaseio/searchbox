@@ -52,24 +52,24 @@ export const debounce = (method, delay) => {
 export const isEmpty = val => !(val && val.length && Object.keys(val).length);
 
 /**
- * To determine whether a component has renderQuerySuggestions prop defined or not
+ * To determine whether a component has renderPopularSuggestions prop defined or not
  * @returns {Boolean}
  */
-export const hasQuerySuggestionsRenderer = (props = {}) => {
-  const { renderQuerySuggestions } = props;
-  return isFunction(renderQuerySuggestions);
+export const hasPopularSuggestionsRenderer = (props = {}) => {
+  const { renderPopularSuggestions } = props;
+  return isFunction(renderPopularSuggestions);
 };
 
 /**
- * Extracts the renderQuerySuggestions prop from props and returns a valid React element
+ * Extracts the renderPopularSuggestions prop from props and returns a valid React element
  * @param {Object} data
  * @param {Object} props
  */
-export const getQuerySuggestionsComponent = (data = {}, props = {}) => {
-  const { renderQuerySuggestions } = props;
+export const getPopularSuggestionsComponent = (data = {}, props = {}) => {
+  const { renderPopularSuggestions } = props;
   // Render function as render prop
-  if (isFunction(renderQuerySuggestions)) {
-    return renderQuerySuggestions(data);
+  if (isFunction(renderPopularSuggestions)) {
+    return renderPopularSuggestions(data);
   }
   return null;
 };

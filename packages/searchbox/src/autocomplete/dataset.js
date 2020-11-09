@@ -25,7 +25,7 @@ function sourceFn(query, cb, that) {
   cb([], that.instance.suggestionsRequestPending);
 
   var parsedSuggestions;
-  var querySuggestions;
+  var popularSuggestions;
 
   that.instance.onSuggestions = function(suggestions) {
     parsedSuggestions = suggestions.data;
@@ -43,14 +43,14 @@ function sourceFn(query, cb, that) {
       },
       rawData: suggestions.rawData || [],
       promotedData: suggestions.promotedData || [],
-      querySuggestions
+      popularSuggestions
     });
   };
 
-  that.instance.onQuerySuggestions = function(suggestions) {
-    querySuggestions = suggestions.data;
-    for (var j = 0; j < querySuggestions.length; j++) {
-      Object.assign(querySuggestions[j], {
+  that.instance.onPopularSuggestions = function(suggestions) {
+    popularSuggestions = suggestions.data;
+    for (var j = 0; j < popularSuggestions.length; j++) {
+      Object.assign(popularSuggestions[j], {
         _click_id: j + 1
       });
     }
@@ -63,7 +63,7 @@ function sourceFn(query, cb, that) {
       },
       rawData: suggestions.rawData || [],
       promotedData: suggestions.promotedData || [],
-      querySuggestions
+      popularSuggestions
     });
   };
 }
@@ -224,11 +224,11 @@ _.mixin(Dataset.prototype, EventEmitter, {
 
     function getSuggestionsHtml() {
       if (that.templates.render) {
-        let strigifiedQuerySuggestions = '';
-        if (that.templates.renderQuerySuggestions) {
+        let strigifiedPopularSuggestions = '';
+        if (that.templates.renderPopularSuggestions) {
           const className = this.cssClasses.prefix + this.cssClasses.suggestion;
-          strigifiedQuerySuggestions = that.templates.renderQuerySuggestions({
-            data: options.querySuggestions,
+          strigifiedPopularSuggestions = that.templates.renderPopularSuggestions({
+            data: options.popularSuggestions,
             getItemProps: function(item) {
               const id = ['option', Math.floor(Math.random() * 100000000)].join(
                 '-'
@@ -245,7 +245,7 @@ _.mixin(Dataset.prototype, EventEmitter, {
         const stringifiedHTML = that.templates.render({
           data: suggestions,
           promotedData: options.promotedData,
-          querySuggestions: options.querySuggestions,
+          popularSuggestions: options.popularSuggestions,
           resultStats: options.resultStats,
           rawData: options.rawData,
           getItemProps: function(item) {
@@ -259,7 +259,7 @@ _.mixin(Dataset.prototype, EventEmitter, {
             ) || undefined} data-${customdatasetKey}=${that.name}`;
           }
         });
-        return strigifiedQuerySuggestions + stringifiedHTML;
+        return strigifiedPopularSuggestions + stringifiedHTML;
       }
       var args = [].slice.call(arguments, 0);
       var $suggestions;
@@ -440,7 +440,7 @@ function getTemplates(templates, displayFn) {
     footer: templates.footer && _.templatify(templates.footer),
     suggestion: templates.suggestion || suggestionTemplate,
     render: templates.render || undefined,
-    renderQuerySuggestions: templates.renderQuerySuggestions || undefined
+    renderPopularSuggestions: templates.renderPopularSuggestions || undefined
   };
 
   function suggestionTemplate(context) {

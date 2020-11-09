@@ -75,8 +75,8 @@ export class SearchComponent extends Base {
 
   // other properties
 
-  // To enable the query suggestions
-  enableQuerySuggestions: boolean;
+  // To enable the popular suggestions
+  enablePopularSuggestions: boolean;
 
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
@@ -148,7 +148,7 @@ export class SearchComponent extends Base {
     transformRequest,
     transformResponse,
     beforeValueChange,
-    enableQuerySuggestions,
+    enablePopularSuggestions,
     results,
     ...rsAPIConfig
   }: types.ComponentConfig);

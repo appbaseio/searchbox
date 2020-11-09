@@ -58,7 +58,7 @@
           :showVoiceSearch="true"
           :URLParams="true"
           class="custom-class"
-          :enableQuerySuggestions="true"
+          :enablePopularSuggestions="true"
           iconPosition="left"
         />
         <div class="row">

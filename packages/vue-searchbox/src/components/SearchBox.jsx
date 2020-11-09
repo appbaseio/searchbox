@@ -7,8 +7,8 @@ import {
 	equals,
 	getClassName,
 	debounce as debounceFunc,
-	hasQuerySuggestionsRenderer,
-	getQuerySuggestionsComponent,
+	hasPopularSuggestionsRenderer,
+	getPopularSuggestionsComponent,
 	hasCustomRenderer,
 	getComponent
 } from '../utils/helper';
@@ -34,7 +34,7 @@ const SearchBox = {
 		transformRequest: VueTypes.func,
 		transformResponse: VueTypes.func,
 		beforeValueChange: VueTypes.func,
-		enableQuerySuggestions: VueTypes.bool,
+		enablePopularSuggestions: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -90,7 +90,7 @@ const SearchBox = {
 		render: types.render,
 		renderError: types.renderError,
 		renderNoSuggestion: types.renderNoSuggestion,
-		renderQuerySuggestions: types.renderQuerySuggestions,
+		renderPopularSuggestions: types.renderPopularSuggestions,
 		renderMic: types.renderMic,
 		innerClass: types.innerClass,
 		className: types.className,
@@ -131,10 +131,10 @@ const SearchBox = {
 			const { id } = this.$props;
 			return this.searchbase.getComponent(id);
 		},
-		getQuerySuggestionsList() {
+		getpopularSuggestionsList() {
 			const { suggestions } = this.getComponentInstance();
 			return (suggestions || []).filter(
-				suggestion => suggestion._query_suggestion
+				suggestion => suggestion._popular_suggestion
 			);
 		},
 		getSuggestionsList() {
@@ -144,7 +144,7 @@ const SearchBox = {
 			}
 			const { suggestions } = this.getComponentInstance();
 			return (suggestions || []).filter(
-				suggestion => !suggestion._query_suggestion
+				suggestion => !suggestion._popular_suggestion
 			);
 		},
 		_applySetter(prev, next, setterFunc) {
@@ -342,9 +342,9 @@ const SearchBox = {
 		getBackgroundColor(highlightedIndex, index) {
 			return highlightedIndex === index ? '#eee' : '#fff';
 		},
-		getComponent(downshiftProps = {}, isQuerySuggestionsRender = false) {
+		getComponent(downshiftProps = {}, isPopularSuggestionsRender = false) {
 			const { instanceValue, loading, error, results } = this.$props;
-			const querySuggestionsList = this.getQuerySuggestionsList();
+			const popularSuggestionsList = this.getpopularSuggestionsList();
 			const suggestionsList = this.getSuggestionsList();
 			const data = {
 				loading,
@@ -356,14 +356,14 @@ const SearchBox = {
 				customData: results.customData,
 				resultStats: this.stats,
 				rawData: results.rawData,
-				querySuggestions: querySuggestionsList,
+				popularSuggestions: popularSuggestionsList,
 				triggerClickAnalytics: this.triggerClickAnalytics
 			};
-			if (isQuerySuggestionsRender) {
-				return getQuerySuggestionsComponent(
+			if (isPopularSuggestionsRender) {
+				return getPopularSuggestionsComponent(
 					{
 						downshiftProps,
-						data: querySuggestionsList,
+						data: popularSuggestionsList,
 						value: instanceValue,
 						loading,
 						error
@@ -391,7 +391,7 @@ const SearchBox = {
 			instanceValue
 		} = this.$props;
 		const suggestionsList = this.getSuggestionsList();
-		const querySuggestionsList = this.getQuerySuggestionsList();
+		const popularSuggestionsList = this.getpopularSuggestionsList();
 		return (
 			<div class={className}>
 				{title && (
@@ -461,7 +461,7 @@ const SearchBox = {
 													'list'
 												)}`}
 											>
-												{hasQuerySuggestionsRenderer(this)
+												{hasPopularSuggestionsRenderer(this)
 													? this.getComponent(
 														{
 															isOpen,
@@ -471,7 +471,7 @@ const SearchBox = {
 														},
 														true
 													)
-													: querySuggestionsList.map((sugg, index) => (
+													: popularSuggestionsList.map((sugg, index) => (
 														<li
 															{...{
 																domProps: getItemProps({
@@ -507,13 +507,13 @@ const SearchBox = {
 																item
 															})
 														}}
-														key={`${index + querySuggestionsList.length + 1}-${
+														key={`${index + popularSuggestionsList.length + 1}-${
 															item.value
 														}`}
 														style={{
 															backgroundColor: this.getBackgroundColor(
 																highlightedIndex,
-																index + querySuggestionsList.length
+																index + popularSuggestionsList.length
 															)
 														}}
 													>

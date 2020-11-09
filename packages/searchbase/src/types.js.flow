@@ -43,7 +43,7 @@ export type BaseConfig = {
 };
 
 export type ComponentConfig = BaseConfig & {
-  enableQuerySuggestions: boolean,
+  enablePopularSuggestions: boolean,
   showDistinctSuggestions: boolean,
   results: Array<Object>,
   beforeValueChange: (value: string) => Promise<any>,
