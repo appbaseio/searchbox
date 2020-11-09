@@ -9,10 +9,10 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/searchbase@1.1.0-beta.3":
-  version "1.1.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.0-beta.3.tgz#e5547e849d5754b5810d8b996e7c94ba58d19100"
-  integrity sha512-VWq1A07X4Lm5fY2yTynFosnOLXjXCF7SBwq3QVuk81c4lGljaN/AN9jDdIBX12xRomhSRJYftFcoDTgKhxUSxw==
+"@appbaseio/searchbase@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.1.tgz#5fb3787bf8ad47c775a7a945dbdab3afaa47fc6d"
+  integrity sha512-RZ6SR/bUCJ0gk0yprrOoznMiSPOrjDDX3G+dKcBjukOPchKPYvhnDNFuJYbsIPi91cx6F/ToBoCEv7T6VHnPgw==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -25,12 +25,12 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
-"@appbaseio/vue-searchbox@1.1.0-beta.3":
-  version "1.1.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.1.0-beta.3.tgz#dbba5c912cf114e1edfe80f302fd48204846f268"
-  integrity sha512-HHSQ5i8zxzZqTXjVsVqpqP6raEkz6OubJwVt7MwtTMg+vB3gapt0vPhGeb/VFU8dJFqnjcjmKpFbztVIdnqDMQ==
+"@appbaseio/vue-searchbox@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.0.1.tgz#d6833036e1a2a8ab41ea2b557f25b1663d7d8f97"
+  integrity sha512-+6a3Hh0JVuFrW8IdhE4QC7NOgbo2MiP1KQdVQ3dRpnaHCQNZlGY5EhI1DdajvLS3JpHHn2JFTLcpSjYbDd8axA==
   dependencies:
-    "@appbaseio/searchbase" "1.1.0-beta.3"
+    "@appbaseio/searchbase" "1.0.1"
     "@appbaseio/vue-emotion" "^0.4.4"
     "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
     compute-scroll-into-view "^1.0.11"
@@ -2988,9 +2988,9 @@ domutils@^1.5.1, domutils@^1.7.0:
     domelementtype "1"
 
 dot-prop@^4.1.1:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
-  integrity sha512-tUMXrxlExSW6U2EXiiKGSBVdYgtV8qlHL+C10TsW4PURY/ic+eaysnSkwB4kA/mBlCyy/IKDJ+Lc3wbWeaXtuQ==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.1.tgz#45884194a71fc2cda71cbb4bceb3a4dd2f433ba4"
+  integrity sha512-l0p4+mIuJIua0mhxGoh4a+iNL9bmeK5DvnSVQa6T0OhrVmaEa1XScX5Etc673FePCJOArq/4Pa2cLGODUWTPOQ==
   dependencies:
     is-obj "^1.0.0"
 
