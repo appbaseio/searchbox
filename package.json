@@ -7,7 +7,7 @@
     "packages/searchbase/examples/*",
     "packages/vue-searchbox/examples/*",
     "packages/react-searchbox/examples/*",
-    "packages/searchbox/examples/*",
+    "packages/native/examples/*",
     "site"
   ],
   "scripts": {

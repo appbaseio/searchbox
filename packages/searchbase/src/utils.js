@@ -387,3 +387,29 @@ export const searchBaseMappings = {
   setDefaultQuery: 'setDefaultQuery',
   setCustomQuery: 'setCustomQuery'
 };
+
+export function btoa(input = '') {
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  const str = input;
+  let output = '';
+
+  // eslint-disable-next-line
+  for (
+    let block = 0, charCode, i = 0, map = chars;
+    str.charAt(i | 0) || ((map = '='), i % 1); // eslint-disable-line no-bitwise
+    output += map.charAt(63 & (block >> (8 - (i % 1) * 8))) // eslint-disable-line no-bitwise
+  ) {
+    charCode = str.charCodeAt((i += 3 / 4));
+
+    if (charCode > 0xff) {
+      throw new Error(
+        '"btoa" failed: The string to be encoded contains characters outside of the Latin1 range.'
+      );
+    }
+
+    block = (block << 8) | charCode; // eslint-disable-line no-bitwise
+  }
+
+  return output;
+}

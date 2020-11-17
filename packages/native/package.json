@@ -1,0 +1,31 @@
+{
+    "name": "@appbaseio/react-native-searchbox",
+    "version": "1.0.1-beta",
+    "description": "Lightweight searchbox component for React Native",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "Apache-2.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/appbaseio/searchbase.git"
+    },
+    "keywords": [
+        "searchbox",
+        "appbaseio"
+    ],
+    "peerDependencies": {
+        "react": "*",
+        "react-native": "*"
+    },
+    "dependencies": {
+        "@appbaseio/searchbase": "1.0.2",
+        "color": "^3.1.3"
+    },
+    "author": "kuldepsaxena155@gmail.com",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/appbaseio/searchbase/issues"
+    },
+    "homepage": "https://github.com/appbaseio/searchbase#readme"
+}

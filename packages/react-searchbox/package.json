@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/react-searchbox",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React library kit based on ReactiveSearch's DataSearch",
   "license": "MIT",
   "repository": {
@@ -30,7 +30,7 @@
     "react-dom": "^15.0.0 || ^16.0.0"
   },
   "dependencies": {
-    "@appbaseio/searchbase": "1.0.1",
+    "@appbaseio/searchbase": "1.0.2",
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
     "downshift": "^3.3.1"
@@ -58,8 +58,6 @@
     "eslint-plugin-react-hooks": "1.x",
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^4.0.1",
     "rollup-plugin-commonjs": "^9.1.3",

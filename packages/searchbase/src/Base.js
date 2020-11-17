@@ -1,6 +1,6 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
-import { errorMessages } from './utils';
+import { errorMessages, btoa } from './utils';
 import type { AppbaseSettings, BaseConfig } from './types';
 
 /**

@@ -93,7 +93,7 @@ class SearchBox extends React.Component {
     return this.context.getComponent(id);
   }
 
-  get () {
+  get popularSuggestionsList() {
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
       suggestion => suggestion._popular_suggestion
@@ -523,9 +523,9 @@ class SearchBox extends React.Component {
                     {this.suggestionsList.slice(0, size).map((item, index) => (
                       <li
                         {...getItemProps({ item })}
-                        key={`${index + this.popularSuggestionsList.length + 1}-${
-                          item.value
-                        }`}
+                        key={`${index +
+                          this.popularSuggestionsList.length +
+                          1}-${item.value}`}
                         style={{
                           backgroundColor: this.getBackgroundColor(
                             highlightedIndex,
@@ -658,13 +658,8 @@ export default props => (
     {...props}
     subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
   >
-    {({ error, requestPending, results, value }) => (
-      <SearchBox
-        {...props}
-        error={error}
-        loading={requestPending}
-        results={results}
-      />
+    {({ error, loading, results, value }) => (
+      <SearchBox {...props} error={error} loading={loading} results={results} />
     )}
   </SearchComponent>
 );
