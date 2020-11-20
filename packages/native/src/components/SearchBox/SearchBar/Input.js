@@ -79,6 +79,8 @@ class Input extends React.Component {
       theme,
       renderErrorMessage,
       style,
+      pointerEvents,
+      inputWrapper,
       ...attributes
     } = this.props;
 
@@ -114,24 +116,31 @@ class Input extends React.Component {
               {renderNode(Icon, leftIcon)}
             </View>
           )}
-
-          <InputComponent
-            testID="RNE__Input__text-input"
-            underlineColorAndroid="transparent"
-            editable={!disabled}
-            ref={ref => {
-              this.input = ref;
-            }}
+          <View
             style={StyleSheet.flatten([
-              styles.input(theme),
-              inputStyle,
-              disabled && styles.disabledInput,
-              disabled && disabledInputStyle,
-              style
+              styles.inputWrapper(theme),
+              inputWrapper
             ])}
-            placeholderTextColor={theme.colors.grey3}
-            {...patchWebProps(attributes)}
-          />
+            pointerEvents={pointerEvents}
+          >
+            <InputComponent
+              testID="RNE__Input__text-input"
+              underlineColorAndroid="transparent"
+              editable={!disabled}
+              ref={ref => {
+                this.input = ref;
+              }}
+              style={StyleSheet.flatten([
+                styles.input(theme),
+                inputStyle,
+                disabled && styles.disabledInput,
+                disabled && disabledInputStyle,
+                style
+              ])}
+              placeholderTextColor={theme.colors.grey3}
+              {...patchWebProps(attributes)}
+            />
+          </View>
 
           {rightIcon && (
             <View
@@ -187,6 +196,7 @@ Input.propTypes = {
   label: PropTypes.node,
   labelStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   labelProps: PropTypes.object,
+  inputWrapper: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   theme: PropTypes.object,
   renderErrorMessage: PropTypes.bool
 };
@@ -210,6 +220,10 @@ const styles = {
     alignItems: 'center',
     borderColor: theme.colors.grey3
   }),
+  inputWrapper: theme => ({
+    alignSelf: 'center',
+    flex: 1
+  }),
   iconContainer: {
     height: 40,
     justifyContent: 'center',
@@ -218,7 +232,6 @@ const styles = {
     marginVertical: 4
   },
   input: theme => ({
-    alignSelf: 'center',
     color: theme.colors.black,
     fontSize: 18,
     flex: 1,
