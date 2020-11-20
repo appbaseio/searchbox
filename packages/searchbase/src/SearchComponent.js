@@ -7,7 +7,8 @@ import type {
   RequestStatus,
   AppbaseSettings,
   GenerateQueryResponse,
-  MicStatusField
+  MicStatusField,
+  RecentSearchOptions
 } from './types';
 import Observable from './Observable';
 import Base from './Base';
@@ -161,6 +162,12 @@ class SearchComponent extends Base {
   // aggregations
   aggregationData: Aggregations;
 
+  // recent searches
+  recentSearches: {
+    label: string,
+    value: string
+  };
+
   /* ------ Private properties only for the internal use ----------- */
   _parent: SearchBase;
 
@@ -269,7 +276,6 @@ class SearchComponent extends Base {
       pagination,
       queryString
     } = rsAPIConfig;
-
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
     }
@@ -910,6 +916,24 @@ class SearchComponent extends Base {
     this.stateChanges.unsubscribe(fn);
   };
 
+  // Method to clear results
+  clearResults = (options?: Option = defaultOption) => {
+    const prev = this.results;
+    this.results.setRaw({
+      hits: {
+        hits: []
+      }
+    });
+    this._applyOptions(
+      {
+        stateChanges: options.stateChanges
+      },
+      'results',
+      prev,
+      this.results
+    );
+  };
+
   /* -------- Private methods only for the internal use -------- */
   // Method to apply the changed based on set options
   _applyOptions(
@@ -959,6 +983,97 @@ class SearchComponent extends Base {
       );
     }
   }
+
+  getRecentSearches = (
+    queryOptions?: RecentSearchOptions = {
+      size: 5,
+      minChars: 3
+    },
+    options?: Option = defaultOption
+  ): Promise<any> => {
+    const requestOptions = {
+      headers: {
+        ...this.headers
+      }
+    };
+    let queryString = '';
+    const addParam = (key, value) => {
+      if (queryString) {
+        queryString += `&${key}=${value}`;
+      } else {
+        queryString += `${key}=${value}`;
+      }
+    };
+    if (this.appbaseSettings && this.appbaseSettings.userId) {
+      addParam('user_id', this.appbaseSettings.userId);
+    }
+    if (queryOptions) {
+      if (queryOptions.size) {
+        addParam('size', String(queryOptions.size));
+      }
+      if (queryOptions.from) {
+        addParam('from', queryOptions.from);
+      }
+      if (queryOptions.to) {
+        addParam('to', queryOptions.to);
+      }
+      if (queryOptions.minChars) {
+        addParam('min_chars', String(queryOptions.minChars));
+      }
+      if (queryOptions.customEvents) {
+        Object.keys(queryOptions.customEvents).forEach((key: string) => {
+          // $FlowFixMe
+          addParam(key, queryOptions.customEvents[key]);
+        });
+      }
+    }
+    return new Promise((resolve, reject) => {
+      fetch(
+        `${this.url}/_analytics/${this.index}/recent-searches?${queryString}`,
+        requestOptions
+      )
+        .then(res => {
+          if (res.status >= 500) {
+            return reject(res);
+          }
+          if (res.status >= 400) {
+            return reject(res);
+          }
+          return res
+            .json()
+            .then(recentSearches => {
+              const prev = this.recentSearches;
+              this.recentSearches = recentSearches.map(searchObject => ({
+                label: searchObject.key,
+                value: searchObject.key
+              }));
+              this._applyOptions(
+                {
+                  stateChanges: options.stateChanges
+                },
+                'recentSearches',
+                prev,
+                this.recentSearches
+              );
+              // Populate the recent searches
+            })
+            .catch(e => {
+              console.warn(
+                'SearchBase: error while fetching the recent searches ',
+                e
+              );
+              return reject(e);
+            });
+        })
+        .catch(e => {
+          console.warn(
+            'SearchBase: error while fetching the recent searches ',
+            e
+          );
+          return reject(e);
+        });
+    });
+  };
 
   _fetchRequest(
     requestBody: Object,

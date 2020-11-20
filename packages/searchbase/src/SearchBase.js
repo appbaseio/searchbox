@@ -49,7 +49,9 @@ class SearchBase extends Base {
         credentials: component.credentials || this.credentials,
         headers: component.headers || this.headers,
         transformRequest: component.transformRequest || this.transformRequest,
-        transformResponse: component.transformResponse || this.transformResponse
+        transformResponse:
+          component.transformResponse || this.transformResponse,
+        appbaseConfig: component.appbaseConfig || this.appbaseConfig
       });
     } else {
       // set the id property on instance

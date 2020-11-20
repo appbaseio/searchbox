@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/react-native-searchbox",
-    "version": "1.0.1-beta",
+    "version": "1.0.1-beta.3",
     "description": "Lightweight searchbox component for React Native",
     "main": "src/index.js",
     "scripts": {
@@ -16,7 +16,11 @@
     ],
     "peerDependencies": {
         "react": "*",
-        "react-native": "*"
+        "react-native": "*",
+        "react-native-vector-icons": ">6.6.0"
+    },
+    "devDependencies": {
+        "react-native-vector-icons": "^6.6.0"
     },
     "dependencies": {
         "@appbaseio/searchbase": "1.0.2",

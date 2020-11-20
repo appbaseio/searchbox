@@ -80,3 +80,11 @@ export type SearchBaseConfig = BaseConfig & {
 export type Option = {
   stateChanges?: boolean
 };
+
+export type RecentSearchOptions = {
+  from?: string,
+  to?: string,
+  size?: number,
+  minChars?: number,
+  customEvents?: { [string]: string }
+};

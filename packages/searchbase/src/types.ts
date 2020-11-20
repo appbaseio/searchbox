@@ -45,6 +45,14 @@ export type BaseConfig = {
   transformResponse?: (response: any) => Promise<any>;
 };
 
+export type RecentSearchOptions = {
+  from?: string;
+  to?: string;
+  size?: number;
+  minChars?: number;
+  customEvents?: Object;
+};
+
 export type ComponentConfig = BaseConfig & {
   enablePopularSuggestions?: boolean;
 

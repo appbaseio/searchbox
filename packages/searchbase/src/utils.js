@@ -366,6 +366,7 @@ export const searchBaseMappings = {
   appbaseSettings: 'appbaseConfig',
   suggestions: 'suggestions',
   queryId: 'queryId',
+  recentSearches: 'recentSearches',
   // ---------------- Methods -----------------------
   onMicClick: 'handleMicClick',
   triggerDefaultQuery: 'triggerDefaultQuery',
