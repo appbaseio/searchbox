@@ -45,6 +45,7 @@ export type BaseConfig = {
 export type ComponentConfig = BaseConfig & {
   enablePopularSuggestions: boolean,
   showDistinctSuggestions: boolean,
+  preserveResults: boolean,
   results: Array<Object>,
   beforeValueChange: (value: string) => Promise<any>,
   // called when value changes

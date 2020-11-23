@@ -49,6 +49,7 @@ class SearchComponent extends React.Component {
       excludeFields,
       fuzziness,
       searchOperators,
+      preserveResults,
       highlight,
       highlightField,
       customHighlight,
@@ -118,7 +119,8 @@ class SearchComponent extends React.Component {
       onRequestStatusChange,
       onQueryChange,
       onMicStatusChange,
-      enablePopularSuggestions
+      enablePopularSuggestions,
+      preserveResults
     });
   }
 
@@ -126,7 +128,7 @@ class SearchComponent extends React.Component {
     const { subscribeTo, triggerQueryOnInit } = this.props;
 
     // Subscribe to state changes
-    if (this.hasCustomRenderer) {
+    if (this.hasCustomRenderer && this.componentInstance) {
       this.componentInstance.subscribeToStateChanges(change => {
         const state = {};
         Object.keys(change).forEach(property => {
@@ -135,15 +137,17 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (triggerQueryOnInit) {
+    if (triggerQueryOnInit && this.componentInstance) {
       this.componentInstance.triggerDefaultQuery();
     }
   }
 
   componentWillUnmount() {
-    const { id } = this.props;
-    // unregister component
-    this.context.unregister(id);
+    const { id, destroyOnUnmount } = this.props;
+    if (destroyOnUnmount) {
+      // unregister component
+      this.context.unregister(id);
+    }
   }
 
   get componentInstance() {
@@ -165,7 +169,8 @@ class SearchComponent extends React.Component {
 
 SearchComponent.defaultProps = {
   // Triggers the default query on init
-  triggerQueryOnInit: true
+  triggerQueryOnInit: true,
+  destroyOnUnmount: true
 };
 
 SearchComponent.propTypes = {
@@ -178,6 +183,7 @@ SearchComponent.propTypes = {
   transformResponse: func,
   beforeValueChange: func,
   enablePopularSuggestions: bool,
+  preserveResults: bool,
   // RS API properties
   // eslint-disable-next-line react/no-typos
   id: string.isRequired,
@@ -236,7 +242,10 @@ SearchComponent.propTypes = {
   onQueryChange: func,
 
   // called when mic status changes
-  onMicStatusChange: func
+  onMicStatusChange: func,
+
+  // to destroy the component state
+  destroyOnUnmount: bool
 };
 
 export default SearchComponent;

@@ -38,6 +38,10 @@ class SearchBase extends Base {
     if (!componentId) {
       throw new Error(errorMessages.invalidComponentId);
     }
+    if (this._components[componentId]) {
+      // return existing instance
+      return this._components[componentId];
+    }
     let componentInstance = component;
     if (component && !(component instanceof SearchComponent)) {
       // create instance from object with all the options

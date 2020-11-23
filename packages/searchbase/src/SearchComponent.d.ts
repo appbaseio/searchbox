@@ -81,6 +81,9 @@ export class SearchComponent extends Base {
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
 
+  // To preserve the results state
+  preserveResults: boolean;
+
   // query error
   error: any;
 

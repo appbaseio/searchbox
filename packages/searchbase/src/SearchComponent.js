@@ -147,6 +147,9 @@ class SearchComponent extends Base {
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
 
+  // preserve the data for infinite loading
+  preserveResults: boolean;
+
   // query error
   error: any;
 
@@ -230,6 +233,7 @@ class SearchComponent extends Base {
     enablePopularSuggestions,
     results,
     showDistinctSuggestions,
+    preserveResults,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -333,6 +337,8 @@ class SearchComponent extends Base {
     this.enablePopularSuggestions = enablePopularSuggestions;
 
     this.showDistinctSuggestions = showDistinctSuggestions;
+
+    this.preserveResults = preserveResults;
 
     // Initialize the state changes observable
     this.stateChanges = new Observable();
@@ -714,13 +720,12 @@ class SearchComponent extends Base {
                     ...rawResults.hits.hits
                   ];
                 }
-
-                this.results.setRaw(rawResults);
+                this._appendResults(rawResults);
                 afterResponse();
               })
               .catch(handleError);
           } else {
-            this.results.setRaw(rawResults);
+            this._appendResults(rawResults);
             afterResponse();
           }
           return Promise.resolve(rawResults);
@@ -935,6 +940,29 @@ class SearchComponent extends Base {
   };
 
   /* -------- Private methods only for the internal use -------- */
+  _appendResults(rawResults: Object) {
+    if (
+      this.preserveResults &&
+      rawResults &&
+      Array.isArray(rawResults.hits && rawResults.hits.hits) &&
+      Array.isArray(
+        this.results.rawData &&
+          this.results.rawData.hits &&
+          this.results.rawData.hits.hits
+      )
+    ) {
+      this.results.setRaw({
+        ...rawResults,
+        hits: {
+          ...rawResults.hits,
+          hits: [...this.results.rawData.hits.hits, ...rawResults.hits.hits]
+        }
+      });
+    } else {
+      this.results.setRaw(rawResults);
+    }
+  }
+
   // Method to apply the changed based on set options
   _applyOptions(
     options: Options,
