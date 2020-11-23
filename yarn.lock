@@ -9,22 +9,6 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-native-searchbox@1.0.1-beta.3":
-  version "1.0.1-beta.3"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-native-searchbox/-/react-native-searchbox-1.0.1-beta.3.tgz#e685b1b92d8a5f9fe4ab971c17495959c5dbf6df"
-  integrity sha512-Wl4tRqUVg+N3SIeDJa2KXfholVKxQsbBDHLe8CT8SQkTVlncSnu6RzVWquJbBYclTidY43xqNBLMmjPJj1UkVw==
-  dependencies:
-    "@appbaseio/searchbase" "1.0.2"
-    color "^3.1.3"
-
-"@appbaseio/searchbase@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.2.tgz#a9c0224717aef5b00cf3d62641f81c1d8899a2c6"
-  integrity sha512-i/+qwMMLWreHUriNZeCnCiisv+9xaYjqe/UmGf6okWgXnXT5o30MxL54GPwEXnktqAlU6mPMe69Gd/YIGtqo4g==
-  dependencies:
-    "@appbaseio/analytics" "^2.1.0-beta"
-    cross-fetch "^3.0.4"
-
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"

@@ -553,26 +553,19 @@ class SearchBox extends React.Component {
 
   render() {
     const { showModal } = this.state;
-    const { style, autosuggest } = this.props;
-    return (
-      <SafeAreaView style={styles.flex1}>
-        <View style={style}>
-          {!autosuggest ? this.renderSearchInput() : null}
-          {showModal
-            ? this.renderAutoSuggestView()
-            : autosuggest && (
-                <Pressable onPress={this.openModal}>
-                  {/* We can't disable pointer events for all searchbar just disable it for text input */}
-                  {/* <View pointerEvents="none"> */}
-                  {this.renderSearchInput({
-                    pointerEvents: 'none'
-                  })}
-                  {/* </View> */}
-                </Pressable>
-              )}
-        </View>
-      </SafeAreaView>
-    );
+    const { autosuggest } = this.props;
+    if (!autosuggest) {
+      return this.renderSearchInput();
+    }
+    return showModal
+      ? this.renderAutoSuggestView()
+      : autosuggest && (
+          <Pressable onPress={this.openModal}>
+            {this.renderSearchInput({
+              pointerEvents: 'none'
+            })}
+          </Pressable>
+        );
   }
 }
 

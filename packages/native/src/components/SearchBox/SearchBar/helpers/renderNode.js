@@ -8,7 +8,7 @@ const renderNode = (Component, content, defaultProps) => {
     return content;
   }
   if (typeof content === 'function') {
-    return content();
+    return content(defaultProps);
   }
   // Just in case
   if (content === true) {
