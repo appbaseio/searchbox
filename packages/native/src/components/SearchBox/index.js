@@ -509,6 +509,7 @@ class SearchBox extends React.Component {
         <Text
           style={styles.itemText}
           onPress={() => this.onSuggestionSelected(item)}
+          numberOfLines={1}
         >
           {item.label}
         </Text>
