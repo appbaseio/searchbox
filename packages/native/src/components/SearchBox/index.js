@@ -109,12 +109,15 @@ class SearchBox extends React.Component {
   }
 
   closeModal = () => {
-    const { showModal } = this.state;
+    const { showModal, autoFillInProgress } = this.state;
     if (showModal) {
-      this.setState({
-        showModal: false,
-        autoFillInProgress: false,
-        recentSearchSelection: false
+      this.clearState(() => {
+        if (autoFillInProgress) {
+          // Clear stale query
+          this.setValue({
+            value: ''
+          });
+        }
       });
     }
   };
@@ -147,31 +150,21 @@ class SearchBox extends React.Component {
   }
 
   get popularSuggestionsList() {
-    const { autoFillInProgress } = this.state;
     const suggestions = this.componentInstance.suggestions;
-    if (autoFillInProgress) {
-      return this.prevPopularSuggestionsList || [];
-    }
-    this.prevPopularSuggestionsList = (suggestions || []).filter(
+    return (suggestions || []).filter(
       suggestion => suggestion._popular_suggestion
     );
-    return this.prevPopularSuggestionsList;
   }
 
   get suggestionsList() {
-    const { autoFillInProgress } = this.state;
     const { defaultSuggestions } = this.props;
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    if (autoFillInProgress) {
-      return this.prevSuggestionsList || [];
-    }
     const suggestions = this.componentInstance.suggestions;
-    this.prevSuggestionsList = (suggestions || []).filter(
+    return (suggestions || []).filter(
       suggestion => !suggestion._popular_suggestion
     );
-    return this.prevSuggestionsList;
   }
 
   get stats() {
@@ -337,10 +330,8 @@ class SearchBox extends React.Component {
 
   renderNoSuggestion = () => {
     const { renderNoSuggestion, loading, error } = this.props;
-    const { autoFillInProgress } = this.state;
     const currentValue = this.componentInstance.value;
     if (
-      !autoFillInProgress &&
       renderNoSuggestion &&
       !this.suggestionsList.length &&
       !loading &&
@@ -354,15 +345,27 @@ class SearchBox extends React.Component {
     return null;
   };
 
+  clearState = (cb = () => null) => {
+    this.setState(
+      {
+        showModal: false,
+        autoFillInProgress: false
+      },
+      cb
+    );
+  };
+
   handleSubmitEditing = e => {
+    const text = e.nativeEvent.text;
     // if a suggestion was selected, delegate the handling
     // to suggestion handler
-    this.setValue({
-      value: e.nativeEvent.text,
-      triggerCustomQuery: true
-    });
-    this.closeModal();
-    this.onValueSelected(e.nativeEvent.text, causes.ENTER_PRESS);
+    this.clearState(() =>
+      this.setValue({
+        value: text,
+        triggerCustomQuery: true
+      })
+    );
+    this.onValueSelected(text, causes.ENTER_PRESS);
   };
 
   setFocus() {
@@ -374,26 +377,12 @@ class SearchBox extends React.Component {
   }
 
   handleAutoFill = (item, recentSearch) => {
-    const prev = this.componentInstance.value;
     this.setState(
       {
-        autoFillInProgress: true,
-        recentSearchSelection: !!recentSearch
+        autoFillInProgress: true
       },
       () => {
-        this.componentInstance.setValue(item.value, {
-          triggerDefaultQuery: false,
-          triggerCustomQuery: true,
-          stateChanges: false
-        });
-        this.componentInstance._applyOptions(
-          {
-            stateChanges: true
-          },
-          'value',
-          prev,
-          this.componentInstance.value
-        );
+        this.componentInstance.setValue(item.value);
       }
     );
   };
@@ -427,7 +416,6 @@ class SearchBox extends React.Component {
       searchHeaderStyle,
       recentSearches
     } = this.props;
-    const { recentSearchSelection, autoFillInProgress } = this.state;
     return (
       <Modal
         supportedOrientations={null}
@@ -475,8 +463,7 @@ class SearchBox extends React.Component {
                   ItemSeparatorComponent={this.renderItemSeparator}
                   renderItem={this.renderSuggestionItem}
                 />
-                {(!this.componentInstance.value ||
-                  (recentSearchSelection && autoFillInProgress)) && (
+                {!this.componentInstance.value && (
                   <FlatList
                     data={(recentSearches || []).slice(0, size)}
                     keyboardShouldPersistTaps={'handled'}
