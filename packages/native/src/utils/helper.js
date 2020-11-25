@@ -2,9 +2,6 @@ import React from 'react';
 
 export const SearchContext = React.createContext();
 
-// export const getClassName = (classMap, component) =>
-//   (classMap && classMap[component]) || '';
-
 /**
  * To determine wether an element is a function
  * @param {any} element
@@ -48,57 +45,3 @@ export const debounce = (method, delay) => {
     method();
   }, delay);
 };
-
-// export const isEmpty = val => !(val && val.length && Object.keys(val).length);
-
-/**
- * To determine whether a component has renderPopularSuggestions prop defined or not
- * @returns {Boolean}
- */
-export const hasPopularSuggestionsRenderer = (props = {}) => {
-  const { renderPopularSuggestions } = props;
-  return isFunction(renderPopularSuggestions);
-};
-
-/**
- * Extracts the renderPopularSuggestions prop from props and returns a valid React element
- * @param {Object} data
- * @param {Object} props
- */
-export const getPopularSuggestionsComponent = (data = {}, props = {}) => {
-  const { renderPopularSuggestions } = props;
-  // Render function as render prop
-  if (isFunction(renderPopularSuggestions)) {
-    return renderPopularSuggestions(data);
-  }
-  return null;
-};
-
-// export const checkValidValue = value => {
-//   if (value) {
-//     if (Array.isArray(value) && !value.length) return false;
-//     return true;
-//   }
-//   return false;
-// };
-
-// export function isEqual(x, y) {
-//   if (x === y) return true;
-//   if (!(x instanceof Object) || !(y instanceof Object)) return false;
-//   if (x.constructor !== y.constructor) return false;
-
-//   /* eslint-disable */
-// 	for (const p in x) {
-// 		if (!x.hasOwnProperty(p)) continue;
-// 		if (!y.hasOwnProperty(p)) return false;
-// 		if (x[p] === y[p]) continue;
-// 		if (typeof x[p] !== 'object') return false;
-// 		if (!isEqual(x[p], y[p])) return false;
-// 	}
-
-// 	for (const p in y) {
-// 		if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
-// 	}
-// 	/* eslint-enable */
-//   return true;
-// }

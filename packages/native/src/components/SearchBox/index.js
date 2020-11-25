@@ -17,7 +17,9 @@ import {
   SafeAreaView,
   FlatList,
   Modal,
-  Pressable
+  Pressable,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import {
   appbaseConfig as appbaseConfigDef,
@@ -38,9 +40,7 @@ import {
   debounce as debounceFunc,
   equals,
   getComponent,
-  getPopularSuggestionsComponent,
   hasCustomRenderer,
-  hasPopularSuggestionsRenderer,
   SearchContext
 } from '../../utils/helper';
 import SearchBar from './SearchBar';
@@ -57,6 +57,12 @@ const defaultRecentSearchIcon = theme => ({
   type: 'material',
   size: 24,
   name: 'history'
+});
+
+const defaultPopularSuggestionIcon = theme => ({
+  type: 'material',
+  size: 24,
+  name: 'trending-up'
 });
 
 const defaultAutoFillIcon = theme => ({
@@ -85,7 +91,21 @@ class SearchBox extends React.Component {
         stateChanges: true
       });
     }
+    if (this.componentInstance) {
+      const onResults = () => {
+        this.scrollToTop();
+      };
+      if (this.componentInstance.onResults) {
+        this.componentInstance.onResults = () => {
+          onResults();
+          this.componentInstance.onResults();
+        };
+      } else {
+        this.componentInstance.onResults = onResults;
+      }
+    }
     this.searchbarRef = React.createRef();
+    this.flatListRef = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
@@ -152,7 +172,7 @@ class SearchBox extends React.Component {
   get popularSuggestionsList() {
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
-      suggestion => suggestion._popular_suggestion
+      suggestion => suggestion.source && suggestion.source._popular_suggestion
     );
   }
 
@@ -163,7 +183,8 @@ class SearchBox extends React.Component {
     }
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
-      suggestion => !suggestion._popular_suggestion
+      suggestion =>
+        !(suggestion.source && suggestion.source._popular_suggestion)
     );
   }
 
@@ -180,13 +201,17 @@ class SearchBox extends React.Component {
     };
   }
 
+  get totalSuggestions() {
+    return [...this.suggestionsList, ...this.popularSuggestionsList];
+  }
+
   _applySetter = (prev, next, setterFunc) => {
     if (!equals(prev, next))
       this.componentInstance && this.componentInstance[setterFunc](next);
   };
 
   getComponent = (isPopularSuggestionsRender = false) => {
-    const { error, loading } = this.props;
+    const { error, loading, recentSearches } = this.props;
     const data = {
       error,
       loading,
@@ -197,19 +222,9 @@ class SearchBox extends React.Component {
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
       rawData: this.componentInstance.results.rawData,
-      popularSuggestions: this.popularSuggestionsList
+      popularSuggestions: this.popularSuggestionsList,
+      recentSearches
     };
-    if (isPopularSuggestionsRender) {
-      return getPopularSuggestionsComponent(
-        {
-          data: this.popularSuggestionsList,
-          value: this.componentInstance.value,
-          loading,
-          error
-        },
-        this.props
-      );
-    }
     return getComponent(data, this.props);
   };
 
@@ -250,6 +265,11 @@ class SearchBox extends React.Component {
 
   onInputChange = value => {
     this.setValue({ value });
+  };
+
+  scrollToTop = () => {
+    this.flatListRef.current &&
+      this.flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
   };
 
   setValue = ({ value, clearResults = true, ...rest }) => {
@@ -333,7 +353,7 @@ class SearchBox extends React.Component {
     const currentValue = this.componentInstance.value;
     if (
       renderNoSuggestion &&
-      !this.suggestionsList.length &&
+      !this.totalSuggestions.length &&
       !loading &&
       currentValue &&
       !error
@@ -443,41 +463,38 @@ class SearchBox extends React.Component {
             {this.hasCustomRenderer ? (
               <View>{this.getComponent()}</View>
             ) : (
-              <View>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.flex1}
+              >
                 {this.renderNoSuggestion()}
-                {hasPopularSuggestionsRenderer(this.props) ? (
-                  this.getComponent(true)
-                ) : (
+                {this.totalSuggestions.length ? (
                   <FlatList
+                    ref={this.flatListRef}
+                    data={this.totalSuggestions.slice(0, size)}
                     keyboardShouldPersistTaps={'handled'}
-                    data={this.popularSuggestionsList}
                     keyExtractor={item => item.label}
                     ItemSeparatorComponent={this.renderItemSeparator}
                     renderItem={this.renderSuggestionItem}
                   />
-                )}
-                <FlatList
-                  data={this.suggestionsList.slice(0, size)}
-                  keyboardShouldPersistTaps={'handled'}
-                  keyExtractor={item => item.label}
-                  ItemSeparatorComponent={this.renderItemSeparator}
-                  renderItem={this.renderSuggestionItem}
-                />
-                {!this.componentInstance.value && (
-                  <FlatList
-                    data={(recentSearches || []).slice(0, size)}
-                    keyboardShouldPersistTaps={'handled'}
-                    keyExtractor={item => item.label}
-                    ItemSeparatorComponent={this.renderItemSeparator}
-                    renderItem={rest =>
-                      this.renderSuggestionItem({
-                        recentSearch: true,
-                        ...rest
-                      })
-                    }
-                  />
-                )}
-              </View>
+                ) : null}
+                {!this.componentInstance.value &&
+                  recentSearches &&
+                  recentSearches.length && (
+                    <FlatList
+                      data={(recentSearches || []).slice(0, size)}
+                      keyboardShouldPersistTaps={'handled'}
+                      keyExtractor={item => item.label}
+                      ItemSeparatorComponent={this.renderItemSeparator}
+                      renderItem={rest =>
+                        this.renderSuggestionItem({
+                          isRecentSearch: true,
+                          ...rest
+                        })
+                      }
+                    />
+                  )}
+              </KeyboardAvoidingView>
             )}
           </View>
         </SafeAreaView>
@@ -485,27 +502,34 @@ class SearchBox extends React.Component {
     );
   }
 
-  renderSuggestionItem = ({ item, recentSearch }) => {
+  renderSuggestionItem = ({ item, isRecentSearch }) => {
     const {
       renderItem,
       theme,
       autoFillIcon = defaultAutoFillIcon(theme),
       showAutoFill,
-      recentSearchIcon = defaultRecentSearchIcon(theme)
+      recentSearchIcon = defaultRecentSearchIcon(theme),
+      popularSuggestionIcon = defaultPopularSuggestionIcon(theme)
     } = this.props;
     if (renderItem) {
-      return renderItem(item);
+      return renderItem(item, isRecentSearch);
     }
     return (
       <View style={styles.itemStyle}>
-        {recentSearch
+        {isRecentSearch
           ? renderNode(Icon, recentSearchIcon, {
               theme,
               onPress: () => this.onSuggestionSelected(item),
               ...defaultRecentSearchIcon(theme)
             })
           : null}
-
+        {item.source && item.source._popular_suggestion
+          ? renderNode(Icon, popularSuggestionIcon, {
+              theme,
+              onPress: () => this.onSuggestionSelected(item),
+              ...defaultPopularSuggestionIcon(theme)
+            })
+          : null}
         <Text
           style={styles.itemText}
           onPress={() => this.onSuggestionSelected(item)}
@@ -517,7 +541,7 @@ class SearchBox extends React.Component {
           {showAutoFill
             ? renderNode(Icon, autoFillIcon, {
                 theme,
-                onPress: () => this.handleAutoFill(item, recentSearch),
+                onPress: () => this.handleAutoFill(item, isRecentSearch),
                 ...defaultAutoFillIcon(theme)
               })
             : null}

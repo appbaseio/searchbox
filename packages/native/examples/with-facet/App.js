@@ -100,7 +100,12 @@ const Filters = () => {
                     ItemSeparatorComponent={renderItemSeparator}
                     renderItem={({ item }) => (
                       <View
-                        style={{ flex: 1, flexDirection: 'row', padding: 10 }}
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          padding: 10,
+                          alignItems: 'center'
+                        }}
                       >
                         <CheckBox
                           style={{
