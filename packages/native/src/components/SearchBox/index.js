@@ -408,7 +408,7 @@ class SearchBox extends React.Component {
   };
 
   renderSearchInput({ isOpenWithModal = false, ...rest } = {}) {
-    const { placeholder, theme, loading, searchBarProps } = this.props;
+    const { placeholder, theme, loading, style, searchBarProps } = this.props;
     const currentValue = this.componentInstance.value || '';
     return (
       <SearchBar
@@ -422,6 +422,7 @@ class SearchBox extends React.Component {
         showLoading={loading}
         returnKeyType="search"
         ref={this.searchbarRef}
+        style={style}
         {...rest}
         {...searchBarProps}
       />
@@ -582,68 +583,56 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.propTypes = {
-  enablePopularSuggestions: bool,
-  enableRecentSearches: bool,
+  // RS API
   dataField: dataFieldDef,
   aggregationField: string,
   nestedField: string,
   size: number,
-  title: string,
-  defaultValue: string,
-  value: string,
-  downShiftProps: object,
-  placeholder: string,
-  showIcon: bool,
-  iconPosition: position,
-  icon: any,
-  showClear: bool,
-  clearIcon: any,
-  autosuggest: bool,
-  strictSelection: bool,
-  defaultSuggestions: arrayOf(object),
   debounce: wholeNumber,
-  highlight: bool,
-  highlightField,
-  customHighlight: func,
+  // TODO: Implement later
+  // highlight: bool,
+  // highlightField,
+  // customHighlight: func,
   queryFormat,
   fuzziness: fuzzinessDef,
-  showVoiceSearch: bool,
   searchOperators: bool,
-  render: func,
-  renderItem: func,
-  renderPopularSuggestions: func,
-  renderNoSuggestion: titleDef,
-  getMicInstance: func,
-  renderMic: func,
-  onChange: func,
-  onValueChange: func,
   onValueSelected: func,
   onAggregationData: func,
   onError: func,
   onResults: func,
-  style: object,
   defaultQuery: func,
-  beforeValueChange: func,
+  customQuery: func,
   onQueryChange: func,
-  className: string,
-  loader: object,
-  onBlur: func,
-  onKeyPress: func,
-  onKeyUp: func,
-  onFocus: func,
-  onKeyDown: func,
-  autoFocus: bool,
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
-  searchBarProps: object,
-  separatorStyle: oneOfType([object, array]),
-  searchHeaderStyle: oneOfType([object, array]),
+  // Customize Suggestions
+  defaultSuggestions: arrayOf(object),
+  autosuggest: bool,
   showAutoFill: bool,
+  enablePopularSuggestions: bool,
+  enableRecentSearches: bool,
+  maxPopularSuggestions: number,
   // icons
   autoFillIcon: nodeType,
   recentSearchIcon: nodeType,
   goBackIcon: nodeType,
+  // Customize UI
+  defaultValue: string,
+  value: string,
+  placeholder: string,
+  render: func,
+  renderItem: func,
+  renderNoSuggestion: titleDef,
+  style: object,
+  searchBarProps: object,
+  separatorStyle: oneOfType([object, array]),
+  searchHeaderStyle: oneOfType([object, array]),
+  // Voice Search
+  // TODO: Implement voice search
+  // showVoiceSearch: bool,
+  // getMicInstance: func,
+  // renderMic: func,
   // internal props
   error: any,
   loading: bool,
@@ -652,16 +641,14 @@ SearchBox.propTypes = {
 };
 
 SearchBox.defaultProps = {
+  maxPopularSuggestions: 5,
   enablePopularSuggestions: false,
   enableRecentSearches: false,
   showAutoFill: true,
   theme: defaultTheme,
   placeholder: 'Search',
   showIcon: true,
-  iconPosition: 'right',
-  showClear: false,
   autosuggest: true,
-  strictSelection: false,
   debounce: 0,
   showVoiceSearch: false,
   className: '',

@@ -70,7 +70,8 @@ class SearchComponent extends React.Component {
       onRequestStatusChange,
       onQueryChange,
       onMicStatusChange,
-      enablePopularSuggestions
+      enablePopularSuggestions,
+      maxPopularSuggestions
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -120,7 +121,8 @@ class SearchComponent extends React.Component {
       onQueryChange,
       onMicStatusChange,
       enablePopularSuggestions,
-      preserveResults
+      preserveResults,
+      maxPopularSuggestions
     });
   }
 
@@ -183,6 +185,7 @@ SearchComponent.propTypes = {
   transformResponse: func,
   beforeValueChange: func,
   enablePopularSuggestions: bool,
+  maxPopularSuggestions: number,
   preserveResults: bool,
   // RS API properties
   // eslint-disable-next-line react/no-typos

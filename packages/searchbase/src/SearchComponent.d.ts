@@ -78,6 +78,9 @@ export class SearchComponent extends Base {
   // To enable the popular suggestions
   enablePopularSuggestions: boolean;
 
+  // To define the size of popular suggestions
+  maxPopularSuggestions: number;
+
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
 

@@ -144,6 +144,9 @@ class SearchComponent extends Base {
   // To enable the popular suggestions
   enablePopularSuggestions: boolean;
 
+  // size of the popular suggestions
+  maxPopularSuggestions: number;
+
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
 
@@ -231,6 +234,7 @@ class SearchComponent extends Base {
     onQueryChange,
     onMicStatusChange,
     enablePopularSuggestions,
+    maxPopularSuggestions,
     results,
     showDistinctSuggestions,
     preserveResults,
@@ -335,6 +339,8 @@ class SearchComponent extends Base {
 
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
+
+    this.maxPopularSuggestions = maxPopularSuggestions;
 
     this.showDistinctSuggestions = showDistinctSuggestions;
 
@@ -837,7 +843,7 @@ class SearchComponent extends Base {
         {
           id: suggestionQueryID,
           dataField: popularSuggestionFields,
-          size: 5,
+          size: this.maxPopularSuggestions || 5,
           value: this.value,
           defaultQuery: {
             query: {

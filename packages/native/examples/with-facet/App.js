@@ -229,6 +229,7 @@ export default function App() {
           // searchBarProps={{
           //   platform: 'android'
           // }}
+          // maxPopularSuggestions={3}
           goBackIcon={props => <Ionicons {...props} />}
           autoFillIcon={props => <Feather name="arrow-up-left" {...props} />}
           recentSearchIcon={props => (
