@@ -24,8 +24,6 @@ import {
 import {
   appbaseConfig as appbaseConfigDef,
   fuzziness as fuzzinessDef,
-  highlightField,
-  position,
   queryFormat,
   title as titleDef,
   wholeNumber,
@@ -41,7 +39,8 @@ import {
   equals,
   getComponent,
   hasCustomRenderer,
-  SearchContext
+  SearchContext,
+  isFunction
 } from '../../utils/helper';
 import SearchBar from './SearchBar';
 import causes from '../../utils/causes';
@@ -435,7 +434,8 @@ class SearchBox extends React.Component {
       goBackIcon = defaultGoBackIcon(theme),
       size,
       searchHeaderStyle,
-      recentSearches
+      recentSearches,
+      suggestionsContainerStyle
     } = this.props;
     return (
       <Modal
@@ -462,12 +462,24 @@ class SearchBox extends React.Component {
               isOpenWithModal: true
             })}
             {this.hasCustomRenderer ? (
-              <View>{this.getComponent()}</View>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={StyleSheet.flatten([
+                  styles.flex1,
+                  suggestionsContainerStyle
+                ])}
+              >
+                {this.getComponent()}
+              </KeyboardAvoidingView>
             ) : (
               <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.flex1}
+                style={StyleSheet.flatten([
+                  styles.flex1,
+                  suggestionsContainerStyle
+                ])}
               >
+                {this.renderError()}
                 {this.renderNoSuggestion()}
                 {this.totalSuggestions.length ? (
                   <FlatList
@@ -564,6 +576,14 @@ class SearchBox extends React.Component {
     );
   };
 
+  renderError = () => {
+    const { renderError, error, loading } = this.props;
+    if (error && renderError && !loading) {
+      return isFunction(renderError) ? renderError(error) : renderError;
+    }
+    return null;
+  };
+
   render() {
     const { showModal } = this.state;
     const { autosuggest } = this.props;
@@ -624,10 +644,12 @@ SearchBox.propTypes = {
   render: func,
   renderItem: func,
   renderNoSuggestion: titleDef,
+  renderError: titleDef,
   style: object,
   searchBarProps: object,
   separatorStyle: oneOfType([object, array]),
   searchHeaderStyle: oneOfType([object, array]),
+  suggestionsContainerStyle: oneOfType([object, array]),
   // Voice Search
   // TODO: Implement voice search
   // showVoiceSearch: bool,
