@@ -1,7 +1,8 @@
 import React from 'react';
 
 const SuggestionItem = ({ currentValue, suggestion }) => {
-  const { label, value } = suggestion;
+  const { label, value, isPredictiveSuggestion } = suggestion;
+
   const stringToReplace = currentValue.split(' ').join('|');
   // label has highest precedence
   if (label) {
@@ -11,12 +12,11 @@ const SuggestionItem = ({ currentValue, suggestion }) => {
           <div
             className="trim"
             dangerouslySetInnerHTML={{
-              __html: label.replace(
-                new RegExp(stringToReplace, 'ig'),
-                matched => {
-                  return `<mark class="highlight-class">${matched}</mark>`;
-                }
-              )
+              __html: isPredictiveSuggestion
+                ? label
+                : label.replace(new RegExp(stringToReplace, 'ig'), matched => {
+                    return `<mark class="highlight-class">${matched}</mark>`;
+                  })
             }}
           />
         );

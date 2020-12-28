@@ -61,7 +61,7 @@ export const parseHits = (hits: Array<Object>): Array<Object> => {
         .reduce(
           (obj: { [key: string]: any }, key: string) => {
             // eslint-disable-next-line
-              obj[key] = data[key];
+            obj[key] = data[key];
             return obj;
           },
           {
@@ -168,12 +168,14 @@ export const extractSuggestion = (val: any) => {
  * @param {array} suggestions Raw Suggestions received from ES
  * @param {string} currentValue Search Term
  * @param {boolean} showDistinctSuggestions When set to true will only return 1 suggestion per document
+ * @param {boolean} enablePredictiveSuggestions When set to true will return the predictive suggestions list instead of the deafult list
  */
 export const getSuggestions = (
   fields: Array<string> = [],
   suggestions: Array<Object>,
   value: string = '',
-  showDistinctSuggestions: boolean = true
+  showDistinctSuggestions: boolean = true,
+  enablePredictiveSuggestions: boolean = false
 ) => {
   let suggestionsList = [];
   let labelsList = [];
@@ -277,7 +279,78 @@ export const getSuggestions = (
     traverseSuggestions();
   }
 
-  return suggestionsList;
+  const getPredictiveSuggestions = ({
+    suggestions,
+    currentValue,
+    wordsToShowAfterHighlight
+  }) => {
+    const suggestionMap = {};
+    if (currentValue) {
+      const parsedSuggestion = suggestions.reduce((agg, { label, ...rest }) => {
+        // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
+        const parsedContent = new DOMParser().parseFromString(
+          label,
+          'text/html'
+        ).documentElement.textContent;
+
+        // to match the partial start of word.
+        // example if searchTerm is `select` and string contains `selected`
+        let regexString = `(${currentValue})\\w+`;
+        let regex = new RegExp(regexString, 'i');
+        let regexExecution = regex.exec(parsedContent);
+        // if execution value is null it means either there is no match or there are chances
+        // that exact word is present
+        if (!regexExecution) {
+          // regex to match exact word
+          regexString = `(${currentValue})`;
+          regex = new RegExp(regexString, 'i');
+          regexExecution = regex.exec(parsedContent);
+        }
+
+        if (regexExecution) {
+          const matchedString = parsedContent.slice(
+            regexExecution.index,
+            parsedContent.length
+          );
+
+          const suggestionPhrase = `${currentValue}<mark class="highlight-class">${matchedString
+            .slice(currentValue.length)
+            .split(' ')
+            .slice(0, wordsToShowAfterHighlight + 1)
+            .join(' ')}</mark>`;
+
+          // to show unique results only
+          if (!suggestionMap[suggestionPhrase]) {
+            suggestionMap[suggestionPhrase] = 1;
+            return [
+              ...agg,
+              {
+                label: suggestionPhrase,
+                isPredictiveSuggestion: true,
+                ...rest
+              }
+            ];
+          }
+
+          return agg;
+        }
+
+        return agg;
+      }, []);
+
+      return parsedSuggestion;
+    }
+
+    return [];
+  };
+
+  if (enablePredictiveSuggestions) {
+    return getPredictiveSuggestions({
+      suggestions: suggestionsList,
+      currentValue: value,
+      wordsToShowAfterHighlight: true
+    });
+  } else return suggestionsList;
 };
 
 export function parseCompAggToHits(
@@ -302,18 +375,18 @@ export function isEqual(x, y): boolean {
   if (x.constructor !== y.constructor) return false;
 
   /* eslint-disable */
-	for (const p in x) {
-		if (!x.hasOwnProperty(p)) continue;
-		if (!y.hasOwnProperty(p)) return false;
-		if (x[p] === y[p]) continue;
-		if (typeof x[p] !== 'object') return false;
-		if (!isEqual(x[p], y[p])) return false;
-	}
+  for (const p in x) {
+    if (!x.hasOwnProperty(p)) continue;
+    if (!y.hasOwnProperty(p)) return false;
+    if (x[p] === y[p]) continue;
+    if (typeof x[p] !== 'object') return false;
+    if (!isEqual(x[p], y[p])) return false;
+  }
 
-	for (const p in y) {
-		if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
-	}
-	/* eslint-enable */
+  for (const p in y) {
+    if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
+  }
+  /* eslint-enable */
   return true;
 }
 

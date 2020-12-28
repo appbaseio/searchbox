@@ -84,6 +84,9 @@ export class SearchComponent extends Base {
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
 
+  // To show the predictive suggestions
+  enablePredictiveSuggestions: boolean;
+
   // To preserve the results state
   preserveResults: boolean;
 
@@ -229,13 +232,13 @@ export class SearchComponent extends Base {
   setDefaultQuery(
     defaultQuery: (component: SearchComponent) => void,
     options?: types.Options
-  ): void
+  ): void;
 
   // Method to set the custom query
   setCustomQuery(
     customQuery: (component: SearchComponent) => void,
     options?: types.Options
-  ): void
+  ): void;
 
   // Method to execute the component's own query i.e default query
   triggerDefaultQuery(options?: types.Option): Promise<any>;

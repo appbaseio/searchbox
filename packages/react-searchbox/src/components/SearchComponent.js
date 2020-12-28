@@ -77,7 +77,8 @@ class SearchComponent extends React.Component {
       onRequestStatusChange,
       onQueryChange,
       onMicStatusChange,
-      enablePopularSuggestions
+      enablePopularSuggestions,
+      enablePredictiveSuggestions
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -126,7 +127,8 @@ class SearchComponent extends React.Component {
       onRequestStatusChange,
       onQueryChange,
       onMicStatusChange,
-      enablePopularSuggestions
+      enablePopularSuggestions,
+      enablePredictiveSuggestions
     });
   }
 
@@ -182,7 +184,8 @@ class SearchComponent extends React.Component {
 SearchComponent.defaultProps = {
   // Triggers the default query on init
   triggerQueryOnInit: true,
-  URLParams: false
+  URLParams: false,
+  enablePredictiveSuggestions: false
 };
 
 SearchComponent.propTypes = {
@@ -195,6 +198,7 @@ SearchComponent.propTypes = {
   transformResponse: func,
   beforeValueChange: func,
   enablePopularSuggestions: bool,
+  enablePredictiveSuggestions: bool,
   URLParams: bool,
   // RS API properties
   id: stringRequired,
