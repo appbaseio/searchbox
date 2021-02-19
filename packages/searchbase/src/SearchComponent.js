@@ -99,7 +99,7 @@ class SearchComponent extends Base {
 
   aggregationField: string;
 
-  aggregationSize: string;
+  aggregationSize: number;
 
   after: Object;
 

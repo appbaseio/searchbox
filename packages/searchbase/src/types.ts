@@ -107,6 +107,8 @@ export type ComponentConfig = BaseConfig & {
 
   aggregationField?: string;
 
+  aggregationSize?: number;
+
   after?: Object;
 
   includeNullValues?: Boolean;

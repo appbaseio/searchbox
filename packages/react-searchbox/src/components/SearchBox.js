@@ -575,6 +575,7 @@ SearchBox.propTypes = {
   enablePopularSuggestions: bool,
   dataField: dataFieldValidator,
   aggregationField: string,
+  aggregationSize: number,
   nestedField: string,
   size: number,
   title: string,

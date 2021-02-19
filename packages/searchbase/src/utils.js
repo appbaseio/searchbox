@@ -331,6 +331,7 @@ export const searchBaseMappings = {
   sortBy: 'sortBy',
   value: 'value',
   aggregationField: 'aggregationField',
+  aggregationSize: 'aggregationSize',
   after: 'after',
   includeNullValues: 'includeNullValues',
   includeFields: 'includeFields',

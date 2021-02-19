@@ -606,6 +606,7 @@ SearchBox.propTypes = {
   // RS API
   dataField: dataFieldDef,
   aggregationField: string,
+  aggregationSize: number,
   nestedField: string,
   size: number,
   debounce: wholeNumber,

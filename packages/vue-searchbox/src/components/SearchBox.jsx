@@ -51,6 +51,7 @@ const SearchBox = {
 		size: VueTypes.number,
 		sortBy: types.sortType,
 		aggregationField: VueTypes.string,
+		aggregationSize: VueTypes.number,
 		after: VueTypes.object,
 		includeNullValues: VueTypes.bool,
 		includeFields: types.sourceFields,
