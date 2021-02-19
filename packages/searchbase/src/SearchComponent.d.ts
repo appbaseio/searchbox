@@ -33,6 +33,8 @@ export class SearchComponent extends Base {
 
   aggregationField: string;
 
+  aggregationSize: string;
+
   after: Object;
 
   includeNullValues: Boolean;

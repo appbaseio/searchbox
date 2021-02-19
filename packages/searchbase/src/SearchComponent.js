@@ -99,6 +99,8 @@ class SearchComponent extends Base {
 
   aggregationField: string;
 
+  aggregationSize: string;
+
   after: Object;
 
   includeNullValues: boolean;
@@ -263,6 +265,7 @@ class SearchComponent extends Base {
       sortBy,
       value,
       aggregationField,
+      aggregationSize,
       after,
       includeNullValues,
       includeFields,
@@ -308,6 +311,7 @@ class SearchComponent extends Base {
     this.size = size;
     this.sortBy = sortBy;
     this.aggregationField = aggregationField;
+    this.aggregationSize = aggregationSize;
     this.after = after;
     this.includeNullValues = includeNullValues;
     this.includeFields = includeFields;
@@ -449,6 +453,7 @@ class SearchComponent extends Base {
       fieldWeights: getNormalizedWeights(this.dataField),
       includeNullValues: this.includeNullValues,
       aggregationField: this.aggregationField,
+      aggregationSize: this.aggregationSize,
       categoryField: this.categoryField,
       missingLabel: this.missingLabel,
       showMissing: this.showMissing,

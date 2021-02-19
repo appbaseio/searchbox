@@ -44,6 +44,7 @@ const searchComponent = searchbase.register('search-component', {
 const filterComponent = searchbase.register('language-filter', {
   type: 'term',
   dataField: 'language.keyword',
+  aggregationSize: 10,
   react: {
     and: 'search-component'
   }
@@ -54,7 +55,10 @@ const resultComponent = searchbase.register('result-component', {
   dataField: 'name',
   react: {
     and: ['search-component', 'language-filter']
-  }
+  },
+  defaultQuery: () => ({
+    track_total_hits: true
+  })
 });
 
 const handleInput = e => {
