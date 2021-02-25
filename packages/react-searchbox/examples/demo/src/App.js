@@ -53,16 +53,6 @@ export default () => (
         title="Search"
         placeholder="Search for Books"
         autosuggest={true}
-        defaultSuggestions={[
-          {
-            label: 'Songwriting',
-            value: 'Songwriting'
-          },
-          {
-            label: 'Musicians',
-            value: 'Musicians'
-          }
-        ]}
         size={10}
         debounce={100}
         queryFormat="or"
@@ -72,6 +62,7 @@ export default () => (
         URLParams
         className="custom-class"
         enablePopularSuggestions
+        enableRecentSearches
         iconPosition="left"
         style={{ paddingBottom: 10 }}
       />
