@@ -35,6 +35,7 @@ const SearchBox = {
 		transformResponse: VueTypes.func,
 		beforeValueChange: VueTypes.func,
 		enablePopularSuggestions: VueTypes.bool,
+		enableRecentSearches: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -86,6 +87,7 @@ const SearchBox = {
 		autosuggest: types.autosuggest,
 		strictSelection: types.strictSelection,
 		defaultSuggestions: types.defaultSuggestions,
+		recentSearches: types.defaultSuggestions,
 		debounce: types.debounce,
 		showVoiceSearch: types.showVoiceSearch,
 		render: types.render,
@@ -108,6 +110,12 @@ const SearchBox = {
 			isOpen: false
 		};
 		return this.state;
+	},
+	mounted() {
+		if(this.enableRecentSearches) {
+			const { getRecentSearches } =  this.getComponentInstance();
+			getRecentSearches();
+		}
 	},
 	computed: {
 		hasCustomRenderer() {
@@ -132,7 +140,7 @@ const SearchBox = {
 			const { id } = this.$props;
 			return this.searchbase.getComponent(id);
 		},
-		getpopularSuggestionsList() {
+		getPopularSuggestionsList() {
 			const { suggestions } = this.getComponentInstance();
 			return (suggestions || []).filter(
 				suggestion => suggestion._popular_suggestion
@@ -142,6 +150,9 @@ const SearchBox = {
 			const { defaultSuggestions, instanceValue } = this.$props;
 			if (!instanceValue && defaultSuggestions) {
 				return defaultSuggestions;
+			}
+			if(!instanceValue) {
+				return [];
 			}
 			const { suggestions } = this.getComponentInstance();
 			return (suggestions || []).filter(
@@ -204,6 +215,9 @@ const SearchBox = {
 			const { debounce } = this.$props;
 			this.isOpen = isOpen;
 			const componentInstance = this.getComponentInstance();
+			if (this.enableRecentSearches && !value && componentInstance.value) {
+				componentInstance.getRecentSearches();
+			}
 			if (debounce > 0) {
 				componentInstance.setValue(value, {
 					triggerDefaultQuery: false,
@@ -344,8 +358,8 @@ const SearchBox = {
 			return highlightedIndex === index ? '#eee' : '#fff';
 		},
 		getComponent(downshiftProps = {}, isPopularSuggestionsRender = false) {
-			const { instanceValue, loading, error, results } = this.$props;
-			const popularSuggestionsList = this.getpopularSuggestionsList();
+			const { instanceValue, loading, error, results, recentSearches } = this.$props;
+			const popularSuggestionsList = this.getPopularSuggestionsList();
 			const suggestionsList = this.getSuggestionsList();
 			const data = {
 				loading,
@@ -357,6 +371,7 @@ const SearchBox = {
 				customData: results.customData,
 				resultStats: this.stats,
 				rawData: results.rawData,
+				recentSearches,
 				popularSuggestions: popularSuggestionsList,
 				triggerClickAnalytics: this.triggerClickAnalytics
 			};
@@ -389,16 +404,18 @@ const SearchBox = {
 			autoFocus,
 			innerRef,
 			size,
-			instanceValue
+			instanceValue,
+			recentSearches
 		} = this.$props;
 		const suggestionsList = this.getSuggestionsList();
-		const popularSuggestionsList = this.getpopularSuggestionsList();
+		const popularSuggestionsList = this.getPopularSuggestionsList();
+		const hasSuggestions = defaultSuggestions && defaultSuggestions.length || recentSearches && recentSearches.length;
 		return (
 			<div class={className}>
 				{title && (
 					<Title class={getClassName(innerClass, 'title') || ''}>{title}</Title>
 				)}
-				{defaultSuggestions || autosuggest ? (
+				{hasSuggestions || autosuggest ? (
 					<DownShift
 						id="searchbox-downshift"
 						handleChange={this.onSuggestionSelected}
@@ -415,7 +432,6 @@ const SearchBox = {
 							}) => (
 								<div class={suggestionsContainer}>
 									<Input
-										id="search-box"
 										showIcon={showIcon}
 										showClear={showClear}
 										iconPosition={iconPosition}
@@ -446,33 +462,49 @@ const SearchBox = {
 									/>
 									{this.renderIcons()}
 									{this.hasCustomRenderer
-                    && this.getComponent({
-                    	isOpen,
-                    	getItemProps,
-                    	getItemEvents,
-                    	highlightedIndex
-                    })}
+										&& this.getComponent({
+											isOpen,
+											getItemProps,
+											getItemEvents,
+											highlightedIndex
+										})}
 									{this.renderErrorComponent()}
 									{!this.hasCustomRenderer
-                  && isOpen
-                  && suggestionsList.length ? (
+                  					&& isOpen ? (
 											<ul
 												class={`${suggestionsStyle} ${getClassName(
 													innerClass,
 													'list'
 												)}`}
 											>
-												{hasPopularSuggestionsRenderer(this)
-													? this.getComponent(
-														{
-															isOpen,
-															getItemProps,
-															getItemEvents,
-															highlightedIndex
-														},
-														true
-													)
-													: popularSuggestionsList.map((sugg, index) => (
+												{suggestionsList.slice(0, size).map((item, index) => (
+													<li
+														{...{
+															domProps: getItemProps({ item })
+														}}
+														{...{
+															on: getItemEvents({
+																item
+															})
+														}}
+														key={`${index + 1}-${
+															item.value
+														}`}
+														style={{
+															backgroundColor: this.getBackgroundColor(
+																highlightedIndex,
+																index
+															)
+														}}
+													>
+														<SuggestionItem
+															currentValue={instanceValue}
+															suggestion={item}
+														/>
+													</li>
+												))}
+												{
+													!instanceValue ? recentSearches.map((sugg, index) => (
 														<li
 															{...{
 																domProps: getItemProps({
@@ -497,33 +529,44 @@ const SearchBox = {
 																suggestion={sugg}
 															/>
 														</li>
-													))}
-												{suggestionsList.slice(0, size).map((item, index) => (
-													<li
-														{...{
-															domProps: getItemProps({ item })
-														}}
-														{...{
-															on: getItemEvents({
-																item
-															})
-														}}
-														key={`${index + popularSuggestionsList.length + 1}-${
-															item.value
-														}`}
-														style={{
-															backgroundColor: this.getBackgroundColor(
-																highlightedIndex,
-																index + popularSuggestionsList.length
-															)
-														}}
-													>
-														<SuggestionItem
-															currentValue={instanceValue}
-															suggestion={item}
-														/>
-													</li>
-												))}
+													)) : null
+												}
+												{instanceValue && (hasPopularSuggestionsRenderer(this)
+													? this.getComponent(
+														{
+															isOpen,
+															getItemProps,
+															getItemEvents,
+															highlightedIndex
+														},
+														true
+													)
+													: popularSuggestionsList.map((sugg, index) => (
+														<li
+															{...{
+																domProps: getItemProps({
+																	item: sugg
+																})
+															}}
+															{...{
+																on: getItemEvents({
+																	item: sugg
+																})
+															}}
+															key={`${index + suggestionsList.length + 1}-${sugg.value}`}
+															style={{
+																backgroundColor: this.getBackgroundColor(
+																	highlightedIndex,
+																	index + suggestionsList.length
+																)
+															}}
+														>
+															<SuggestionItem
+																currentValue={instanceValue}
+																suggestion={sugg}
+															/>
+														</li>
+													)))}
 											</ul>
 										) : (
 											this.renderNoSuggestionComponent()
@@ -588,13 +631,14 @@ const SearchBoxWrapper = {
 					on: context.listeners,
 					props: context.props,
 					scopedSlots: {
-						default: ({ loading, error, micStatus, results, value }) => {
+						default: ({ loading, error, micStatus, results, value, recentSearches }) => {
 							return (
 								<SearchBox
 									loading={loading}
 									error={error}
 									micStatus={micStatus}
 									results={results}
+									recentSearches={recentSearches}
 									instanceValue={value}
 									{...{
 										attrs: context.data.attrs,
@@ -612,11 +656,10 @@ const SearchBoxWrapper = {
 					'error',
 					'requestPending',
 					'results',
-					'value'
+					'value',
+					'recentSearches'
 				]}
 			/>
-		//  Hi! Search component
-		//  </SearchComponent>
 		);
 	}
 };

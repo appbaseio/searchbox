@@ -40,16 +40,6 @@
           title="Search"
           placeholder="Search for Books"
           :autosuggest="true"
-          :defaultSuggestions="[
-            {
-              label: 'Songwriting',
-              value: 'Songwriting'
-            },
-            {
-              label: 'Musicians',
-              value: 'Musicians'
-            }
-          ]"
           :size="10"
           :debounce="100"
           queryFormat="or"
@@ -59,6 +49,7 @@
           :URLParams="true"
           class="custom-class"
           :enablePopularSuggestions="true"
+          :enableRecentSearches="true"
           iconPosition="left"
         />
         <div class="row">

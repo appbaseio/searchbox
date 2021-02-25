@@ -112,6 +112,9 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
+    if (!this.componentInstance.value) {
+      return [];
+    }
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
       suggestion => !suggestion._popular_suggestion
@@ -149,7 +152,8 @@ class SearchBox extends React.Component {
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
       rawData: this.componentInstance.results.rawData,
-      popularSuggestions: this.popularSuggestionsList
+      popularSuggestions: this.popularSuggestionsList,
+      recentSearches: this.componentInstance.recentSearches
     };
     if (isPopularSuggestionsRender) {
       return getPopularSuggestionsComponent(
@@ -450,7 +454,6 @@ class SearchBox extends React.Component {
         )}
         {hasSuggestions || autosuggest ? (
           <Downshift
-            id="search-box-downshift"
             onChange={this.onSuggestionSelected}
             onStateChange={this.handleStateChange}
             isOpen={this.state.isOpen}
@@ -467,7 +470,6 @@ class SearchBox extends React.Component {
             }) => (
               <div {...getRootProps({ css: suggestionsContainer })}>
                 <Input
-                  id="search-box"
                   showIcon={showIcon}
                   showClear={showClear}
                   iconPosition={iconPosition}
@@ -525,13 +527,11 @@ class SearchBox extends React.Component {
                       ? recentSearches.map((sugg, index) => (
                           <li
                             {...getItemProps({ item: sugg })}
-                            key={`${index + this.suggestionsList + 1}-${
-                              sugg.value
-                            }`}
+                            key={`${index + 1}-${sugg.value}`}
                             style={{
                               backgroundColor: this.getBackgroundColor(
                                 highlightedIndex,
-                                index + this.suggestionsList
+                                index
                               )
                             }}
                           >
