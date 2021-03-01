@@ -36,8 +36,8 @@ export type AppbaseSettings = {
 };
 
 export type BaseConfig = {
-  index: string;
-  url: string;
+  index?: string;
+  url?: string;
   credentials?: string;
   appbaseConfig?: AppbaseSettings;
   headers?: Object;
@@ -61,27 +61,27 @@ export type ComponentConfig = BaseConfig & {
   beforeValueChange?: (value: string) => Promise<any>;
 
   // called when value changes
-  onValueChange: (next: string, prev: string) => void;
+  onValueChange?: (next: string, prev: string) => void;
 
   // called when results change
-  onResults: (next: string, prev: string) => void;
+  onResults?: (next: string, prev: string) => void;
 
   // called when composite aggregations change
-  onAggregationData: (next: Array<Object>, prev: Array<Object>) => void;
+  onAggregationData?: (next: Array<Object>, prev: Array<Object>) => void;
 
   // called when there is an error while fetching results
-  onError: (error: any) => void;
+  onError?: (error: any) => void;
 
   // called when request status changes
-  onRequestStatusChange: (next: string, prev: string) => void;
+  onRequestStatusChange?: (next: string, prev: string) => void;
 
   // called when query changes
-  onQueryChange: (next: string, prev: string) => void;
+  onQueryChange?: (next: string, prev: string) => void;
 
   // called when mic status changes
-  onMicStatusChange: (next: string, prev: string) => void;
+  onMicStatusChange?: (next: string, prev: string) => void;
 
-  id: string;
+  id?: string;
 
   type?: QueryType;
 

@@ -1,0 +1,47 @@
+<div id="root">
+  <h2 class="text-center">Github Search</h2>
+  <div class="autocomplete">
+    <input
+      type="text"
+      placeholder="Search Github ..."
+      matInput
+      [matAutocomplete]="auto"
+      class="autocomplete-input"
+      (keydown)="handleKeyDown($event)"
+      (input)="handleInput($event)"
+    />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleOptionSelect($event)">
+      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value">
+        {{suggestion.label}}
+      </mat-option>
+    </mat-autocomplete>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="filter">
+        <mat-selection-list #topics (selectionChange)="handleSelection($event)">
+          <h3 matSubheader>Languages</h3>
+          <mat-list-option checkboxPosition="before" *ngFor="let topic of filterComponent.aggregationData.data" [value]="topic._key">
+            {{ topic._key }}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+    <div class="col">
+      <div id="results">
+        <div *ngIf="resultComponent.requestPending" class="loading">Loading results... </div>
+        <div *ngFor="let item of resultComponent.results.data;">
+          <div class="result-set">
+            <div class="image">
+              <img src={{item.avatar}} alt={{item.name}} />
+            </div>
+            <div class="details">
+              <h4>{{ item.name }}</h4>
+              <p>{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
