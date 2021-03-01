@@ -14,8 +14,8 @@ export type DataField = {
 };
 
 export type Options = {
-  triggerQuery?: boolean;
-  triggerSuggestionsQuery?: boolean;
+  triggerDefaultQuery?: boolean;
+  triggerCustomQuery?: boolean;
   stateChanges?: boolean;
 };
 
