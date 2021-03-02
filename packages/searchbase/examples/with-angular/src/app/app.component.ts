@@ -1,8 +1,9 @@
-import { Component, AfterContentInit } from '@angular/core';
+import { Component, AfterContentInit, ViewChild } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
-import { distinctUntilChanged, switchMap, startWith, map } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { SearchBase, SearchComponent } from '@appbaseio/searchbase';
 import { MatSelectionListChange } from '@angular/material/list';
+import { PageEvent } from '@angular/material/paginator';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 
@@ -18,13 +19,14 @@ export class AppComponent implements AfterContentInit {
   credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
   suggestions: Observable<any[]>;
+  searchQuery: string;
 
   searchBase: SearchBase;
   searchComponent: SearchComponent;
   filterComponent: SearchComponent;
   resultComponent: SearchComponent;
 
-
+  @ViewChild('results') results;
 
   constructor() {
     // Create searchbase instance
@@ -37,7 +39,9 @@ export class AppComponent implements AfterContentInit {
 
    // Register search component => To render the suggestions
     this.searchComponent = this.searchBase.register('search-component', {
-      dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics']
+      dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics'],
+      clearFiltersOnQueryChange: true,
+      size: 5
     });
 
     // Register a component to filter languages with empty value
@@ -65,6 +69,7 @@ export class AppComponent implements AfterContentInit {
       dataField: 'language.keyword',
       aggregationSize: 10,
       size: 0,
+      value: [],
       react: {
         and: ['filter-languages', 'search-component']
       },
@@ -76,20 +81,24 @@ export class AppComponent implements AfterContentInit {
       react: {
         and: ['search-component', 'language-filter']
       },
+      size: 10,
       defaultQuery: () => ({
         track_total_hits: true
       })
     });
   }
 
-
-
   ngAfterContentInit() {
     // Fetch initial results
     this.resultComponent.triggerDefaultQuery();
     // Fetch initial filter options
     this.filterComponent.triggerDefaultQuery();
+    // Scroll to top when results change
+    this.resultComponent.subscribeToStateChanges(() => {
+      this.results.nativeElement.scrollTop = 0;
+    }, 'results');
   }
+
   handleInput(e) {
     // Set the value to fetch the suggestions
     this.setSuggestions(e.target.value);
@@ -97,20 +106,22 @@ export class AppComponent implements AfterContentInit {
 
   handleKeyDown(e) {
     // Fetch the results
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      this.searchComponent.triggerCustomQuery();
-    }
-  }
-  handleOptionSelect(selectedOption: MatAutocompleteSelectedEvent) {
+    e.preventDefault();
+    this.searchQuery = this.searchComponent.value;
     this.searchComponent.triggerCustomQuery();
   }
-  handleSelection(selectedOptions : MatSelectionListChange) {
-    this.filterComponent.setValue(selectedOptions.options.map(o => o.value), {
+
+  handleOptionSelect(selectedOption: MatAutocompleteSelectedEvent) {
+    this.searchComponent.setValue(selectedOption.option.value, {
       triggerCustomQuery: true,
-      triggerDefaultQuery: false,
-      stateChanges: false,
-    });
+      triggerDefaultQuery: true
+    })
+    this.searchQuery = selectedOption.option.value;
+  }
+
+  handleSelection() {
+    // Update results when language changes
+    this.filterComponent.triggerCustomQuery();
   }
 
   setSuggestions(value) {
@@ -122,7 +133,6 @@ export class AppComponent implements AfterContentInit {
     } else {
         // Update suggestions when value gets changed
         this.suggestions = of(value).pipe(
-          startWith(''),
           distinctUntilChanged(),
           switchMap(val => {
             this.searchComponent.setValue(val, {
@@ -137,4 +147,25 @@ export class AppComponent implements AfterContentInit {
       }
   }
 
+  handlePageChange(page: PageEvent) {
+    this.resultComponent.setFrom(page.pageIndex * page.pageSize, {
+      triggerCustomQuery: false,
+      triggerDefaultQuery: true
+    })
+  }
+
+  clearFilter(type: string) {
+    if(type === 'language') {
+      this.filterComponent.setValue(undefined, {
+        triggerCustomQuery: true,
+        triggerDefaultQuery: false
+      })
+    } else if(type === 'search') {
+      this.searchComponent.setValue('', {
+        triggerCustomQuery: true,
+        triggerDefaultQuery: false
+      });
+      this.searchQuery = '';
+    }
+  }
 }

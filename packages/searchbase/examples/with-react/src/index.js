@@ -27,7 +27,8 @@ class App extends React.Component {
         'fullname',
         'owner',
         'topics'
-      ]
+      ],
+      clearFiltersOnQueryChange: true
     });
 
     // Register result component with react dependency on search component => To render the results
