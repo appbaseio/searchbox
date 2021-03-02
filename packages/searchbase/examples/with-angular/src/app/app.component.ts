@@ -81,6 +81,7 @@ export class AppComponent implements AfterContentInit {
       react: {
         and: ['search-component', 'language-filter']
       },
+      from: 0,
       size: 10,
       defaultQuery: () => ({
         track_total_hits: true

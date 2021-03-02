@@ -66,6 +66,7 @@
           [hidePageSize]="true"
           [length]="resultComponent.results.numberOfResults"
           [pageSizeOptions]="[5, 10, 25, 100]"
+          [pageIndex]="resultComponent.from / resultComponent.size"
           (page)="handlePageChange($event)"
         >
         </mat-paginator>
