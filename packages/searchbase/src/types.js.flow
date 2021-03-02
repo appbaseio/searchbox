@@ -44,6 +44,7 @@ export type BaseConfig = {
 
 export type ComponentConfig = BaseConfig & {
   enablePopularSuggestions: boolean,
+  clearFiltersOnQueryChange: boolean,
   showDistinctSuggestions: boolean,
   preserveResults: boolean,
   maxPopularSuggestions: number,

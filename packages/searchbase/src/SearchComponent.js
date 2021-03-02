@@ -155,6 +155,9 @@ class SearchComponent extends Base {
   // preserve the data for infinite loading
   preserveResults: boolean;
 
+  // to clear the dependent facets values on query change
+  clearFiltersOnQueryChange: boolean;
+
   // query error
   error: any;
 
@@ -240,6 +243,7 @@ class SearchComponent extends Base {
     results,
     showDistinctSuggestions,
     preserveResults,
+    clearFiltersOnQueryChange,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -349,6 +353,8 @@ class SearchComponent extends Base {
     this.showDistinctSuggestions = showDistinctSuggestions;
 
     this.preserveResults = preserveResults;
+
+    this.clearFiltersOnQueryChange = clearFiltersOnQueryChange;
 
     // Initialize the state changes observable
     this.stateChanges = new Observable();
@@ -780,6 +786,15 @@ class SearchComponent extends Base {
               triggerCustomQuery: false
             });
 
+            // Reset value for dependent components
+            if (this.clearFiltersOnQueryChange) {
+              componentInstance.setValue(undefined, {
+                stateChanges: true,
+                triggerDefaultQuery: false,
+                triggerCustomQuery: false
+              });
+            }
+
             componentInstance._setRequestStatus(REQUEST_STATUS.pending);
             // Update the query
             componentInstance._updateQuery();
@@ -797,12 +812,6 @@ class SearchComponent extends Base {
               const componentInstance = this._parent.getComponent(id);
               if (componentInstance) {
                 componentInstance._setRequestStatus(REQUEST_STATUS.inactive);
-                // Reset value for dependent components
-                componentInstance.setValue(undefined, {
-                  stateChanges: true,
-                  triggerDefaultQuery: false,
-                  triggerCustomQuery: false
-                });
                 // Update the results
                 const prev = componentInstance.results;
                 // Collect results from the response for a particular component

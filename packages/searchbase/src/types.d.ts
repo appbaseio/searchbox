@@ -56,6 +56,8 @@ export type RecentSearchOptions = {
 export type ComponentConfig = BaseConfig & {
   enablePopularSuggestions?: boolean;
 
+  clearFiltersOnQueryChange?: boolean;
+
   results?: Array<Object>;
 
   beforeValueChange?: (value: string) => Promise<any>;

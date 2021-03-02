@@ -37,7 +37,8 @@ const searchbase = new SearchBase({
 
 // Register search component => To render the suggestions
 const searchComponent = searchbase.register('search-component', {
-  dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics']
+  dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics'],
+  clearFiltersOnQueryChange: true
 });
 
 // Register filter component with dependency on search component
@@ -117,7 +118,6 @@ filterComponent.subscribeToStateChanges(
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = i._key;
-        checkbox.value = i._key;
         checkbox.id = i._key;
         checkbox.onclick = () => {
           const values = filterComponent.value || [];
