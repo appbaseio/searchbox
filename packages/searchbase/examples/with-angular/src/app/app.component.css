@@ -34,6 +34,12 @@
   .filter-button {
     margin-left: 5px;
     margin-bottom: 5px;
+    white-space: pre-wrap !important;
+  }
+  .paginator-bottom {
+    position: static;
+    bottom: 0;
+    right: 0;
   }
 
   .autocomplete-input {
@@ -49,7 +55,10 @@
     padding-right: 32px;
     border-radius: 0;
     background-size: 18px;
-    margin-bottom: 20px;
+  }
+
+  .example-button-row{
+    padding: 5px 0px;
   }
 
   .autocomplete-result {
@@ -141,11 +150,6 @@
     color: #9d9d9d;
   }
 
-  .loading {
-    text-align: center;
-    padding: 10px;
-  }
-
   .results-stats {
     text-align: center;
     margin: 5px;
@@ -162,6 +166,7 @@
     flex: 1;
     padding: 15px;
     padding-left: 0;
+    position: relative;
   }
 
   .row > .col:first-child {

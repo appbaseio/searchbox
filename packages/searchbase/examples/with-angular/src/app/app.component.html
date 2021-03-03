@@ -19,19 +19,19 @@
       </mat-option>
     </mat-autocomplete>
   </div>
-  <div class="example-button-row">
-    <button class="filter-button" *ngIf="searchQuery" (click)="clearFilter('search')" mat-raised-button color="accent">
-      Search: {{searchQuery}}
-      <mat-icon>close</mat-icon>
-    </button>
-    <button class="filter-button" *ngIf="filterComponent.value && filterComponent.value.length" (click)="clearFilter('language')" mat-raised-button color="accent">
-      Languages: {{filterComponent.value.join(", ")}}
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
   <div class="row">
-    <div class="col" *ngIf="showFilters">
-      <div class="filter">
+    <div class="col">
+      <div class="example-button-row">
+        <button class="filter-button" *ngIf="searchQuery" (click)="clearFilter('search')" mat-raised-button color="accent">
+          Search: {{searchQuery}}
+          <mat-icon>close</mat-icon>
+        </button>
+        <button class="filter-button" *ngIf="filterComponent.value && filterComponent.value.length" (click)="clearFilter('language')" mat-raised-button color="accent">
+          Languages: {{filterComponent.value.join(", ")}}
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="filter" *ngIf="showFilters">
         <mat-selection-list [(ngModel)]="filterComponent.value" *ngIf="filterComponent.aggregationData.data.length" #topics (selectionChange)="handleSelection($event)">
           <h3 matSubheader>Languages</h3>
           <mat-list-option checkboxPosition="before" *ngFor="let topic of filterComponent.aggregationData.data" [value]="topic._key">
@@ -44,12 +44,12 @@
       </div>
     </div>
     <div class="col">
-      <p *ngIf="!resultComponent.requestPending" class="results-stats">
-        <span *ngIf="resultComponent.results.data.length">Showing {{resultComponent.results.numberOfResults}} in {{resultComponent.results.time}}ms</span>
-        <span *ngIf="!resultComponent.results.data.length">No results found</span>
+      <p class="results-stats">
+        <span *ngIf="!resultComponent.requestPending && resultComponent.results.data.length">Showing {{resultComponent.results.numberOfResults}} in {{resultComponent.results.time}}ms</span>
+        <span *ngIf="!resultComponent.requestPending && !resultComponent.results.data.length">No results found</span>
+        <span *ngIf="resultComponent.requestPending">Loading results... </span>
       <p>
       <div #results id="results">
-        <div *ngIf="resultComponent.requestPending" class="loading">Loading results... </div>
         <div *ngFor="let item of resultComponent.results.data;">
           <div class="result-set">
             <div>
@@ -61,16 +61,16 @@
             </div>
           </div>
         </div>
-        <mat-paginator *ngIf="resultComponent.results.data.length" [length]="100"
-          [pageSize]="resultComponent.size"
-          [hidePageSize]="true"
-          [length]="resultComponent.results.numberOfResults"
-          [pageSizeOptions]="[5, 10, 25, 100]"
-          [pageIndex]="resultComponent.from / resultComponent.size"
-          (page)="handlePageChange($event)"
-        >
-        </mat-paginator>
       </div>
+      <mat-paginator class="paginator-bottom" *ngIf="resultComponent.results.data.length" [length]="100"
+      [pageSize]="resultComponent.size"
+      [hidePageSize]="true"
+      [length]="resultComponent.results.numberOfResults"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageIndex]="resultComponent.from / resultComponent.size"
+      (page)="handlePageChange($event)"
+    >
+    </mat-paginator>
     </div>
   </div>
   <div *ngIf="isMobile" class="example-button-container">
