@@ -30,7 +30,7 @@
     </button>
   </div>
   <div class="row">
-    <div class="col">
+    <div class="col" *ngIf="showFilters">
       <div class="filter">
         <mat-selection-list [(ngModel)]="filterComponent.value" *ngIf="filterComponent.aggregationData.data.length" #topics (selectionChange)="handleSelection($event)">
           <h3 matSubheader>Languages</h3>
@@ -72,5 +72,11 @@
         </mat-paginator>
       </div>
     </div>
+  </div>
+  <div *ngIf="isMobile" class="example-button-container">
+    <button (click)="showFilters = !showFilters" mat-fab color="accent" aria-label="Show filters">
+      <mat-icon *ngIf="!showFilters">filter_alt</mat-icon>
+      <mat-icon *ngIf="showFilters">close</mat-icon>
+    </button>
   </div>
 </div>

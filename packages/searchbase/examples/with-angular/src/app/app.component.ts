@@ -20,6 +20,8 @@ export class AppComponent implements AfterContentInit {
 
   suggestions: Observable<any[]>;
   searchQuery: string;
+  showFilters: boolean;
+  isMobile: boolean;
 
   searchBase: SearchBase;
   searchComponent: SearchComponent;
@@ -35,7 +37,6 @@ export class AppComponent implements AfterContentInit {
       url: this.url,
       credentials: this.credentials
     });
-
 
    // Register search component => To render the suggestions
     this.searchComponent = this.searchBase.register('search-component', {
@@ -87,6 +88,9 @@ export class AppComponent implements AfterContentInit {
         track_total_hits: true
       })
     });
+
+    this.isMobile = window.innerWidth <= 765;
+    this.showFilters = !this.isMobile;
   }
 
   ngAfterContentInit() {

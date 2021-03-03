@@ -33,6 +33,7 @@
 
   .filter-button {
     margin-left: 5px;
+    margin-bottom: 5px;
   }
 
   .autocomplete-input {
@@ -103,7 +104,7 @@
     overflow: auto;
     max-height: 500px;
     flex-wrap: wrap !important;
-    word-break: break-all !important;
+    word-break: break-word !important;
     white-space: normal !important;
   }
 
@@ -198,6 +199,12 @@
 
   .text-center {
     text-align: center;
+  }
+
+  .example-button-container {
+    position: fixed;
+    right: 10px;
+    top: 138px;
   }
 
   @media screen and (max-width: 767px) {
