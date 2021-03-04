@@ -1,6 +1,6 @@
 ## Searchbox
 
-Searchbox is a lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It's available for React, Vue and Vanilla JS.
+Searchbox is a lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It's available for React, Vue, React Native and Flutter.
 
 <p align="center">
   <a href="https://github.com/appbaseio/searchbase/tree/master/packages/searchbox" style="padding: 10px; display: inline;"><img  width="30%" src="https://docs.appbase.io/images/Searchbox_JS@1x.png" alt="searchbox" title="searchbox" /></a>
