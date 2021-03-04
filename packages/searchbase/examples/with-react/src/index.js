@@ -10,7 +10,7 @@ class App extends React.Component {
 
     const index = 'gitxplore-app';
     const url =
-      'https://appbase-demo-ansible-abxiydt-arc.searchbase.io.searchbase.io';
+      'https://appbase-demo-ansible-abxiydt-arc.searchbase.io';
     const credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
     this.searchBase = new SearchBase({
