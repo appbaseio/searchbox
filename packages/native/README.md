@@ -95,7 +95,7 @@ The official docs for the library are at [docs/react-searchbox](https://docs.app
 
 ## 6. Contributing
 
-Please check the [contribution guide](./CONTRIBUTING.md)
+Please check the [contribution guide](https://github.com/appbaseio/searchbox/blob/master/.github/CONTRIBUTING.md)
 
 [⬆ Back to Top](#toc)
 
