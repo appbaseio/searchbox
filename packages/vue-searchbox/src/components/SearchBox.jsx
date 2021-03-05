@@ -35,6 +35,7 @@ const SearchBox = {
 		transformResponse: VueTypes.func,
 		beforeValueChange: VueTypes.func,
 		enablePopularSuggestions: VueTypes.bool,
+		enablePredictiveSuggestions: VueTypes.bool,
 		enableRecentSearches: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
