@@ -85,7 +85,7 @@ export class SearchComponent extends Base {
   showDistinctSuggestions: boolean;
 
   // To show the predictive suggestions
-  enablePredictiveSuggestions: boolean;
+  enablePredictiveSuggestions?: boolean;
 
   // To preserve the results state
   preserveResults: boolean;
