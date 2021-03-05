@@ -3,7 +3,8 @@ import Autocomplete from '@trevoreyre/autocomplete-js';
 import '../styles.css';
 
 const index = 'gitxplore-app';
-const url = 'https://@arc-cluster-appbase-demo-6pjy6z.searchbase.io';
+const url =
+  'https://appbase-demo-ansible-abxiydt-arc.searchbase.io';
 const credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
 document.body.innerHTML = `
@@ -27,7 +28,8 @@ const searchbase = new SearchBase({
 
 // Register search component => To render the suggestions
 searchbase.register('search-component', {
-  dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics']
+  dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics'],
+  clearFiltersOnQueryChange: true
 });
 
 // Register result component with react dependency on search component => To render the results

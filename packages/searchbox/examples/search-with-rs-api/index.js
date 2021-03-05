@@ -4,7 +4,7 @@ import Searchbase from '@appbaseio/searchbase';
 const instance = new Searchbase({
   index: 'movie-app',
   credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
-  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
+  url: 'https://appbase-demo-ansible-abxiydt-arc',
   size: 5,
   dataField: ['original_title', 'original_title.raw'],
   enableAppbase: true,
@@ -14,7 +14,7 @@ const instance = new Searchbase({
 const analyticsInstance = new Searchbase({
   index: 'movies-store-app',
   credentials: 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
-  url: 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
+  url: 'https://appbase-demo-ansible-abxiydt-arc',
   size: 5,
   analytics: true,
   dataField: [

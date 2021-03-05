@@ -1,0 +1,82 @@
+<div id="root">
+  <h2 class="text-center">Github Search</h2>
+  <div class="autocomplete">
+    <input
+      type="text"
+      placeholder="Search Github ..."
+      matInput
+      [(ngModel)]="searchComponent.value"
+      #trigger="matAutocompleteTrigger"
+      [matAutocomplete]="auto"
+      class="autocomplete-input"
+      (keydown.enter)="trigger.closePanel(); handleKeyDown($event)"
+      (input)="handleInput($event)"
+      id="custom"
+    />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleOptionSelect($event)">
+      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value">
+        {{suggestion.label}}
+      </mat-option>
+    </mat-autocomplete>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="example-button-row">
+        <button class="filter-button" *ngIf="searchQuery" (click)="clearFilter('search')" mat-raised-button color="accent">
+          Search: {{searchQuery}}
+          <mat-icon>close</mat-icon>
+        </button>
+        <button class="filter-button" *ngIf="filterComponent.value && filterComponent.value.length" (click)="clearFilter('language')" mat-raised-button color="accent">
+          Languages: {{filterComponent.value.join(", ")}}
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="filter" *ngIf="showFilters">
+        <mat-selection-list [(ngModel)]="filterComponent.value" *ngIf="filterComponent.aggregationData.data.length" #topics (selectionChange)="handleSelection($event)">
+          <h3 matSubheader>Languages</h3>
+          <mat-list-option checkboxPosition="before" *ngFor="let topic of filterComponent.aggregationData.data" [value]="topic._key">
+            <div class="lang-option">
+              <span>{{ topic._key }}</span>
+              <span class="count">{{ topic._doc_count }}</span>
+            </div>
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+    <div class="col">
+      <p class="results-stats">
+        <span *ngIf="!resultComponent.requestPending && resultComponent.results.data.length">Showing {{resultComponent.results.numberOfResults}} in {{resultComponent.results.time}}ms</span>
+        <span *ngIf="!resultComponent.requestPending && !resultComponent.results.data.length">No results found</span>
+        <span *ngIf="resultComponent.requestPending">Loading results... </span>
+      <p>
+      <div #results id="results">
+        <div *ngFor="let item of resultComponent.results.data;">
+          <div class="result-set">
+            <div>
+              <img src={{item.avatar}} alt={{item.name}} />
+            </div>
+            <div class="details">
+              <h4>{{ item.name }}</h4>
+              <p>{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-paginator class="paginator-bottom" *ngIf="resultComponent.results.data.length" [length]="100"
+      [pageSize]="resultComponent.size"
+      [hidePageSize]="true"
+      [length]="resultComponent.results.numberOfResults"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageIndex]="resultComponent.from / resultComponent.size"
+      (page)="handlePageChange($event)"
+    >
+    </mat-paginator>
+    </div>
+  </div>
+  <div *ngIf="isMobile" class="example-button-container">
+    <button (click)="showFilters = !showFilters" mat-fab color="accent" aria-label="Show filters">
+      <mat-icon *ngIf="!showFilters">filter_alt</mat-icon>
+      <mat-icon *ngIf="showFilters">close</mat-icon>
+    </button>
+  </div>
+</div>

@@ -99,6 +99,8 @@ class SearchComponent extends Base {
 
   aggregationField: string;
 
+  aggregationSize: number;
+
   after: Object;
 
   includeNullValues: boolean;
@@ -155,6 +157,9 @@ class SearchComponent extends Base {
 
   // preserve the data for infinite loading
   preserveResults: boolean;
+
+  // to clear the dependent facets values on query change
+  clearFiltersOnQueryChange: boolean;
 
   // query error
   error: any;
@@ -242,6 +247,7 @@ class SearchComponent extends Base {
     showDistinctSuggestions,
     enablePredictiveSuggestions,
     preserveResults,
+    clearFiltersOnQueryChange,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -267,6 +273,7 @@ class SearchComponent extends Base {
       sortBy,
       value,
       aggregationField,
+      aggregationSize,
       after,
       includeNullValues,
       includeFields,
@@ -312,6 +319,7 @@ class SearchComponent extends Base {
     this.size = size;
     this.sortBy = sortBy;
     this.aggregationField = aggregationField;
+    this.aggregationSize = aggregationSize;
     this.after = after;
     this.includeNullValues = includeNullValues;
     this.includeFields = includeFields;
@@ -351,6 +359,8 @@ class SearchComponent extends Base {
     this.enablePredictiveSuggestions = enablePredictiveSuggestions;
 
     this.preserveResults = preserveResults;
+
+    this.clearFiltersOnQueryChange = clearFiltersOnQueryChange;
 
     // Initialize the state changes observable
     this.stateChanges = new Observable();
@@ -456,6 +466,7 @@ class SearchComponent extends Base {
       fieldWeights: getNormalizedWeights(this.dataField),
       includeNullValues: this.includeNullValues,
       aggregationField: this.aggregationField,
+      aggregationSize: this.aggregationSize,
       categoryField: this.categoryField,
       missingLabel: this.missingLabel,
       showMissing: this.showMissing,
@@ -782,6 +793,15 @@ class SearchComponent extends Base {
               triggerCustomQuery: false
             });
 
+            // Reset value for dependent components
+            if (this.clearFiltersOnQueryChange) {
+              componentInstance.setValue(undefined, {
+                stateChanges: true,
+                triggerDefaultQuery: false,
+                triggerCustomQuery: false
+              });
+            }
+
             componentInstance._setRequestStatus(REQUEST_STATUS.pending);
             // Update the query
             componentInstance._updateQuery();
@@ -799,12 +819,6 @@ class SearchComponent extends Base {
               const componentInstance = this._parent.getComponent(id);
               if (componentInstance) {
                 componentInstance._setRequestStatus(REQUEST_STATUS.inactive);
-                // Reset value for dependent components
-                componentInstance.setValue(undefined, {
-                  stateChanges: true,
-                  triggerDefaultQuery: false,
-                  triggerCustomQuery: false
-                });
                 // Update the results
                 const prev = componentInstance.results;
                 // Collect results from the response for a particular component
