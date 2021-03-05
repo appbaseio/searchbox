@@ -313,7 +313,7 @@ export const getSuggestions = (
             parsedContent.length
           );
 
-          const suggestionPhrase = `${currentValue}<mark class="highlight-class">${matchedString
+          const suggestionPhrase = `${currentValue}<mark style="font-weight: 600; padding: 0; background-color: inherit; color: inherit">${matchedString
             .slice(currentValue.length)
             .split(' ')
             .slice(0, wordsToShowAfterHighlight + 1)
@@ -350,7 +350,7 @@ export const getSuggestions = (
       currentValue: value,
       wordsToShowAfterHighlight: true
     });
-  } else return suggestionsList;
+  } return suggestionsList;
 };
 
 export function parseCompAggToHits(
