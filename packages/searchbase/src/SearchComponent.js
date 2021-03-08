@@ -152,6 +152,9 @@ class SearchComponent extends Base {
   // To show the distinct suggestions
   showDistinctSuggestions: boolean;
 
+  // To show the predictive suggestions
+  enablePredictiveSuggestions: boolean;
+
   // preserve the data for infinite loading
   preserveResults: boolean;
 
@@ -242,6 +245,7 @@ class SearchComponent extends Base {
     maxPopularSuggestions,
     results,
     showDistinctSuggestions,
+    enablePredictiveSuggestions,
     preserveResults,
     clearFiltersOnQueryChange,
     ...rsAPIConfig
@@ -352,6 +356,8 @@ class SearchComponent extends Base {
 
     this.showDistinctSuggestions = showDistinctSuggestions;
 
+    this.enablePredictiveSuggestions = enablePredictiveSuggestions;
+
     this.preserveResults = preserveResults;
 
     this.clearFiltersOnQueryChange = clearFiltersOnQueryChange;
@@ -433,7 +439,8 @@ class SearchComponent extends Base {
         fields,
         this.results.data,
         this.value,
-        this.showDistinctSuggestions
+        this.showDistinctSuggestions,
+        this.enablePredictiveSuggestions
       ).slice(0, this.size);
     }
     return [];

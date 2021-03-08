@@ -275,6 +275,24 @@
   dependencies:
     cross-fetch "^3.0.4"
 
+"@appbaseio/react-searchbox@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.0.5.tgz#991df16a2a8f6f3c519a2b3abb6a062ada7ef9eb"
+  integrity sha512-y/dG+bkrkXlQnLiwrFxf+DRKqQZNs2DBTaiMZ1fG5r28OgjauBscTJG4uKr8c3ErMmzebRCxVf64JbBkueJuGA==
+  dependencies:
+    "@appbaseio/searchbase" "1.0.5"
+    "@emotion/core" "^10.0.17"
+    "@emotion/styled" "^10.0.17"
+    downshift "^3.3.1"
+
+"@appbaseio/searchbase@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.0.5.tgz#ece5fc75a81798c485e1698862dc7c90ce41a73a"
+  integrity sha512-E2EvX1LzSB1UAY1if9XQv/G88xTZHb+OOTE91Jm+JNYsvs10QTNm4Jbq+PEceu5vLDyzEPe/MDaQbSpsdfJDtw==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
+    cross-fetch "^3.0.4"
+
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"

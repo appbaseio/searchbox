@@ -606,6 +606,7 @@ class SearchBox extends React.Component {
 
 SearchBox.propTypes = {
   enablePopularSuggestions: bool,
+  enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
   aggregationField: string,
   aggregationSize: number,
@@ -684,6 +685,7 @@ SearchBox.defaultProps = {
   URLParams: false,
   showDistinctSuggestions: true,
   enablePopularSuggestions: false,
+  enablePredictiveSuggestions: false,
   recentSearches: []
 };
 

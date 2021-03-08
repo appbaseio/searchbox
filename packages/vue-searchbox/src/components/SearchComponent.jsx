@@ -16,6 +16,7 @@ const SearchComponent = {
 		transformResponse: VueTypes.func,
 		beforeValueChange: VueTypes.func,
 		enablePopularSuggestions: VueTypes.bool,
+		enablePredictiveSuggestions: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -116,6 +117,7 @@ const SearchComponent = {
 			pagination,
 			queryString,
 			enablePopularSuggestions,
+			enablePredictiveSuggestions,
 			showDistinctSuggestions,
 			subscribeTo
 		} = this.rawProps;
@@ -160,6 +162,7 @@ const SearchComponent = {
 			pagination,
 			queryString,
 			enablePopularSuggestions,
+			enablePredictiveSuggestions,
 			showDistinctSuggestions,
 			onValueChange: (prev, next) => {
 				this.$emit('value', {
