@@ -15,6 +15,8 @@ export class AppComponent implements AfterContentInit  {
   url = 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io';
   credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
+  showFilters: boolean;
+  isMobile: boolean;
 
   searchBase: SearchBase;
 
@@ -84,6 +86,9 @@ export class AppComponent implements AfterContentInit  {
         track_total_hits: true
       })
     });
+
+    this.isMobile = window.innerWidth <= 765;
+    this.showFilters = !this.isMobile;
   }
 
   ngAfterContentInit() {

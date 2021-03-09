@@ -21,7 +21,7 @@
     <div class="col">
       <mat-selection-list
         [(ngModel)]="filterComponent.value"
-        *ngIf="filterComponent.aggregationData.data.length"
+        *ngIf="showFilters && filterComponent.aggregationData.data.length"
         (selectionChange)="handleSelection($event)"
         #topics
       >
@@ -65,4 +65,10 @@
     </div>
     </div>
   </div>
+  <div *ngIf="isMobile" class="example-button-container">
+    <button (click)="showFilters = !showFilters" mat-fab color="accent" aria-label="Show filters">
+      <mat-icon *ngIf="!showFilters">filter_alt</mat-icon>
+      <mat-icon *ngIf="showFilters">close</mat-icon>
+    </button>
+   </div>
 </div>
