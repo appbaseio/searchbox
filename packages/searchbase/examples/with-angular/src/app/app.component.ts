@@ -41,6 +41,25 @@ export class AppComponent implements AfterContentInit  {
       size: 5
     });
 
+    // Register a component to filter languages with empty value
+    this.searchBase.register('filter-languages', {
+      dataField: 'language',
+      value: [],
+      customQuery: () => ({
+        query: {
+          bool: {
+            must_not: [
+              {
+                match: {
+                  'language.keyword': ""
+                }
+              }
+            ]
+          }
+        },
+      })
+    })
+
     // Register filter component with dependency on search component
     this.filterComponent = this.searchBase.register('language-filter', {
       type: 'term',
@@ -49,7 +68,7 @@ export class AppComponent implements AfterContentInit  {
       size: 0,
       value: [],
       react: {
-        and: ['search-component']
+        and: ['search-component', 'filter-languages']
       },
     });
 
