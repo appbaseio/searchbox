@@ -1,3 +1,68 @@
 <div id="root">
   <h2 class="text-center">Github Search</h2>
+  <div class="autocomplete">
+    <input
+      type="text"
+      placeholder="Search Github ..."
+      matInput
+      [matAutocomplete]="auto"
+      class="autocomplete-input"
+      [(ngModel)]="searchComponent.value"
+      (input)="handleInput($event)"
+      id="custom"
+    />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleOptionSelect($event)">
+      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value">
+        {{suggestion.label}}
+      </mat-option>
+    </mat-autocomplete>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-selection-list
+        [(ngModel)]="filterComponent.value"
+        *ngIf="filterComponent.aggregationData.data.length"
+        (selectionChange)="handleSelection($event)"
+        #topics
+      >
+        <h3 matSubheader>Languages</h3>
+        <mat-list-option
+          checkboxPosition="before"
+          *ngFor="let topic of filterComponent.aggregationData.data"
+          [value]="topic._key"
+        >
+          <div class="lang-option">
+            <span>{{ topic._key }}</span>
+            <span class="count"> {{ topic._doc_count }}</span>
+          </div>
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+    <div class="col">
+      <p class="results-stats">
+        <span *ngIf="!resultComponent.requestPending && resultComponent.results.data.length">
+          Showing {{resultComponent.results.numberOfResults}} in {{resultComponent.results.time}}ms
+        </span>
+        <span *ngIf="!resultComponent.requestPending && !resultComponent.results.data.length">
+          No results found
+        </span>
+        <span *ngIf="resultComponent.requestPending">
+        Loading results...
+        </span>
+      <p>
+      <div #results id="results">
+        <div *ngFor="let item of resultComponent.results.data;">
+          <div class="result-set">
+            <div>
+              <img src={{item.avatar}} alt={{item.name}} />
+            </div>
+            <div class="details">
+              <h4>{{ item.name }}</h4>
+              <p>{{ item.description }}</p>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+  </div>
 </div>
