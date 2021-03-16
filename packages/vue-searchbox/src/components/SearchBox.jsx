@@ -37,6 +37,7 @@ const SearchBox = {
 		enablePopularSuggestions: VueTypes.bool,
 		enablePredictiveSuggestions: VueTypes.bool,
 		enableRecentSearches: VueTypes.bool,
+		clearFiltersOnQueryChange: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -628,6 +629,7 @@ const SearchBoxWrapper = {
 			<SearchComponent
 				value=""
 				triggerQueryOnInit={false}
+				clearFiltersOnQueryChange={true}
 				{...{
 					on: context.listeners,
 					props: context.props,

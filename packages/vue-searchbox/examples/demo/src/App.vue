@@ -40,7 +40,7 @@
           title="Search"
           placeholder="Search for Books"
           :autosuggest="true"
-          :size="10"
+          :size="5"
           :debounce="100"
           queryFormat="or"
           fuzziness="AUTO"

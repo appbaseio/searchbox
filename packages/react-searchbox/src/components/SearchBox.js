@@ -659,6 +659,7 @@ SearchBox.propTypes = {
   onKeyDown: func,
   autoFocus: bool,
   URLParams: bool,
+  clearFiltersOnQueryChange: bool,
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
@@ -686,6 +687,7 @@ SearchBox.defaultProps = {
   showDistinctSuggestions: true,
   enablePopularSuggestions: false,
   enablePredictiveSuggestions: false,
+  clearFiltersOnQueryChange: true,
   recentSearches: []
 };
 
@@ -693,6 +695,7 @@ export default props => (
   <SearchComponent
     triggerQueryOnInit={false}
     value="" // Init value as empty
+    clearFiltersOnQueryChange
     {...props}
     subscribeTo={[
       'micStatus',
