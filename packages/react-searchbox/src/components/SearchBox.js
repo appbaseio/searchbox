@@ -76,17 +76,12 @@ class SearchBox extends React.Component {
       headers,
       fuzziness,
       nestedField,
-      currentUrl,
       appbaseConfig
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
     this._applySetter(prevProps.fuzziness, fuzziness, 'setFuzziness');
     this._applySetter(prevProps.nestedField, nestedField, 'setNestedField');
-    // eslint-disable-next-line react/prop-types
-    if (prevProps.currentUrl !== currentUrl) {
-      this.setValueFromURL();
-    }
     if (
       JSON.stringify(prevProps.appbaseConfig) !== JSON.stringify(appbaseConfig)
     ) {
@@ -217,7 +212,12 @@ class SearchBox extends React.Component {
   };
 
   setValue = ({ value, isOpen = true, ...rest }) => {
-    const { onChange, debounce, enableRecentSearches } = this.props;
+    const {
+      onChange,
+      debounce,
+      enableRecentSearches,
+      autosuggest
+    } = this.props;
     if (enableRecentSearches && !value && this.componentInstance.value) {
       this.componentInstance.getRecentSearches();
     }
@@ -238,7 +238,7 @@ class SearchBox extends React.Component {
       } else {
         this.componentInstance.setValue(value || '', {
           triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: true,
+          triggerDefaultQuery: !!autosuggest,
           stateChanges: true
         });
       }

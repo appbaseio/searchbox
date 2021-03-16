@@ -25,9 +25,7 @@ class SearchBoxWithStyle extends React.Component {
             }
           `}
         />
-        {this.state.mount && (
-          <SearchBoxDefault currentUrl={window.location.href} {...this.props} />
-        )}
+        {this.state.mount && <SearchBoxDefault {...this.props} />}
       </div>
     );
   }
