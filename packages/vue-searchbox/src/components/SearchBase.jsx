@@ -1,5 +1,5 @@
 import { SearchBase as Headless } from '@appbaseio/searchbase';
-import { func } from 'vue-types';
+import VueTypes from 'vue-types';
 import { types } from '../utils/types';
 
 const SearchBase = {
@@ -10,8 +10,8 @@ const SearchBase = {
 		credentials: types.credentials,
 		headers: types.headers,
 		appbaseConfig: types.appbaseConfig,
-		transformRequest: func,
-		transformResponse: func
+		transformRequest: VueTypes.func,
+		transformResponse: VueTypes.func
 	},
 	provide() {
 		this.searchbase = new Headless({
