@@ -53,6 +53,7 @@ const SearchComponent = {
 		selectAllLabel: VueTypes.string,
 		pagination: VueTypes.bool,
 		queryString: VueTypes.bool,
+		preserveResults: VueTypes.bool,
 		render: VueTypes.func,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
@@ -119,7 +120,8 @@ const SearchComponent = {
 			enablePopularSuggestions,
 			enablePredictiveSuggestions,
 			showDistinctSuggestions,
-			subscribeTo
+			subscribeTo,
+			preserveResults
 		} = this.rawProps;
 		const componentInstance = this.searchbase.register(id, {
 			index,
@@ -164,6 +166,7 @@ const SearchComponent = {
 			enablePopularSuggestions,
 			enablePredictiveSuggestions,
 			showDistinctSuggestions,
+			preserveResults,
 			onValueChange: (prev, next) => {
 				this.$emit('value', {
 					prev,

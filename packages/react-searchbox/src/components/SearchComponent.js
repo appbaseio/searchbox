@@ -79,7 +79,8 @@ class SearchComponent extends React.Component {
       onQueryChange,
       onMicStatusChange,
       enablePopularSuggestions,
-      enablePredictiveSuggestions
+      enablePredictiveSuggestions,
+      preserveResults
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -130,7 +131,8 @@ class SearchComponent extends React.Component {
       onQueryChange,
       onMicStatusChange,
       enablePopularSuggestions,
-      enablePredictiveSuggestions
+      enablePredictiveSuggestions,
+      preserveResults
     });
   }
 
@@ -222,6 +224,7 @@ SearchComponent.propTypes = {
   excludeFields: sourceFields,
   fuzziness: fuzzinessDef,
   searchOperators: bool,
+  preserveResults: bool,
   highlight: bool,
   highlightField: string,
   customHighlight: object,

@@ -280,63 +280,66 @@ export const getSuggestions = (
   }
 
   const getPredictiveSuggestions = ({
-    suggestions,
-    currentValue,
+    predictiveSuggestions,
+    currentValuePredictive,
     wordsToShowAfterHighlight
   }) => {
     const suggestionMap = {};
-    if (currentValue) {
-      const parsedSuggestion = suggestions.reduce((agg, { label, ...rest }) => {
-        // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
-        const parsedContent = new DOMParser().parseFromString(
-          label,
-          'text/html'
-        ).documentElement.textContent;
+    if (currentValuePredictive) {
+      const parsedSuggestion = predictiveSuggestions.reduce(
+        (agg, { label, ...rest }) => {
+          // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
+          const parsedContent = new DOMParser().parseFromString(
+            label,
+            'text/html'
+          ).documentElement.textContent;
 
-        // to match the partial start of word.
-        // example if searchTerm is `select` and string contains `selected`
-        let regexString = `(${currentValue})\\w+`;
-        let regex = new RegExp(regexString, 'i');
-        let regexExecution = regex.exec(parsedContent);
-        // if execution value is null it means either there is no match or there are chances
-        // that exact word is present
-        if (!regexExecution) {
-          // regex to match exact word
-          regexString = `(${currentValue})`;
-          regex = new RegExp(regexString, 'i');
-          regexExecution = regex.exec(parsedContent);
-        }
+          // to match the partial start of word.
+          // example if searchTerm is `select` and string contains `selected`
+          let regexString = `(${currentValuePredictive})\\w+`;
+          let regex = new RegExp(regexString, 'i');
+          let regexExecution = regex.exec(parsedContent);
+          // if execution value is null it means either there is no match or there are chances
+          // that exact word is present
+          if (!regexExecution) {
+            // regex to match exact word
+            regexString = `(${currentValuePredictive})`;
+            regex = new RegExp(regexString, 'i');
+            regexExecution = regex.exec(parsedContent);
+          }
 
-        if (regexExecution) {
-          const matchedString = parsedContent.slice(
-            regexExecution.index,
-            parsedContent.length
-          );
+          if (regexExecution) {
+            const matchedString = parsedContent.slice(
+              regexExecution.index,
+              parsedContent.length
+            );
 
-          const suggestionPhrase = `${currentValue}<mark style="font-weight: 600; padding: 0; background-color: inherit; color: inherit">${matchedString
-            .slice(currentValue.length)
-            .split(' ')
-            .slice(0, wordsToShowAfterHighlight + 1)
-            .join(' ')}</mark>`;
+            const suggestionPhrase = `${currentValuePredictive}<mark style="font-weight: 600; padding: 0; background-color: inherit; color: inherit">${matchedString
+              .slice(currentValuePredictive.length)
+              .split(' ')
+              .slice(0, wordsToShowAfterHighlight + 1)
+              .join(' ')}</mark>`;
 
-          // to show unique results only
-          if (!suggestionMap[suggestionPhrase]) {
-            suggestionMap[suggestionPhrase] = 1;
-            return [
-              ...agg,
-              {
-                label: suggestionPhrase,
-                isPredictiveSuggestion: true,
-                ...rest
-              }
-            ];
+            // to show unique results only
+            if (!suggestionMap[suggestionPhrase]) {
+              suggestionMap[suggestionPhrase] = 1;
+              return [
+                ...agg,
+                {
+                  label: suggestionPhrase,
+                  isPredictiveSuggestion: true,
+                  ...rest
+                }
+              ];
+            }
+
+            return agg;
           }
 
           return agg;
-        }
-
-        return agg;
-      }, []);
+        },
+        []
+      );
 
       return parsedSuggestion;
     }
@@ -350,7 +353,8 @@ export const getSuggestions = (
       currentValue: value,
       wordsToShowAfterHighlight: true
     });
-  } return suggestionsList;
+  }
+  return suggestionsList;
 };
 
 export function parseCompAggToHits(
