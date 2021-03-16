@@ -12,7 +12,7 @@ export default interface Aggregations {
   setAfterKey: (key: Object) => void;
 
   // Method to set data explicitly
-  setData: (data: object) => void;
+  setData: (aggField: string, data: object, append?: boolean) => void;
 
   setRaw: (rawResponse: object) => void;
 

@@ -676,6 +676,7 @@ class SearchComponent extends Base {
   setAfter = (after: Object, options?: Options = defaultOptions): void => {
     const prev = this.after;
     this.after = after;
+    this.aggregationData.setAfterKey(after);
     this._applyOptions(options, 'after', prev, after);
   };
 
@@ -842,7 +843,8 @@ class SearchComponent extends Base {
                     {
                       defaultOptions,
                       ...options
-                    }
+                    },
+                    false
                   );
                 }
               }
@@ -1290,7 +1292,8 @@ class SearchComponent extends Base {
 
   _handleAggregationResponse(
     aggsResponse: Object,
-    options?: Options = defaultOptions
+    options?: Options = defaultOptions,
+    append?: boolean = true
   ) {
     let aggregationField = this.aggregationField;
     if (!aggregationField && typeof this.dataField === 'string') {
@@ -1300,7 +1303,8 @@ class SearchComponent extends Base {
     this.aggregationData.setRaw(aggsResponse[aggregationField]);
     this.aggregationData.setData(
       aggregationField,
-      aggsResponse[aggregationField].buckets
+      aggsResponse[aggregationField].buckets,
+      this.preserveResults && append
     );
     this._applyOptions(
       { stateChanges: options.stateChanges },

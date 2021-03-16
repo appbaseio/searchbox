@@ -32,9 +32,15 @@ class Aggregations {
   }
 
   // Method to set data explicitly
-  setData(aggField: string, data: Object) {
+  setData(aggField: string, data: Object, append: boolean = false) {
     // parse aggregation buckets
-    this.data = parseCompAggToHits(aggField, data);
+    const parsedData = parseCompAggToHits(aggField, data);
+    // Merge data
+    if (append) {
+      this.data = [...this.data, ...parsedData];
+    } else {
+      this.data = parsedData;
+    }
   }
 }
 
