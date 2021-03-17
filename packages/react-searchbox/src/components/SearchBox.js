@@ -64,8 +64,8 @@ class SearchBox extends React.Component {
   }
 
   componentDidMount() {
-    const { enableRecentSearches } = this.props;
-    if (enableRecentSearches) {
+    const { enableRecentSearches, autosuggest } = this.props;
+    if (enableRecentSearches && autosuggest) {
       this.componentInstance.getRecentSearches();
     }
   }
@@ -218,7 +218,12 @@ class SearchBox extends React.Component {
       enableRecentSearches,
       autosuggest
     } = this.props;
-    if (enableRecentSearches && !value && this.componentInstance.value) {
+    if (
+      enableRecentSearches &&
+      !value &&
+      this.componentInstance.value &&
+      autosuggest
+    ) {
       this.componentInstance.getRecentSearches();
     }
     if (onChange) {
@@ -231,7 +236,11 @@ class SearchBox extends React.Component {
           triggerCustomQuery: false,
           stateChanges: true
         });
-        debounceFunc(this.triggerDefaultQuery, debounce);
+        if (autosuggest) {
+          debounceFunc(this.triggerDefaultQuery, debounce);
+        } else {
+          this.triggerCustomQuery();
+        }
         if (rest.triggerCustomQuery) {
           this.triggerCustomQuery();
         }
@@ -241,6 +250,9 @@ class SearchBox extends React.Component {
           triggerDefaultQuery: !!autosuggest,
           stateChanges: true
         });
+        if (!autosuggest) {
+          this.triggerCustomQuery();
+        }
       }
     }
   };
