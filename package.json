@@ -5,9 +5,7 @@
   "workspaces": [
     "packages/*",
     "packages/searchbase/examples/*",
-    "packages/vue-searchbox/examples/with-facet",
-    "packages/vue-searchbox/examples/with-react",
-    "packages/vue-searchbox/examples/with-vanilla",
+    "packages/vue-searchbox/examples/*",
     "packages/react-searchbox/examples/*",
     "packages/native/examples/*",
     "site"
