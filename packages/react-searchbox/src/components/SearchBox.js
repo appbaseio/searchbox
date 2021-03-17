@@ -239,7 +239,7 @@ class SearchBox extends React.Component {
         if (autosuggest) {
           debounceFunc(this.triggerDefaultQuery, debounce);
         } else {
-          this.triggerCustomQuery();
+          debounceFunc(this.triggerCustomQuery, debounce);
         }
         if (rest.triggerCustomQuery) {
           this.triggerCustomQuery();
