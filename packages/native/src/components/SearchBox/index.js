@@ -302,6 +302,9 @@ class SearchBox extends React.Component {
         if (value && triggerDefaultQuery) {
           debounceFunc(this.triggerDefaultQuery, debounce);
         }
+        if (!autosuggest) {
+          debounceFunc(this.triggerCustomQuery, debounce);
+        }
         if (rest.triggerCustomQuery) {
           this.triggerCustomQuery();
         }
@@ -312,6 +315,9 @@ class SearchBox extends React.Component {
           triggerDefaultQuery: !!value && triggerDefaultQuery,
           stateChanges: true
         });
+        if (!autosuggest) {
+          this.triggerCustomQuery();
+        }
       }
     }
   };
