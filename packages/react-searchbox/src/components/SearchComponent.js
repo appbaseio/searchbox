@@ -139,7 +139,7 @@ class SearchComponent extends React.Component {
   }
 
   componentDidMount() {
-    const { subscribeTo, triggerQueryOnInit } = this.props;
+    const { subscribeTo, triggerQueryOnInit, autosuggest } = this.props;
 
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -151,7 +151,7 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (triggerQueryOnInit) {
+    if (triggerQueryOnInit && autosuggest) {
       this.componentInstance.triggerDefaultQuery();
     }
   }
@@ -172,11 +172,11 @@ class SearchComponent extends React.Component {
   }
 
   render() {
-    const { id, URLParams } = this.props;
+    const { id, URLParams, autosuggest } = this.props;
     if (this.hasCustomRenderer && this.componentInstance) {
       if (URLParams) {
         return (
-          <URLParamsProvider id={id}>
+          <URLParamsProvider id={id} autosuggest={autosuggest}>
             {getComponent(this.componentInstance.mappedProps, this.props)}
           </URLParamsProvider>
         );
@@ -192,7 +192,8 @@ SearchComponent.defaultProps = {
   triggerQueryOnInit: true,
   URLParams: false,
   enablePredictiveSuggestions: false,
-  clearFiltersOnQueryChange: false
+  clearFiltersOnQueryChange: false,
+  autosuggest: true
 };
 
 SearchComponent.propTypes = {
@@ -266,7 +267,8 @@ SearchComponent.propTypes = {
   onQueryChange: func,
 
   // called when mic status changes
-  onMicStatusChange: func
+  onMicStatusChange: func,
+  autosuggest: bool
 };
 
 export default SearchComponent;

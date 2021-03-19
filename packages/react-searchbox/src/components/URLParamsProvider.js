@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchContext, checkValidValue, isEqual } from '../utils/helper';
-import { stringRequired } from '../utils/types';
+import { bool, stringRequired } from '../utils/types';
 
 class URLParamsProvider extends React.Component {
   static contextType = SearchContext;
@@ -11,14 +11,14 @@ class URLParamsProvider extends React.Component {
   }
 
   componentDidMount() {
-    const { id } = this.props;
+    const { id, autosuggest } = this.props;
     if (window) {
       this.init();
       // Set component value
       if (this.params.has(id)) {
         try {
           this.componentInstance.setValue(JSON.parse(this.params.get(id)), {
-            triggerDefaultQuery: true,
+            triggerDefaultQuery: !!autosuggest,
             stateChanges: true
           });
         } catch (e) {
@@ -126,7 +126,12 @@ class URLParamsProvider extends React.Component {
 }
 
 URLParamsProvider.propTypes = {
-  id: stringRequired
+  id: stringRequired,
+  autosuggest: bool
+};
+
+URLParamsProvider.defaultProps = {
+  autosuggest: true
 };
 
 export default URLParamsProvider;
