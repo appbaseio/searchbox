@@ -176,7 +176,7 @@ class SearchComponent extends React.Component {
     if (this.hasCustomRenderer && this.componentInstance) {
       if (URLParams) {
         return (
-          <URLParamsProvider id={id} autosuggest={autosuggest}>
+          <URLParamsProvider id={id} triggerDefaultQueryInit={autosuggest}>
             {getComponent(this.componentInstance.mappedProps, this.props)}
           </URLParamsProvider>
         );
