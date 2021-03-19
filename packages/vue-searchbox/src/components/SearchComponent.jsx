@@ -58,7 +58,8 @@ const SearchComponent = {
 		render: VueTypes.func,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
-		triggerQueryOnInit: VueTypes.bool.def(true)
+		triggerQueryOnInit: VueTypes.bool.def(true),
+		autosuggest: VueTypes.bool.def(true)
 	},
 	data() {
 		return {
@@ -123,7 +124,7 @@ const SearchComponent = {
 			showDistinctSuggestions,
 			subscribeTo,
 			preserveResults,
-			clearFiltersOnQueryChange
+			clearFiltersOnQueryChange,
 		} = this.rawProps;
 		const componentInstance = this.searchbase.register(id, {
 			index,
@@ -224,9 +225,9 @@ const SearchComponent = {
 		}, subscribeTo);
 	},
 	mounted() {
-		const { triggerQueryOnInit } = this.$props;
+		const { triggerQueryOnInit, autosuggest } = this.$props;
 		const componentInstance = this.getComponentInstance();
-		if (triggerQueryOnInit) {
+		if (triggerQueryOnInit && autosuggest) {
 			componentInstance.triggerDefaultQuery();
 		}
 	},
@@ -236,12 +237,12 @@ const SearchComponent = {
 		}
 	},
 	render() {
-		const { id, URLParams } = this.$props;
+		const { id, URLParams, autosuggest } = this.$props;
 		if (this.$scopedSlots.default) {
 			const dom = this.$scopedSlots.default;
 			if (URLParams) {
 				return (
-					<URLParamsProvider id={id}>{dom(this.searchState)}</URLParamsProvider>
+					<URLParamsProvider id={id} autosuggest={autosuggest} >{dom(this.searchState)}</URLParamsProvider>
 				);
 			}
 			return <div>{dom(this.searchState)}</div>;
