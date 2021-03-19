@@ -59,7 +59,7 @@ const SearchComponent = {
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),
-		autosuggest: VueTypes.bool.def(true)
+		triggerDefaultQueryInit: VueTypes.bool.def(true)
 	},
 	data() {
 		return {
@@ -225,9 +225,9 @@ const SearchComponent = {
 		}, subscribeTo);
 	},
 	mounted() {
-		const { triggerQueryOnInit, autosuggest } = this.$props;
+		const { triggerQueryOnInit } = this.$props;
 		const componentInstance = this.getComponentInstance();
-		if (triggerQueryOnInit && autosuggest) {
+		if (triggerQueryOnInit) {
 			componentInstance.triggerDefaultQuery();
 		}
 	},
@@ -237,12 +237,12 @@ const SearchComponent = {
 		}
 	},
 	render() {
-		const { id, URLParams, autosuggest } = this.$props;
+		const { id, URLParams, triggerDefaultQueryInit } = this.$props;
 		if (this.$scopedSlots.default) {
 			const dom = this.$scopedSlots.default;
 			if (URLParams) {
 				return (
-					<URLParamsProvider id={id} autosuggest={autosuggest} >{dom(this.searchState)}</URLParamsProvider>
+					<URLParamsProvider id={id} triggerDefaultQueryInit={triggerDefaultQueryInit} >{dom(this.searchState)}</URLParamsProvider>
 				);
 			}
 			return <div>{dom(this.searchState)}</div>;

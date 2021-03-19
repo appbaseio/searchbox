@@ -6,17 +6,17 @@ const URLParamsProvider = {
 	inject: ['searchbase'],
 	props: {
 		id: VueTypes.string.isRequired,
-		autosuggest: VueTypes.bool.def(true)
+		triggerDefaultQueryInit: VueTypes.bool.def(true)
 	},
 	mounted() {
-		const { id, autosuggest } = this.$props;
+		const { id, triggerDefaultQueryInit } = this.$props;
 		if (window) {
 			this.init();
 			// Set component value
 			if (this.params.has(id)) {
 				try {
 					this.getComponentInstance().setValue(JSON.parse(this.params.get(id)), {
-						triggerDefaultQuery: autosuggest,
+						triggerDefaultQuery: triggerDefaultQueryInit,
 						stateChanges: true
 					});
 				} catch (e) {
