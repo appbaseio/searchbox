@@ -59,7 +59,7 @@ const SearchComponent = {
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),
-		triggerDefaultQueryInit: VueTypes.bool.def(true)
+		triggerDefaultQueryOnInit: VueTypes.bool.def(true)
 	},
 	data() {
 		return {
@@ -237,12 +237,12 @@ const SearchComponent = {
 		}
 	},
 	render() {
-		const { id, URLParams, triggerDefaultQueryInit } = this.$props;
+		const { id, URLParams, triggerDefaultQueryOnInit } = this.$props;
 		if (this.$scopedSlots.default) {
 			const dom = this.$scopedSlots.default;
 			if (URLParams) {
 				return (
-					<URLParamsProvider id={id} triggerDefaultQueryInit={triggerDefaultQueryInit} >{dom(this.searchState)}</URLParamsProvider>
+					<URLParamsProvider id={id} triggerDefaultQueryOnInit={triggerDefaultQueryOnInit} >{dom(this.searchState)}</URLParamsProvider>
 				);
 			}
 			return <div>{dom(this.searchState)}</div>;

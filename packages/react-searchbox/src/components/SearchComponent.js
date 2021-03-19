@@ -81,7 +81,8 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange
+      clearFiltersOnQueryChange,
+      subscribeTo
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -136,11 +137,6 @@ class SearchComponent extends React.Component {
       preserveResults,
       clearFiltersOnQueryChange
     });
-  }
-
-  componentDidMount() {
-    const { subscribeTo, triggerQueryOnInit, autosuggest } = this.props;
-
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
       this.componentInstance.subscribeToStateChanges(change => {
@@ -151,7 +147,12 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (triggerQueryOnInit && autosuggest) {
+  }
+
+  componentDidMount() {
+    const { triggerQueryOnInit } = this.props;
+
+    if (triggerQueryOnInit) {
       this.componentInstance.triggerDefaultQuery();
     }
   }
@@ -172,11 +173,14 @@ class SearchComponent extends React.Component {
   }
 
   render() {
-    const { id, URLParams, autosuggest } = this.props;
+    const { id, URLParams, triggerQueryOnInit } = this.props;
     if (this.hasCustomRenderer && this.componentInstance) {
       if (URLParams) {
         return (
-          <URLParamsProvider id={id} triggerDefaultQueryInit={autosuggest}>
+          <URLParamsProvider
+            id={id}
+            triggerDefaultQueryOnInit={triggerQueryOnInit}
+          >
             {getComponent(this.componentInstance.mappedProps, this.props)}
           </URLParamsProvider>
         );
@@ -192,8 +196,7 @@ SearchComponent.defaultProps = {
   triggerQueryOnInit: true,
   URLParams: false,
   enablePredictiveSuggestions: false,
-  clearFiltersOnQueryChange: false,
-  autosuggest: true
+  clearFiltersOnQueryChange: false
 };
 
 SearchComponent.propTypes = {
@@ -267,8 +270,7 @@ SearchComponent.propTypes = {
   onQueryChange: func,
 
   // called when mic status changes
-  onMicStatusChange: func,
-  autosuggest: bool
+  onMicStatusChange: func
 };
 
 export default SearchComponent;

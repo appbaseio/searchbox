@@ -11,14 +11,14 @@ class URLParamsProvider extends React.Component {
   }
 
   componentDidMount() {
-    const { id, triggerDefaultQueryInit } = this.props;
+    const { id, triggerDefaultQueryOnInit } = this.props;
     if (window) {
       this.init();
       // Set component value
       if (this.params.has(id)) {
         try {
           this.componentInstance.setValue(JSON.parse(this.params.get(id)), {
-            triggerDefaultQuery: !!triggerDefaultQueryInit,
+            triggerDefaultQuery: !!triggerDefaultQueryOnInit,
             stateChanges: true
           });
         } catch (e) {
@@ -127,11 +127,11 @@ class URLParamsProvider extends React.Component {
 
 URLParamsProvider.propTypes = {
   id: stringRequired,
-  triggerDefaultQueryInit: bool
+  triggerDefaultQueryOnInit: bool
 };
 
 URLParamsProvider.defaultProps = {
-  triggerDefaultQueryInit: true
+  triggerDefaultQueryOnInit: true
 };
 
 export default URLParamsProvider;

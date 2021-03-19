@@ -793,9 +793,9 @@ class SearchComponent extends Base {
               triggerDefaultQuery: false,
               triggerCustomQuery: false
             });
-
-            // Reset value for dependent components
-            if (this.clearFiltersOnQueryChange) {
+            // Reset value for dependent components after fist query is made
+            // We wait for first query to not clear filters applied by URL params
+            if (this.clearFiltersOnQueryChange && this._query) {
               componentInstance.setValue(undefined, {
                 stateChanges: true,
                 triggerDefaultQuery: false,
