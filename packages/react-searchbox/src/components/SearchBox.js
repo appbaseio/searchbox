@@ -51,8 +51,7 @@ class SearchBox extends React.Component {
     let currentValue = value || defaultValue || '';
 
     this.state = {
-      isOpen: false,
-      currentValue: ''
+      isOpen: false
     };
     // Set the value in searchbase instance
     if (currentValue) {
@@ -65,18 +64,9 @@ class SearchBox extends React.Component {
   }
 
   componentDidMount() {
-    const { enableRecentSearches, autosuggest, id } = this.props;
+    const { enableRecentSearches, autosuggest } = this.props;
     if (enableRecentSearches && autosuggest) {
       this.componentInstance.getRecentSearches();
-    }
-    if (window) {
-      let params = new URLSearchParams(window.location.search);
-      let inputValue = params.get(id);
-      if (inputValue) {
-        this.setState(() => ({
-          currentValue: inputValue
-        }));
-      }
     }
   }
 
@@ -498,11 +488,7 @@ class SearchBox extends React.Component {
                   {...getInputProps({
                     className: getClassName(innerClass, 'input'),
                     placeholder: placeholder,
-                    value:
-                      value ||
-                      (currentValue === null
-                        ? this.state.currentValue
-                        : currentValue),
+                    value: value || (currentValue === null ? '' : currentValue),
                     onChange: this.onInputChange,
                     onBlur: this.withTriggerQuery(onBlur),
                     onFocus: this.handleFocus,
