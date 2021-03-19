@@ -114,7 +114,7 @@ const SearchBox = {
 		return this.state;
 	},
 	mounted() {
-		if(this.enableRecentSearches) {
+		if(this.enableRecentSearches && this.autosuggest) {
 			const { getRecentSearches } =  this.getComponentInstance();
 			getRecentSearches();
 		}
@@ -217,7 +217,7 @@ const SearchBox = {
 			const { debounce } = this.$props;
 			this.isOpen = isOpen;
 			const componentInstance = this.getComponentInstance();
-			if (this.enableRecentSearches && !value && componentInstance.value) {
+			if (this.enableRecentSearches && !value && componentInstance.value && this.autosuggest) {
 				componentInstance.getRecentSearches();
 			}
 			if (debounce > 0) {
@@ -226,12 +226,19 @@ const SearchBox = {
 					triggerCustomQuery: false,
 					stateChanges: true
 				});
-				debounceFunc(this.triggerDefaultQuery, debounce);
+				if(this.autosuggest) {
+					debounceFunc(this.triggerDefaultQuery, debounce);
+				} else {
+					debounceFunc(this.triggerCustomQuery, debounce);
+				}
 				if(rest.triggerCustomQuery) {
 					debounceFunc(this.triggerCustomQuery, debounce);
 				}
 			} else {
 				this.triggerSuggestionsQuery(value, rest.triggerCustomQuery);
+				if(!this.autosuggest) {
+					this.triggerCustomQuery();
+				}
 			}
 		},
 		triggerSuggestionsQuery(value, triggerCustomQuery) {
