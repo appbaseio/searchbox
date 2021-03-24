@@ -348,11 +348,12 @@ export const getSuggestions = (
   };
 
   if (enablePredictiveSuggestions) {
-    return getPredictiveSuggestions({
-      suggestions: suggestionsList,
-      currentValue: value,
+    let results = getPredictiveSuggestions({
+      predictiveSuggestions: suggestionsList,
+      currentValuePredictive: value,
       wordsToShowAfterHighlight: true
     });
+    return results;
   }
   return suggestionsList;
 };
