@@ -44,51 +44,51 @@ export class AppComponent implements AfterContentInit {
       dataField: [
         {
           field: 'fullName',
-          weight: 1
-        },
-        {
-          field: 'fullName.search',
           weight: 3
         },
         {
-          field: 'name',
-          weight: 0.8
+          field: 'fullName.search',
+          weight: 1
         },
         {
-          field: 'name.search',
+          field: 'name',
           weight: 1.6
         },
         {
-          field: 'description',
-          weight: 0.7
+          field: 'name.search',
+          weight: 0.8
         },
         {
-          field: 'description.search',
+          field: 'description',
           weight: 1.4
         },
         {
-          field: 'owner',
-          weight: 0.6
+          field: 'description.search',
+          weight: 0.7
         },
         {
-          field: 'owner.search',
+          field: 'owner',
           weight: 1.2
         },
         {
-          field: 'topics',
-          weight: 0.5
+          field: 'owner.search',
+          weight: 0.6
         },
         {
-          field: 'topics.search',
+          field: 'topics',
           weight: 1.0
         },
         {
+          field: 'topics.search',
+          weight: 0.5
+        },
+        {
           field: 'language',
-          weight: 0.3
+          weight: 0.6
         },
         {
           field: 'language.search',
-          weight: 0.6
+          weight: 0.3
         },
       ],
       queryFormat: 'and',
