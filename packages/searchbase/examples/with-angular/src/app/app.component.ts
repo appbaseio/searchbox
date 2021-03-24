@@ -1,4 +1,4 @@
-import { Component, AfterContentInit, ViewChild } from '@angular/core';
+import { Component, AfterContentInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { SearchBase, SearchComponent } from '@appbaseio/searchbase';
@@ -10,7 +10,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class AppComponent implements AfterContentInit {
@@ -128,12 +129,14 @@ export class AppComponent implements AfterContentInit {
 
     // Register result component with react dependency on search and filter component => To render the results
     this.resultComponent = this.searchBase.register('result-component', {
-      dataField: 'name',
       react: {
         and: ['search-component', 'language-filter']
       },
       from: 0,
       size: 10,
+      // Sort results by stars
+      dataField: 'stars',
+      sortBy: 'desc',
       defaultQuery: () => ({
         track_total_hits: true
       })

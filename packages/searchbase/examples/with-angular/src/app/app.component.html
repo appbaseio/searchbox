@@ -14,8 +14,7 @@
       id="custom"
     />
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleOptionSelect($event)">
-      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value">
-        {{suggestion.label}}
+      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value" [innerHtml]="suggestion.label" >
       </mat-option>
     </mat-autocomplete>
   </div>
@@ -55,10 +54,17 @@
             <div>
               <img src={{item.avatar}} alt={{item.name}} />
             </div>
-            <div class="details">
-              <h4>{{ item.name }}</h4>
-              <p>{{ item.description }}</p>
-            </div>
+              <div class="details">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.description }}</p>
+                <div class="item-details">
+                  <div class="star-icon-parent">
+                    <mat-icon class="star-icon">star</mat-icon>
+                    <span class="star-text">{{ item.stars.toLocaleString() }}</span>
+                  </div>
+                  <a href={{item.url}} target="blank">View on Github</a>
+                </div>
+              </div>
           </div>
         </div>
       </div>

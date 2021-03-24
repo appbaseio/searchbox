@@ -136,7 +136,9 @@
 
   .result-set .details {
     padding-left: 20px;
+    padding-right: 20px;
     margin-top: 15px;
+    width: 100%;
   }
 
   .result-set h4 {
@@ -210,6 +212,33 @@
     position: fixed;
     right: 10px;
     top: 138px;
+  }
+
+  mark {
+    font-weight: 600;
+    padding: 0;
+    background-color: inherit;
+    color: inherit;
+  }
+
+  .star-icon {
+    color: gold;
+  }
+
+  .star-icon-parent {
+    display: flex;
+    align-items: center;
+  }
+
+  .star-text {
+    margin-left: 5px;
+    font-weight: 500;
+  }
+
+  .item-details {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
 
   @media screen and (max-width: 767px) {
