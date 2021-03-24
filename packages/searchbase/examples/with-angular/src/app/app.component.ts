@@ -36,7 +36,54 @@ export class AppComponent implements AfterContentInit  {
     // Register search component => To render the auto-suggestions
     this.searchComponent = this.searchBase.register('search-component', {
       dataField: [
-       'name', 'description', 'name.raw', 'fullname', 'owner', 'topics'
+        {
+          field: 'fullName',
+          weight: 3
+        },
+        {
+          field: 'fullName.search',
+          weight: 1
+        },
+        {
+          field: 'name',
+          weight: 1.6
+        },
+        {
+          field: 'name.search',
+          weight: 0.8
+        },
+        {
+          field: 'description',
+          weight: 1.4
+        },
+        {
+          field: 'description.search',
+          weight: 0.7
+        },
+        {
+          field: 'owner',
+          weight: 1.2
+        },
+        {
+          field: 'owner.search',
+          weight: 0.6
+        },
+        {
+          field: 'topics',
+          weight: 1.0
+        },
+        {
+          field: 'topics.search',
+          weight: 0.5
+        },
+        {
+          field: 'language',
+          weight: 0.6
+        },
+        {
+          field: 'language.search',
+          weight: 0.3
+        },
       ],
       size: 5
     });
