@@ -91,6 +91,7 @@ export class AppComponent implements AfterContentInit {
           weight: 0.6
         },
       ],
+      queryFormat: 'and',
       clearFiltersOnQueryChange: true,
       enablePredictiveSuggestions: true,
       size: 5
