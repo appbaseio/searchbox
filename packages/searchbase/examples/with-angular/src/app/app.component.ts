@@ -37,55 +37,59 @@ export class AppComponent implements AfterContentInit  {
     this.searchComponent = this.searchBase.register('search-component', {
       dataField: [
         {
-          field: 'fullName',
-          weight: 3
-        },
-        {
-          field: 'fullName.search',
+          field: 'description',
           weight: 1
         },
         {
-          field: 'name',
-          weight: 1.6
-        },
-        {
-          field: 'name.search',
-          weight: 0.8
-        },
-        {
-          field: 'description',
-          weight: 1.4
+          field: 'description.keyword',
+          weight: 1
         },
         {
           field: 'description.search',
-          weight: 0.7
-        },
-        {
-          field: 'owner',
-          weight: 1.2
-        },
-        {
-          field: 'owner.search',
-          weight: 0.6
-        },
-        {
-          field: 'topics',
-          weight: 1.0
-        },
-        {
-          field: 'topics.search',
-          weight: 0.5
+          weight: 0.1
         },
         {
           field: 'language',
-          weight: 0.6
+          weight: 2
+        },
+        {
+          field: 'language.keyword',
+          weight: 2
         },
         {
           field: 'language.search',
-          weight: 0.3
+          weight: 0.2
         },
+        {
+          field: 'name',
+          weight: 5
+        },
+        {
+          field: 'name.keyword',
+          weight: 5
+        },
+        {
+          field: 'name.search',
+          weight: 0.5
+        },
+        {
+          field: 'owner',
+          weight: 1
+        },
+        {
+          field: 'owner.keyword',
+          weight: 1
+        },
+        {
+          field: 'owner.search',
+          weight: 0.1
+        }
       ],
-      size: 5
+      includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
+      size: 5,
+      queryFormat: 'and',
+      // To clear the filter values when search query gets changed
+      clearFiltersOnQueryChange: true,
     });
 
     // Register filter component with dependency on search component

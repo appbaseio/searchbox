@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MatListModule } from '@angular/material/list';
     NgbModule,
     MatAutocompleteModule,
     FormsModule,
-    MatListModule
+    MatListModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
