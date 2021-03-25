@@ -1,4 +1,4 @@
-import { Component, AfterContentInit } from '@angular/core';
+import { Component, AfterContentInit, ViewEncapsulation } from '@angular/core';
 import { SearchBase, SearchComponent } from '@appbaseio/searchbase';
 import { of, Observable, from } from 'rxjs';
 import { distinctUntilChanged, switchMap, map } from 'rxjs/operators';
@@ -7,7 +7,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class AppComponent implements AfterContentInit  {
@@ -38,8 +39,59 @@ export class AppComponent implements AfterContentInit  {
     // Register search component => To render the auto-suggestions
     this.searchComponent = this.searchBase.register('search-component', {
       dataField: [
-       'name', 'description', 'name.raw', 'fullname', 'owner', 'topics'
+        {
+          field: 'description',
+          weight: 1
+        },
+        {
+          field: 'description.keyword',
+          weight: 1
+        },
+        {
+          field: 'description.search',
+          weight: 0.1
+        },
+        {
+          field: 'language',
+          weight: 2
+        },
+        {
+          field: 'language.keyword',
+          weight: 2
+        },
+        {
+          field: 'language.search',
+          weight: 0.2
+        },
+        {
+          field: 'name',
+          weight: 5
+        },
+        {
+          field: 'name.keyword',
+          weight: 5
+        },
+        {
+          field: 'name.search',
+          weight: 0.5
+        },
+        {
+          field: 'owner',
+          weight: 1
+        },
+        {
+          field: 'owner.keyword',
+          weight: 1
+        },
+        {
+          field: 'owner.search',
+          weight: 0.1
+        }
       ],
+      includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
+      queryFormat: 'and',
+      clearFiltersOnQueryChange: true,
+      enablePredictiveSuggestions: true,
       size: 5
     });
 
@@ -82,6 +134,7 @@ export class AppComponent implements AfterContentInit  {
       },
       from: 0,
       size: 10,
+      includeFields: ['name', 'description', 'url', 'avatar', 'stars'],
       defaultQuery: () => ({
         track_total_hits: true
       })
