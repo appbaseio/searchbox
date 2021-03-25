@@ -1,19 +1,21 @@
-import { Component, AfterContentInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  AfterContentInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { SearchBase, SearchComponent } from '@appbaseio/searchbase';
-import { MatSelectionListChange } from '@angular/material/list';
 import { PageEvent } from '@angular/material/paginator';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
-
 export class AppComponent implements AfterContentInit {
   index = 'gitxplore-app';
   url = 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io';
@@ -39,58 +41,60 @@ export class AppComponent implements AfterContentInit {
       credentials: this.credentials
     });
 
-   // Register search component => To render the suggestions
+    // Register search component => To render the suggestions
     this.searchComponent = this.searchBase.register('search-component', {
-      dataField: [
-        {
-          field: 'fullName',
-          weight: 3
-        },
-        {
-          field: 'fullName.search',
-          weight: 1
-        },
-        {
-          field: 'name',
-          weight: 1.6
-        },
-        {
-          field: 'name.search',
-          weight: 0.8
-        },
-        {
-          field: 'description',
-          weight: 1.4
-        },
-        {
-          field: 'description.search',
-          weight: 0.7
-        },
-        {
-          field: 'owner',
-          weight: 1.2
-        },
-        {
-          field: 'owner.search',
-          weight: 0.6
-        },
-        {
-          field: 'topics',
-          weight: 1.0
-        },
-        {
-          field: 'topics.search',
-          weight: 0.5
-        },
-        {
-          field: 'language',
-          weight: 0.6
-        },
-        {
-          field: 'language.search',
-          weight: 0.3
-        },
-      ],
+      // Note: we're not using dataField in client because we have set it in appbase.io dashboard
+      // dataField: [
+      //   {
+      //     field: 'description',
+      //     weight: 1
+      //   },
+      //   {
+      //     field: 'description.keyword',
+      //     weight: 1
+      //   },
+      //   {
+      //     field: 'description.search',
+      //     weight: 0.1
+      //   },
+      //   {
+      //     field: 'language',
+      //     weight: 2
+      //   },
+      //   {
+      //     field: 'language.keyword',
+      //     weight: 2
+      //   },
+      //   {
+      //     field: 'language.search',
+      //     weight: 0.2
+      //   },
+      //   {
+      //     field: 'name',
+      //     weight: 5
+      //   },
+      //   {
+      //     field: 'name.keyword',
+      //     weight: 5
+      //   },
+      //   {
+      //     field: 'name.search',
+      //     weight: 0.5
+      //   },
+      //   {
+      //     field: 'owner',
+      //     weight: 1
+      //   },
+      //   {
+      //     field: 'owner.keyword',
+      //     weight: 1
+      //   },
+      //   {
+      //     field: 'owner.search',
+      //     weight: 0.1
+      //   }
+      // ],
+      includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
       queryFormat: 'and',
       clearFiltersOnQueryChange: true,
       enablePredictiveSuggestions: true,
@@ -107,14 +111,14 @@ export class AppComponent implements AfterContentInit {
             must_not: [
               {
                 match: {
-                  'language.keyword': ""
+                  'language.keyword': ''
                 }
               }
             ]
           }
-        },
+        }
       })
-    })
+    });
 
     // Register filter component with dependency on search component
     this.filterComponent = this.searchBase.register('language-filter', {
@@ -125,19 +129,18 @@ export class AppComponent implements AfterContentInit {
       value: [],
       react: {
         and: ['filter-languages', 'search-component']
-      },
+      }
     });
 
     // Register result component with react dependency on search and filter component => To render the results
     this.resultComponent = this.searchBase.register('result-component', {
+      dataField: 'title',
       react: {
         and: ['search-component', 'language-filter']
       },
       from: 0,
       size: 10,
-      // Sort results by stars
-      dataField: 'stars',
-      sortBy: 'desc',
+      includeFields: ['name', 'description', 'url', 'avatar', 'stars'],
       defaultQuery: () => ({
         track_total_hits: true
       })
@@ -161,7 +164,7 @@ export class AppComponent implements AfterContentInit {
   handleInput(e) {
     // Set the value to fetch the suggestions
     this.setSuggestions(e.target.value);
-  };
+  }
 
   handleKeyDown(e) {
     // Fetch the results
@@ -174,7 +177,7 @@ export class AppComponent implements AfterContentInit {
     this.searchComponent.setValue(selectedOption.option.value, {
       triggerCustomQuery: true,
       triggerDefaultQuery: true
-    })
+    });
     this.searchQuery = selectedOption.option.value;
   }
 
@@ -184,42 +187,42 @@ export class AppComponent implements AfterContentInit {
   }
 
   setSuggestions(value) {
-    if(!value) {
+    if (!value) {
       this.searchComponent.setValue('', {
         triggerDefaultQuery: false,
-        triggerCustomQuery: false,
+        triggerCustomQuery: false
       });
     } else {
-        // Update suggestions when value gets changed
-        this.suggestions = of(value).pipe(
-          distinctUntilChanged(),
-          switchMap(val => {
-            this.searchComponent.setValue(val, {
-              triggerDefaultQuery: false,
-              triggerCustomQuery: false,
-            });
-            return from(this.searchComponent.triggerDefaultQuery())
-            .pipe(
-              map(() => this.searchComponent.suggestions))
-          })
-        )
-      }
+      // Update suggestions when value gets changed
+      this.suggestions = of(value).pipe(
+        distinctUntilChanged(),
+        switchMap(val => {
+          this.searchComponent.setValue(val, {
+            triggerDefaultQuery: false,
+            triggerCustomQuery: false
+          });
+          return from(this.searchComponent.triggerDefaultQuery()).pipe(
+            map(() => this.searchComponent.suggestions)
+          );
+        })
+      );
+    }
   }
 
   handlePageChange(page: PageEvent) {
     this.resultComponent.setFrom(page.pageIndex * page.pageSize, {
       triggerCustomQuery: false,
       triggerDefaultQuery: true
-    })
+    });
   }
 
   clearFilter(type: string) {
-    if(type === 'language') {
+    if (type === 'language') {
       this.filterComponent.setValue(undefined, {
         triggerCustomQuery: true,
         triggerDefaultQuery: false
-      })
-    } else if(type === 'search') {
+      });
+    } else if (type === 'search') {
       this.searchComponent.setValue('', {
         triggerCustomQuery: true,
         triggerDefaultQuery: false
