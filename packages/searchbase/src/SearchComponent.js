@@ -425,11 +425,13 @@ class SearchComponent extends Base {
         this.results.data &&
         Array.isArray(this.results.data) &&
         this.results.data.length > 0 &&
-        this.results.data[0] &&
-        this.results.data[0]._source
+        this.results.data[0]
       ) {
         // Extract fields from _source
-        fields = Object.keys(this.results.data[0]._source);
+        fields = Object.keys(this.results.data[0]).filter(
+          key =>
+            !['_id', '_click_id', '_index', '_score', '_type'].includes(key)
+        );
       }
       if (this.enablePopularSuggestions) {
         // extract suggestions from popular suggestion fields too
