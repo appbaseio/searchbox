@@ -264,6 +264,9 @@ export class SearchComponent extends Base {
 
   // Method to unsubscribe the state changes
   unsubscribeToStateChanges(fn?: Function): void;
+
+  // Method to clear the stored results
+  clearResults(options?: types.Option): void
 }
 
 export default SearchComponent;
