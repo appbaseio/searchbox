@@ -95,9 +95,7 @@ export class AppComponent implements AfterContentInit {
       //   }
       // ],
       includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
-      queryFormat: 'and',
       clearFiltersOnQueryChange: true,
-      enablePredictiveSuggestions: true,
       size: 5
     });
 
@@ -192,6 +190,8 @@ export class AppComponent implements AfterContentInit {
         triggerDefaultQuery: false,
         triggerCustomQuery: false
       });
+      this.searchComponent.clearResults();
+      this.suggestions = of(this.searchComponent.suggestions);
     } else {
       // Update suggestions when value gets changed
       this.suggestions = of(value).pipe(
