@@ -511,9 +511,7 @@ class SearchBox extends React.Component {
                   </div>
                 )}
                 {this.renderError()}
-                {!this.hasCustomRenderer &&
-                isOpen &&
-                this.suggestionsList.length ? (
+                {!this.hasCustomRenderer && isOpen ? (
                   <ul
                     css={suggestionsCss}
                     className={getClassName(innerClass, 'list')}
