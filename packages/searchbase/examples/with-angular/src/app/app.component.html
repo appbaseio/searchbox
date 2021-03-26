@@ -9,10 +9,13 @@
       class="autocomplete-input"
       [(ngModel)]="searchComponent.value"
       (input)="handleInput($event)"
+      #trigger="matAutocompleteTrigger"
+      (keydown.enter)="trigger.closePanel(); handleKeyDown($event)"
       id="custom"
     />
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleOptionSelect($event)">
-      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value" [innerHtml]="suggestion.label" >
+      <mat-option *ngFor="let suggestion of suggestions | async" [value]="suggestion.value">
+        {{suggestion.label}}
       </mat-option>
     </mat-autocomplete>
   </div>
@@ -64,7 +67,7 @@
                   <span class="star-text">{{ item.stars.toLocaleString() }}</span>
                 </div>
                 <a href={{item.url}} target="blank">View on Github</a>
-               </div>
+              </div>
             </div>
           </div>
       </div>

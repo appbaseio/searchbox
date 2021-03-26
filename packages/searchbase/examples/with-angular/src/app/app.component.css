@@ -251,3 +251,7 @@ mark {
     max-width: none;
   }
 }
+
+.mat-option.mat-active {
+  background: rgba(240, 240, 235)
+}

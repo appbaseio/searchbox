@@ -1,4 +1,4 @@
-import { Component, AfterContentInit, ViewEncapsulation } from '@angular/core';
+import { Component, AfterContentInit } from '@angular/core';
 import { SearchBase, SearchComponent } from '@appbaseio/searchbase';
 import { of, Observable, from } from 'rxjs';
 import { distinctUntilChanged, switchMap, map } from 'rxjs/operators';
@@ -7,8 +7,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./app.component.css']
 })
 
 export class AppComponent implements AfterContentInit  {
@@ -89,10 +88,9 @@ export class AppComponent implements AfterContentInit  {
         }
       ],
       includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
-      queryFormat: 'and',
+      size: 5,
+      // To clear the filter values when search query gets changed
       clearFiltersOnQueryChange: true,
-      enablePredictiveSuggestions: true,
-      size: 5
     });
 
     // Register a component to filter languages with empty value
@@ -113,7 +111,6 @@ export class AppComponent implements AfterContentInit  {
         },
       })
     })
-
     // Register filter component with dependency on search component
     this.filterComponent = this.searchBase.register('language-filter', {
       type: 'term',
@@ -139,7 +136,6 @@ export class AppComponent implements AfterContentInit  {
         track_total_hits: true
       })
     });
-
     this.isMobile = window.innerWidth <= 765;
     this.showFilters = !this.isMobile;
   }
@@ -159,6 +155,9 @@ export class AppComponent implements AfterContentInit  {
         triggerDefaultQuery: false,
         triggerCustomQuery: false,
       });
+      // clear suggestions
+      this.searchComponent.clearResults();
+      this.suggestions = of(this.searchComponent.suggestions);
     } else {
         // Update suggestions when value gets changed
         this.suggestions = of(value).pipe(
@@ -191,5 +190,11 @@ export class AppComponent implements AfterContentInit  {
   handleSelection() {
     // Update results when language changes
     this.filterComponent.triggerCustomQuery();
+  }
+
+  handleKeyDown(e) {
+    // Fetch the results
+    e.preventDefault();
+    this.searchComponent.triggerCustomQuery();
   }
 }
