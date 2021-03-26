@@ -87,7 +87,6 @@ export class AppComponent implements AfterContentInit  {
       ],
       includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
       size: 5,
-      queryFormat: 'and',
       // To clear the filter values when search query gets changed
       clearFiltersOnQueryChange: true,
     });
@@ -133,6 +132,9 @@ export class AppComponent implements AfterContentInit  {
         triggerDefaultQuery: false,
         triggerCustomQuery: false,
       });
+      // clear suggestions
+      this.searchComponent.clearResults();
+      this.suggestions = of(this.searchComponent.suggestions);
     } else {
         // Update suggestions when value gets changed
         this.suggestions = of(value).pipe(
@@ -165,5 +167,11 @@ export class AppComponent implements AfterContentInit  {
   handleSelection() {
     // Update results when language changes
     this.filterComponent.triggerCustomQuery();
+  }
+
+  handleKeyDown(e) {
+    // Fetch the results
+    e.preventDefault();
+    this.searchComponent.triggerCustomQuery();
   }
 }

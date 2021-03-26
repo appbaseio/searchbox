@@ -9,6 +9,8 @@
       class="autocomplete-input"
       [(ngModel)]="searchComponent.value"
       (input)="handleInput($event)"
+      #trigger="matAutocompleteTrigger"
+      (keydown.enter)="trigger.closePanel(); handleKeyDown($event)"
       id="custom"
     />
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleOptionSelect($event)">
