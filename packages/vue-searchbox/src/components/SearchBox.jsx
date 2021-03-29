@@ -20,6 +20,8 @@ import SuggestionItem from '../addons/SuggestionItem.jsx';
 import Title from '../styles/Title';
 import Icons from './Icons.jsx';
 import causes from '../utils/causes';
+import RecentSvg from '../styles/RecentSvg';
+import PopularSvg from '../styles/PopularSvg';
 
 const SearchBox = {
 	name: 'search-box',
@@ -145,7 +147,7 @@ const SearchBox = {
 		getPopularSuggestionsList() {
 			const { suggestions } = this.getComponentInstance();
 			return (suggestions || []).filter(
-				suggestion => suggestion._popular_suggestion
+				suggestion => suggestion.source._popular_suggestion
 			);
 		},
 		getSuggestionsList() {
@@ -158,7 +160,7 @@ const SearchBox = {
 			}
 			const { suggestions } = this.getComponentInstance();
 			return (suggestions || []).filter(
-				suggestion => !suggestion._popular_suggestion
+				suggestion => !suggestion.source._popular_suggestion
 			);
 		},
 		_applySetter(prev, next, setterFunc) {
@@ -414,8 +416,9 @@ const SearchBox = {
 			innerRef,
 			size,
 			instanceValue,
-			recentSearches
+			recentSearches,
 		} = this.$props;
+		const { recentSearchesIcon, popularSearchesIcon } = this.$scopedSlots;
 		const suggestionsList = this.getSuggestionsList();
 		const popularSuggestionsList = this.getPopularSuggestionsList();
 		const hasSuggestions = defaultSuggestions && defaultSuggestions.length || recentSearches && recentSearches.length;
@@ -513,7 +516,7 @@ const SearchBox = {
 													</li>
 												))}
 												{
-													!instanceValue ? recentSearches.map((sugg, index) => (
+													!instanceValue ? (recentSearches || []).map((sugg, index) => (
 														<li
 															{...{
 																domProps: getItemProps({
@@ -530,9 +533,13 @@ const SearchBox = {
 																backgroundColor: this.getBackgroundColor(
 																	highlightedIndex,
 																	index
-																)
+																),
+																justifyContent: 'flex-start'
 															}}
 														>
+															<div style={{padding: '0 10px 0 0'}}>
+																<RecentSvg className={getClassName(innerClass, 'recent-search-icon') || null} icon={recentSearchesIcon} />
+															</div>
 															<SuggestionItem
 																currentValue={instanceValue}
 																suggestion={sugg}
@@ -550,7 +557,7 @@ const SearchBox = {
 														},
 														true
 													)
-													: popularSuggestionsList.map((sugg, index) => (
+													: (popularSuggestionsList || []).map((sugg, index) => (
 														<li
 															{...{
 																domProps: getItemProps({
@@ -567,9 +574,13 @@ const SearchBox = {
 																backgroundColor: this.getBackgroundColor(
 																	highlightedIndex,
 																	index + suggestionsList.length
-																)
+																),
+																justifyContent: 'flex-start'
 															}}
 														>
+															<div style={{padding: '0 10px 0 0'}}>
+																<PopularSvg className={getClassName(innerClass, 'popular-search-icon') || null} icon={popularSearchesIcon} />
+															</div>
 															<SuggestionItem
 																currentValue={instanceValue}
 																suggestion={sugg}
