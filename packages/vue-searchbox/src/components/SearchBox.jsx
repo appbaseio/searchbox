@@ -20,8 +20,7 @@ import SuggestionItem from '../addons/SuggestionItem.jsx';
 import Title from '../styles/Title';
 import Icons from './Icons.jsx';
 import causes from '../utils/causes';
-import RecentSvg from '../styles/RecentSvg';
-import PopularSvg from '../styles/PopularSvg';
+import CustomSvg from '../styles/CustomSvg';
 
 const SearchBox = {
 	name: 'search-box',
@@ -538,7 +537,17 @@ const SearchBox = {
 															}}
 														>
 															<div style={{padding: '0 10px 0 0'}}>
-																<RecentSvg className={getClassName(innerClass, 'recent-search-icon') || null} icon={recentSearchesIcon} />
+																<CustomSvg
+																	iconId={`${sugg.id}-icon`}
+																	className={
+																		getClassName(
+																			innerClass,
+																			'recent-search-icon'
+																		) || null
+																	}
+																	icon={recentSearchesIcon}
+																	type="recent-search-icon"
+																/>
 															</div>
 															<SuggestionItem
 																currentValue={instanceValue}
@@ -579,7 +588,17 @@ const SearchBox = {
 															}}
 														>
 															<div style={{padding: '0 10px 0 0'}}>
-																<PopularSvg className={getClassName(innerClass, 'popular-search-icon') || null} icon={popularSearchesIcon} />
+																<CustomSvg
+																	iconId={`${sugg.id}-icon`}
+																	className={
+																		getClassName(
+																			innerClass,
+																			'popular-search-icon'
+																		) || null
+																	}
+																	icon={popularSearchesIcon}
+																	type="popular-search-icon"
+																/>
 															</div>
 															<SuggestionItem
 																currentValue={instanceValue}
