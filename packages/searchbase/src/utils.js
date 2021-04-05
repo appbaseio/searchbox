@@ -315,7 +315,7 @@ export const getSuggestions = (
               parsedContent.length
             );
 
-            const suggestionPhrase = `<em>${currentValuePredictiveTrimmed}</em><mark class="highlight-predictive-suggestions">${matchedString
+            const suggestionPhrase = `${currentValuePredictiveTrimmed}<mark class="highlight-class">${matchedString
               .slice(currentValuePredictiveTrimmed.length)
               .split(' ')
               .slice(0, wordsToShowAfterHighlight + 1)
@@ -349,27 +349,11 @@ export const getSuggestions = (
   };
 
   if (enablePredictiveSuggestions) {
-    let predictiveSuggestions = getPredictiveSuggestions({
+    return getPredictiveSuggestions({
       predictiveSuggestions: suggestionsList,
       currentValuePredictive: value,
       wordsToShowAfterHighlight: true
     });
-
-    const finalSuggestions = [];
-
-		const predictiveValues = predictiveSuggestions.reduce((arr, suggestion) => {
-			finalSuggestions.push(suggestion);
-			arr.push(suggestion.value);
-			return arr;
-		}, []);
-
-		suggestionsList.forEach((suggestion) => {
-			if (!predictiveValues.includes(suggestion.value)) {
-				finalSuggestions.push(suggestion);
-			}
-		});
-		suggestionsList = finalSuggestions;
-    return suggestionsList;
   }
   return suggestionsList;
 };

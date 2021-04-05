@@ -45,13 +45,6 @@ const suggestions = css`
       color: inherit;
     }
   }
-  .highlight-predictive-suggestions {
-    font-weight: 600;
-    padding: 0;
-    background-color: inherit;
-    color: inherit;
-    font-style: italic;
-  }
 `;
 
 const suggestionsContainer = css`
