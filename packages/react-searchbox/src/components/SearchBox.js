@@ -41,8 +41,7 @@ import {
 } from '../styles/Suggestions';
 import SuggestionWrapper from '../addons/SuggestionsWrapper';
 import causes from '../utils/causes';
-import RecentSvg from '../styles/RecentSvg';
-import PopularSvg from '../styles/PopularSvg';
+import CustomSvg from '../styles/CustomSvg';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -457,7 +456,7 @@ class SearchBox extends React.Component {
       size,
       recentSearches,
       recentSearchesIcon,
-	    popularSearchesIcon,
+      popularSearchesIcon
     } = this.props;
     const currentValue = this.componentInstance.value || '';
     const hasSuggestions = defaultSuggestions || recentSearches;
@@ -547,12 +546,22 @@ class SearchBox extends React.Component {
                                 highlightedIndex,
                                 index
                               ),
-                              justifyContent: 'flex-start',
+                              justifyContent: 'flex-start'
                             }}
                           >
-                            <div style={{padding: '0 10px 0 0'}}>
-														  <RecentSvg className={getClassName(innerClass, 'recent-search-icon') || null} icon={recentSearchesIcon} />
-														</div>
+                            <div style={{ padding: '0 10px 0 0' }}>
+                              <CustomSvg
+                                iconId={`${sugg.id}-icon`}
+                                className={
+                                  getClassName(
+                                    innerClass,
+                                    'recent-search-icon'
+                                  ) || null
+                                }
+                                icon={recentSearchesIcon}
+                                type="recent-search-icon"
+                              />
+                            </div>
                             <SuggestionItem
                               currentValue={currentValue}
                               suggestion={sugg}
@@ -571,29 +580,41 @@ class SearchBox extends React.Component {
                           },
                           true
                         )
-                      : (this.popularSuggestionsList || []).map((sugg, index) => (
-                          <li
-                            {...getItemProps({ item: sugg })}
-                            key={`${index + this.suggestionsList + 1}-${
-                              sugg.value
-                            }`}
-                            style={{
-                              backgroundColor: this.getBackgroundColor(
-                                highlightedIndex,
-                                index + this.suggestionsList
-                              ),
-                              justifyContent: 'flex-start',
-                            }}
-                          >
-                            <div style={{padding: '0 10px 0 0'}}>
-														  <PopularSvg className={getClassName(innerClass, 'popular-search-icon') || null} icon={popularSearchesIcon} />
-														</div>
-                            <SuggestionItem
-                              currentValue={currentValue}
-                              suggestion={sugg}
-                            />
-                          </li>
-                        ))}
+                      : (this.popularSuggestionsList || []).map(
+                          (sugg, index) => (
+                            <li
+                              {...getItemProps({ item: sugg })}
+                              key={`${index + this.suggestionsList + 1}-${
+                                sugg.value
+                              }`}
+                              style={{
+                                backgroundColor: this.getBackgroundColor(
+                                  highlightedIndex,
+                                  index + this.suggestionsList
+                                ),
+                                justifyContent: 'flex-start'
+                              }}
+                            >
+                              <div style={{ padding: '0 10px 0 0' }}>
+                                <CustomSvg
+                                  iconId={`${sugg.id}-icon`}
+                                  className={
+                                    getClassName(
+                                      innerClass,
+                                      'popular-search-icon'
+                                    ) || null
+                                  }
+                                  icon={popularSearchesIcon}
+                                  type="popular-search-icon"
+                                />
+                              </div>
+                              <SuggestionItem
+                                currentValue={currentValue}
+                                suggestion={sugg}
+                              />
+                            </li>
+                          )
+                        )}
                   </ul>
                 ) : (
                   this.renderNoSuggestion()
@@ -686,7 +707,7 @@ SearchBox.propTypes = {
   showDistinctSuggestions: bool,
   queryString: bool,
   recentSearchesIcon: any,
-	popularSearchesIcon: any,
+  popularSearchesIcon: any,
 
   // internal props
   error: any,
@@ -714,7 +735,7 @@ SearchBox.defaultProps = {
   clearFiltersOnQueryChange: true,
   recentSearches: [],
   recentSearchesIcon: undefined,
-	popularSearchesIcon: undefined,
+  popularSearchesIcon: undefined
 };
 
 export default props => (
