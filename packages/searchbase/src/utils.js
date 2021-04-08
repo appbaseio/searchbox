@@ -465,7 +465,8 @@ export const searchBaseMappings = {
   setSortBy: 'setSortBy',
   setReact: 'setReact',
   setDefaultQuery: 'setDefaultQuery',
-  setCustomQuery: 'setCustomQuery'
+  setCustomQuery: 'setCustomQuery',
+  setAfter: 'setAfter'
 };
 
 export function btoa(input = '') {
