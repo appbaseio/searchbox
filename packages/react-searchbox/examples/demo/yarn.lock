@@ -9,20 +9,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.1.0.tgz#76939eb1a6abef6713d263269fbb6e0c787b8dee"
-  integrity sha512-g5tYaQag38pwUn5gvcCEKjKHiuvA208xAaiwcT2Yb+wbTsdclx61KLs/t3+uw4TWT0KCnbpXqBIiy1Ufqwvpog==
+"@appbaseio/react-searchbox@1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.1.10.tgz#26eff310bbc1fc002bdcbd6dd1fc4769d0958ccd"
+  integrity sha512-7wXREPXfpLEPEAQY6bwV3d51YTQWOoqwLT1EHj+5oHXss7ZWzCXMrKwGGV6k+4T7s1Wl+pPyME4yeWZWOyYHtA==
   dependencies:
-    "@appbaseio/searchbase" "1.1.0"
+    "@appbaseio/searchbase" "1.1.9"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.0.tgz#92df1bbd38d4864fead30b5a5d19c49b5fdf2ef1"
-  integrity sha512-Qsz4Da8ZCBEzHrt/XXTuAGQshIjGESOIIWnNuVqf7qvgglQuD8TZ+Ss07kFPUX/yohRZP5mBxvRulLGPxTfh4w==
+"@appbaseio/searchbase@1.1.9":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.9.tgz#5b266ba0db3f2129a51f3566412b2978d5514189"
+  integrity sha512-h6I2e/2Lo3qZiAaFfyj/P6muLEUAkpVhV18V8jOuQcBug++4XEbw6d5h9PubnHXdK9rddJCcEVuP38mU6rqHGg==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -8666,9 +8666,9 @@ xtend@^4.0.0:
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 yallist@^2.1.2:
   version "2.1.2"
