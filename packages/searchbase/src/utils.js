@@ -285,7 +285,8 @@ export const getSuggestions = (
     wordsToShowAfterHighlight
   }) => {
     const suggestionMap = {};
-    if (currentValuePredictive) {
+    const currentValuePredictiveTrimmed = currentValuePredictive.trim();
+    if (currentValuePredictiveTrimmed) {
       const parsedSuggestion = predictiveSuggestions.reduce(
         (agg, { label, ...rest }) => {
           // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
@@ -296,14 +297,14 @@ export const getSuggestions = (
 
           // to match the partial start of word.
           // example if searchTerm is `select` and string contains `selected`
-          let regexString = `(${currentValuePredictive})\\w+`;
+          let regexString = `^(${currentValuePredictiveTrimmed})\\w+`;
           let regex = new RegExp(regexString, 'i');
           let regexExecution = regex.exec(parsedContent);
           // if execution value is null it means either there is no match or there are chances
           // that exact word is present
           if (!regexExecution) {
             // regex to match exact word
-            regexString = `(${currentValuePredictive})`;
+            regexString = `^(${currentValuePredictiveTrimmed})`;
             regex = new RegExp(regexString, 'i');
             regexExecution = regex.exec(parsedContent);
           }
@@ -314,8 +315,8 @@ export const getSuggestions = (
               parsedContent.length
             );
 
-            const suggestionPhrase = `${currentValuePredictive}<mark style="font-weight: 600; padding: 0; background-color: inherit; color: inherit">${matchedString
-              .slice(currentValuePredictive.length)
+            const suggestionPhrase = `${currentValuePredictiveTrimmed}<mark class="highlight-class">${matchedString
+              .slice(currentValuePredictiveTrimmed.length)
               .split(' ')
               .slice(0, wordsToShowAfterHighlight + 1)
               .join(' ')}</mark>`;
@@ -348,12 +349,11 @@ export const getSuggestions = (
   };
 
   if (enablePredictiveSuggestions) {
-    let results = getPredictiveSuggestions({
+    return getPredictiveSuggestions({
       predictiveSuggestions: suggestionsList,
       currentValuePredictive: value,
       wordsToShowAfterHighlight: true
     });
-    return results;
   }
   return suggestionsList;
 };
