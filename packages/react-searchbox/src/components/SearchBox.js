@@ -16,7 +16,8 @@ import {
   suggestions as suggestionsDef,
   title as titleDef,
   wholeNumber,
-  dataFieldValidator
+  dataFieldValidator,
+  element,
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
 import Input from '../styles/Input';
@@ -41,6 +42,7 @@ import {
 } from '../styles/Suggestions';
 import SuggestionWrapper from '../addons/SuggestionsWrapper';
 import causes from '../utils/causes';
+import CustomSvg from '../styles/CustomSvg';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -98,7 +100,7 @@ class SearchBox extends React.Component {
   get popularSuggestionsList() {
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
-      suggestion => suggestion._popular_suggestion
+      suggestion => suggestion.source._popular_suggestion
     );
   }
 
@@ -112,7 +114,7 @@ class SearchBox extends React.Component {
     }
     const suggestions = this.componentInstance.suggestions;
     return (suggestions || []).filter(
-      suggestion => !suggestion._popular_suggestion
+      suggestion => !suggestion.source._popular_suggestion
     );
   }
 
@@ -453,7 +455,9 @@ class SearchBox extends React.Component {
       autoFocus,
       value,
       size,
-      recentSearches
+      recentSearches,
+      recentSearchesIcon,
+      popularSearchesIcon
     } = this.props;
     const currentValue = this.componentInstance.value || '';
     const hasSuggestions = defaultSuggestions || recentSearches;
@@ -534,7 +538,7 @@ class SearchBox extends React.Component {
                       </li>
                     ))}
                     {!currentValue
-                      ? recentSearches.map((sugg, index) => (
+                      ? (recentSearches || []).map((sugg, index) => (
                           <li
                             {...getItemProps({ item: sugg })}
                             key={`${index + 1}-${sugg.value}`}
@@ -542,9 +546,23 @@ class SearchBox extends React.Component {
                               backgroundColor: this.getBackgroundColor(
                                 highlightedIndex,
                                 index
-                              )
+                              ),
+                              justifyContent: 'flex-start'
                             }}
                           >
+                            <div style={{ padding: '0 10px 0 0' }}>
+                              <CustomSvg
+                                iconId={`${index + 1}-${sugg.value}-icon`}
+                                className={
+                                  getClassName(
+                                    innerClass,
+                                    'recent-search-icon'
+                                  ) || null
+                                }
+                                icon={recentSearchesIcon}
+                                type="recent-search-icon"
+                              />
+                            </div>
                             <SuggestionItem
                               currentValue={currentValue}
                               suggestion={sugg}
@@ -563,25 +581,41 @@ class SearchBox extends React.Component {
                           },
                           true
                         )
-                      : this.popularSuggestionsList.map((sugg, index) => (
-                          <li
-                            {...getItemProps({ item: sugg })}
-                            key={`${index + this.suggestionsList + 1}-${
-                              sugg.value
-                            }`}
-                            style={{
-                              backgroundColor: this.getBackgroundColor(
-                                highlightedIndex,
-                                index + this.suggestionsList
-                              )
-                            }}
-                          >
-                            <SuggestionItem
-                              currentValue={currentValue}
-                              suggestion={sugg}
-                            />
-                          </li>
-                        ))}
+                      : (this.popularSuggestionsList || []).map(
+                          (sugg, index) => (
+                            <li
+                              {...getItemProps({ item: sugg })}
+                              key={`${index + this.suggestionsList.length + 1}-${
+                                sugg.value
+                              }`}
+                              style={{
+                                backgroundColor: this.getBackgroundColor(
+                                  highlightedIndex,
+                                  index + this.suggestionsList.length
+                                ),
+                                justifyContent: 'flex-start'
+                              }}
+                            >
+                              <div style={{ padding: '0 10px 0 0' }}>
+                                <CustomSvg
+                                  iconId={`${index + 1}-${sugg.value}-icon`}
+                                  className={
+                                    getClassName(
+                                      innerClass,
+                                      'popular-search-icon'
+                                    ) || null
+                                  }
+                                  icon={popularSearchesIcon}
+                                  type="popular-search-icon"
+                                />
+                              </div>
+                              <SuggestionItem
+                                currentValue={currentValue}
+                                suggestion={sugg}
+                              />
+                            </li>
+                          )
+                        )}
                   </ul>
                 ) : (
                   this.renderNoSuggestion()
@@ -673,6 +707,8 @@ SearchBox.propTypes = {
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
+  recentSearchesIcon: element,
+  popularSearchesIcon: element,
 
   // internal props
   error: any,
@@ -698,7 +734,9 @@ SearchBox.defaultProps = {
   enablePopularSuggestions: false,
   enablePredictiveSuggestions: false,
   clearFiltersOnQueryChange: true,
-  recentSearches: []
+  recentSearches: [],
+  recentSearchesIcon: undefined,
+  popularSearchesIcon: undefined
 };
 
 export default props => (
