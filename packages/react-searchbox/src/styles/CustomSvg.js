@@ -1,5 +1,8 @@
 import React from 'react';
-
+import {
+  object,
+  string,
+} from '../utils/types';
 const CustomSvg = ({ iconId, className, icon, type }) => {
   if (icon) {
     return React.createElement('div', { className }, [
@@ -37,5 +40,12 @@ const CustomSvg = ({ iconId, className, icon, type }) => {
     </svg>
   );
 };
+
+CustomSvg.propTypes = {
+  iconId: string,
+  className: string,
+  icon: object,
+  type: string,
+}
 
 export default CustomSvg;

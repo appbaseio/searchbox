@@ -1,6 +1,10 @@
 const CustomSvg = {
 	name: 'CustomSvg',
-	props: ['className', 'icon', 'type'],
+	props: {
+		className: String,
+		icon: Function,
+		type: String,
+	},
 	data() {
 		return {
 			customIcon:

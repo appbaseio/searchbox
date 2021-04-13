@@ -16,7 +16,7 @@ import {
   suggestions as suggestionsDef,
   title as titleDef,
   wholeNumber,
-  dataFieldValidator
+  dataFieldValidator,
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
 import Input from '../styles/Input';
@@ -551,7 +551,7 @@ class SearchBox extends React.Component {
                           >
                             <div style={{ padding: '0 10px 0 0' }}>
                               <CustomSvg
-                                iconId={`${sugg.id}-icon`}
+                                iconId={`${index + 1}-${sugg.value}-icon`}
                                 className={
                                   getClassName(
                                     innerClass,
@@ -706,8 +706,8 @@ SearchBox.propTypes = {
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
-  recentSearchesIcon: any,
-  popularSearchesIcon: any,
+  recentSearchesIcon: object,
+  popularSearchesIcon: object,
 
   // internal props
   error: any,

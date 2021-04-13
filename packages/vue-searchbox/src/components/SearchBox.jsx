@@ -538,7 +538,7 @@ const SearchBox = {
 														>
 															<div style={{padding: '0 10px 0 0'}}>
 																<CustomSvg
-																	iconId={`${sugg.id}-icon`}
+																	iconId={`${index + 1}-${sugg.value}-icon`}
 																	className={
 																		getClassName(
 																			innerClass,
