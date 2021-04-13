@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  object,
+  element,
   string,
 } from '../utils/types';
 const CustomSvg = ({ iconId, className, icon, type }) => {
@@ -44,7 +44,7 @@ const CustomSvg = ({ iconId, className, icon, type }) => {
 CustomSvg.propTypes = {
   iconId: string,
   className: string,
-  icon: object,
+  icon: element,
   type: string,
 }
 

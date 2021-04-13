@@ -8,6 +8,7 @@ export const array = PropTypes.array;
 export const number = PropTypes.number;
 export const func = PropTypes.func;
 export const any = PropTypes.any;
+export const element = PropTypes.element;
 
 export const queryTypes = PropTypes.oneOf(['search', 'term', 'geo', 'range']);
 

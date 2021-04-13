@@ -17,6 +17,7 @@ import {
   title as titleDef,
   wholeNumber,
   dataFieldValidator,
+  element,
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
 import Input from '../styles/Input';
@@ -584,20 +585,20 @@ class SearchBox extends React.Component {
                           (sugg, index) => (
                             <li
                               {...getItemProps({ item: sugg })}
-                              key={`${index + this.suggestionsList + 1}-${
+                              key={`${index + this.suggestionsList.length + 1}-${
                                 sugg.value
                               }`}
                               style={{
                                 backgroundColor: this.getBackgroundColor(
                                   highlightedIndex,
-                                  index + this.suggestionsList
+                                  index + this.suggestionsList.length
                                 ),
                                 justifyContent: 'flex-start'
                               }}
                             >
                               <div style={{ padding: '0 10px 0 0' }}>
                                 <CustomSvg
-                                  iconId={`${sugg.id}-icon`}
+                                  iconId={`${index + 1}-${sugg.value}-icon`}
                                   className={
                                     getClassName(
                                       innerClass,
@@ -706,8 +707,8 @@ SearchBox.propTypes = {
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
-  recentSearchesIcon: object,
-  popularSearchesIcon: object,
+  recentSearchesIcon: element,
+  popularSearchesIcon: element,
 
   // internal props
   error: any,
