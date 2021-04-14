@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/vue-searchbox",
-    "version": "1.1.11",
+    "version": "1.1.12",
     "private": false,
     "description": "Lightweight searchbox component for Vue",
     "author": "Anuj Shah <anujshah584@gmail.com>",
@@ -12,7 +12,8 @@
     "scripts": {
         "build": "nps build",
         "prepare": "nps build",
-        "watch": "nps watch"
+        "watch": "nps watch",
+        "postpublish": "node ./update-searchbox.js"
     },
     "repository": {
         "type": "git",
