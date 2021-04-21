@@ -75,6 +75,8 @@ const SearchBox = {
 		selectAllLabel: VueTypes.string,
 		pagination: VueTypes.bool,
 		queryString: VueTypes.bool,
+		distinctField: VueTypes.string,
+		distinctFieldConfig: VueTypes.object,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),

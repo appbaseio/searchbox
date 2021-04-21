@@ -56,6 +56,8 @@ const SearchComponent = {
 		queryString: VueTypes.bool,
 		preserveResults: VueTypes.bool,
 		render: VueTypes.func,
+		distinctField: VueTypes.string,
+		distinctFieldConfig: VueTypes.object,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),
@@ -125,6 +127,8 @@ const SearchComponent = {
 			subscribeTo,
 			preserveResults,
 			clearFiltersOnQueryChange,
+			distinctField,
+			distinctFieldConfig,
 		} = this.rawProps;
 		const componentInstance = this.searchbase.register(id, {
 			index,
@@ -171,6 +175,8 @@ const SearchComponent = {
 			showDistinctSuggestions,
 			preserveResults,
 			clearFiltersOnQueryChange,
+			distinctField,
+			distinctFieldConfig,
 			onValueChange: (prev, next) => {
 				this.$emit('value', {
 					prev,

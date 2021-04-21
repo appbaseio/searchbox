@@ -709,6 +709,8 @@ SearchBox.propTypes = {
   queryString: bool,
   recentSearchesIcon: element,
   popularSearchesIcon: element,
+  distinctField: string,
+  distinctFieldConfig: object,
 
   // internal props
   error: any,
