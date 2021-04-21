@@ -640,6 +640,8 @@ SearchBox.propTypes = {
   enablePopularSuggestions: bool,
   enableRecentSearches: bool,
   maxPopularSuggestions: number,
+  distinctField: string,
+  distinctFieldConfig: object,
   // icons
   autoFillIcon: nodeType,
   recentSearchIcon: nodeType,
