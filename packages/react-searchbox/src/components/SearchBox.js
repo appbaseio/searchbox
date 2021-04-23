@@ -66,7 +66,12 @@ class SearchBox extends React.Component {
   }
 
   componentDidMount() {
-    const { enableRecentSearches, autosuggest } = this.props;
+    const { enableRecentSearches, autosuggest, aggregationField } = this.props;
+    if (aggregationField !== undefined) {
+      console.warn(
+          'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+      );
+  }
     if (enableRecentSearches && autosuggest) {
       this.componentInstance.getRecentSearches();
     }

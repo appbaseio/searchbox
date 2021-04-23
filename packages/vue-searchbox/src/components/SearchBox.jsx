@@ -117,6 +117,11 @@ const SearchBox = {
 		return this.state;
 	},
 	mounted() {
+		if (this.aggregationField !== undefined) {
+			console.warn(
+				'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+			);
+		}
 		if(this.enableRecentSearches && this.autosuggest) {
 			const { getRecentSearches } =  this.getComponentInstance();
 			getRecentSearches();

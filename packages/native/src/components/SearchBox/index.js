@@ -107,6 +107,15 @@ class SearchBox extends React.Component {
     this.flatListRef = React.createRef();
   }
 
+  componentDidMount() {
+    const { aggregationField } = this.props;
+    if (aggregationField !== undefined) {
+      console.warn(
+          'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+      );
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const {
       dataField,
