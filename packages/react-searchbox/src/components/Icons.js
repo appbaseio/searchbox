@@ -1,5 +1,7 @@
 import React from 'react';
 import CancelSvg from '../styles/CancelSvg';
+import IconGroup from '../styles/IconGroup';
+import IconWrapper from '../styles/IconWrapper';
 import InputIcon from '../styles/InputIcon';
 import SearchSvg from '../styles/SearchSvg';
 import { getClassName } from '../utils/helper';
@@ -32,36 +34,32 @@ const Icons = props => {
 
   return (
     <div>
-      {currentValue && showClear && (
-        <InputIcon
-          onClick={clearValue}
-          iconPosition="right"
-          clearIcon={iconPosition === 'right'}
-          showIcon={showIcon}
-          isClearIcon
-        >
-          {clearIcon || <CancelSvg />}
-        </InputIcon>
-      )}
-      {enableVoiceSearch && (
+      <IconGroup groupPosition="right"
+					positionType="absolute" >{enableVoiceSearch && (
         <Mic
           getInstance={getMicInstance}
           render={renderMic}
-          iconPosition={iconPosition}
           className={getClassName(innerClass, 'mic') || null}
           onClick={onMicClick}
           status={micStatus}
-          applyClearStyle={!!currentValue && showClear}
-          showIcon={showIcon}
         />
-      )}
-      <InputIcon
-        showIcon={showIcon}
+      )}{currentValue && showClear && (
+        <IconWrapper
+          onClick={clearValue}
+        >
+          {clearIcon || <CancelSvg />}
+        </IconWrapper>
+      )}</IconGroup>
+
+<IconGroup groupPosition="left"
+					positionType="absolute"> <IconWrapper
+
         onClick={handleSearchIconClick}
-        iconPosition={iconPosition}
+
       >
         <SearchIcon showIcon={showIcon} icon={icon} />
-      </InputIcon>
+      </IconWrapper></IconGroup>
+
     </div>
   );
 };
