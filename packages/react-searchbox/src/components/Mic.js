@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import MicIcon from '../styles/MicIcon';
+import IconWrapper from '../styles/IconWrapper';
+import MicSvg from '../styles/MicSvg';
+import MuteSvg from '../styles/MuteSvg';
+import ListenSvg from '../styles/ListenSvg';
 import { hasCustomRenderer as hcr, getComponent as gc } from '../utils/helper';
 
 const STATUS = {
@@ -16,22 +19,17 @@ const Icon = props => {
     url =
       'https://cdn3.iconfinder.com/data/icons/glypho-music-and-sound/64/microphone-off-512.png';
   }
-
+console.log("status", status)
   switch (status) {
-    case STATUS.active:
-      url = 'https://media.giphy.com/media/ZZr4lCvpuMP58PXzY1/giphy.gif';
-      break;
-    case STATUS.stopped:
-      break;
-    case STATUS.denied:
-      url =
-        'https://cdn3.iconfinder.com/data/icons/glypho-music-and-sound/64/microphone-off-512.png';
-      break;
-    default:
-      url =
-        'https://cdn3.iconfinder.com/data/icons/glypho-music-and-sound/64/microphone-512.png';
-  }
-  return <img {...rest} src={url} style={{ width: '18px' }} />;
+			case STATUS.active:
+				return <ListenSvg {...rest} />;
+			case STATUS.stopped:
+			case STATUS.denied:
+				return <MuteSvg {...rest}  />;
+			default:
+				return <MicSvg {...rest}  />;
+		}
+
 };
 
 class Mic extends Component {
@@ -66,17 +64,14 @@ class Mic extends Component {
     const hasCustomRenderer = hcr(this.props);
 
     return (
-      <MicIcon
-        showIcon={showIcon}
-        iconPosition={iconPosition}
-        showClear={applyClearStyle}
+      <IconWrapper
       >
         {hasCustomRenderer ? (
           getComponent()
         ) : (
           <Icon className={className} onClick={onClick} status={status} />
         )}
-      </MicIcon>
+      </IconWrapper>
     );
   }
 }
