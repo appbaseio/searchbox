@@ -1,5 +1,6 @@
 import CancelSvg from '../styles/CancelSvg';
-import InputIcon from '../styles/InputIcon';
+import IconWrapper from '../styles/IconWrapper';
+import IconGroup from '../styles/IconGroup';
 import SearchSvg from '../styles/SearchSvg';
 import { getClassName } from '../utils/helper';
 import Mic from './Mic.jsx';
@@ -46,36 +47,50 @@ const Icons = {
 			micStatus,
 			handleMicClick
 		} = this.$props;
+
 		return (
 			<div>
-				{currentValue && showClear && (
-					<InputIcon
-						onClick={clearValue}
-						iconPosition="right"
-						clearIcon={iconPosition === 'right'}
-						showIcon={showIcon}
-						isClearIcon
-					>
-						{clearIcon || <CancelSvg />}
-					</InputIcon>
-				)}
-				{enableVoiceSearch && (
+					<IconGroup groupPosition="right"
+					positionType="absolute" >
+
+{currentValue && showClear && (
+						<IconWrapper
+							onClick={clearValue}
+							showIcon={showIcon}
+							isClearIcon
+						>
+							{clearIcon || <CancelSvg />}
+						</IconWrapper>
+					)}
+							{enableVoiceSearch && (
 					<Mic
-						iconPosition={iconPosition}
+
 						className={getClassName(innerClass, 'mic') || null}
 						status={micStatus}
 						handleMicClick={handleMicClick}
-						applyClearStyle={!!currentValue && showClear}
-						showIcon={showIcon}
+
 					/>
 				)}
-				<InputIcon
+
+					{iconPosition==='right'&&	<IconWrapper
 					showIcon={showIcon}
 					onClick={handleSearchIconClick}
 					iconPosition={iconPosition}
 				>
 					<SearchIcon showIcon={showIcon} icon={icon} />
-				</InputIcon>
+				</IconWrapper>}
+					</IconGroup>
+
+			<IconGroup groupPosition="left"
+					positionType="absolute">
+					{iconPosition==='left'&&	<IconWrapper
+					showIcon={showIcon}
+					onClick={handleSearchIconClick}
+					iconPosition={iconPosition}
+				>
+					<SearchIcon showIcon={showIcon} icon={icon} />
+				</IconWrapper>}</IconGroup>
+
 			</div>
 		);
 	}

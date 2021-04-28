@@ -35,7 +35,15 @@ const Icons = props => {
   return (
     <div>
       <IconGroup groupPosition="right"
-					positionType="absolute" >{enableVoiceSearch && (
+					positionType="absolute" >
+            {currentValue && showClear && (
+        <IconWrapper
+          onClick={clearValue}
+        >
+          {clearIcon || <CancelSvg />}
+        </IconWrapper>
+      )}
+            {enableVoiceSearch && (
         <Mic
           getInstance={getMicInstance}
           render={renderMic}
@@ -43,22 +51,24 @@ const Icons = props => {
           onClick={onMicClick}
           status={micStatus}
         />
-      )}{currentValue && showClear && (
-        <IconWrapper
-          onClick={clearValue}
-        >
-          {clearIcon || <CancelSvg />}
-        </IconWrapper>
-      )}</IconGroup>
+      )}
+      {iconPosition==='right'&& <IconWrapper
+
+onClick={handleSearchIconClick}
+
+>
+<SearchIcon showIcon={showIcon} icon={icon} />
+</IconWrapper>}
+      </IconGroup>
 
 <IconGroup groupPosition="left"
-					positionType="absolute"> <IconWrapper
+					positionType="absolute">{iconPosition==='left'&& <IconWrapper
 
         onClick={handleSearchIconClick}
 
       >
         <SearchIcon showIcon={showIcon} icon={icon} />
-      </IconWrapper></IconGroup>
+      </IconWrapper>}</IconGroup>
 
     </div>
   );

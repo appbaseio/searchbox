@@ -19,35 +19,65 @@ const input = css`
 const Input = styled.input`
   ${input}
 
-  ${props =>
-    props.showIcon &&
-    props.iconPosition === 'left' &&
-    css`
-      padding-left: 32px;
-    `};
 
-  ${props =>
-    props.showIcon &&
-    props.iconPosition === 'right' &&
-    css`
-      padding-right: 32px;
-    `};
+	${props =>
+		props.showIcon
+		&& props.iconPosition === 'left'
+		&& css`
+			padding-left: 32px;
+		`};
 
-  ${props =>
-    // for clear icon
-    props.showClear &&
-    css`
-      padding-right: 32px;
-    `};
+	${props =>
+		props.showIcon
+		&& props.iconPosition === 'right'
+		&& css`
+			padding-right: 32px;
+		`};
 
-  ${props =>
-    // for clear icon with search icon
-    props.showClear &&
-    props.showIcon &&
-    props.iconPosition === 'right' &&
-    css`
-      padding-right: 48px;
-    `};
+	${props =>
+		// for clear icon
+		props.showClear
+		&& css`
+			padding-right: 32px;
+		`};
+		${props =>
+			// for voice search icon
+			props.showVoiceSearch
+			&& css`
+					padding-right: 32px;
+				`};
+	${props =>
+		// for clear icon with search icon
+		props.showClear
+		&& props.showIcon
+		&& props.iconPosition === 'right'
+		&& css`
+			padding-right: 60px;
+		`};
+		${props =>
+			// for voice search icon with clear icon
+			props.showVoiceSearch
+			&& props.showIcon
+			&& css`
+						padding-right: 60px;
+					`};
+		${props =>
+			// for voice search icon with search icon
+			props.showVoiceSearch
+			&& props.showIcon
+			&& props.iconPosition === 'right'
+			&& css`
+				padding-right: 60px;
+				`};
+			${props =>
+			// for clear icon with search icon and voice search
+			props.showClear
+			&& props.showIcon && props.showVoiceSearch
+			&& props.iconPosition === 'right'
+			&& css`
+					padding-right: 86px;
+				`};
+
 `;
 
 export default Input;

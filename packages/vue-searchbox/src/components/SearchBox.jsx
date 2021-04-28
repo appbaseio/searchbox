@@ -406,6 +406,7 @@ const SearchBox = {
 			innerClass,
 			showIcon,
 			showClear,
+			showVoiceSearch,
 			iconPosition,
 			title,
 			defaultSuggestions,
@@ -445,6 +446,7 @@ const SearchBox = {
 									<Input
 										showIcon={showIcon}
 										showClear={showClear}
+										showVoiceSearch={showVoiceSearch}
 										iconPosition={iconPosition}
 										class={getClassName(innerClass, 'input')}
 										placeholder={placeholder}
@@ -648,6 +650,7 @@ const SearchBox = {
 							iconPosition={iconPosition}
 							showIcon={showIcon}
 							showClear={showClear}
+							showVoiceSearch={showVoiceSearch}
 							innerRef={innerRef}
 						/>
 						{this.renderIcons()}

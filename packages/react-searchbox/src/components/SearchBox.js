@@ -444,6 +444,7 @@ class SearchBox extends React.Component {
       autosuggest,
       showIcon,
       showClear,
+      showVoiceSearch,
       iconPosition,
       placeholder,
       onBlur,
@@ -488,6 +489,7 @@ class SearchBox extends React.Component {
                 <Input
                   showIcon={showIcon}
                   showClear={showClear}
+                  showVoiceSearch={showVoiceSearch}
                   iconPosition={iconPosition}
                   {...getInputProps({
                     className: getClassName(innerClass, 'input'),
@@ -639,6 +641,7 @@ class SearchBox extends React.Component {
               iconPosition={iconPosition}
               showIcon={showIcon}
               showClear={showClear}
+              showVoiceSearch={showVoiceSearch}
             />
             {this.renderIcons()}
           </div>
