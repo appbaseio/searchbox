@@ -754,13 +754,14 @@ export default props => (
       'recentSearches'
     ]}
   >
-    {({ error, loading, results, value, recentSearches }) => (
+    {({ error, loading, results, value, recentSearches, micStatus }) => (
       <SearchBox
         {...props}
         error={error}
         loading={loading}
         results={results}
         recentSearches={recentSearches}
+        micStatus={micStatus}
       />
     )}
   </SearchComponent>
