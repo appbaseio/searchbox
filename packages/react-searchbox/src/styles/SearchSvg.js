@@ -8,7 +8,7 @@ const SearchSvg = () => (
     xmlns='http://www.w3.org/2000/svg'
     viewBox='0 0 15 15'
 
-		style={{transform:'scale(1.25)', position:'relative',left:'3px'}}
+		style={{transform:'scale(1.25)', position:'relative'}}
   >
     <title>Search</title>
     <path

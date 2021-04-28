@@ -19,7 +19,7 @@ const Icon = props => {
     url =
       'https://cdn3.iconfinder.com/data/icons/glypho-music-and-sound/64/microphone-off-512.png';
   }
-console.log("status", status)
+
   switch (status) {
 			case STATUS.active:
 				return <ListenSvg {...rest} />;

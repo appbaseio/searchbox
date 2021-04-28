@@ -1,7 +1,10 @@
 import React from 'react';
 import { Global, css } from '@emotion/core';
 
-const MicSvg = props => (
+const MicSvg = props => {
+
+
+	return (
 	<React.Fragment>
 		<Global
 			styles={css`
@@ -25,6 +28,7 @@ const MicSvg = props => (
 			height={28}
 			{...props}
 			style={{transform:'scale(1.5)'}}
+			onClick={props.onClick}
 		>
 			<g id="el_TvxDfTAtKp" fillRule="evenodd">
 				<g id="el_D93PK3GbmJ" fillRule="nonzero" style={{ fill: '#595959' }}>
@@ -40,6 +44,6 @@ const MicSvg = props => (
 			</g>
 		</svg>
 	</React.Fragment>
-);
+);}
 
 export default MicSvg;
