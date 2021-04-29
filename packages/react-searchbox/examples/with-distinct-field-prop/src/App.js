@@ -52,95 +52,51 @@ export default () => (
         ]}
         title="Search"
         placeholder="Search for Books"
-        distinctField="authors.keyword"
-        distinctFieldConfig={{
-          inner_hits: {
-              name: 'most_recent',
-              size: 5,
-              sort: [{ timestamp: 'asc' }],
-          },
-          max_concurrent_group_searches: 4,
-      }}
         style={{ paddingBottom: 10 }}
       />
-      <div className="row">
-        <div className="col">
-          <SearchComponent
-            id="author-filter"
-            type="term"
-            dataField="authors.keyword"
-            subscribeTo={['aggregationData', 'requestStatus', 'value']}
-            URLParams
-            react={{
-              and: ['search-component']
-            }}
-            // To initialize with default value
-            value={[]}
-            render={({ aggregationData, loading, value, setValue }) => {
-              return (
-                <div className="filter-container">
-                  {loading ? (
-                    <div>Loading Filters ...</div>
-                  ) : (
-                    aggregationData.data.map(item => (
-                      <div className="list-item" key={item._key}>
-                        <input
-                          type="checkbox"
-                          checked={value ? value.includes(item._key) : false}
-                          value={item._key}
-                          onChange={e => {
-                            const values = value || [];
-                            if (values && values.includes(e.target.value)) {
-                              values.splice(values.indexOf(e.target.value), 1);
-                            } else {
-                              values.push(e.target.value);
-                            }
-                            // Set filter value and trigger custom query
-                            setValue(values, {
-                              triggerDefaultQuery: false,
-                              triggerCustomQuery: true,
-                              stateChanges: true
-                            });
-                          }}
-                        />
-                        <label className="list-item-label" htmlFor={item._key}>
-                          {item._key} ({item._doc_count})
-                        </label>
-                      </div>
-                    ))
-                  )}
-                </div>
-              );
-            }}
-          />
-        </div>
-
-        <div className="col">
-          <SearchComponent
-            id="result-component"
-            highlight
-            dataField="original_title"
-            size={10}
-            react={{
-              and: ['search-component', 'author-filter']
-            }}
-          >
-            {({ results, loading, size, setValue, setFrom }) => {
-              return (
-                <div className="result-list-container">
-                  {loading ? (
-                    <div>Loading Results ...</div>
-                  ) : (
-                    <div>
-                      {!results.data.length ? (
-                        <div>No results found</div>
-                      ) : (
-                        <p>
-                          {results.numberOfResults} results found in{' '}
-                          {results.time}ms
-                        </p>
-                      )}
-                      {results.data.map(item => (
+      <div>
+        <SearchComponent
+          id="result-component"
+          highlight
+          dataField="original_title"
+          size={10}
+          react={{
+            and: ['search-component']
+          }}
+          distinctField="authors.keyword"
+          distinctFieldConfig={{
+            inner_hits: {
+              name: 'other_books',
+              size: 3,
+              sort: [{ timestamp: 'asc' }]
+            },
+            max_concurrent_group_searches: 4
+          }}
+        >
+          {({ results, loading, size, setValue, setFrom }) => {
+            return (
+              <div className="result-list-container">
+                {loading ? (
+                  <div>Loading Results ...</div>
+                ) : (
+                  <div>
+                    {!results.data.length ? (
+                      <div>No results found</div>
+                    ) : (
+                      <p>
+                        {results.numberOfResults} results found in{' '}
+                        {results.time}ms
+                      </p>
+                    )}
+                    {results.data.map(item => {
+                      const otherBooks = item.inner_hits
+                        ? item.inner_hits.other_books.hits.hits
+                        : [];
+                      const updatedBooks = otherBooks.filter(
+                        book =>
+                          book._source.original_title !== item.original_title
+                      );
+                      return (
                         <div
                           className="flex book-content text-left"
                           key={item._id}
@@ -150,77 +106,142 @@ export default () => (
                             alt="Book Cover"
                             className="book-image"
                           />
-                          <div
-                            className="flex column justify-center"
-                            style={{ marginLeft: 20 }}
-                          >
+                          <div className="flex column justify-center book-container">
                             <div
-                              className="book-header"
-                              dangerouslySetInnerHTML={{
-                                __html: item.original_title
-                              }}
-                            />
-                            <div className="flex column justify-space-between">
-                              <div>
+                              className="flex column"
+                              style={{ marginLeft: 20 }}
+                            >
+                              <div
+                                className="book-header"
+                                dangerouslySetInnerHTML={{
+                                  __html: item.original_title
+                                }}
+                              />
+                              <div className="flex column justify-space-between">
                                 <div>
-                                  by{' '}
-                                  <span className="authors-list">
-                                    {item.authors}
-                                  </span>
+                                  <div>
+                                    by{' '}
+                                    <span className="authors-list">
+                                      {item.authors}
+                                    </span>
+                                  </div>
+                                  <div className="ratings-list flex align-center">
+                                    <span className="stars">
+                                      {Array(item.average_rating_rounded)
+                                        .fill('x')
+                                        .map((i, index) => (
+                                          <i
+                                            className="fas fa-star"
+                                            key={item._id + `_${index}`}
+                                          />
+                                        )) // eslint-disable-line
+                                      }
+                                    </span>
+                                    <span className="avg-rating">
+                                      ({item.average_rating} avg)
+                                    </span>
+                                  </div>
                                 </div>
-                                <div className="ratings-list flex align-center">
-                                  <span className="stars">
-                                    {Array(item.average_rating_rounded)
-                                      .fill('x')
-                                      .map((i, index) => (
-                                        <i
-                                          className="fas fa-star"
-                                          key={item._id + `_${index}`}
-                                        />
-                                      )) // eslint-disable-line
-                                    }
-                                  </span>
-                                  <span className="avg-rating">
-                                    ({item.average_rating} avg)
-                                  </span>
-                                </div>
+                                <span className="pub-year">
+                                  Pub {item.original_publication_year}
+                                </span>
                               </div>
-                              <span className="pub-year">
-                                Pub {item.original_publication_year}
-                              </span>
                             </div>
                           </div>
+                          {updatedBooks.length > 0 && (
+                            <div className="flex column other-books-container">
+                              <div className="flex row other-books-header">
+                                <span className="pub-year">
+                                  Other books by the same Author(s) :
+                                </span>
+                              </div>
+                              <div className="flex row other-books-sub-container">
+                                <div className="flex col">
+                                  <div className="flex row">
+                                    {updatedBooks.length > 0 && (
+                                      <div className="flex row">
+                                        <img
+                                          src={
+                                            updatedBooks[0]._source.image_medium
+                                              ? updatedBooks[0]._source
+                                                  .image_medium
+                                              : updatedBooks[0]._source.image
+                                          }
+                                          alt="Book Cover"
+                                          className="other-books-cover"
+                                        />
+                                        <div className="other-books-title-container">
+                                          <h6 className="other-books-title">
+                                            {
+                                              updatedBooks[0]._source
+                                                .original_title
+                                            }
+                                          </h6>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex col">
+                                  <div className="flex row">
+                                    {updatedBooks.length > 1 && (
+                                      <div className="flex row">
+                                        <img
+                                          src={
+                                            updatedBooks[1]._source.image_medium
+                                              ? updatedBooks[1]._source
+                                                  .image_medium
+                                              : updatedBooks[1]._source.image
+                                          }
+                                          alt="Book Cover"
+                                          className="other-books-cover"
+                                        />
+                                        <div className="other-books-title-container">
+                                          <h6 className="other-books-title">
+                                            {
+                                              updatedBooks[1]._source
+                                                .original_title
+                                            }
+                                          </h6>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  <ReactPaginate
-                    pageCount={Math.floor(results.numberOfResults / size)}
-                    onPageChange={({ selected }) =>
-                      setFrom((selected + 1) * size)
-                    }
-                    previousLabel="previous"
-                    nextLabel="next"
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    subContainerClassName="pages pagination"
-                    breakLinkClassName="page-link"
-                    containerClassName="pagination"
-                    pageClassName="page-item"
-                    pageLinkClassName="page-link"
-                    previousClassName="page-item"
-                    previousLinkClassName="page-link"
-                    nextClassName="page-item"
-                    nextLinkClassName="page-link"
-                    activeClassName="active"
-                  />
-                </div>
-              );
-            }}
-          </SearchComponent>
-        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                <ReactPaginate
+                  pageCount={Math.floor(results.numberOfResults / size)}
+                  onPageChange={({ selected }) =>
+                    setFrom((selected + 1) * size)
+                  }
+                  previousLabel="previous"
+                  nextLabel="next"
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  subContainerClassName="pages pagination"
+                  breakLinkClassName="page-link"
+                  containerClassName="pagination"
+                  pageClassName="page-item"
+                  pageLinkClassName="page-link"
+                  previousClassName="page-item"
+                  previousLinkClassName="page-link"
+                  nextClassName="page-item"
+                  nextLinkClassName="page-link"
+                  activeClassName="active"
+                />
+              </div>
+            );
+          }}
+        </SearchComponent>
       </div>
     </div>
   </SearchBase>
