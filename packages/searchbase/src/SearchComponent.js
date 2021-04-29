@@ -143,7 +143,7 @@ class SearchComponent extends Base {
 
   distinctField: string;
 
-  distinctFieldConfig: object;
+  distinctFieldConfig: Object;
 
   // other properties
 
