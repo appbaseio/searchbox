@@ -69,7 +69,9 @@ const renderResultItem = ({ item }) => {
                       resizeMode="contain"
                     />
                     <Text style={styles.otherBooksText}>
-                      {book._source.original_title}
+                      {book._source.original_title.length > 12
+                        ? `${book._source.original_title.substring(0, 11)}...`
+                        : book._source.original_title}
                     </Text>
                   </View>
                 </View>
@@ -263,9 +265,11 @@ const styles = StyleSheet.create({
   otherBooksImage: {
     height: 35,
     width: 30,
-    marginRight: 10
+    marginRight: 6
   },
   otherBooksText: {
-    width: 90
+    width: 90,
+    lineHeight: 35,
+    textAlignVertical: 'center'
   }
 });
