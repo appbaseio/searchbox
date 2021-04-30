@@ -14,10 +14,18 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  SafeAreaView
+  SafeAreaView,
+  ScrollView
 } from 'react-native';
 
 const renderResultItem = ({ item }) => {
+  const otherBooks = item.inner_hits
+    ? item.inner_hits.other_books.hits.hits
+    : [];
+  const updatedBooks = otherBooks.filter(
+    book => book._source.original_title !== item.original_title
+  );
+  // console.log('updatedBooks ==>> ', updatedBooks);
   return (
     <View style={styles.itemStyle}>
       <Image
@@ -27,7 +35,7 @@ const renderResultItem = ({ item }) => {
         }}
         resizeMode="contain"
       />
-      <View style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
         <Text style={styles.textStyle}>{item.original_title}</Text>
         <Text style={styles.textStyle}>by {item.authors}</Text>
         <View style={styles.star}>
@@ -44,7 +52,32 @@ const renderResultItem = ({ item }) => {
           <Text style={styles.rating}>({item.average_rating} avg)</Text>
         </View>
         <Text>Pub {item.original_publication_year}</Text>
-      </View>
+        {updatedBooks.length > 0 && (
+          <View>
+            <Text style={styles.otherBooksHeader}>
+              Other books by the same Author(s) :
+            </Text>
+            <View style={styles.row}>
+              {updatedBooks.map(book => (
+                <View key={book._id} style={styles.col}>
+                  <View style={styles.otherBooksContainer}>
+                    <Image
+                      style={styles.otherBooksImage}
+                      source={{
+                        uri: book._source.image
+                      }}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.otherBooksText}>
+                      {book._source.original_title}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -103,22 +136,22 @@ export default function App() {
           onValueSelected={value => {
             setResetPagination(true);
           }}
-          distinctField="authors.keyword"
-          distinctFieldConfig={{
-              inner_hits: {
-                  name: 'most_recent',
-                  size: 5,
-                  sort: [{ timestamp: 'asc' }],
-              },
-              max_concurrent_group_searches: 4,
-          }}
         />
         <SearchComponent
           id="result-component"
           dataField="original_title"
           size={10}
           react={{
-            and: ['search-component', 'author-filter']
+            and: ['search-component']
+          }}
+          distinctField="authors.keyword"
+          distinctFieldConfig={{
+            inner_hits: {
+              name: 'other_books',
+              size: 3,
+              sort: [{ timestamp: 'asc' }]
+            },
+            max_concurrent_group_searches: 4
           }}
           onResults={setResults}
         >
@@ -210,5 +243,29 @@ const styles = StyleSheet.create({
   },
   rating: {
     marginLeft: 10
+  },
+  otherBooksHeader: {
+    marginTop: 5
+  },
+  col: {
+    flexDirection: 'column'
+  },
+  row: {
+    flexDirection: 'row'
+  },
+  otherBooksContainer: {
+    flexDirection: 'row',
+    maxWidth: 150,
+    maxHeight: 60,
+    paddingTop: 5,
+    paddingBottom: 5
+  },
+  otherBooksImage: {
+    height: 35,
+    width: 30,
+    marginRight: 10
+  },
+  otherBooksText: {
+    width: 90
   }
 });
