@@ -81,7 +81,7 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange,
+      clearOnQueryChange,
       subscribeTo
     } = this.props;
     // Register search base component
@@ -135,7 +135,7 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange
+      clearOnQueryChange
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -196,7 +196,7 @@ SearchComponent.defaultProps = {
   triggerQueryOnInit: true,
   URLParams: false,
   enablePredictiveSuggestions: false,
-  clearFiltersOnQueryChange: false
+  clearOnQueryChange: false
 };
 
 SearchComponent.propTypes = {
@@ -210,7 +210,7 @@ SearchComponent.propTypes = {
   beforeValueChange: func,
   enablePopularSuggestions: bool,
   enablePredictiveSuggestions: bool,
-  clearFiltersOnQueryChange: bool,
+  clearOnQueryChange: bool,
   URLParams: bool,
   // RS API properties
   id: stringRequired,

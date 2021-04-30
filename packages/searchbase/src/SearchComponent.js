@@ -159,7 +159,7 @@ class SearchComponent extends Base {
   preserveResults: boolean;
 
   // to clear the dependent facets values on query change
-  clearFiltersOnQueryChange: boolean;
+  clearOnQueryChange: boolean;
 
   // query error
   error: any;
@@ -247,7 +247,7 @@ class SearchComponent extends Base {
     showDistinctSuggestions,
     enablePredictiveSuggestions,
     preserveResults,
-    clearFiltersOnQueryChange,
+    clearOnQueryChange,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -360,7 +360,7 @@ class SearchComponent extends Base {
 
     this.preserveResults = preserveResults;
 
-    this.clearFiltersOnQueryChange = clearFiltersOnQueryChange;
+    this.clearOnQueryChange = clearOnQueryChange;
 
     // Initialize the state changes observable
     this.stateChanges = new Observable();
@@ -797,7 +797,7 @@ class SearchComponent extends Base {
             });
             // Reset value for dependent components after fist query is made
             // We wait for first query to not clear filters applied by URL params
-            if (this.clearFiltersOnQueryChange && this._query) {
+            if (this.clearOnQueryChange && this._query) {
               componentInstance.setValue(undefined, {
                 stateChanges: true,
                 triggerDefaultQuery: false,
