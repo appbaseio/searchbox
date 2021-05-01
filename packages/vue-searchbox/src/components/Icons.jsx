@@ -50,47 +50,42 @@ const Icons = {
 
 		return (
 			<div>
-					<IconGroup groupPosition="right"
-					positionType="absolute" >
-
-{currentValue && showClear && (
-						<IconWrapper
-							onClick={clearValue}
-							showIcon={showIcon}
-							isClearIcon
-						>
+				<IconGroup groupPosition="right" positionType="absolute">
+					{currentValue && showClear && (
+						<IconWrapper onClick={clearValue} showIcon={showIcon} isClearIcon>
 							{clearIcon || <CancelSvg />}
 						</IconWrapper>
 					)}
-							{enableVoiceSearch && (
-					<Mic
+					{enableVoiceSearch && (
+						<Mic
+							className={getClassName(innerClass, 'mic') || null}
+							status={micStatus}
+							handleMicClick={handleMicClick}
+						/>
+					)}
 
-						className={getClassName(innerClass, 'mic') || null}
-						status={micStatus}
-						handleMicClick={handleMicClick}
+					{iconPosition === 'right' && (
+						<IconWrapper
+							showIcon={showIcon}
+							onClick={handleSearchIconClick}
+							iconPosition={iconPosition}
+						>
+							<SearchIcon showIcon={showIcon} icon={icon} />
+						</IconWrapper>
+					)}
+				</IconGroup>
 
-					/>
-				)}
-
-					{iconPosition==='right'&&	<IconWrapper
-					showIcon={showIcon}
-					onClick={handleSearchIconClick}
-					iconPosition={iconPosition}
-				>
-					<SearchIcon showIcon={showIcon} icon={icon} />
-				</IconWrapper>}
-					</IconGroup>
-
-			<IconGroup groupPosition="left"
-					positionType="absolute">
-					{iconPosition==='left'&&	<IconWrapper
-					showIcon={showIcon}
-					onClick={handleSearchIconClick}
-					iconPosition={iconPosition}
-				>
-					<SearchIcon showIcon={showIcon} icon={icon} />
-				</IconWrapper>}</IconGroup>
-
+				<IconGroup groupPosition="left" positionType="absolute">
+					{iconPosition === 'left' && (
+						<IconWrapper
+							showIcon={showIcon}
+							onClick={handleSearchIconClick}
+							iconPosition={iconPosition}
+						>
+							<SearchIcon showIcon={showIcon} icon={icon} />
+						</IconWrapper>
+					)}
+				</IconGroup>
 			</div>
 		);
 	}

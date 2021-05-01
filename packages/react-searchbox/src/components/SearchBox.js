@@ -17,7 +17,7 @@ import {
   title as titleDef,
   wholeNumber,
   dataFieldValidator,
-  element,
+  element
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
 import Input from '../styles/Input';
@@ -587,9 +587,9 @@ class SearchBox extends React.Component {
                           (sugg, index) => (
                             <li
                               {...getItemProps({ item: sugg })}
-                              key={`${index + this.suggestionsList.length + 1}-${
-                                sugg.value
-                              }`}
+                              key={`${index +
+                                this.suggestionsList.length +
+                                1}-${sugg.value}`}
                               style={{
                                 backgroundColor: this.getBackgroundColor(
                                   highlightedIndex,
