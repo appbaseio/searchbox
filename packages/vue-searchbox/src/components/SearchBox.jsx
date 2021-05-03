@@ -38,7 +38,7 @@ const SearchBox = {
 		enablePopularSuggestions: VueTypes.bool,
 		enablePredictiveSuggestions: VueTypes.bool,
 		enableRecentSearches: VueTypes.bool,
-		clearFiltersOnQueryChange: VueTypes.bool,
+		clearOnQueryChange: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -676,7 +676,7 @@ const SearchBoxWrapper = {
 				clearFiltersOnQueryChange={true}
 				{...{
 					on: context.listeners,
-					props: context.props,
+				clearOnQueryChange
 					scopedSlots: {
 						default: ({ loading, error, micStatus, results, value, recentSearches }) => {
 							return (

@@ -81,10 +81,10 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange,
+      clearOnQueryChange,
       subscribeTo,
       distinctField,
-      distinctFieldConfig,
+      distinctFieldConfig
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -137,7 +137,7 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange,
+      clearOnQueryChange,
       distinctField,
       distinctFieldConfig
     });
@@ -200,7 +200,7 @@ SearchComponent.defaultProps = {
   triggerQueryOnInit: true,
   URLParams: false,
   enablePredictiveSuggestions: false,
-  clearFiltersOnQueryChange: false
+  clearOnQueryChange: false
 };
 
 SearchComponent.propTypes = {
@@ -214,7 +214,7 @@ SearchComponent.propTypes = {
   beforeValueChange: func,
   enablePopularSuggestions: bool,
   enablePredictiveSuggestions: bool,
-  clearFiltersOnQueryChange: bool,
+  clearOnQueryChange: bool,
   URLParams: bool,
   // RS API properties
   id: stringRequired,

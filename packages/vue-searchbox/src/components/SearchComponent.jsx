@@ -17,7 +17,7 @@ const SearchComponent = {
 		beforeValueChange: VueTypes.func,
 		enablePopularSuggestions: VueTypes.bool,
 		enablePredictiveSuggestions: VueTypes.bool,
-		clearFiltersOnQueryChange: VueTypes.bool,
+		clearOnQueryChange: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -126,9 +126,9 @@ const SearchComponent = {
 			showDistinctSuggestions,
 			subscribeTo,
 			preserveResults,
-			clearFiltersOnQueryChange,
+			clearOnQueryChange,
 			distinctField,
-			distinctFieldConfig,
+			distinctFieldConfig
 		} = this.rawProps;
 		const componentInstance = this.searchbase.register(id, {
 			index,
@@ -174,7 +174,7 @@ const SearchComponent = {
 			enablePredictiveSuggestions,
 			showDistinctSuggestions,
 			preserveResults,
-			clearFiltersOnQueryChange,
+			clearOnQueryChange,
 			distinctField,
 			distinctFieldConfig,
 			onValueChange: (prev, next) => {
