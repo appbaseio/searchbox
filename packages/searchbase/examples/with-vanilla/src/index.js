@@ -29,7 +29,7 @@ const searchbase = new SearchBase({
 // Register search component => To render the suggestions
 searchbase.register('search-component', {
   dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics'],
-  clearFiltersOnQueryChange: true
+  clearOnQueryChange: true
 });
 
 // Register result component with react dependency on search component => To render the results
