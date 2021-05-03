@@ -14,8 +14,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  SafeAreaView,
-  ScrollView
+  SafeAreaView
 } from 'react-native';
 
 const renderResultItem = ({ item }) => {
@@ -25,7 +24,6 @@ const renderResultItem = ({ item }) => {
   const updatedBooks = otherBooks.filter(
     book => book._source.original_title !== item.original_title
   );
-  // console.log('updatedBooks ==>> ', updatedBooks);
   return (
     <View style={styles.itemStyle}>
       <Image
@@ -35,8 +33,10 @@ const renderResultItem = ({ item }) => {
         }}
         resizeMode="contain"
       />
-      <ScrollView style={{ flex: 1 }}>
-        <Text style={styles.textStyle}>{item.original_title}</Text>
+      <View style={{ flex: 1 }}>
+        <Text numberOfLines={1} style={styles.textStyle}>
+          {item.original_title}
+        </Text>
         <Text style={styles.textStyle}>by {item.authors}</Text>
         <View style={styles.star}>
           {Array(item.average_rating_rounded)
@@ -52,7 +52,7 @@ const renderResultItem = ({ item }) => {
           <Text style={styles.rating}>({item.average_rating} avg)</Text>
         </View>
         <Text>Pub {item.original_publication_year}</Text>
-        {updatedBooks.length > 0 && (
+        {updatedBooks.length ? (
           <View>
             <Text style={styles.otherBooksHeader}>
               Other books by the same Author(s) :
@@ -68,18 +68,16 @@ const renderResultItem = ({ item }) => {
                       }}
                       resizeMode="contain"
                     />
-                    <Text style={styles.otherBooksText}>
-                      {book._source.original_title.length > 12
-                        ? `${book._source.original_title.substring(0, 11)}...`
-                        : book._source.original_title}
+                    <Text numberOfLines={1} style={styles.otherBooksText}>
+                      {book._source.original_title}
                     </Text>
                   </View>
                 </View>
               ))}
             </View>
           </View>
-        )}
-      </ScrollView>
+        ) : null}
+      </View>
     </View>
   );
 };

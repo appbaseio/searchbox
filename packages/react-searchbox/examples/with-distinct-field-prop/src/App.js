@@ -148,7 +148,7 @@ export default () => (
                               </div>
                             </div>
                           </div>
-                          {updatedBooks.length > 0 && (
+                          {updatedBooks.length ? (
                             <div className="flex column other-books-container">
                               <div className="flex row other-books-header">
                                 <span className="pub-year">
@@ -158,59 +158,29 @@ export default () => (
                               <div className="flex row other-books-sub-container">
                                 <div className="flex col">
                                   <div className="flex row">
-                                    {updatedBooks.length > 0 && (
+                                    {updatedBooks.map(book => (
                                       <div className="flex row">
                                         <img
                                           src={
-                                            updatedBooks[0]._source.image_medium
-                                              ? updatedBooks[0]._source
-                                                  .image_medium
-                                              : updatedBooks[0]._source.image
+                                            book._source.image_medium
+                                              ? book._source.image_medium
+                                              : book._source.image
                                           }
                                           alt="Book Cover"
                                           className="other-books-cover"
                                         />
                                         <div className="other-books-title-container">
                                           <h6 className="other-books-title">
-                                            {
-                                              updatedBooks[0]._source
-                                                .original_title
-                                            }
+                                            {book._source.original_title}
                                           </h6>
                                         </div>
                                       </div>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="flex col">
-                                  <div className="flex row">
-                                    {updatedBooks.length > 1 && (
-                                      <div className="flex row">
-                                        <img
-                                          src={
-                                            updatedBooks[1]._source.image_medium
-                                              ? updatedBooks[1]._source
-                                                  .image_medium
-                                              : updatedBooks[1]._source.image
-                                          }
-                                          alt="Book Cover"
-                                          className="other-books-cover"
-                                        />
-                                        <div className="other-books-title-container">
-                                          <h6 className="other-books-title">
-                                            {
-                                              updatedBooks[1]._source
-                                                .original_title
-                                            }
-                                          </h6>
-                                        </div>
-                                      </div>
-                                    )}
+                                    ))}
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          )}
+                          ) : null}
                         </div>
                       );
                     })}

@@ -191,9 +191,8 @@ li.page-item.active > a {
 }
 
 .other-books-cover {
-  height: 10vh;
+  max-height: 10vh;
   margin-right: 5%;
-  padding: 10%;
 }
 
 .other-books-title-container {

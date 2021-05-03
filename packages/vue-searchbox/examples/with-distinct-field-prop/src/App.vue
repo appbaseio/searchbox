@@ -126,7 +126,6 @@
                           v-bind:key="book._id"
                           v-for="book in filterOtherBooks(item)"
                         >
-                          <!-- ------------------------------------------------ -->
                           <div
                             class="flex col"
                             style="background-color: #ffffff; border: none;"
@@ -147,7 +146,6 @@
                               </div>
                             </div>
                           </div>
-                          <!-- ------------------------------------------------ -->
                         </div>
                       </div>
                     </div>
