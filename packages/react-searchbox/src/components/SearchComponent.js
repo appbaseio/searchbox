@@ -82,7 +82,9 @@ class SearchComponent extends React.Component {
       enablePredictiveSuggestions,
       preserveResults,
       clearOnQueryChange,
-      subscribeTo
+      subscribeTo,
+      distinctField,
+      distinctFieldConfig
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -135,7 +137,9 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearOnQueryChange
+      clearOnQueryChange,
+      distinctField,
+      distinctFieldConfig
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -247,6 +251,8 @@ SearchComponent.propTypes = {
   pagination: bool,
   queryString: bool,
   render: func,
+  distinctField: string,
+  distinctFieldConfig: object,
   // subscribe on changes,
   subscribeTo: PropTypes.arrayOf(string),
   triggerQueryOnInit: bool,

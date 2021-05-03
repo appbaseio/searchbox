@@ -141,6 +141,10 @@ class SearchComponent extends Base {
 
   queryString: boolean;
 
+  distinctField: string;
+
+  distinctFieldConfig: Object;
+
   // other properties
 
   // To enable the popular suggestions
@@ -293,7 +297,9 @@ class SearchComponent extends Base {
       enableSynonyms,
       selectAllLabel,
       pagination,
-      queryString
+      queryString,
+      distinctField,
+      distinctFieldConfig
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
@@ -348,7 +354,8 @@ class SearchComponent extends Base {
     this.onRequestStatusChange = onRequestStatusChange;
     this.onQueryChange = onQueryChange;
     this.onMicStatusChange = onMicStatusChange;
-
+    this.distinctField = distinctField;
+    this.distinctFieldConfig = distinctFieldConfig;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
 
@@ -484,7 +491,9 @@ class SearchComponent extends Base {
       enableSynonyms: this.enableSynonyms,
       selectAllLabel: this.selectAllLabel,
       pagination: this.pagination,
-      queryString: this.queryString
+      queryString: this.queryString,
+      distinctField: this.distinctField,
+      distinctFieldConfig: this.distinctFieldConfig
     };
   }
 

@@ -75,6 +75,8 @@ const SearchBox = {
 		selectAllLabel: VueTypes.string,
 		pagination: VueTypes.bool,
 		queryString: VueTypes.bool,
+		distinctField: VueTypes.string,
+		distinctFieldConfig: VueTypes.object,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),
@@ -115,6 +117,11 @@ const SearchBox = {
 		return this.state;
 	},
 	mounted() {
+		if (this.aggregationField) {
+			console.warn(
+				'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+			);
+		}
 		if(this.enableRecentSearches && this.autosuggest) {
 			const { getRecentSearches } =  this.getComponentInstance();
 			getRecentSearches();

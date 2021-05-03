@@ -72,7 +72,9 @@ class SearchComponent extends React.Component {
       onQueryChange,
       onMicStatusChange,
       enablePopularSuggestions,
-      maxPopularSuggestions
+      maxPopularSuggestions,
+      distinctField,
+      distinctFieldConfig,
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -124,7 +126,9 @@ class SearchComponent extends React.Component {
       onMicStatusChange,
       enablePopularSuggestions,
       preserveResults,
-      maxPopularSuggestions
+      maxPopularSuggestions,
+      distinctField,
+      distinctFieldConfig,
     });
   }
 
@@ -225,6 +229,8 @@ SearchComponent.propTypes = {
   pagination: bool,
   queryString: bool,
   render: func,
+  distinctField: string,
+  distinctFieldConfig: object,
   // subscribe on changes,
   subscribeTo: arrayOf(string),
   triggerQueryOnInit: bool,
