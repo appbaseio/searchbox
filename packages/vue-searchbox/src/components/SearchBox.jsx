@@ -673,10 +673,10 @@ const SearchBoxWrapper = {
 			<SearchComponent
 				value=""
 				triggerQueryOnInit={false}
-				clearFiltersOnQueryChange={true}
+				clearOnQueryChange={true}
 				{...{
 					on: context.listeners,
-				clearOnQueryChange
+					props: context.props,
 					scopedSlots: {
 						default: ({ loading, error, micStatus, results, value, recentSearches }) => {
 							return (
