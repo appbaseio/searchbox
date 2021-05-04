@@ -6,25 +6,11 @@ const URLParamsProvider = {
 	inject: ['searchbase'],
 	props: {
 		id: VueTypes.string.isRequired,
-		triggerDefaultQueryOnInit: VueTypes.bool.def(true)
 	},
 	mounted() {
-		const { id, triggerDefaultQueryOnInit } = this.$props;
+		const { id } = this.$props;
 		if (window) {
 			this.init();
-			// Set component value
-			if (this.params.has(id)) {
-				try {
-					this.getComponentInstance().setValue(JSON.parse(this.params.get(id)), {
-						triggerDefaultQuery: triggerDefaultQueryOnInit,
-						triggerCustomQuery: true,
-						stateChanges: true
-					});
-				} catch (e) {
-					console.error(e);
-					// Do not set value if JSON parsing fails.
-				}
-			}
 
 			window.addEventListener('popstate', () => {
 				const options = {

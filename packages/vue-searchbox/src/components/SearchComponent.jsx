@@ -60,8 +60,7 @@ const SearchComponent = {
 		distinctFieldConfig: VueTypes.object,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
-		triggerQueryOnInit: VueTypes.bool.def(true),
-		triggerDefaultQueryOnInit: VueTypes.bool.def(true)
+		triggerQueryOnInit: VueTypes.bool.def(true)
 	},
 	data() {
 		return {
@@ -89,7 +88,6 @@ const SearchComponent = {
 			appbaseConfig,
 			transformRequest,
 			transformResponse,
-			value,
 			type,
 			react,
 			queryFormat,
@@ -130,6 +128,18 @@ const SearchComponent = {
 			distinctField,
 			distinctFieldConfig
 		} = this.rawProps;
+		let { value } = this.rawProps;
+		if (window && window.location && window.location.search) {
+			const params = new URLSearchParams(window.location.search);
+			if (params.has(id)) {
+				try {
+					value = JSON.parse(params.get(id));
+				} catch (e) {
+					console.error(e);
+					// Do not set value if JSON parsing fails.
+				}
+			}
+		}
 		const componentInstance = this.searchbase.register(id, {
 			index,
 			url,
@@ -229,6 +239,10 @@ const SearchComponent = {
 				this.searchState = componentInstance.mappedProps;
 			});
 		}, subscribeTo);
+
+		if (value) {
+			this.componentInstance.triggerCustomQuery();
+		}
 	},
 	mounted() {
 		const { triggerQueryOnInit } = this.$props;
@@ -243,12 +257,12 @@ const SearchComponent = {
 		}
 	},
 	render() {
-		const { id, URLParams, triggerDefaultQueryOnInit } = this.$props;
+		const { id, URLParams } = this.$props;
 		if (this.$scopedSlots.default) {
 			const dom = this.$scopedSlots.default;
 			if (URLParams) {
 				return (
-					<URLParamsProvider id={id} triggerDefaultQueryOnInit={triggerDefaultQueryOnInit} >{dom(this.searchState)}</URLParamsProvider>
+					<URLParamsProvider id={id}>{dom(this.searchState)}</URLParamsProvider>
 				);
 			}
 			return <div>{dom(this.searchState)}</div>;

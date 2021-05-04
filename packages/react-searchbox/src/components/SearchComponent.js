@@ -39,7 +39,6 @@ class SearchComponent extends React.Component {
       appbaseConfig,
       transformRequest,
       transformResponse,
-      value,
       type,
       react,
       queryFormat,
@@ -86,6 +85,18 @@ class SearchComponent extends React.Component {
       distinctField,
       distinctFieldConfig
     } = this.props;
+    let { value } = this.props;
+    if (window && window.location && window.location.search) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has(id)) {
+        try {
+          value = JSON.parse(params.get(id));
+        } catch (e) {
+          console.error(e);
+          // Do not set value if JSON parsing fails.
+        }
+      }
+    }
     // Register search base component
     context.register(id, {
       index,
@@ -151,6 +162,9 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
+    if (value) {
+      this.componentInstance.triggerCustomQuery();
+    }
   }
 
   componentDidMount() {
@@ -177,14 +191,11 @@ class SearchComponent extends React.Component {
   }
 
   render() {
-    const { id, URLParams, triggerQueryOnInit } = this.props;
+    const { id, URLParams } = this.props;
     if (this.hasCustomRenderer && this.componentInstance) {
       if (URLParams) {
         return (
-          <URLParamsProvider
-            id={id}
-            triggerDefaultQueryOnInit={triggerQueryOnInit}
-          >
+          <URLParamsProvider id={id}>
             {getComponent(this.componentInstance.mappedProps, this.props)}
           </URLParamsProvider>
         );
