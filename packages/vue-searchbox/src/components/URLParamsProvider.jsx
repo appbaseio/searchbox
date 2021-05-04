@@ -17,6 +17,7 @@ const URLParamsProvider = {
 				try {
 					this.getComponentInstance().setValue(JSON.parse(this.params.get(id)), {
 						triggerDefaultQuery: triggerDefaultQueryOnInit,
+						triggerCustomQuery: true,
 						stateChanges: true
 					});
 				} catch (e) {
