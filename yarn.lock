@@ -275,6 +275,22 @@
   dependencies:
     cross-fetch "^3.0.4"
 
+"@appbaseio/react-native-searchbox@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-native-searchbox/-/react-native-searchbox-1.1.0.tgz#c8eae970403f2e11527ef26323ee8e0b857c0efd"
+  integrity sha512-3v8jGwNNQMemP0UHSSTXWN9QkUGWbgBHxnNckKCguVhluMaJk2bbk76BOBIEffkxZdPEVvDBSyX0tuPpFCHb/A==
+  dependencies:
+    "@appbaseio/searchbase" "1.1.0"
+    color "^3.1.3"
+
+"@appbaseio/searchbase@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.0.tgz#92df1bbd38d4864fead30b5a5d19c49b5fdf2ef1"
+  integrity sha512-Qsz4Da8ZCBEzHrt/XXTuAGQshIjGESOIIWnNuVqf7qvgglQuD8TZ+Ss07kFPUX/yohRZP5mBxvRulLGPxTfh4w==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
+    cross-fetch "^3.0.4"
+
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"
@@ -24560,15 +24576,7 @@ url-parse-lax@^1.0.0:
   dependencies:
     prepend-http "^1.0.1"
 
-url-parse@^1.1.8, url-parse@^1.4.3, url-parse@^1.4.4:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
-  dependencies:
-    querystringify "^2.1.1"
-    requires-port "^1.0.0"
-
-url-parse@^1.4.7:
+url-parse@^1.1.8, url-parse@^1.4.3, url-parse@^1.4.4, url-parse@^1.4.7:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.1.tgz#d5fa9890af8a5e1f274a2c98376510f6425f6e3b"
   integrity sha512-HOfCOUJt7iSYzEx/UqgtwKRMC6EU91NFhsCHMv9oM03VJcVo2Qrp8T8kI9D7amFf1cu+/3CEhgb3rF9zL7k85Q==
