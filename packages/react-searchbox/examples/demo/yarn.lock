@@ -9,20 +9,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@1.1.10":
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.1.10.tgz#26eff310bbc1fc002bdcbd6dd1fc4769d0958ccd"
-  integrity sha512-7wXREPXfpLEPEAQY6bwV3d51YTQWOoqwLT1EHj+5oHXss7ZWzCXMrKwGGV6k+4T7s1Wl+pPyME4yeWZWOyYHtA==
+"@appbaseio/react-searchbox@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.2.0.tgz#4cc49c3ed53a7c61b3b60d03c60c7ad53aa263e5"
+  integrity sha512-fqGGe15+fFV+OeyzQdhdZScG13i8GgOPrIjYygH8WKVDl+fBUs2uPn/vcbgmX+MOUsj98ysh9xwz7pZhHzZo6Q==
   dependencies:
-    "@appbaseio/searchbase" "1.1.9"
+    "@appbaseio/searchbase" "1.2.0"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@1.1.9":
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.9.tgz#5b266ba0db3f2129a51f3566412b2978d5514189"
-  integrity sha512-h6I2e/2Lo3qZiAaFfyj/P6muLEUAkpVhV18V8jOuQcBug++4XEbw6d5h9PubnHXdK9rddJCcEVuP38mU6rqHGg==
+"@appbaseio/searchbase@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.2.0.tgz#1cc2b02acd1ebacf07429a208470fb432b84e7c5"
+  integrity sha512-gB25qvde6cmGq1gJ+GfNm4Wwfe3GL4UlFECezFptCQG92G5Ad48Q9vY7QQwkNSBReilaevW0TsspXBgcp29ZSA==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -3833,9 +3833,9 @@ handle-thing@^1.2.5:
   integrity sha1-/Xqtcmvxpf0W38KbL3pmAdJxOcQ=
 
 handlebars@^4.0.3:
-  version "4.7.6"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.6.tgz#d4c05c1baf90e9945f77aa68a7a219aa4a7df74e"
-  integrity sha512-1f2BACcBfiwAfStCKZNrUCgqNZkGsAT7UM3kkYtXuLo0KnaVfjKOyf7PRzB6++aK9STyT1Pd2ZCPe3EGOXleXA==
+  version "4.7.7"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.7.tgz#9ce33416aad02dbd6c8fafa8240d5d98004945a1"
+  integrity sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==
   dependencies:
     minimist "^1.2.5"
     neo-async "^2.6.0"
@@ -8184,9 +8184,9 @@ uglify-js@^3.0.13:
     source-map "~0.6.1"
 
 uglify-js@^3.1.4:
-  version "3.10.3"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.10.3.tgz#f0d2f99736c14de46d2d24649ba328be3e71c3bf"
-  integrity sha512-Lh00i69Uf6G74mvYpHCI9KVVXLcHW/xu79YTvH7Mkc9zyKUeSPz0owW0dguj0Scavns3ZOh3wY63J0Zb97Za2g==
+  version "3.13.5"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.13.5.tgz#5d71d6dbba64cf441f32929b1efce7365bb4f113"
+  integrity sha512-xtB8yEqIkn7zmOyS2zUNBsYCBRhDkvlNxMMY2smuJ/qA8NCHeQvKCF3i9Z4k8FJH4+PJvZRtMrPynfZ75+CSZw==
 
 uglify-to-browserify@~1.0.0:
   version "1.0.2"
