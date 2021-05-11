@@ -847,7 +847,7 @@ SearchBox.defaultProps = {
   recentSearches: [],
   recentSearchesIcon: undefined,
   popularSearchesIcon: undefined,
-  focusShortcuts: ['/', 's'],
+  focusShortcuts: ['/'],
   addonBefore: undefined,
   addonAfter: undefined
 };
