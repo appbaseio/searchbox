@@ -18,8 +18,12 @@ import {
   wholeNumber,
   dataFieldValidator,
   element,
+  array
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
+import InputGroup from '../styles/InputGroup';
+import InputAddon from '../styles/InputAddon';
+import InputWrapper from '../styles/InputWrapper';
 import Input from '../styles/Input';
 import Title from '../styles/Title';
 import {
@@ -51,7 +55,7 @@ class SearchBox extends React.Component {
     super(props, context);
     const { value, defaultValue } = props;
     let currentValue = value || defaultValue || '';
-
+    this.searchInputField = React.createRef();
     this.state = {
       isOpen: false
     };
@@ -322,6 +326,24 @@ class SearchBox extends React.Component {
     }
   };
 
+  renderInputAddonBefore = () => {
+    const { addonBefore } = this.props;
+    if (addonBefore) {
+      return <InputAddon>{addonBefore}</InputAddon>;
+    }
+
+    return null;
+  };
+
+  renderInputAddonAfter = () => {
+    const { addonAfter } = this.props;
+    if (addonAfter) {
+      return <InputAddon>{addonAfter}</InputAddon>;
+    }
+
+    return null;
+  };
+
   renderIcons = () => {
     const {
       iconPosition,
@@ -485,23 +507,33 @@ class SearchBox extends React.Component {
               ...rest
             }) => (
               <div {...getRootProps({ css: suggestionsContainer })}>
-                <Input
-                  showIcon={showIcon}
-                  showClear={showClear}
-                  iconPosition={iconPosition}
-                  {...getInputProps({
-                    className: getClassName(innerClass, 'input'),
-                    placeholder: placeholder,
-                    value: value || (currentValue === null ? '' : currentValue),
-                    onChange: this.onInputChange,
-                    onBlur: this.withTriggerQuery(onBlur),
-                    onFocus: this.handleFocus,
-                    onKeyPress: this.withTriggerQuery(onKeyPress),
-                    onKeyUp: this.withTriggerQuery(onKeyUp),
-                    onKeyDown: e => this.handleKeyDown(e, highlightedIndex)
-                  })}
-                />
-                {this.renderIcons()}
+                <InputGroup>
+                  {this.renderInputAddonBefore()}
+                  <InputWrapper>
+                    <Input
+                      ref={this.searchInputField}
+                      showIcon={showIcon}
+                      showClear={showClear}
+                      iconPosition={iconPosition}
+                      {...getInputProps({
+                        className: getClassName(innerClass, 'input'),
+                        placeholder: placeholder,
+                        value:
+                          value || (currentValue === null ? '' : currentValue),
+                        onChange: this.onInputChange,
+                        onBlur: this.withTriggerQuery(onBlur),
+                        onFocus: this.handleFocus,
+                        onKeyPress: this.withTriggerQuery(onKeyPress),
+                        onKeyUp: this.withTriggerQuery(onKeyUp),
+                        onKeyDown: e => this.handleKeyDown(e, highlightedIndex),
+                        autoFocus: autoFocus
+                      })}
+                    />{' '}
+                    {this.renderIcons()}
+                  </InputWrapper>
+                  {this.renderInputAddonAfter()}
+                </InputGroup>
+
                 {this.hasCustomRenderer && (
                   <div>
                     {this.getComponent({
@@ -585,9 +617,9 @@ class SearchBox extends React.Component {
                           (sugg, index) => (
                             <li
                               {...getItemProps({ item: sugg })}
-                              key={`${index + this.suggestionsList.length + 1}-${
-                                sugg.value
-                              }`}
+                              key={`${index +
+                                this.suggestionsList.length +
+                                1}-${sugg.value}`}
                               style={{
                                 backgroundColor: this.getBackgroundColor(
                                   highlightedIndex,
@@ -626,6 +658,7 @@ class SearchBox extends React.Component {
         ) : (
           <div css={suggestionsContainer}>
             <Input
+              ref={this.searchInputField}
               className={getClassName(innerClass, 'input') || null}
               placeholder={placeholder}
               value={value || (currentValue === null ? '' : currentValue)}
@@ -703,12 +736,13 @@ SearchBox.propTypes = {
   onKeyDown: func,
   autoFocus: bool,
   URLParams: bool,
-  clearFiltersOnQueryChange: bool,
+  clearOnQueryChange: bool,
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
   recentSearchesIcon: element,
   popularSearchesIcon: element,
+  focusShortcuts: array,
 
   // internal props
   error: any,
@@ -733,17 +767,18 @@ SearchBox.defaultProps = {
   showDistinctSuggestions: true,
   enablePopularSuggestions: false,
   enablePredictiveSuggestions: false,
-  clearFiltersOnQueryChange: true,
+  clearOnQueryChange: true,
   recentSearches: [],
   recentSearchesIcon: undefined,
-  popularSearchesIcon: undefined
+  popularSearchesIcon: undefined,
+  focusShortcuts: ['/']
 };
 
 export default props => (
   <SearchComponent
     triggerQueryOnInit={false}
     value="" // Init value as empty
-    clearFiltersOnQueryChange
+    clearOnQueryChange
     {...props}
     subscribeTo={[
       'micStatus',

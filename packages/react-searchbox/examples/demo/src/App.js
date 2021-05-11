@@ -65,6 +65,8 @@ export default () => (
         enableRecentSearches
         iconPosition="left"
         style={{ paddingBottom: 10 }}
+        addonBefore={'hi'}
+        addonAfter={'me'}
       />
       <div className="row">
         <div className="col">
