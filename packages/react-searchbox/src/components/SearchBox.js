@@ -36,6 +36,7 @@ import {
   hasPopularSuggestionsRenderer,
   isEmpty,
   isFunction,
+  isNumeric,
   parseFocusShortcuts,
   SearchContext
 } from '../utils/helper';
@@ -505,9 +506,12 @@ class SearchBox extends React.Component {
       );
       return;
     }
-    const shortcuts = this.props.focusShortcuts.map(key =>
-      typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
-    );
+    const shortcuts = this.props.focusShortcuts.map(key => {
+      if (typeof key === 'string') {
+        return isNumeric(key) ? +key : key.toUpperCase().charCodeAt(0);
+      }
+      return key;
+    });
     const elt = e.target || e.srcElement;
     const tagName = elt.tagName;
     if (elt.isContentEditable || tagName === 'INPUT') {

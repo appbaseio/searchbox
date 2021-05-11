@@ -65,9 +65,12 @@ export default () => (
         enableRecentSearches
         iconPosition="left"
         style={{ paddingBottom: 10 }}
-        addonBefore={'hi'}
-        addonAfter={'me'}
-        focusShortcuts={['ctrl+47', '65', '/']}
+        // addonAfter={<h2>treat</h2>}
+        // addonBefore={
+        //   <img src="https://i.imgur.com/V03pXmH.jpg" height="30px" />
+        // }
+        focusShortcuts={['47']}
+        // autoFocus
       />
       <div className="row">
         <div className="col">
