@@ -34,7 +34,9 @@ import {
   getPopularSuggestionsComponent,
   hasCustomRenderer,
   hasPopularSuggestionsRenderer,
+  isEmpty,
   isFunction,
+  parseFocusShortcuts,
   SearchContext
 } from '../utils/helper';
 import Downshift from 'downshift';
@@ -53,7 +55,7 @@ class SearchBox extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    const { value, defaultValue } = props;
+    const { value, defaultValue, focusShortcuts } = props;
     let currentValue = value || defaultValue || '';
     this.searchInputField = React.createRef();
     this.state = {
@@ -67,13 +69,37 @@ class SearchBox extends React.Component {
         stateChanges: true
       });
     }
+
+    // dynamically import hotkey-js
+    if (!isEmpty(focusShortcuts)) {
+      this.hotKeyCombinationsUsed = false;
+      for (let index = 0; index < focusShortcuts.length; index += 1) {
+        if (
+          typeof focusShortcuts[index] === 'string' &&
+          focusShortcuts[index].indexOf('+') !== -1
+        ) {
+          this.hotKeyCombinationsUsed = true;
+          break;
+        }
+      }
+      if (this.hotKeyCombinationsUsed) {
+        import('hotkeys-js').then(module => {
+          this.hotkeys = module.default;
+        });
+      }
+    }
   }
 
   componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
     const { enableRecentSearches, autosuggest } = this.props;
     if (enableRecentSearches && autosuggest) {
       this.componentInstance.getRecentSearches();
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   componentDidUpdate(prevProps) {
@@ -456,6 +482,50 @@ class SearchBox extends React.Component {
     }
   };
 
+  onKeyDown = e => {
+    if (isEmpty(this.props.focusShortcuts)) {
+      return;
+    }
+
+    // for hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc, we use hotkeys-js
+    if (this.hotKeyCombinationsUsed) {
+      this.hotkeys(
+        parseFocusShortcuts(this.props.focusShortcuts).join(','),
+        (event, handler) => {
+          // Prevent the default refresh event under WINDOWS system
+          event.preventDefault();
+          const elt = e.target || e.srcElement;
+          const tagName = elt.tagName;
+          if (elt.isContentEditable || tagName === 'INPUT') {
+            // already in an input
+            return;
+          }
+          this.searchInputField.current.focus();
+        }
+      );
+      return;
+    }
+    const shortcuts = this.props.focusShortcuts.map(key =>
+      typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
+    );
+    const elt = e.target || e.srcElement;
+    const tagName = elt.tagName;
+    if (elt.isContentEditable || tagName === 'INPUT') {
+      // already in an input
+      return;
+    }
+    let which = e.which || e.keyCode;
+    let chrCode = which - 48 * Math.floor(which / 48);
+    if (shortcuts.indexOf(which >= 96 ? chrCode : which) === -1) {
+      // not the right shortcut
+      return;
+    }
+
+    this.searchInputField.current.focus();
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   render() {
     const {
       style,
@@ -771,7 +841,7 @@ SearchBox.defaultProps = {
   recentSearches: [],
   recentSearchesIcon: undefined,
   popularSearchesIcon: undefined,
-  focusShortcuts: ['/']
+  focusShortcuts: ['/', 's']
 };
 
 export default props => (

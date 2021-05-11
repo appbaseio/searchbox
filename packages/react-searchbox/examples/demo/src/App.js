@@ -67,6 +67,7 @@ export default () => (
         style={{ paddingBottom: 10 }}
         addonBefore={'hi'}
         addonAfter={'me'}
+        focusShortcuts={['ctrl+47', '65', '/']}
       />
       <div className="row">
         <div className="col">
