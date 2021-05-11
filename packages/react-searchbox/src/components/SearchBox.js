@@ -813,6 +813,8 @@ SearchBox.propTypes = {
   recentSearchesIcon: element,
   popularSearchesIcon: element,
   focusShortcuts: array,
+  addonBefore: any,
+  addonAfter: any,
 
   // internal props
   error: any,
@@ -841,7 +843,9 @@ SearchBox.defaultProps = {
   recentSearches: [],
   recentSearchesIcon: undefined,
   popularSearchesIcon: undefined,
-  focusShortcuts: ['/', 's']
+  focusShortcuts: ['/', 's'],
+  addonBefore: undefined,
+  addonAfter: undefined
 };
 
 export default props => (
