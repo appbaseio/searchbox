@@ -122,7 +122,7 @@ export function getCharFromCharCode(passedCharCode) {
 // used for parsing focusshortcuts for keycodes passed as string, eg: 'ctrl+/' is same as 'ctrl+47'
 // returns focusShortcuts containing appropriate key charsas depicted on keyboards
 export function parseFocusShortcuts(focusShortcutsArray) {
-  if (isEmpty(focusShortcutsArray)) return;
+  if (isEmpty(focusShortcutsArray)) return [];
 
   let parsedFocusShortcutsArray = [];
   focusShortcutsArray.forEach(element => {
