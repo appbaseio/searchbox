@@ -38,7 +38,8 @@ import {
   isFunction,
   isNumeric,
   parseFocusShortcuts,
-  SearchContext
+  SearchContext,
+  isHotkeyCombinationUsed
 } from '../utils/helper';
 import Downshift from 'downshift';
 import Icons from './Icons';
@@ -73,20 +74,18 @@ class SearchBox extends React.Component {
 
     // dynamically import hotkey-js
     if (!isEmpty(focusShortcuts)) {
-      this.hotKeyCombinationsUsed = false;
-      for (let index = 0; index < focusShortcuts.length; index += 1) {
-        if (
-          typeof focusShortcuts[index] === 'string' &&
-          focusShortcuts[index].indexOf('+') !== -1
-        ) {
-          this.hotKeyCombinationsUsed = true;
-          break;
-        }
-      }
+      this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
       if (this.hotKeyCombinationsUsed) {
-        import('hotkeys-js').then(module => {
-          this.hotkeys = module.default;
-        });
+        import('hotkeys-js')
+          .then(module => {
+            this.hotkeys = module.default;
+          })
+          .catch(err =>
+            // eslint-disable-next-line no-console
+            console.warn(
+              'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
+            )
+          );
       }
     }
   }
@@ -489,7 +488,22 @@ class SearchBox extends React.Component {
     }
   };
 
-  onKeyDown = e => {
+  focusSearchBox = event => {
+    const elt = event.target || event.srcElement;
+    const tagName = elt.tagName;
+    if (
+      elt.isContentEditable ||
+      tagName === 'INPUT' ||
+      tagName === 'SELECT' ||
+      tagName === 'TEXTAREA'
+    ) {
+      // already in an input
+      return;
+    }
+    this.searchInputField.current.focus();
+  };
+
+  onKeyDown = event => {
     if (isEmpty(this.props.focusShortcuts)) {
       return;
     }
@@ -498,42 +512,37 @@ class SearchBox extends React.Component {
     if (this.hotKeyCombinationsUsed) {
       this.hotkeys(
         parseFocusShortcuts(this.props.focusShortcuts).join(','),
+        /* eslint-disable no-shadow */
         (event, handler) => {
           // Prevent the default refresh event under WINDOWS system
           event.preventDefault();
-          const elt = e.target || e.srcElement;
-          const tagName = elt.tagName;
-          if (elt.isContentEditable || tagName === 'INPUT') {
-            // already in an input
-            return;
-          }
-          this.searchInputField.current.focus();
+          this.focusSearchBox(event);
         }
       );
       return;
     }
     const shortcuts = this.props.focusShortcuts.map(key => {
       if (typeof key === 'string') {
-        return isNumeric(key) ? +key : key.toUpperCase().charCodeAt(0);
+        return isNumeric(key)
+          ? parseInt(key, 10)
+          : key.toUpperCase().charCodeAt(0);
       }
       return key;
     });
-    const elt = e.target || e.srcElement;
-    const tagName = elt.tagName;
-    if (elt.isContentEditable || tagName === 'INPUT') {
-      // already in an input
-      return;
-    }
-    let which = e.which || e.keyCode;
+
+    // the below algebraic expression is used to get the correct ascii code out of the e.which || e.keycode returned value
+    // since the keyboards doesn't understand ascii but scan codes and they differ for certain keys such as '/'
+    // stackoverflow ref: https://stackoverflow.com/a/29811987/10822996
+    let which = event.which || event.keyCode;
     let chrCode = which - 48 * Math.floor(which / 48);
     if (shortcuts.indexOf(which >= 96 ? chrCode : which) === -1) {
       // not the right shortcut
       return;
     }
+    this.focusSearchBox(event);
 
-    this.searchInputField.current.focus();
-    e.stopPropagation();
-    e.preventDefault();
+    event.stopPropagation();
+    event.preventDefault();
   };
 
   renderSuggestionsDropdown = ({
