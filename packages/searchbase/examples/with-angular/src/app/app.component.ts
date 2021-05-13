@@ -95,7 +95,7 @@ export class AppComponent implements AfterContentInit {
       //   }
       // ],
       includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
-      clearFiltersOnQueryChange: true,
+      clearOnQueryChange: true,
       size: 5
     });
 

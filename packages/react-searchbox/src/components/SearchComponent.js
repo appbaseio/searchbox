@@ -39,7 +39,6 @@ class SearchComponent extends React.Component {
       appbaseConfig,
       transformRequest,
       transformResponse,
-      value,
       type,
       react,
       queryFormat,
@@ -81,9 +80,23 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange,
-      subscribeTo
+      clearOnQueryChange,
+      subscribeTo,
+      distinctField,
+      distinctFieldConfig
     } = this.props;
+    let { value } = this.props;
+    if (window && window.location && window.location.search) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has(id)) {
+        try {
+          value = JSON.parse(params.get(id));
+        } catch (e) {
+          console.error(e);
+          // Do not set value if JSON parsing fails.
+        }
+      }
+    }
     // Register search base component
     context.register(id, {
       index,
@@ -135,7 +148,9 @@ class SearchComponent extends React.Component {
       enablePopularSuggestions,
       enablePredictiveSuggestions,
       preserveResults,
-      clearFiltersOnQueryChange
+      clearOnQueryChange,
+      distinctField,
+      distinctFieldConfig
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -146,6 +161,9 @@ class SearchComponent extends React.Component {
         });
         this.setState(state);
       }, subscribeTo);
+    }
+    if (value) {
+      this.componentInstance.triggerCustomQuery();
     }
   }
 
@@ -173,14 +191,11 @@ class SearchComponent extends React.Component {
   }
 
   render() {
-    const { id, URLParams, triggerQueryOnInit } = this.props;
+    const { id, URLParams } = this.props;
     if (this.hasCustomRenderer && this.componentInstance) {
       if (URLParams) {
         return (
-          <URLParamsProvider
-            id={id}
-            triggerDefaultQueryOnInit={triggerQueryOnInit}
-          >
+          <URLParamsProvider id={id}>
             {getComponent(this.componentInstance.mappedProps, this.props)}
           </URLParamsProvider>
         );
@@ -196,7 +211,7 @@ SearchComponent.defaultProps = {
   triggerQueryOnInit: true,
   URLParams: false,
   enablePredictiveSuggestions: false,
-  clearFiltersOnQueryChange: false
+  clearOnQueryChange: false
 };
 
 SearchComponent.propTypes = {
@@ -210,7 +225,7 @@ SearchComponent.propTypes = {
   beforeValueChange: func,
   enablePopularSuggestions: bool,
   enablePredictiveSuggestions: bool,
-  clearFiltersOnQueryChange: bool,
+  clearOnQueryChange: bool,
   URLParams: bool,
   // RS API properties
   id: stringRequired,
@@ -247,6 +262,8 @@ SearchComponent.propTypes = {
   pagination: bool,
   queryString: bool,
   render: func,
+  distinctField: string,
+  distinctFieldConfig: object,
   // subscribe on changes,
   subscribeTo: PropTypes.arrayOf(string),
   triggerQueryOnInit: bool,

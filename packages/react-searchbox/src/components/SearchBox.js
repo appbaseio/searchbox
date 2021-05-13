@@ -93,7 +93,13 @@ class SearchBox extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
-    const { enableRecentSearches, autosuggest } = this.props;
+    const { enableRecentSearches, autosuggest, aggregationField } = this.props;
+    if (aggregationField) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
+      );
+    }
     if (enableRecentSearches && autosuggest) {
       this.componentInstance.getRecentSearches();
     }
@@ -870,6 +876,8 @@ SearchBox.propTypes = {
   addonBefore: any,
   addonAfter: any,
   expandSuggestionsContainer: bool,
+  distinctField: string,
+  distinctFieldConfig: object,
 
   // internal props
   error: any,
@@ -919,13 +927,14 @@ export default props => (
       'recentSearches'
     ]}
   >
-    {({ error, loading, results, value, recentSearches }) => (
+    {({ error, loading, results, value, recentSearches, micStatus }) => (
       <SearchBox
         {...props}
         error={error}
         loading={loading}
         results={results}
         recentSearches={recentSearches}
+        micStatus={micStatus}
       />
     )}
   </SearchComponent>

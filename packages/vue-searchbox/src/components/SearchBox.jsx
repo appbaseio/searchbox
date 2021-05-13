@@ -38,7 +38,7 @@ const SearchBox = {
 		enablePopularSuggestions: VueTypes.bool,
 		enablePredictiveSuggestions: VueTypes.bool,
 		enableRecentSearches: VueTypes.bool,
-		clearFiltersOnQueryChange: VueTypes.bool,
+		clearOnQueryChange: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
 		// RS API properties
@@ -75,6 +75,8 @@ const SearchBox = {
 		selectAllLabel: VueTypes.string,
 		pagination: VueTypes.bool,
 		queryString: VueTypes.bool,
+		distinctField: VueTypes.string,
+		distinctFieldConfig: VueTypes.object,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),
@@ -115,6 +117,11 @@ const SearchBox = {
 		return this.state;
 	},
 	mounted() {
+		if (this.aggregationField) {
+			console.warn(
+				'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+			);
+		}
 		if(this.enableRecentSearches && this.autosuggest) {
 			const { getRecentSearches } =  this.getComponentInstance();
 			getRecentSearches();
@@ -666,7 +673,7 @@ const SearchBoxWrapper = {
 			<SearchComponent
 				value=""
 				triggerQueryOnInit={false}
-				clearFiltersOnQueryChange={true}
+				clearOnQueryChange={true}
 				{...{
 					on: context.listeners,
 					props: context.props,

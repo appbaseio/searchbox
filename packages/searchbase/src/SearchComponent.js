@@ -141,6 +141,10 @@ class SearchComponent extends Base {
 
   queryString: boolean;
 
+  distinctField: string;
+
+  distinctFieldConfig: Object;
+
   // other properties
 
   // To enable the popular suggestions
@@ -159,7 +163,7 @@ class SearchComponent extends Base {
   preserveResults: boolean;
 
   // to clear the dependent facets values on query change
-  clearFiltersOnQueryChange: boolean;
+  clearOnQueryChange: boolean;
 
   // query error
   error: any;
@@ -247,7 +251,7 @@ class SearchComponent extends Base {
     showDistinctSuggestions,
     enablePredictiveSuggestions,
     preserveResults,
-    clearFiltersOnQueryChange,
+    clearOnQueryChange,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -293,7 +297,9 @@ class SearchComponent extends Base {
       enableSynonyms,
       selectAllLabel,
       pagination,
-      queryString
+      queryString,
+      distinctField,
+      distinctFieldConfig
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
@@ -348,7 +354,8 @@ class SearchComponent extends Base {
     this.onRequestStatusChange = onRequestStatusChange;
     this.onQueryChange = onQueryChange;
     this.onMicStatusChange = onMicStatusChange;
-
+    this.distinctField = distinctField;
+    this.distinctFieldConfig = distinctFieldConfig;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
 
@@ -360,7 +367,7 @@ class SearchComponent extends Base {
 
     this.preserveResults = preserveResults;
 
-    this.clearFiltersOnQueryChange = clearFiltersOnQueryChange;
+    this.clearOnQueryChange = clearOnQueryChange;
 
     // Initialize the state changes observable
     this.stateChanges = new Observable();
@@ -484,7 +491,9 @@ class SearchComponent extends Base {
       enableSynonyms: this.enableSynonyms,
       selectAllLabel: this.selectAllLabel,
       pagination: this.pagination,
-      queryString: this.queryString
+      queryString: this.queryString,
+      distinctField: this.distinctField,
+      distinctFieldConfig: this.distinctFieldConfig
     };
   }
 
@@ -797,7 +806,7 @@ class SearchComponent extends Base {
             });
             // Reset value for dependent components after fist query is made
             // We wait for first query to not clear filters applied by URL params
-            if (this.clearFiltersOnQueryChange && this._query) {
+            if (this.clearOnQueryChange && this._query) {
               componentInstance.setValue(undefined, {
                 stateChanges: true,
                 triggerDefaultQuery: false,
