@@ -115,7 +115,7 @@ export function isHotkeyCombination(hotkey) {
 // parse focusshortcuts array for key combinations
 export function isHotkeyCombinationUsed(focusShortcuts) {
   for (let index = 0; index < focusShortcuts.length; index += 1) {
-    if (isHotkeyCombination(focusShortcuts[0])) {
+    if (isHotkeyCombination(focusShortcuts[index])) {
       return true;
     }
   }
