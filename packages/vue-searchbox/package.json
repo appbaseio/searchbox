@@ -39,7 +39,8 @@
         "vue-types": "^1.6.0"
     },
     "peerDependencies": {
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "hotkeys-js": "^3.8.5"
     },
     "devDependencies": {
         "@babel/core": "^7.6.4",
