@@ -497,7 +497,6 @@ const SearchBox = {
 
 			// for hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc, we use hotkeys-js
 			if (this.hotKeyCombinationsUsed) {
-				console.log('hey there', this.hotKeyCombinationsUsed);
 				this.hotkeys(
 					parseFocusShortcuts(focusShortcuts).join(','), // eslint-disable-next-line no-unused-vars
 					/* eslint-disable no-shadow */ (event, handler) => {
