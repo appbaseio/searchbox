@@ -73,21 +73,21 @@ class SearchBox extends React.Component {
     }
 
     // dynamically import hotkey-js
-    // if (!isEmpty(focusShortcuts)) {
-    //   this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
-    //   if (this.hotKeyCombinationsUsed) {
-    //     import('hotkeys-js')
-    //       .then(module => {
-    //         this.hotkeys = module.default;
-    //       })
-    //       .catch(err =>
-    //         // eslint-disable-next-line no-console
-    //         console.warn(
-    //           'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
-    //         )
-    //       );
-    //   }
-    // }
+    if (!isEmpty(focusShortcuts)) {
+      this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
+      if (this.hotKeyCombinationsUsed) {
+        import('hotkeys-js')
+          .then(module => {
+            this.hotkeys = module.default;
+          })
+          .catch(err =>
+            // eslint-disable-next-line no-console
+            console.warn(
+              'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
+            )
+          );
+      }
+    }
   }
 
   componentDidMount() {

@@ -493,7 +493,8 @@ class SearchComponent extends Base {
       pagination: this.pagination,
       queryString: this.queryString,
       distinctField: this.distinctField,
-      distinctFieldConfig: this.distinctFieldConfig
+      distinctFieldConfig: this.distinctFieldConfig,
+      index: this.index
     };
   }
 
