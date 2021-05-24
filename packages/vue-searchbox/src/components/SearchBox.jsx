@@ -120,7 +120,7 @@ const SearchBox = {
 		focusShortcuts: VueTypes.focusShortcuts,
 		addonBefore: VueTypes.any,
 		addonAfter: VueTypes.any,
-		expandSuggestionsContainer: { default: true, type: Boolean }
+		expandSuggestionsContainer: types.expandSuggestionsContainer
 	},
 	data() {
 		this.state = {

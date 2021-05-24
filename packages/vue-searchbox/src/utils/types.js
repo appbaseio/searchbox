@@ -87,5 +87,6 @@ export const types = {
 	sourceFields: VueTypes.arrayOf(VueTypes.string),
 	focusShortcuts: VueTypes.arrayOf(
 		VueTypes.oneOfType([VueTypes.string, VueTypes.number])
-	)
+	),
+	expandSuggestionsContainer: VueTypes.bool.def(true)
 };
