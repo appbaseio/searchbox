@@ -51,10 +51,7 @@
           :enablePopularSuggestions="true"
           :enableRecentSearches="true"
           iconPosition="left"
-          :focusShortcuts="['b', 'ctrl+y']"
         >
-          <h1 slot="addonBefore">Hi</h1>
-          <img slot="addonAfter" src="https://picsum.photos/20/30" />
         </search-box>
         <div class="row">
           <div class="col">
