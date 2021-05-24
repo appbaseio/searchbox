@@ -335,7 +335,6 @@ const SearchBox = {
 
 			return null;
 		},
-
 		renderInputAddonAfter() {
 			const { addonAfter } = this.$scopedSlots;
 			if (addonAfter) {
@@ -776,43 +775,49 @@ const SearchBox = {
 					/>
 				) : (
 					<div class={suggestionsContainer}>
-						<Input
-							ref="searchInputField"
-							class={getClassName(innerClass, 'input') || ''}
-							placeholder={placeholder}
-							autoFocus={autoFocus}
-							{...{
-								on: {
-									blur: e => {
-										this.$emit('blur', e);
-									},
-									keypress: e => {
-										this.$emit('keyPress', e);
-									},
-									input: this.onInputChange,
-									focus: e => {
-										this.$emit('focus', e);
-									},
-									keydown: e => {
-										this.$emit('keyDown', e);
-									},
-									keyup: e => {
-										this.$emit('keyUp', e);
-									}
-								}
-							}}
-							{...{
-								domProps: {
-									autofocus: autoFocus,
-									value: instanceValue || ''
-								}
-							}}
-							iconPosition={iconPosition}
-							showIcon={showIcon}
-							showClear={showClear}
-							innerRef={innerRef}
-						/>
-						{this.renderIcons()}
+						<InputGroup>
+							{this.renderInputAddonBefore()}
+							<InputWrapper>
+								<Input
+									ref="searchInputField"
+									class={getClassName(innerClass, 'input') || ''}
+									placeholder={placeholder}
+									autoFocus={autoFocus}
+									{...{
+										on: {
+											blur: e => {
+												this.$emit('blur', e);
+											},
+											keypress: e => {
+												this.$emit('keyPress', e);
+											},
+											input: this.onInputChange,
+											focus: e => {
+												this.$emit('focus', e);
+											},
+											keydown: e => {
+												this.$emit('keyDown', e);
+											},
+											keyup: e => {
+												this.$emit('keyUp', e);
+											}
+										}
+									}}
+									{...{
+										domProps: {
+											autofocus: autoFocus,
+											value: instanceValue || ''
+										}
+									}}
+									iconPosition={iconPosition}
+									showIcon={showIcon}
+									showClear={showClear}
+									innerRef={innerRef}
+								/>
+								{this.renderIcons()}
+							</InputWrapper>
+							{this.renderInputAddonAfter()}
+						</InputGroup>
 					</div>
 				)}
 			</div>
