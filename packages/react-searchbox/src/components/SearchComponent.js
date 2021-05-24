@@ -97,9 +97,11 @@ class SearchComponent extends React.Component {
         }
       }
     }
+    // console.log('SearchComponent index ==>> ', index);
+
     // Register search base component
     context.register(id, {
-      index,
+      // index,
       url,
       credentials,
       headers,
@@ -152,6 +154,34 @@ class SearchComponent extends React.Component {
       distinctField,
       distinctFieldConfig
     });
+
+    // if (index) {
+    //   this.componentInstance.mappedProps.index = index;
+    // }
+    if (index) {
+      console.log('adding index to req ==>> ', index);
+      // this.componentInstance.transformRequest = request =>
+      //   Promise.resolve({
+      //     index,
+      //     ...request
+      //   });
+      // this.componentInstance.triggerDefaultQuery();
+      this.componentInstance.transformRequest = request =>
+        Promise.resolve({
+          ...request,
+          index
+        });
+      // this.componentInstance.defaultQuery = () => ({
+      //   query: {
+      //     index
+      //   }
+      // });
+    }
+    console.log('allProps componentInstance ==>> ', this.componentInstance);
+    console.log(
+      'mappedProps componentInstance ==>> ',
+      this.componentInstance.mappedProps
+    );
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
       this.componentInstance.subscribeToStateChanges(change => {
@@ -159,6 +189,7 @@ class SearchComponent extends React.Component {
         Object.keys(change).forEach(property => {
           state[property] = change[property].next;
         });
+        console.log('state ==>> ', state);
         this.setState(state);
       }, subscribeTo);
     }
