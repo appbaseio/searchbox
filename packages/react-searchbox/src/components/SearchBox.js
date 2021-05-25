@@ -888,6 +888,7 @@ SearchBox.propTypes = {
   expandSuggestionsContainer: bool,
   distinctField: string,
   distinctFieldConfig: object,
+  index: string,
 
   // internal props
   error: any,
@@ -919,7 +920,8 @@ SearchBox.defaultProps = {
   focusShortcuts: ['/'],
   addonBefore: undefined,
   addonAfter: undefined,
-  expandSuggestionsContainer: true
+  expandSuggestionsContainer: true,
+  index: undefined
 };
 
 export default props => (

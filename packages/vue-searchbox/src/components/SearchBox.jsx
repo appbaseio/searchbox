@@ -33,8 +33,9 @@ const SearchBox = {
 	name: 'search-box',
 	inject: ['searchbase'],
 	props: {
-		// search component props
+		// common props for search component and search box
 		index: VueTypes.string,
+		// search component props
 		url: VueTypes.string,
 		credentials: VueTypes.string,
 		headers: VueTypes.object,
