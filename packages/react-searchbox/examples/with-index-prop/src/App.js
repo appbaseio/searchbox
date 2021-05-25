@@ -63,7 +63,7 @@ export default () => (
           />
         </div>
         <div className="search-component-container">
-          {/* all queries triggereing from this component will be tragetted to the 'good-books-clone' as it is specified
+          {/* all queries triggereing from this component will be tragetted to the 'good-books-clone' index in the BE as it is specified
           through the index prop  */}
           <SearchBox
             id="author-search-component"

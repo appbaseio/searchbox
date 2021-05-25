@@ -202,6 +202,9 @@ class SearchComponent extends Base {
   // query search ID
   _queryId: string;
 
+  // explicitly define the index to query from
+  _componentIndex: string;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   beforeValueChange: (value: string) => Promise<any>;
@@ -299,7 +302,8 @@ class SearchComponent extends Base {
       pagination,
       queryString,
       distinctField,
-      distinctFieldConfig
+      distinctFieldConfig,
+      _componentIndex
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
@@ -356,6 +360,7 @@ class SearchComponent extends Base {
     this.onMicStatusChange = onMicStatusChange;
     this.distinctField = distinctField;
     this.distinctFieldConfig = distinctFieldConfig;
+    this._componentIndex = _componentIndex;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
 
@@ -494,7 +499,7 @@ class SearchComponent extends Base {
       queryString: this.queryString,
       distinctField: this.distinctField,
       distinctFieldConfig: this.distinctFieldConfig,
-      index: this.index
+      index: this._componentIndex
     };
   }
 

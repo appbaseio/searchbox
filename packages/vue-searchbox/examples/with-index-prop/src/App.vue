@@ -27,6 +27,8 @@
       <div>
         <div class="search-box-container">
           <div class="search-component-container">
+            <!-- as no index is specified in this component, by default all the queries made will be targetted to the
+            index provided in seachbase component  -->
             <search-box
               id="book-search-component"
               :dataField="[
@@ -45,6 +47,8 @@
             />
           </div>
           <div class="search-component-container">
+            <!-- all queries triggereing from this component will be tragetted to the 'good-books-clone' index in the BE as it is specified
+            through the index prop  -->
             <search-box
               id="author-search-component"
               :dataField="[

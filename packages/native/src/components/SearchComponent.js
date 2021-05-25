@@ -78,7 +78,7 @@ class SearchComponent extends React.Component {
     } = this.props;
     // Register search base component
     context.register(id, {
-      index,
+      // index,
       url,
       credentials,
       headers,
@@ -129,6 +129,7 @@ class SearchComponent extends React.Component {
       maxPopularSuggestions,
       distinctField,
       distinctFieldConfig,
+      _componentIndex: index
     });
   }
 
@@ -231,6 +232,8 @@ SearchComponent.propTypes = {
   render: func,
   distinctField: string,
   distinctFieldConfig: object,
+  // explicitly define the index to query from
+  _componentIndex: string,
   // subscribe on changes,
   subscribeTo: arrayOf(string),
   triggerQueryOnInit: bool,

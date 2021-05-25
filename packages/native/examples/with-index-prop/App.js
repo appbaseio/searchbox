@@ -62,7 +62,7 @@ const renderItemSeparator = () => {
 export default function App() {
   const [dataSource, setDataSource] = useState([]);
   const [resetPagination, setResetPagination] = useState(false);
-  const [showAuthorSearchComponent, setShowAuthorSearchComponent] = useState(true);
+  const [showAuthorSearchComponent, setShowAuthorSearchComponent] = useState(false);
   const stateRef = useRef();
   stateRef.current = dataSource;
   const stateRefQuery = useRef();
@@ -94,6 +94,8 @@ export default function App() {
       >
       {!showAuthorSearchComponent ?
       <View key="book-search-component">
+          {/* as no index is specified in this component, by default all the queries made will be targetted to the
+          index provided in seachbase component */}
           <SearchBox
             id="book-search-component"
             dataField={[
@@ -110,18 +112,23 @@ export default function App() {
               setResetPagination(true);
             }}
             placeholder="Search books"
+            react={{
+              and: ['author-search-component']
+            }}
           />
       </View> :
       <View key="author-search-component">
+        {/* all queries triggereing from this component will be tragetted to the 'good-books-clone' index in the BE as it is specified
+        through the index prop  */}
         <SearchBox
           id="author-search-component"
           dataField={[
             {
-              field: 'original_title',
+              field: 'authors',
               weight: 1
             },
             {
-              field: 'original_title.search',
+              field: 'authors.search',
               weight: 3
             }
           ]}
@@ -129,7 +136,10 @@ export default function App() {
             setResetPagination(true);
           }}
           placeholder="Search authors"
-          // index
+          index="good-books-clone"
+          react={{
+            and: ['book-search-component']
+          }}
         />
       </View>}
       <SearchComponent
