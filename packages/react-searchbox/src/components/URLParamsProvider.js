@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchContext, checkValidValue, isEqual } from '../utils/helper';
-import { bool, stringRequired } from '../utils/types';
+import { stringRequired } from '../utils/types';
 
 class URLParamsProvider extends React.Component {
   static contextType = SearchContext;
@@ -11,21 +11,9 @@ class URLParamsProvider extends React.Component {
   }
 
   componentDidMount() {
-    const { id, triggerDefaultQueryOnInit } = this.props;
+    const { id } = this.props;
     if (window) {
       this.init();
-      // Set component value
-      if (this.params.has(id)) {
-        try {
-          this.componentInstance.setValue(JSON.parse(this.params.get(id)), {
-            triggerDefaultQuery: !!triggerDefaultQueryOnInit,
-            stateChanges: true
-          });
-        } catch (e) {
-          console.error(e);
-          // Do not set value if JSON parsing fails.
-        }
-      }
 
       window.addEventListener('popstate', () => {
         const options = {
@@ -126,12 +114,7 @@ class URLParamsProvider extends React.Component {
 }
 
 URLParamsProvider.propTypes = {
-  id: stringRequired,
-  triggerDefaultQueryOnInit: bool
-};
-
-URLParamsProvider.defaultProps = {
-  triggerDefaultQueryOnInit: true
+  id: stringRequired
 };
 
 export default URLParamsProvider;

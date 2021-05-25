@@ -123,6 +123,12 @@ export class SearchComponent extends Base {
   // query search ID
   _queryId: string;
 
+  // To define the distinct field
+  distinctField: string;
+
+  // To specify additional options to the distinctField prop
+  distinctFieldConfig: Object;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   beforeValueChange: (value: string) => Promise<any>;

@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/react-searchbox",
-    "version": "1.1.12",
+    "version": "1.2.0",
     "description": "React library kit based on ReactiveSearch's DataSearch",
     "license": "MIT",
     "repository": {
@@ -29,10 +29,12 @@
     "peerDependencies": {
         "prop-types": "^15.5.4",
         "react": "^15.0.0 || ^16.0.0",
-        "react-dom": "^15.0.0 || ^16.0.0"
+        "react-dom": "^15.0.0 || ^16.0.0",
+        "hotkeys-js":"^3.8.4"
+
     },
     "dependencies": {
-        "@appbaseio/searchbase": "1.1.12",
+        "@appbaseio/searchbase": "1.2.0",
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
         "downshift": "^3.3.1"

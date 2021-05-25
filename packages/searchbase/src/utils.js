@@ -446,6 +446,8 @@ export const searchBaseMappings = {
   suggestions: 'suggestions',
   queryId: 'queryId',
   recentSearches: 'recentSearches',
+  distinctField: 'distinctField',
+  distinctFieldConfig: 'distinctFieldConfig',
   // ---------------- Methods -----------------------
   onMicClick: 'handleMicClick',
   triggerDefaultQuery: 'triggerDefaultQuery',
