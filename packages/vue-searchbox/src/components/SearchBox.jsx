@@ -148,7 +148,8 @@ const SearchBox = {
 		if (!isEmpty(focusShortcuts)) {
 			this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
 			if (this.hotKeyCombinationsUsed) {
-				import('hotkeys-js')
+				const moduleName = 'hotkeys-js';
+				import(moduleName)
 					.then(module => {
 						this.hotkeys = module.default;
 					}) // eslint-disable-next-line no-unused-vars

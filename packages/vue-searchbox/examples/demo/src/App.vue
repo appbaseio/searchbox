@@ -51,8 +51,7 @@
           :enablePopularSuggestions="true"
           :enableRecentSearches="true"
           iconPosition="left"
-        >
-        </search-box>
+        />
         <div class="row">
           <div class="col">
             <search-component
