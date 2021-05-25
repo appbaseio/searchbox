@@ -39,8 +39,9 @@ export default () => (
       </h2>
 
       <div className="search-box-container">
-        {/* as no index is specified in this component, by default all the queries made will be targetted to the
-        index provided in seachbase component */}
+        <div className="search-component-container">
+          {/* as no index is specified in this component, by default all the queries made will be targetted to the
+          index provided in seachbase component */}
           <SearchBox
             id="book-search-component"
             dataField={[

@@ -58,8 +58,6 @@ const SearchComponent = {
 		render: VueTypes.func,
 		distinctField: VueTypes.string,
 		distinctFieldConfig: VueTypes.object,
-		// explicitly define the index to query from
-		_componentIndex: VueTypes.string,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true)
@@ -70,7 +68,6 @@ const SearchComponent = {
 		};
 	},
 	created() {
-		console.log('SC->', this.$props.id, 'index ==>> ', this.$props.index, 'componentIndex ==>> ', this.$props.componentIndex);
 		// clone the props for component it is needed because $options gets changed on time
 		let componentProps = this.$props;
 		if (this.$options && this.$options.propsData) {
@@ -144,7 +141,7 @@ const SearchComponent = {
 			}
 		}
 		const componentInstance = this.searchbase.register(id, {
-			// index,
+			index,
 			url,
 			credentials,
 			headers,
@@ -190,7 +187,6 @@ const SearchComponent = {
 			clearOnQueryChange,
 			distinctField,
 			distinctFieldConfig,
-			_componentIndex: index,
 			onValueChange: (prev, next) => {
 				this.$emit('value', {
 					prev,

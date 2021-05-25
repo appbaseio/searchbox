@@ -99,7 +99,7 @@ class SearchComponent extends React.Component {
     }
     // Register search base component
     context.register(id, {
-      // index,
+      index,
       url,
       credentials,
       headers,
@@ -150,8 +150,7 @@ class SearchComponent extends React.Component {
       preserveResults,
       clearOnQueryChange,
       distinctField,
-      distinctFieldConfig,
-      _componentIndex: index
+      distinctFieldConfig
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -265,8 +264,6 @@ SearchComponent.propTypes = {
   render: func,
   distinctField: string,
   distinctFieldConfig: object,
-  // explicitly define the index to query from
-  _componentIndex: string,
   // subscribe on changes,
   subscribeTo: PropTypes.arrayOf(string),
   triggerQueryOnInit: bool,

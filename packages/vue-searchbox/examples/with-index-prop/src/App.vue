@@ -26,8 +26,9 @@
     >
       <div>
         <div class="search-box-container">
-          <!-- as no index is specified in this component, by default all the queries made will be targetted to the
-          index provided in seachbase component -->
+          <div class="search-component-container">
+            <!-- as no index is specified in this component, by default all the queries made will be targetted to the
+            index provided in seachbase component -->
             <search-box
               id="book-search-component"
               :dataField="[
@@ -72,7 +73,9 @@
             id="result-component"
             :dataField="['original_title']"
             :size="5"
-            :react="{ and: ['book-search-component', 'author-search-component'] }"
+            :react="{
+              and: ['book-search-component', 'author-search-component']
+            }"
           >
             <div
               class="result-list-container"
@@ -161,7 +164,7 @@ export default {
     SearchBox,
     SearchComponent,
     Paginate
-  },
+  }
 };
 </script>
 
