@@ -76,7 +76,8 @@ class SearchBox extends React.Component {
     if (!isEmpty(focusShortcuts)) {
       this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
       if (this.hotKeyCombinationsUsed) {
-        import('hotkeys-js')
+        const moduleName = 'hotkeys-js';
+        import(moduleName)
           .then(module => {
             this.hotkeys = module.default;
           })
