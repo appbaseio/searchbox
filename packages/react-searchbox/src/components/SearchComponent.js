@@ -215,7 +215,7 @@ SearchComponent.defaultProps = {
 };
 
 SearchComponent.propTypes = {
-  // index: string,
+  index: string,
   url: string,
   credentials: string,
   headers: object,
