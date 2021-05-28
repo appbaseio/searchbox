@@ -19,7 +19,8 @@ import {
   Modal,
   Pressable,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import {
   appbaseConfig as appbaseConfigDef,
@@ -539,6 +540,13 @@ class SearchBox extends React.Component {
       recentSearchIcon = defaultRecentSearchIcon(theme),
       popularSuggestionIcon = defaultPopularSuggestionIcon(theme)
     } = this.props;
+    const { isPredictiveSuggestion } = item;
+    let normalText = '';
+    let highlightedText = '';
+    if (isPredictiveSuggestion) {
+      normalText = (/[^<]*/).exec(item.label)[0];
+      highlightedText = (/>[^<]*/).exec(item.label)[0].replaceAll('>', '');
+    }
     if (renderItem) {
       return renderItem(item, isRecentSearch);
     }
@@ -558,13 +566,20 @@ class SearchBox extends React.Component {
               ...defaultPopularSuggestionIcon(theme)
             })
           : null}
-        <Text
-          style={styles.itemText}
-          onPress={() => this.onSuggestionSelected(item)}
-          numberOfLines={1}
-        >
-          {item.label}
-        </Text>
+        {isPredictiveSuggestion ? (
+          <TouchableOpacity style={{display: 'flex', flexDirection: 'row', flex: 1}} onPress={() => this.onSuggestionSelected(item)}>
+            <Text>{normalText}</Text>
+            <Text style={{ fontWeight: 'bold' }} numberOfLines={1} >{highlightedText}</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text
+            style={styles.itemText}
+            onPress={() => this.onSuggestionSelected(item)}
+            numberOfLines={1}
+          >
+            {item.label}
+          </Text>
+        )}
         <View styles={styles.autoFillIcon}>
           {showAutoFill
             ? renderNode(Icon, autoFillIcon, {
@@ -677,7 +692,8 @@ SearchBox.propTypes = {
   error: any,
   loading: bool,
   results: object,
-  recentSearches: array
+  recentSearches: array,
+  enablePredictiveSuggestions: bool
 };
 
 SearchBox.defaultProps = {
@@ -694,7 +710,8 @@ SearchBox.defaultProps = {
   className: '',
   autoFocus: false,
   downShiftProps: {},
-  showDistinctSuggestions: true
+  showDistinctSuggestions: true,
+  enablePredictiveSuggestions: false
 };
 
 const styles = StyleSheet.create({
