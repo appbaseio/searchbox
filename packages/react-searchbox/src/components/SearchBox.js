@@ -223,7 +223,7 @@ class SearchBox extends React.Component {
 
   withTriggerQuery = cb => {
     if (cb) {
-      return e => cb(e, this.triggerQuery);
+      return e => cb(this.componentInstance, e);
     }
     return undefined;
   };
@@ -265,8 +265,15 @@ class SearchBox extends React.Component {
     ) {
       this.componentInstance.getRecentSearches();
     }
+    if (value) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: false,
+        triggerCustomQuery: false
+      });
+    }
     if (onChange) {
-      onChange(value, this.triggerQuery, rest.event);
+      this.setState({ isOpen });
+      onChange(value, this.componentInstance, rest.event);
     } else {
       this.setState({ isOpen });
       if (debounce > 0) {
@@ -355,7 +362,7 @@ class SearchBox extends React.Component {
       isOpen: true
     });
     if (this.props.onFocus) {
-      this.props.onFocus(event, this.triggerQuery);
+      this.props.onFocus(this.componentInstance, event);
     }
   };
 
@@ -485,7 +492,7 @@ class SearchBox extends React.Component {
     }
 
     if (this.props.onKeyDown) {
-      this.props.onKeyDown(event, this.triggerQuery);
+      this.props.onKeyDown(this.componentInstance, event);
     }
   };
 
