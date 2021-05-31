@@ -271,34 +271,31 @@ class SearchBox extends React.Component {
         triggerCustomQuery: false
       });
     }
+    this.setState({ isOpen });
     if (onChange) {
-      this.setState({ isOpen });
       onChange(value, this.componentInstance, rest.event);
-    } else {
-      this.setState({ isOpen });
-      if (debounce > 0) {
-        this.componentInstance.setValue(value, {
-          triggerDefaultQuery: false,
-          triggerCustomQuery: false,
-          stateChanges: true
-        });
-        if (autosuggest) {
-          debounceFunc(this.triggerDefaultQuery, debounce);
-        } else {
-          debounceFunc(this.triggerCustomQuery, debounce);
-        }
-        if (rest.triggerCustomQuery) {
-          this.triggerCustomQuery();
-        }
+    } else if (debounce > 0) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: false,
+        triggerCustomQuery: false,
+        stateChanges: true
+      });
+      if (autosuggest) {
+        debounceFunc(this.triggerDefaultQuery, debounce);
       } else {
-        this.componentInstance.setValue(value || '', {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: !!autosuggest,
-          stateChanges: true
-        });
-        if (!autosuggest) {
-          this.triggerCustomQuery();
-        }
+        debounceFunc(this.triggerCustomQuery, debounce);
+      }
+      if (rest.triggerCustomQuery) {
+        this.triggerCustomQuery();
+      }
+    } else {
+      this.componentInstance.setValue(value || '', {
+        triggerCustomQuery: rest.triggerCustomQuery,
+        triggerDefaultQuery: !!autosuggest,
+        stateChanges: true
+      });
+      if (!autosuggest) {
+        this.triggerCustomQuery();
       }
     }
   };
