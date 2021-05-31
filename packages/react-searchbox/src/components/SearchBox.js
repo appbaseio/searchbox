@@ -250,6 +250,14 @@ class SearchBox extends React.Component {
     this.setValue({ value: event.target.value, event });
   };
 
+  isControlled = () => {
+    const { value, onChange } = this.props;
+    if (value !== undefined && onChange) {
+      return true;
+    }
+    return false;
+  };
+
   setValue = ({ value, isOpen = true, ...rest }) => {
     const {
       onChange,
@@ -265,14 +273,12 @@ class SearchBox extends React.Component {
     ) {
       this.componentInstance.getRecentSearches();
     }
-    if (value) {
+    this.setState({ isOpen });
+    if (this.isControlled()) {
       this.componentInstance.setValue(value, {
         triggerDefaultQuery: false,
         triggerCustomQuery: false
       });
-    }
-    this.setState({ isOpen });
-    if (onChange) {
       onChange(value, this.componentInstance, rest.event);
     } else if (debounce > 0) {
       this.componentInstance.setValue(value, {
@@ -925,7 +931,8 @@ SearchBox.defaultProps = {
   addonBefore: undefined,
   addonAfter: undefined,
   expandSuggestionsContainer: true,
-  index: undefined
+  index: undefined,
+  value: undefined
 };
 
 export default props => (
