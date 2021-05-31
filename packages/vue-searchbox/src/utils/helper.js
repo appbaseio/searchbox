@@ -205,3 +205,13 @@ export function parseFocusShortcuts(focusShortcutsArray) {
 	});
 	return parsedFocusShortcutsArray;
 }
+
+// used to convert camelCase event names to kebab-case
+export function convertToKebabCase(eventName) {
+	const regex = /(\\G(?!^)|\b[a-zA-Z][a-z]*)([A-Z][a-z]*|\d+)/g;
+	const parsedEventNameArray =  regex.exec(eventName);
+	if (parsedEventNameArray) {
+		return `${parsedEventNameArray[1].toLowerCase()}-${parsedEventNameArray[2].toLowerCase()}`;
+	}
+	return null;
+}
