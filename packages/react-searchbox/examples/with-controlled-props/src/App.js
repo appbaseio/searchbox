@@ -70,7 +70,7 @@ export class App extends Component {
                   },
                   () => {
                     // To fetch suggestions
-                    searchComponent.triggerDefaultQuery();
+                    // searchComponent.triggerDefaultQuery();
                     // To update results
                     searchComponent.triggerCustomQuery();
                   }
