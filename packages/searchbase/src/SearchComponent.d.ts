@@ -107,6 +107,9 @@ export class SearchComponent extends Base {
   // aggregations
   aggregationData: Aggregations;
 
+  // recent searches
+  recentSearches: Array<{ label: string, value: string }>;
+
   /* ------ Private properties only for the internal use ----------- */
   _parent: SearchBase;
 
@@ -166,6 +169,7 @@ export class SearchComponent extends Base {
     transformResponse,
     beforeValueChange,
     enablePopularSuggestions,
+    maxPopularSuggestions,
     results,
     ...rsAPIConfig
   }: types.ComponentConfig);
@@ -255,6 +259,9 @@ export class SearchComponent extends Base {
   triggerCustomQuery(options?: types.Option): Promise<any>;
 
   getSuggestionsQuery(): Object;
+
+  // Method to get the recent searches
+  getRecentSearches(queryOptions?: types.RecentSearchOptions): Promise<any>;
 
   // use this methods to record a search click event
   recordClick(objects: Object, isSuggestionClick?: boolean): void;
