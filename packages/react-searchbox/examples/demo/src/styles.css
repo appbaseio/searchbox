@@ -199,7 +199,3 @@ li.page-item.active > a {
   color: white;
   border-color: #007bff;
 }
-
-.search-icon{
-  fill:red !important;
-}
