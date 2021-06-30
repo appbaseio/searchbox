@@ -240,7 +240,7 @@ const SearchComponent = {
 			});
 		}, subscribeTo);
 
-		if (value) {
+		if (value && this.componentInstance) {
 			this.componentInstance.triggerCustomQuery();
 		}
 	},
