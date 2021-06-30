@@ -39,7 +39,9 @@ import {
   isNumeric,
   parseFocusShortcuts,
   SearchContext,
-  isHotkeyCombinationUsed
+  isHotkeyCombinationUsed,
+  isModifierKeyUsed,
+  extractModifierKeysFromFocusShortcuts
 } from '../utils/helper';
 import Downshift from 'downshift';
 import Icons from './Icons';
@@ -74,24 +76,26 @@ class SearchBox extends React.Component {
 
     // dynamically import hotkey-js
     if (!isEmpty(focusShortcuts)) {
-      this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
-      if (this.hotKeyCombinationsUsed) {
-        import('hotkeys-js')
-          .then(module => {
-            this.hotkeys = module.default;
-          })
-          .catch(err =>
-            // eslint-disable-next-line no-console
-            console.warn(
-              'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
-            )
+      this.shouldUtilizeHotkeysLib =
+        isHotkeyCombinationUsed(focusShortcuts) ||
+        isModifierKeyUsed(focusShortcuts);
+      if (this.shouldUtilizeHotkeysLib) {
+        try {
+          // eslint-disable-next-line
+          this.hotkeys = require('hotkeys-js').default;
+        } catch (error) {
+          // eslint-disable-next-line
+          console.warn(
+            'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
           );
+        }
       }
     }
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
+    this.registerHotkeysListener();
     const { enableRecentSearches, autosuggest, aggregationField } = this.props;
     if (aggregationField) {
       // eslint-disable-next-line no-console
@@ -503,25 +507,17 @@ class SearchBox extends React.Component {
     this.searchInputField.current.focus();
   };
 
+  // used currently for handling manual focus-on-searchbox input instance
+  // when single keys like a-z, A-Z are used
   onKeyDown = event => {
-    if (isEmpty(this.props.focusShortcuts)) {
+    const { focusShortcuts } = this.props;
+    if (
+      isEmpty(focusShortcuts) ||
+      (this.shouldUtilizeHotkeysLib && typeof this.hotkeys == 'function')
+    ) {
       return;
     }
-
-    // for hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc, we use hotkeys-js
-    if (this.hotKeyCombinationsUsed) {
-      this.hotkeys(
-        parseFocusShortcuts(this.props.focusShortcuts).join(','),
-        /* eslint-disable no-shadow */
-        (event, handler) => {
-          // Prevent the default refresh event under WINDOWS system
-          event.preventDefault();
-          this.focusSearchBox(event);
-        }
-      );
-      return;
-    }
-    const shortcuts = this.props.focusShortcuts.map(key => {
+    const shortcuts = focusShortcuts.map(key => {
       if (typeof key === 'string') {
         return isNumeric(key)
           ? parseInt(key, 10)
@@ -540,9 +536,50 @@ class SearchBox extends React.Component {
       return;
     }
     this.focusSearchBox(event);
-
     event.stopPropagation();
     event.preventDefault();
+  };
+
+  // used for handling focus-on-searchbox input instance
+  // when modifier keys or hotkeys combinations are used
+  registerHotkeysListener = () => {
+    const { focusShortcuts } = this.props;
+    if (
+      !this.shouldUtilizeHotkeysLib ||
+      !(typeof this.hotkeys == 'function') ||
+      isEmpty(focusShortcuts)
+    ) {
+      return;
+    }
+
+    // for single press keys (a-z, A-Z) &, hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc
+    this.hotkeys(
+      parseFocusShortcuts(focusShortcuts).join(','),
+      /* eslint-disable no-shadow */
+      // eslint-disable-next-line no-unused-vars
+      (event, handler) => {
+        // Prevent the default refresh event under WINDOWS system
+        event.preventDefault();
+        this.focusSearchBox(event);
+      }
+    );
+
+    // if one of modifier keys are used, they are handled below
+    this.hotkeys('*', event => {
+      const modifierKeys = extractModifierKeysFromFocusShortcuts(
+        focusShortcuts
+      );
+
+      if (modifierKeys.length === 0) return;
+
+      for (let index = 0; index < modifierKeys.length; index += 1) {
+        const element = modifierKeys[index];
+        if (this.hotkeys[element]) {
+          this.focusSearchBox(event);
+          break;
+        }
+      }
+    });
   };
 
   renderSuggestionsDropdown = ({
@@ -887,6 +924,7 @@ SearchBox.propTypes = {
   expandSuggestionsContainer: bool,
   distinctField: string,
   distinctFieldConfig: object,
+  index: string,
 
   // internal props
   error: any,
@@ -918,7 +956,8 @@ SearchBox.defaultProps = {
   focusShortcuts: ['/'],
   addonBefore: undefined,
   addonAfter: undefined,
-  expandSuggestionsContainer: true
+  expandSuggestionsContainer: true,
+  index: undefined
 };
 
 export default props => (

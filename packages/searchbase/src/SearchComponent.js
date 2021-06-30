@@ -181,10 +181,10 @@ class SearchComponent extends Base {
   aggregationData: Aggregations;
 
   // recent searches
-  recentSearches: {
-    label: string,
-    value: string
-  };
+  recentSearches: Array<{
+    label: String,
+    value: String
+  }>;
 
   /* ------ Private properties only for the internal use ----------- */
   _parent: SearchBase;
@@ -493,7 +493,8 @@ class SearchComponent extends Base {
       pagination: this.pagination,
       queryString: this.queryString,
       distinctField: this.distinctField,
-      distinctFieldConfig: this.distinctFieldConfig
+      distinctFieldConfig: this.distinctFieldConfig,
+      index: this.index
     };
   }
 
@@ -1052,6 +1053,16 @@ class SearchComponent extends Base {
     }
   }
 
+  _getSearchIndex(isPopularSuggestionsAPI: boolean = false) {
+    let index = this.index;
+    if (isPopularSuggestionsAPI) {
+      index = '.suggestions';
+    } else if (this._parent && this._parent.index) {
+      index = this._parent.index;
+    }
+    return index;
+  }
+
   getRecentSearches = (
     queryOptions?: RecentSearchOptions = {
       size: 5,
@@ -1097,7 +1108,9 @@ class SearchComponent extends Base {
     }
     return new Promise((resolve, reject) => {
       fetch(
-        `${this.url}/_analytics/${this.index}/recent-searches?${queryString}`,
+        `${
+          this.url
+        }/_analytics/${this._getSearchIndex()}/recent-searches?${queryString}`,
         requestOptions
       )
         .then(res => {
@@ -1123,6 +1136,7 @@ class SearchComponent extends Base {
                 prev,
                 this.recentSearches
               );
+              resolve(this.recentSearches)
               // Populate the recent searches
             })
             .catch(e => {
@@ -1161,9 +1175,8 @@ class SearchComponent extends Base {
         .then(finalRequestOptions => {
           // set timestamp in request
           const timestamp = Date.now();
-
           let suffix = '_reactivesearch.v3';
-          const index = isPopularSuggestionsAPI ? '.suggestions' : this.index;
+          const index = this._getSearchIndex(isPopularSuggestionsAPI);
           return fetch(`${this.url}/${index}/${suffix}`, finalRequestOptions)
             .then(res => {
               const responseHeaders = res.headers;

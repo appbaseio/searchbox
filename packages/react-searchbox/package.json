@@ -30,11 +30,10 @@
         "prop-types": "^15.5.4",
         "react": "^15.0.0 || ^16.0.0",
         "react-dom": "^15.0.0 || ^16.0.0",
-        "hotkeys-js":"^3.8.4"
-
+        "hotkeys-js": "^3.8.7"
     },
     "dependencies": {
-        "@appbaseio/searchbase": "1.2.0",
+        "@appbaseio/searchbase": "1.2.1",
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
         "downshift": "^3.3.1"

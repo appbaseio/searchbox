@@ -128,7 +128,7 @@ class SearchComponent extends React.Component {
       preserveResults,
       maxPopularSuggestions,
       distinctField,
-      distinctFieldConfig,
+      distinctFieldConfig
     });
   }
 

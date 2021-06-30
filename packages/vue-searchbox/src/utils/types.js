@@ -7,12 +7,12 @@ const DataField = VueTypes.shape({
 	weight: VueTypes.number
 });
 
-const reactKeyType =  VueTypes.oneOfType([
+const reactKeyType = VueTypes.oneOfType([
 	VueTypes.string,
 	VueTypes.arrayOf(VueTypes.string),
 	VueTypes.object,
-	VueTypes.arrayOf( VueTypes.object)]
-)
+	VueTypes.arrayOf(VueTypes.object)
+]);
 
 // eslint-disable-next-line
 export const types = {
@@ -81,8 +81,12 @@ export const types = {
 	reactType: VueTypes.shape({
 		and: reactKeyType,
 		or: reactKeyType,
-		not: reactKeyType,
+		not: reactKeyType
 	}),
 	sortType: VueTypes.oneOf(['asc', 'desc', 'count']),
-	sourceFields: VueTypes.arrayOf(VueTypes.string)
+	sourceFields: VueTypes.arrayOf(VueTypes.string),
+	focusShortcuts: VueTypes.arrayOf(
+		VueTypes.oneOfType([VueTypes.string, VueTypes.number])
+	),
+	expandSuggestionsContainer: VueTypes.bool.def(true)
 };
