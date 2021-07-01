@@ -10,7 +10,6 @@
     "dependencies": {
         "@appbaseio/vue-searchbox": "1.2.0",
         "core-js": "^2.6.5",
-        "hotkeys-js": "^3.8.7",
         "vue": "^2.6.10",
         "vuejs-paginate": "^2.1.0"
     },
