@@ -6,9 +6,12 @@ const right = css`
 `;
 
 const MicIcon = styled('div')`
-  height: 40px;
+
   position: absolute;
-  top: 13px;
+  display:flex;
+align-items:center;
+  top: 50%;
+  transform:translateY(-50%);
   cursor: pointer;
   right: 15px;
   ${({ iconPosition, showClear }) => {

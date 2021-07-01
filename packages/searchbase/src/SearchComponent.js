@@ -181,10 +181,10 @@ class SearchComponent extends Base {
   aggregationData: Aggregations;
 
   // recent searches
-  recentSearches: {
-    label: string,
-    value: string
-  };
+  recentSearches: Array<{
+    label: String,
+    value: String
+  }>;
 
   /* ------ Private properties only for the internal use ----------- */
   _parent: SearchBase;
@@ -1136,6 +1136,7 @@ class SearchComponent extends Base {
                 prev,
                 this.recentSearches
               );
+              resolve(this.recentSearches)
               // Populate the recent searches
             })
             .catch(e => {
