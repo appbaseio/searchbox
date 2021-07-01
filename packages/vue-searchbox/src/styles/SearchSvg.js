@@ -2,9 +2,10 @@ export default () => (
 	<svg
 		alt="Search"
 		class="search-icon"
-		height="14"
+		height="12"
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox="0 0 15 15"
+		style={{transform:'scale(1.25)', position:'relative'}}
 	>
 		<title>Search</title>
 		<path

@@ -14,27 +14,18 @@ const right = css`
 const clear = css`
   padding-right: 32px;
   right: 0;
-  top: 12px;
 `;
 
-const topClear = css`
-  top: 11px;
-`;
-
-const topSearch = css`
-  top: 13px;
-`;
 
 const paddingRight = css`
   padding-right: 10px;
 `;
 
 const InputIcon = styled('div')`
-  position: absolute;
-  ${({ isClearIcon }) => {
-		if (isClearIcon) return topClear;
-		return topSearch;
-	}}
+  position: absolute;display:flex;
+align-items:center;
+  top: 50%;
+  transform:translateY(-50%);
   cursor: pointer;
   ${({ iconPosition }) => {
 		if (iconPosition === 'left') {
