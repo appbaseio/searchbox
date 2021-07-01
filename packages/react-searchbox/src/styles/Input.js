@@ -52,7 +52,7 @@ const Input = styled.input`
     props.showIcon &&
     props.iconPosition === 'right' &&
     css`
-      padding-right: 66px;
+      padding-right: 61px;
     `};
   ${props =>
     // for voice search icon with clear icon
@@ -67,7 +67,7 @@ const Input = styled.input`
     props.showIcon &&
     props.iconPosition === 'right' &&
     css`
-      padding-right: 66px;
+      padding-right: 62px;
     `};
   ${props =>
     // for clear icon with search icon and voice search
