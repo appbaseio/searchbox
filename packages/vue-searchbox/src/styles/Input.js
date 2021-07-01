@@ -44,7 +44,7 @@ const Input = styled('input')`
 	// for voice search icon
 		props.showVoiceSearch
     && css`
-      padding-right: 32px;
+      padding-right: 36px;
     `};
 
   ${props =>
@@ -66,8 +66,8 @@ const Input = styled('input')`
     `};
   ${props =>
 	// for voice search icon with clear icon
-		props.showVoiceSearch
-    && props.showIcon
+		props.showClear
+    && props.showVoiceSearch
     && css`
       padding-right: 66px;
     `};
