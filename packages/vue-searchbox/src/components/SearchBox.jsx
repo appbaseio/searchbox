@@ -143,12 +143,12 @@ const SearchBox = {
         = isHotkeyCombinationUsed(focusShortcuts)
         || isModifierKeyUsed(focusShortcuts);
 			if (this.shouldUtilizeHotkeysLib) {
-				 try {
+				try {
 					// eslint-disable-next-line
-           this.hotkeys = require('hotkeys-js').default;
+          this.hotkeys = require('hotkeys-js').default;
 				} catch (error) {
 					// eslint-disable-next-line
-           console.warn(
+          console.warn(
 						'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
 					);
 				}
@@ -572,7 +572,7 @@ const SearchBox = {
 			innerClass,
 			showIcon,
 			showClear,
-	  		showVoiceSearch,
+			showVoiceSearch,
 			iconPosition,
 			title,
 			defaultSuggestions,

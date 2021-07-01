@@ -619,10 +619,12 @@ class SearchBox extends React.Component {
         {this.hasCustomRenderer && (
           <div>
             {this.getComponent({
-              getInputProps,
-              getItemProps,
-              isOpen,
-              highlightedIndex,
+              downshiftProps: {
+                getInputProps,
+                getItemProps,
+                isOpen,
+                highlightedIndex
+              },
               ...rest
             })}
             {this.renderLoader()}
