@@ -75,6 +75,8 @@
    </SearchBase>
 ```
 
+> Note: Please note that the `SearchBox` component doesn't work with React Native Web because it uses the `Modal` component to display the suggestions that needs some extra plugins.
+
 [⬆ Back to Top](#toc)
 
 ## 4. Installation
