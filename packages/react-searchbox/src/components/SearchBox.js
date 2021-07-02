@@ -226,7 +226,7 @@ class SearchBox extends React.Component {
 
   withTriggerQuery = cb => {
     if (cb) {
-      return e => cb(e, this.triggerQuery);
+      return e => cb(this.componentInstance, e);
     }
     return undefined;
   };
@@ -253,6 +253,14 @@ class SearchBox extends React.Component {
     this.setValue({ value: event.target.value, event });
   };
 
+  isControlled = () => {
+    const { value, onChange } = this.props;
+    if (value !== undefined && onChange) {
+      return true;
+    }
+    return false;
+  };
+
   setValue = ({ value, isOpen = true, ...rest }) => {
     const {
       onChange,
@@ -268,33 +276,35 @@ class SearchBox extends React.Component {
     ) {
       this.componentInstance.getRecentSearches();
     }
-    if (onChange) {
-      onChange(value, this.triggerQuery, rest.event);
-    } else {
-      this.setState({ isOpen });
-      if (debounce > 0) {
-        this.componentInstance.setValue(value, {
-          triggerDefaultQuery: false,
-          triggerCustomQuery: false,
-          stateChanges: true
-        });
-        if (autosuggest) {
-          debounceFunc(this.triggerDefaultQuery, debounce);
-        } else {
-          debounceFunc(this.triggerCustomQuery, debounce);
-        }
-        if (rest.triggerCustomQuery) {
-          this.triggerCustomQuery();
-        }
+    this.setState({ isOpen });
+    if (this.isControlled()) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: false,
+        triggerCustomQuery: false
+      });
+      onChange(value, this.componentInstance, rest.event);
+    } else if (debounce > 0) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: false,
+        triggerCustomQuery: false,
+        stateChanges: true
+      });
+      if (autosuggest) {
+        debounceFunc(this.triggerDefaultQuery, debounce);
       } else {
-        this.componentInstance.setValue(value || '', {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: !!autosuggest,
-          stateChanges: true
-        });
-        if (!autosuggest) {
-          this.triggerCustomQuery();
-        }
+        debounceFunc(this.triggerCustomQuery, debounce);
+      }
+      if (rest.triggerCustomQuery) {
+        this.triggerCustomQuery();
+      }
+    } else {
+      this.componentInstance.setValue(value || '', {
+        triggerCustomQuery: rest.triggerCustomQuery,
+        triggerDefaultQuery: !!autosuggest,
+        stateChanges: true
+      });
+      if (!autosuggest) {
+        this.triggerCustomQuery();
       }
     }
   };
@@ -358,7 +368,7 @@ class SearchBox extends React.Component {
       isOpen: true
     });
     if (this.props.onFocus) {
-      this.props.onFocus(event, this.triggerQuery);
+      this.props.onFocus(this.componentInstance, event);
     }
   };
 
@@ -488,7 +498,7 @@ class SearchBox extends React.Component {
     }
 
     if (this.props.onKeyDown) {
-      this.props.onKeyDown(event, this.triggerQuery);
+      this.props.onKeyDown(this.componentInstance, event);
     }
   };
 
@@ -962,7 +972,8 @@ SearchBox.defaultProps = {
   addonBefore: undefined,
   addonAfter: undefined,
   expandSuggestionsContainer: true,
-  index: undefined
+  index: undefined,
+  value: undefined
 };
 
 export default props => (
