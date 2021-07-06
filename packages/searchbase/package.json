@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/searchbase",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "private": false,
   "description": "Headless core + common utilities for search",
   "main": "dist/@appbaseio/searchbase.cjs.js",
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/appbaseio/searchbase.git"
   },
-  "author": "kuldepsaxena155@gmail.com",
+  "author": "kuldepsaxena155@gmailcom",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/appbaseio/searchbase/issues"
