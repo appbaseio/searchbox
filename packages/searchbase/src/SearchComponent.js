@@ -1048,7 +1048,8 @@ class SearchComponent extends Base {
             next: nextValue
           }
         },
-        key
+        key,
+        this
       );
     }
   }
@@ -1136,7 +1137,7 @@ class SearchComponent extends Base {
                 prev,
                 this.recentSearches
               );
-              resolve(this.recentSearches)
+              resolve(this.recentSearches);
               // Populate the recent searches
             })
             .catch(e => {

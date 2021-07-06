@@ -283,10 +283,28 @@
     "@appbaseio/searchbase" "1.1.0"
     color "^3.1.3"
 
+"@appbaseio/react-searchbox@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.2.0.tgz#4cc49c3ed53a7c61b3b60d03c60c7ad53aa263e5"
+  integrity sha512-fqGGe15+fFV+OeyzQdhdZScG13i8GgOPrIjYygH8WKVDl+fBUs2uPn/vcbgmX+MOUsj98ysh9xwz7pZhHzZo6Q==
+  dependencies:
+    "@appbaseio/searchbase" "1.2.0"
+    "@emotion/core" "^10.0.17"
+    "@emotion/styled" "^10.0.17"
+    downshift "^3.3.1"
+
 "@appbaseio/searchbase@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.1.0.tgz#92df1bbd38d4864fead30b5a5d19c49b5fdf2ef1"
   integrity sha512-Qsz4Da8ZCBEzHrt/XXTuAGQshIjGESOIIWnNuVqf7qvgglQuD8TZ+Ss07kFPUX/yohRZP5mBxvRulLGPxTfh4w==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
+    cross-fetch "^3.0.4"
+
+"@appbaseio/searchbase@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.2.0.tgz#1cc2b02acd1ebacf07429a208470fb432b84e7c5"
+  integrity sha512-gB25qvde6cmGq1gJ+GfNm4Wwfe3GL4UlFECezFptCQG92G5Ad48Q9vY7QQwkNSBReilaevW0TsspXBgcp29ZSA==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
