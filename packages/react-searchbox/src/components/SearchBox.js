@@ -338,6 +338,11 @@ class SearchBox extends React.Component {
 
   onSuggestionSelected = suggestion => {
     if (!suggestion) {
+      this.componentInstance.setValue('', {
+        triggerDefaultQuery: true,
+        triggerCustomQuery: true,
+        stateChanges: true
+      });
       return;
     }
     this.setValue({
