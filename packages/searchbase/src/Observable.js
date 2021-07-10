@@ -29,7 +29,11 @@ export default class Observable {
   }
 
   next(o: any, property: string, thisObj: any) {
-    var scope = thisObj || window;
+    var scope = thisObj;
+    if (!scope && window) {
+      scope = window;
+    }
+
     this.observers.forEach(item => {
       // filter by subscribed properties
       if (item.properties === undefined) {

@@ -92,6 +92,7 @@ class SearchComponent extends React.Component {
         try {
           value = JSON.parse(params.get(id));
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.error(e);
           // Do not set value if JSON parsing fails.
         }

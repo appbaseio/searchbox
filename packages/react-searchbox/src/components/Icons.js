@@ -1,6 +1,7 @@
 import React from 'react';
 import CancelSvg from '../styles/CancelSvg';
-import InputIcon from '../styles/InputIcon';
+import IconGroup from '../styles/IconGroup';
+import IconWrapper from '../styles/IconWrapper';
 import SearchSvg from '../styles/SearchSvg';
 import { getClassName } from '../utils/helper';
 import Mic from './Mic';
@@ -32,36 +33,35 @@ const Icons = props => {
 
   return (
     <div>
-      {currentValue && showClear && (
-        <InputIcon
-          onClick={clearValue}
-          iconPosition="right"
-          clearIcon={iconPosition === 'right'}
-          showIcon={showIcon}
-          isClearIcon
-        >
-          {clearIcon || <CancelSvg />}
-        </InputIcon>
-      )}
-      {enableVoiceSearch && (
-        <Mic
-          getInstance={getMicInstance}
-          render={renderMic}
-          iconPosition={iconPosition}
-          className={getClassName(innerClass, 'mic') || null}
-          onClick={onMicClick}
-          status={micStatus}
-          applyClearStyle={!!currentValue && showClear}
-          showIcon={showIcon}
-        />
-      )}
-      <InputIcon
-        showIcon={showIcon}
-        onClick={handleSearchIconClick}
-        iconPosition={iconPosition}
-      >
-        <SearchIcon showIcon={showIcon} icon={icon} />
-      </InputIcon>
+      <IconGroup groupPosition="right" positionType="absolute">
+        {currentValue && showClear && (
+          <IconWrapper onClick={clearValue}>
+            {clearIcon || <CancelSvg />}
+          </IconWrapper>
+        )}
+        {enableVoiceSearch && (
+          <Mic
+            getInstance={getMicInstance}
+            render={renderMic}
+            className={getClassName(innerClass, 'mic') || null}
+            onClick={onMicClick}
+            status={micStatus}
+          />
+        )}
+        {iconPosition === 'right' && (
+          <IconWrapper onClick={handleSearchIconClick}>
+            <SearchIcon showIcon={showIcon} icon={icon} />
+          </IconWrapper>
+        )}
+      </IconGroup>
+
+      <IconGroup groupPosition="left" positionType="absolute">
+        {iconPosition === 'left' && (
+          <IconWrapper onClick={handleSearchIconClick}>
+            <SearchIcon showIcon={showIcon} icon={icon} />
+          </IconWrapper>
+        )}
+      </IconGroup>
     </div>
   );
 };

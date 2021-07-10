@@ -17,7 +17,9 @@ import {
 	isEmpty,
 	isHotkeyCombinationUsed,
 	parseFocusShortcuts,
-	isNumeric
+	isNumeric,
+	isModifierKeyUsed,
+	extractModifierKeysFromFocusShortcuts
 } from '../utils/helper';
 import {
 	suggestions as suggestionsStyle,
@@ -130,12 +132,32 @@ const SearchBox = {
 		return {
 			...this.state,
 			hotkeys: undefined,
-			hotKeyCombinationsUsed: false
+			shouldUtilizeHotkeysLib: false
 		};
+	},
+	beforeMount() {
+		const { focusShortcuts } = this.$props;
+		// dynamically import hotkey-js
+		if (!isEmpty(focusShortcuts)) {
+			this.shouldUtilizeHotkeysLib
+        = isHotkeyCombinationUsed(focusShortcuts)
+        || isModifierKeyUsed(focusShortcuts);
+			if (this.shouldUtilizeHotkeysLib) {
+				try {
+					// eslint-disable-next-line
+          this.hotkeys = require('hotkeys-js').default;
+				} catch (error) {
+					// eslint-disable-next-line
+          console.warn(
+						'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
+					);
+				}
+			}
+		}
 	},
 	mounted() {
 		document.addEventListener('keydown', this.onKeyDown);
-		const { focusShortcuts } = this.$props;
+		this.registerHotkeysListener();
 		if (this.aggregationField) {
 			console.warn(
 				'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
@@ -144,23 +166,6 @@ const SearchBox = {
 		if (this.enableRecentSearches && this.autosuggest) {
 			const { getRecentSearches } = this.getComponentInstance();
 			getRecentSearches();
-		}
-		// dynamically import hotkey-js
-		if (!isEmpty(focusShortcuts)) {
-			this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
-			if (this.hotKeyCombinationsUsed) {
-				const moduleName = 'hotkeys-js';
-				import(moduleName)
-					.then(module => {
-						this.hotkeys = module.default;
-					}) // eslint-disable-next-line no-unused-vars
-					.catch(err =>
-					// eslint-disable-next-line no-console
-						console.warn(
-							'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
-						)
-					);
-			}
 		}
 	},
 	destroyed() {
@@ -287,7 +292,7 @@ const SearchBox = {
 					debounceFunc(this.triggerCustomQuery, debounce);
 				}
 			} else {
-				this.triggerSuggestionsQuery(value, rest.triggerCustomQuery);
+				this.triggerSuggestionsQuery(value, rest?.triggerCustomQuery);
 				if (!this.autosuggest) {
 					this.triggerCustomQuery();
 				}
@@ -492,23 +497,13 @@ const SearchBox = {
 		},
 		onKeyDown(event) {
 			const { focusShortcuts = ['/'] } = this.$props;
-			if (isEmpty(focusShortcuts)) {
+			if (
+				isEmpty(focusShortcuts)
+        || (this.shouldUtilizeHotkeysLib && typeof this.hotkeys === 'function')
+			) {
 				return;
 			}
 
-			// for hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc, we use hotkeys-js
-			if (this.hotKeyCombinationsUsed) {
-				this.hotkeys(
-					parseFocusShortcuts(focusShortcuts).join(','), // eslint-disable-next-line no-unused-vars
-					/* eslint-disable no-shadow */ (event, handler) => {
-						// Prevent the default refresh event under WINDOWS system
-						event.preventDefault();
-
-						this.focusSearchBox(event);
-					}
-				);
-				return;
-			}
 			const shortcuts = focusShortcuts.map(key => {
 				if (typeof key === 'string') {
 					return isNumeric(key)
@@ -528,9 +523,47 @@ const SearchBox = {
 				return;
 			}
 			this.focusSearchBox(event);
-
 			event.stopPropagation();
 			event.preventDefault();
+		},
+		registerHotkeysListener() {
+			const { focusShortcuts } = this.$props;
+			if (
+				!this.shouldUtilizeHotkeysLib
+        || !(typeof this.hotkeys === 'function')
+        || isEmpty(focusShortcuts)
+			) {
+				return;
+			}
+
+			// for single press keys (a-z, A-Z) &, hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc
+			this.hotkeys(
+				parseFocusShortcuts(focusShortcuts).join(','),
+				/* eslint-disable no-shadow */
+				// eslint-disable-next-line no-unused-vars
+				(event, handler) => {
+					// Prevent the default refresh event under WINDOWS system
+					event.preventDefault();
+					this.focusSearchBox(event);
+				}
+			);
+
+			// if one of modifier keys are used, they are handled below
+			this.hotkeys('*', event => {
+				const modifierKeys = extractModifierKeysFromFocusShortcuts(
+					focusShortcuts
+				);
+
+				if (modifierKeys.length === 0) return;
+
+				for (let index = 0; index < modifierKeys.length; index += 1) {
+					const element = modifierKeys[index];
+					if (this.hotkeys[element]) {
+						this.focusSearchBox(event);
+						break;
+					}
+				}
+			});
 		}
 	},
 	render() {
@@ -539,6 +572,7 @@ const SearchBox = {
 			innerClass,
 			showIcon,
 			showClear,
+			showVoiceSearch,
 			iconPosition,
 			title,
 			defaultSuggestions,
@@ -735,6 +769,7 @@ const SearchBox = {
 													ref="searchInputField"
 													showIcon={showIcon}
 													showClear={showClear}
+													showVoiceSearch={showVoiceSearch}
 													iconPosition={iconPosition}
 													class={getClassName(innerClass, 'input')}
 													placeholder={placeholder}
@@ -814,6 +849,7 @@ const SearchBox = {
 									iconPosition={iconPosition}
 									showIcon={showIcon}
 									showClear={showClear}
+									showVoiceSearch={showVoiceSearch}
 									innerRef={innerRef}
 								/>
 								{this.renderIcons()}
