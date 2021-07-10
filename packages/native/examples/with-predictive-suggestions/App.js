@@ -105,9 +105,9 @@ export default function App() {
           }}
           renderNoSuggestion={() => <Text>No suggestions found</Text>}
           enablePredictiveSuggestions
-          // autosuggest
-          // enableRecentSearches
-          // enablePopularSuggestions
+          autosuggest
+          enableRecentSearches
+          enablePopularSuggestions
         />
         <SearchComponent
           id="result-component"

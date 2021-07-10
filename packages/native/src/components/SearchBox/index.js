@@ -62,7 +62,8 @@ const defaultRecentSearchIcon = theme => ({
 const defaultPopularSuggestionIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'trending-up'
+  name: 'trending-up',
+  style: {marginRight: 10}
 });
 
 const defaultAutoFillIcon = theme => ({
@@ -569,7 +570,7 @@ class SearchBox extends React.Component {
         {isPredictiveSuggestion ? (
           <TouchableOpacity style={{display: 'flex', flexDirection: 'row', flex: 1}} onPress={() => this.onSuggestionSelected(item)}>
             <Text>{normalText}</Text>
-            <Text style={{ fontWeight: 'bold' }} numberOfLines={1} >{highlightedText}</Text>
+            <Text style={{ fontWeight: '700' }} numberOfLines={1}>{highlightedText}</Text>
           </TouchableOpacity>
         ) : (
           <Text
