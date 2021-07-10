@@ -205,7 +205,6 @@ export function parseFocusShortcuts(focusShortcutsArray) {
 	});
 	return parsedFocusShortcutsArray;
 }
-
 // used to convert camelCase event names to kebab-case
 export function convertToKebabCase(eventName) {
 	const regex = /(\\G(?!^)|\b[a-zA-Z][a-z]*)([A-Z][a-z]*|\d+)/g;
@@ -214,4 +213,25 @@ export function convertToKebabCase(eventName) {
 		return `${parsedEventNameArray[1].toLowerCase()}-${parsedEventNameArray[2].toLowerCase()}`;
 	}
 	return null;
+}
+
+export const MODIFIER_KEYS = [
+	'shift',
+	'ctrl',
+	'alt',
+	'control',
+	'option',
+	'cmd',
+	'command'
+];
+
+// filter out modifierkeys such as ctrl, alt, command, shift from focusShortcuts prop
+export function extractModifierKeysFromFocusShortcuts(focusShortcutsArray) {
+	return focusShortcutsArray.filter(shortcutKey =>
+		MODIFIER_KEYS.includes(shortcutKey)
+	);
+}
+
+export function isModifierKeyUsed(focusShortcutsArray) {
+	return !!extractModifierKeysFromFocusShortcuts(focusShortcutsArray).length;
 }
