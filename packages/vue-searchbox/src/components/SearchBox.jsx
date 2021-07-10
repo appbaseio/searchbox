@@ -18,7 +18,6 @@ import {
 	isHotkeyCombinationUsed,
 	parseFocusShortcuts,
 	isNumeric,
-	convertToKebabCase,
 	isModifierKeyUsed,
 	extractModifierKeysFromFocusShortcuts
 } from '../utils/helper';
@@ -542,10 +541,6 @@ const SearchBox = {
 			event.preventDefault();
 		},
 		withTriggerQuery(eventName, event) {
-			const eventNameInKebabCase = convertToKebabCase(eventName);
-			if (eventNameInKebabCase) {
-				this.$emit(eventNameInKebabCase, this.getComponentInstance(), event);
-			}
 			this.$emit(eventName, this.getComponentInstance(), event);
 		},
 		registerHotkeysListener() {
