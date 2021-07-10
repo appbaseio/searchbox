@@ -517,7 +517,6 @@ const SearchBox = {
 			) {
 				return;
 			}
-
 			const shortcuts = focusShortcuts.map(key => {
 				if (typeof key === 'string') {
 					return isNumeric(key)
