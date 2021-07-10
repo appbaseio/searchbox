@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import {
   SearchBase,
-  SearchComponent,
-  SearchBox
+  SearchComponent
 } from '@appbaseio/react-native-searchbox';
 import { AntDesign } from '@expo/vector-icons';
 import {
@@ -16,6 +15,7 @@ import {
   Image,
   SafeAreaView
 } from 'react-native';
+import Search from './Search';
 
 const renderResultItem = ({ item }) => {
   return (
@@ -59,7 +59,6 @@ const renderItemSeparator = () => {
 export default function App() {
   const [dataSource, setDataSource] = useState([]);
   const [resetPagination, setResetPagination] = useState(false);
-  const [text, setText] = useState('');
   const stateRef = useRef();
   stateRef.current = dataSource;
   const stateRefQuery = useRef();
@@ -89,37 +88,8 @@ export default function App() {
           }
         }}
       >
-        <SearchBox
-          id="search-component"
-          dataField={[
-            {
-              field: 'original_title',
-              weight: 1
-            },
-            {
-              field: 'original_title.search',
-              weight: 3
-            }
-          ]}
-          onValueSelected={value => {
-            setResetPagination(true);
-          }}
-          value={text}
-          onChange={(value, searchComponent) => {
-            // console.log('onChange called ==>> ', value, searchComponent);
-            setText(value);
-            searchComponent.triggerDefaultQuery();
-            // searchComponent.triggerCustomQuery();
-          }}
-          // onBlur={(searchComponent, e) => {
-          //   console.log('onBlur EXAMPLE ==>> ', searchComponent, e);
-          // }}
-          // onKeyPress={(searchComponent, e) => {
-          //   console.log('onKeyPress EXAMPLE ==>> ', searchComponent, e);
-          // }}
-          // onFocus={(searchComponent, e) => {
-          //   console.log('onFocus EXAMPLE ==>> ', searchComponent, e);
-          // }}
+        <Search
+          setResetPagination={setResetPagination}
         />
         <SearchComponent
           id="result-component"
