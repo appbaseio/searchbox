@@ -39,7 +39,9 @@ import {
   isNumeric,
   parseFocusShortcuts,
   SearchContext,
-  isHotkeyCombinationUsed
+  isHotkeyCombinationUsed,
+  isModifierKeyUsed,
+  extractModifierKeysFromFocusShortcuts
 } from '../utils/helper';
 import Downshift from 'downshift';
 import Icons from './Icons';
@@ -74,25 +76,26 @@ class SearchBox extends React.Component {
 
     // dynamically import hotkey-js
     if (!isEmpty(focusShortcuts)) {
-      this.hotKeyCombinationsUsed = isHotkeyCombinationUsed(focusShortcuts);
-      if (this.hotKeyCombinationsUsed) {
-        const moduleName = 'hotkeys-js';
-        import(moduleName)
-          .then(module => {
-            this.hotkeys = module.default;
-          })
-          .catch(err =>
-            // eslint-disable-next-line no-console
-            console.warn(
-              'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
-            )
+      this.shouldUtilizeHotkeysLib =
+        isHotkeyCombinationUsed(focusShortcuts) ||
+        isModifierKeyUsed(focusShortcuts);
+      if (this.shouldUtilizeHotkeysLib) {
+        try {
+          // eslint-disable-next-line
+          this.hotkeys = require('hotkeys-js').default;
+        } catch (error) {
+          // eslint-disable-next-line
+          console.warn(
+            'Warning(SearchBox): The `hotkeys-js` library seems to be missing, it is required when using key combinations( eg: `ctrl+a`) in focusShortcuts prop.'
           );
+        }
       }
     }
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
+    this.registerHotkeysListener();
     const { enableRecentSearches, autosuggest, aggregationField } = this.props;
     if (aggregationField) {
       // eslint-disable-next-line no-console
@@ -223,7 +226,7 @@ class SearchBox extends React.Component {
 
   withTriggerQuery = cb => {
     if (cb) {
-      return e => cb(e, this.triggerQuery);
+      return e => cb(this.componentInstance, e);
     }
     return undefined;
   };
@@ -250,6 +253,14 @@ class SearchBox extends React.Component {
     this.setValue({ value: event.target.value, event });
   };
 
+  isControlled = () => {
+    const { value, onChange } = this.props;
+    if (value !== undefined && onChange) {
+      return true;
+    }
+    return false;
+  };
+
   setValue = ({ value, isOpen = true, ...rest }) => {
     const {
       onChange,
@@ -265,33 +276,35 @@ class SearchBox extends React.Component {
     ) {
       this.componentInstance.getRecentSearches();
     }
-    if (onChange) {
-      onChange(value, this.triggerQuery, rest.event);
-    } else {
-      this.setState({ isOpen });
-      if (debounce > 0) {
-        this.componentInstance.setValue(value, {
-          triggerDefaultQuery: false,
-          triggerCustomQuery: false,
-          stateChanges: true
-        });
-        if (autosuggest) {
-          debounceFunc(this.triggerDefaultQuery, debounce);
-        } else {
-          debounceFunc(this.triggerCustomQuery, debounce);
-        }
-        if (rest.triggerCustomQuery) {
-          this.triggerCustomQuery();
-        }
+    this.setState({ isOpen });
+    if (this.isControlled()) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: false,
+        triggerCustomQuery: false
+      });
+      onChange(value, this.componentInstance, rest.event);
+    } else if (debounce > 0) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: false,
+        triggerCustomQuery: false,
+        stateChanges: true
+      });
+      if (autosuggest) {
+        debounceFunc(this.triggerDefaultQuery, debounce);
       } else {
-        this.componentInstance.setValue(value || '', {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: !!autosuggest,
-          stateChanges: true
-        });
-        if (!autosuggest) {
-          this.triggerCustomQuery();
-        }
+        debounceFunc(this.triggerCustomQuery, debounce);
+      }
+      if (rest.triggerCustomQuery) {
+        this.triggerCustomQuery();
+      }
+    } else {
+      this.componentInstance.setValue(value || '', {
+        triggerCustomQuery: rest.triggerCustomQuery,
+        triggerDefaultQuery: !!autosuggest,
+        stateChanges: true
+      });
+      if (!autosuggest) {
+        this.triggerCustomQuery();
       }
     }
   };
@@ -324,13 +337,21 @@ class SearchBox extends React.Component {
   };
 
   onSuggestionSelected = suggestion => {
+    if (!suggestion) {
+      this.componentInstance.setValue('', {
+        triggerDefaultQuery: true,
+        triggerCustomQuery: true,
+        stateChanges: true
+      });
+      return;
+    }
     this.setValue({
-      value: suggestion && suggestion.value,
+      value: suggestion.value,
       isOpen: false,
       triggerCustomQuery: true
     });
     this.triggerClickAnalytics(
-      suggestion && suggestion._click_id,
+      suggestion._click_id,
       true,
       suggestion.source && suggestion.source._id
     );
@@ -355,7 +376,7 @@ class SearchBox extends React.Component {
       isOpen: true
     });
     if (this.props.onFocus) {
-      this.props.onFocus(event, this.triggerQuery);
+      this.props.onFocus(this.componentInstance, event);
     }
   };
 
@@ -485,7 +506,7 @@ class SearchBox extends React.Component {
     }
 
     if (this.props.onKeyDown) {
-      this.props.onKeyDown(event, this.triggerQuery);
+      this.props.onKeyDown(this.componentInstance, event);
     }
   };
 
@@ -504,25 +525,17 @@ class SearchBox extends React.Component {
     this.searchInputField.current.focus();
   };
 
+  // used currently for handling manual focus-on-searchbox input instance
+  // when single keys like a-z, A-Z are used
   onKeyDown = event => {
-    if (isEmpty(this.props.focusShortcuts)) {
+    const { focusShortcuts } = this.props;
+    if (
+      isEmpty(focusShortcuts) ||
+      (this.shouldUtilizeHotkeysLib && typeof this.hotkeys == 'function')
+    ) {
       return;
     }
-
-    // for hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc, we use hotkeys-js
-    if (this.hotKeyCombinationsUsed) {
-      this.hotkeys(
-        parseFocusShortcuts(this.props.focusShortcuts).join(','),
-        /* eslint-disable no-shadow */
-        (event, handler) => {
-          // Prevent the default refresh event under WINDOWS system
-          event.preventDefault();
-          this.focusSearchBox(event);
-        }
-      );
-      return;
-    }
-    const shortcuts = this.props.focusShortcuts.map(key => {
+    const shortcuts = focusShortcuts.map(key => {
       if (typeof key === 'string') {
         return isNumeric(key)
           ? parseInt(key, 10)
@@ -541,9 +554,50 @@ class SearchBox extends React.Component {
       return;
     }
     this.focusSearchBox(event);
-
     event.stopPropagation();
     event.preventDefault();
+  };
+
+  // used for handling focus-on-searchbox input instance
+  // when modifier keys or hotkeys combinations are used
+  registerHotkeysListener = () => {
+    const { focusShortcuts } = this.props;
+    if (
+      !this.shouldUtilizeHotkeysLib ||
+      !(typeof this.hotkeys == 'function') ||
+      isEmpty(focusShortcuts)
+    ) {
+      return;
+    }
+
+    // for single press keys (a-z, A-Z) &, hotkeys' combinations such as 'cmd+k', 'ctrl+shft+a', etc
+    this.hotkeys(
+      parseFocusShortcuts(focusShortcuts).join(','),
+      /* eslint-disable no-shadow */
+      // eslint-disable-next-line no-unused-vars
+      (event, handler) => {
+        // Prevent the default refresh event under WINDOWS system
+        event.preventDefault();
+        this.focusSearchBox(event);
+      }
+    );
+
+    // if one of modifier keys are used, they are handled below
+    this.hotkeys('*', event => {
+      const modifierKeys = extractModifierKeysFromFocusShortcuts(
+        focusShortcuts
+      );
+
+      if (modifierKeys.length === 0) return;
+
+      for (let index = 0; index < modifierKeys.length; index += 1) {
+        const element = modifierKeys[index];
+        if (this.hotkeys[element]) {
+          this.focusSearchBox(event);
+          break;
+        }
+      }
+    });
   };
 
   renderSuggestionsDropdown = ({
@@ -583,10 +637,12 @@ class SearchBox extends React.Component {
         {this.hasCustomRenderer && (
           <div>
             {this.getComponent({
-              getInputProps,
-              getItemProps,
-              isOpen,
-              highlightedIndex,
+              downshiftProps: {
+                getInputProps,
+                getItemProps,
+                isOpen,
+                highlightedIndex
+              },
               ...rest
             })}
             {this.renderLoader()}
@@ -699,6 +755,7 @@ class SearchBox extends React.Component {
       autosuggest,
       showIcon,
       showClear,
+      showVoiceSearch,
       iconPosition,
       placeholder,
       onBlur,
@@ -744,6 +801,7 @@ class SearchBox extends React.Component {
                       ref={this.searchInputField}
                       showIcon={showIcon}
                       showClear={showClear}
+                      showVoiceSearch={showVoiceSearch}
                       iconPosition={iconPosition}
                       {...getInputProps({
                         className: getClassName(innerClass, 'input'),
@@ -809,6 +867,7 @@ class SearchBox extends React.Component {
                   iconPosition={iconPosition}
                   showIcon={showIcon}
                   showClear={showClear}
+                  showVoiceSearch={showVoiceSearch}
                 />
                 {this.renderIcons()}
               </InputWrapper>
@@ -921,7 +980,8 @@ SearchBox.defaultProps = {
   addonBefore: undefined,
   addonAfter: undefined,
   expandSuggestionsContainer: true,
-  index: undefined
+  index: undefined,
+  value: undefined
 };
 
 export default props => (

@@ -51,7 +51,7 @@ yarn dev:react
 
 - You can try the examples for the `react-searchbox` inside `packages/react-searchbox/examples` directory.
 
-## React Searchbox
+## React Native Searchbox
 
 - You can run the following command from `searchbox` project's root directory which will start the watchers for `searchbase` package located under the `packages` directory. This will let you make changes to these projects on the fly and the changes you make will be transpiled live:
 

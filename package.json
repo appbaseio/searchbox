@@ -65,5 +65,8 @@
   ],
   "dependencies": {
     "jest-environment-jsdom": "24"
+  },
+  "engines": {
+    "node": ">=14.17.1"
   }
 }
