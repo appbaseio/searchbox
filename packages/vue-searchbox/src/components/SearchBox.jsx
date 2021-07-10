@@ -53,10 +53,7 @@ const SearchBox = {
 		URLParams: VueTypes.bool,
 		// RS API properties
 		id: VueTypes.string.isRequired,
-		value: {
-			types: VueTypes.string,
-			default: undefined
-		},
+		value: VueTypes.string.def('undefined'),
 		type: types.queryTypes,
 		react: types.reactType,
 		queryFormat: types.queryFormat,
