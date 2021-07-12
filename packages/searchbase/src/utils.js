@@ -162,6 +162,74 @@ export const extractSuggestion = (val: any) => {
   return val;
 };
 
+function escapeRegExp(string = '') {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+export const getPredictiveSuggestions = ({
+  suggestions,
+  currentValue,
+  wordsToShowAfterHighlight
+}) => {
+  const suggestionMap = {};
+  if (currentValue) {
+    const currentValueTrimmed = currentValue.trim();
+    const parsedSuggestion = suggestions.reduce((agg, { label, ...rest }) => {
+      // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
+      const parsedContent = new DOMParser().parseFromString(label, 'text/html')
+        .documentElement.textContent;
+
+      // to match the partial start of word.
+      // example if searchTerm is `select` and string contains `selected`
+      let regexString = `^(${escapeRegExp(currentValueTrimmed)})\\w+`;
+      let regex = new RegExp(regexString, 'i');
+      let regexExecution = regex.exec(parsedContent);
+      // if execution value is null it means either there is no match or there are chances
+      // that exact word is present
+      if (!regexExecution) {
+        // regex to match exact word
+        regexString = `^(${escapeRegExp(currentValueTrimmed)})`;
+        regex = new RegExp(regexString, 'i');
+        regexExecution = regex.exec(parsedContent);
+      }
+
+      if (regexExecution) {
+        const matchedString = parsedContent.slice(
+          regexExecution.index,
+          parsedContent.length
+        );
+        const highlightedWord = matchedString
+          .slice(currentValueTrimmed.length)
+          .split(' ')
+          .slice(0, wordsToShowAfterHighlight + 1)
+          .join(' ');
+        const suggestionPhrase = `${currentValueTrimmed}<mark class="highlight">${highlightedWord}</mark>`;
+        const suggestionValue = `${currentValueTrimmed}${highlightedWord}`;
+        // to show unique results only
+        if (!suggestionMap[suggestionPhrase]) {
+          suggestionMap[suggestionPhrase] = 1;
+          return [
+            ...agg,
+            {
+              ...rest,
+              label: suggestionPhrase,
+              value: suggestionValue,
+              isPredictiveSuggestion: true
+            }
+          ];
+        }
+
+        return agg;
+      }
+
+      return agg;
+    }, []);
+
+    return parsedSuggestion;
+  }
+
+  return [];
+};
 /**
  *
  * @param {array} fields DataFields passed on Search Components
@@ -279,79 +347,10 @@ export const getSuggestions = (
     traverseSuggestions();
   }
 
-  const getPredictiveSuggestions = ({
-    predictiveSuggestions,
-    currentValuePredictive,
-    wordsToShowAfterHighlight
-  }) => {
-    const suggestionMap = {};
-    const currentValuePredictiveTrimmed = currentValuePredictive.trim();
-    if (currentValuePredictiveTrimmed) {
-      const parsedSuggestion = predictiveSuggestions.reduce(
-        (agg, { label, ...rest }) => {
-          // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
-          const parsedContent = new DOMParser().parseFromString(
-            label,
-            'text/html'
-          ).documentElement.textContent;
-
-          // to match the partial start of word.
-          // example if searchTerm is `select` and string contains `selected`
-          let regexString = `^(${currentValuePredictiveTrimmed})\\w+`;
-          let regex = new RegExp(regexString, 'i');
-          let regexExecution = regex.exec(parsedContent);
-          // if execution value is null it means either there is no match or there are chances
-          // that exact word is present
-          if (!regexExecution) {
-            // regex to match exact word
-            regexString = `^(${currentValuePredictiveTrimmed})`;
-            regex = new RegExp(regexString, 'i');
-            regexExecution = regex.exec(parsedContent);
-          }
-
-          if (regexExecution) {
-            const matchedString = parsedContent.slice(
-              regexExecution.index,
-              parsedContent.length
-            );
-
-            const suggestionPhrase = `${currentValuePredictiveTrimmed}<mark class="highlight-class">${matchedString
-              .slice(currentValuePredictiveTrimmed.length)
-              .split(' ')
-              .slice(0, wordsToShowAfterHighlight + 1)
-              .join(' ')}</mark>`;
-
-            // to show unique results only
-            if (!suggestionMap[suggestionPhrase]) {
-              suggestionMap[suggestionPhrase] = 1;
-              return [
-                ...agg,
-                {
-                  label: suggestionPhrase,
-                  isPredictiveSuggestion: true,
-                  ...rest
-                }
-              ];
-            }
-
-            return agg;
-          }
-
-          return agg;
-        },
-        []
-      );
-
-      return parsedSuggestion;
-    }
-
-    return [];
-  };
-
   if (enablePredictiveSuggestions) {
     return getPredictiveSuggestions({
-      predictiveSuggestions: suggestionsList,
-      currentValuePredictive: value,
+      suggestions: suggestionsList,
+      currentValue: value,
       wordsToShowAfterHighlight: true
     });
   }

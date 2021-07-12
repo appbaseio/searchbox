@@ -290,7 +290,12 @@ class SearchBox extends React.Component {
         stateChanges: true
       });
       if (autosuggest) {
-        debounceFunc(this.triggerDefaultQuery, debounce);
+        // Clear results for empty query
+        if (value) {
+          debounceFunc(this.triggerDefaultQuery, debounce);
+        } else {
+          this.componentInstance.clearResults();
+        }
       } else {
         debounceFunc(this.triggerCustomQuery, debounce);
       }
@@ -298,11 +303,20 @@ class SearchBox extends React.Component {
         this.triggerCustomQuery();
       }
     } else {
-      this.componentInstance.setValue(value || '', {
-        triggerCustomQuery: rest.triggerCustomQuery,
-        triggerDefaultQuery: !!autosuggest,
-        stateChanges: true
-      });
+      if (value) {
+        this.componentInstance.setValue(value, {
+          triggerCustomQuery: rest.triggerCustomQuery,
+          triggerDefaultQuery: !!autosuggest,
+          stateChanges: true
+        });
+      } else {
+        this.componentInstance.setValue(value, {
+          triggerCustomQuery: rest.triggerCustomQuery,
+          triggerDefaultQuery: false,
+          stateChanges: true
+        });
+      }
+
       if (!autosuggest) {
         this.triggerCustomQuery();
       }

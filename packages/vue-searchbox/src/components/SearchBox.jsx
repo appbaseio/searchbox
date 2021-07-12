@@ -284,6 +284,12 @@ const SearchBox = {
 					stateChanges: true
 				});
 				if (this.autosuggest) {
+					// Clear results for empty query
+					if (value) {
+						debounceFunc(this.triggerDefaultQuery, debounce);
+					} else {
+						componentInstance.clearResults();
+					}
 					debounceFunc(this.triggerDefaultQuery, debounce);
 				} else {
 					debounceFunc(this.triggerCustomQuery, debounce);
@@ -301,11 +307,19 @@ const SearchBox = {
 		triggerSuggestionsQuery(value, triggerCustomQuery) {
 			const componentInstance = this.getComponentInstance();
 			if (componentInstance) {
-				componentInstance.setValue(value || '', {
-					triggerCustomQuery,
-					triggerDefaultQuery: true,
-					stateChanges: true
-				});
+				if (value) {
+					componentInstance.setValue(value, {
+					  triggerCustomQuery,
+					  triggerDefaultQuery: true,
+					  stateChanges: true
+					});
+				  } else {
+					componentInstance.setValue(value, {
+					  triggerCustomQuery,
+					  triggerDefaultQuery: false,
+					  stateChanges: true
+					});
+				  }
 			}
 		},
 		handleFocus(event) {
