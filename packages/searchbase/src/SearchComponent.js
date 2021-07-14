@@ -30,6 +30,8 @@ import {
   searchBaseMappings
 } from './utils';
 
+let count = 0;
+
 type QueryType =
   | queryTypes.Search
   | queryTypes.Term
@@ -712,7 +714,16 @@ class SearchComponent extends Base {
         query: Array.isArray(this.query) ? this.query : [this.query],
         settings: this.appbaseSettings
       })
+        .then(res => {
+          console.log('COUNT VALUE IS', this.value, this.value.length === 2);
+          const shouldTimeout = this.value.length === 2;
+          count += 1;
+          return shouldTimeout
+            ? new Promise(resolve => setTimeout(() => resolve(res), 10000))
+            : Promise.resolve(res);
+        })
         .then(results => {
+          console.log('COUNT', count);
           const prev = this.results;
           const rawResults = results && results[this.id];
           const afterResponse = () => {
