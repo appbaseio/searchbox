@@ -92,6 +92,7 @@ describe('SearchComponent: test query generation', () => {
       JSON.parse(JSON.stringify(componentInstance.componentQuery))
     ).toEqual({
       id: 'my-component',
+      index: 'gitxplore-latest-app',
       type: 'term',
       dataField: ['original_title']
     });
@@ -124,6 +125,7 @@ describe('SearchComponent: test query generation', () => {
     ).toEqual([
       {
         id: 'result-component',
+        index: 'gitxplore-latest-app',
         dataField: ['original_title'],
         react: {
           and: ['search-component', 'category-component']
@@ -133,12 +135,14 @@ describe('SearchComponent: test query generation', () => {
         dataField: ['original_title'],
         execute: false,
         id: 'search-component',
+        index: 'gitxplore-latest-app',
         value: 'harry'
       },
       {
         dataField: ['category.keyword'],
         execute: false,
         id: 'category-component',
+        index: 'gitxplore-latest-app',
         type: 'term',
         value: 'fantasy'
       }
@@ -176,6 +180,7 @@ describe('SearchComponent: test query generation', () => {
       {
         dataField: ['category.keyword'],
         id: 'category-component',
+        index: 'gitxplore-latest-app',
         react: {
           and: ['search-component']
         },
@@ -186,10 +191,12 @@ describe('SearchComponent: test query generation', () => {
         dataField: ['original_title'],
         execute: false,
         id: 'search-component',
+        index: 'gitxplore-latest-app',
         value: 'harry'
       },
       {
         id: 'result-component',
+        index: 'gitxplore-latest-app',
         dataField: ['original_title'],
         react: {
           and: ['search-component', 'category-component']
