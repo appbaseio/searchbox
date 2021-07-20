@@ -518,6 +518,9 @@ class SearchBox extends React.Component {
       });
       this.onValueSelected(event.target.value, causes.ENTER_PRESS);
     }
+    if (event.key === 'Escape') {
+      this.setState({ isOpen: false });
+    }
 
     if (this.props.onKeyDown) {
       this.props.onKeyDown(this.componentInstance, event);
