@@ -63,7 +63,7 @@ const defaultPopularSuggestionIcon = theme => ({
   type: 'material',
   size: 24,
   name: 'trending-up',
-  style: {marginRight: 10}
+  style: { marginRight: 10 }
 });
 
 const defaultAutoFillIcon = theme => ({
