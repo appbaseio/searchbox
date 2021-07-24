@@ -43,7 +43,7 @@
           :value="this.$data.text"
           @change="handleChange"
           @blur="handleBlur"
-          @keyPress="handleKeyPress"
+          @key-press="handleKeyPress"
           @focus="handleFocus"
           @key-down="handleKeyDown"
           @key-up="handleKeyUp"
