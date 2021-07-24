@@ -53,7 +53,7 @@ const SearchBox = {
 		URLParams: VueTypes.bool,
 		// RS API properties
 		id: VueTypes.string.isRequired,
-		value: VueTypes.string.def('undefined'),
+		value: VueTypes.string.def(undefined),
 		type: types.queryTypes,
 		react: types.reactType,
 		queryFormat: types.queryFormat,
@@ -797,12 +797,12 @@ const SearchBox = {
 															},
 															onFocus: this.handleFocus,
 															onKeyPress: e => {
-																this.withTriggerQuery('keyPress', e);
+																this.withTriggerQuery('key-press', e);
 															},
 															onKeyDown: e =>
 																this.handleKeyDown(e, highlightedIndex),
 															onKeyUp: e => {
-																this.withTriggerQuery('keyUp', e);
+																this.withTriggerQuery('key-up', e);
 															}
 														})
 													}}
