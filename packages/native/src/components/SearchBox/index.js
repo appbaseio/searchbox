@@ -282,6 +282,14 @@ class SearchBox extends React.Component {
       this.flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
   };
 
+  isControlled = () => {
+    const { value, onChange } = this.props;
+    if (value !== undefined && onChange) {
+      return true;
+    }
+    return false;
+  };
+
   setValue = ({ value, clearResults = true, ...rest }) => {
     let triggerDefaultQuery = true;
     const { autoFillInProgress } = this.state;
@@ -296,8 +304,12 @@ class SearchBox extends React.Component {
         autoFillInProgress: false
       });
     }
-    if (onChange) {
-      onChange(value, this.triggerCustomQuery);
+    if (this.isControlled()) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: !!rest.triggerDefaultQuery,
+        triggerCustomQuery: !!rest.triggerCustomQuery
+      });
+      onChange(value, this.componentInstance);
     } else {
       if (!value && clearResults) {
         // Clear suggestions for empty value
@@ -423,8 +435,15 @@ class SearchBox extends React.Component {
     );
   };
 
+  withTriggerQuery = cb => {
+    if (cb) {
+      return e => cb(this.componentInstance, e);
+    }
+    return undefined;
+  };
+
   renderSearchInput({ isOpenWithModal = false, ...rest } = {}) {
-    const { placeholder, theme, loading, style, searchBarProps } = this.props;
+    const { placeholder, theme, loading, style, searchBarProps, onBlur, onKeyPress, onFocus } = this.props;
     const currentValue = this.componentInstance.value || '';
     return (
       <SearchBar
@@ -439,6 +458,9 @@ class SearchBox extends React.Component {
         returnKeyType="search"
         ref={this.searchbarRef}
         style={style}
+        onBlur={this.withTriggerQuery(onBlur)}
+        onFocus={this.withTriggerQuery(onFocus)}
+        onKeyPress={this.withTriggerQuery(onKeyPress)}
         {...rest}
         {...searchBarProps}
       />
@@ -658,6 +680,7 @@ SearchBox.propTypes = {
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
+  onChange: func,
   // Customize Suggestions
   defaultSuggestions: arrayOf(object),
   autosuggest: bool,
@@ -712,7 +735,8 @@ SearchBox.defaultProps = {
   autoFocus: false,
   downShiftProps: {},
   showDistinctSuggestions: true,
-  enablePredictiveSuggestions: false
+  enablePredictiveSuggestions: false,
+  value: undefined
 };
 
 const styles = StyleSheet.create({

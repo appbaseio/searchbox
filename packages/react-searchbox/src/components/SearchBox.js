@@ -96,7 +96,12 @@ class SearchBox extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
     this.registerHotkeysListener();
-    const { enableRecentSearches, autosuggest, aggregationField } = this.props;
+    const {
+      enableRecentSearches,
+      autosuggest,
+      aggregationField,
+      maxRecentSearches
+    } = this.props;
     if (aggregationField) {
       // eslint-disable-next-line no-console
       console.warn(
@@ -104,7 +109,10 @@ class SearchBox extends React.Component {
       );
     }
     if (enableRecentSearches && autosuggest) {
-      this.componentInstance.getRecentSearches();
+      this.componentInstance.getRecentSearches({
+        size: maxRecentSearches || 5,
+        minChars: 3
+      });
     }
   }
 
@@ -266,7 +274,8 @@ class SearchBox extends React.Component {
       onChange,
       debounce,
       enableRecentSearches,
-      autosuggest
+      autosuggest,
+      maxRecentSearches
     } = this.props;
     if (
       enableRecentSearches &&
@@ -274,7 +283,10 @@ class SearchBox extends React.Component {
       this.componentInstance.value &&
       autosuggest
     ) {
-      this.componentInstance.getRecentSearches();
+      this.componentInstance.getRecentSearches({
+        size: maxRecentSearches || 5,
+        minChars: 3
+      });
     }
     this.setState({ isOpen });
     if (this.isControlled()) {
@@ -290,7 +302,12 @@ class SearchBox extends React.Component {
         stateChanges: true
       });
       if (autosuggest) {
-        debounceFunc(this.triggerDefaultQuery, debounce);
+        // Clear results for empty query
+        if (value) {
+          debounceFunc(this.triggerDefaultQuery, debounce);
+        } else {
+          this.componentInstance.clearResults();
+        }
       } else {
         debounceFunc(this.triggerCustomQuery, debounce);
       }
@@ -298,11 +315,20 @@ class SearchBox extends React.Component {
         this.triggerCustomQuery();
       }
     } else {
-      this.componentInstance.setValue(value || '', {
-        triggerCustomQuery: rest.triggerCustomQuery,
-        triggerDefaultQuery: !!autosuggest,
-        stateChanges: true
-      });
+      if (value) {
+        this.componentInstance.setValue(value, {
+          triggerCustomQuery: rest.triggerCustomQuery,
+          triggerDefaultQuery: !!autosuggest,
+          stateChanges: true
+        });
+      } else {
+        this.componentInstance.setValue(value, {
+          triggerCustomQuery: rest.triggerCustomQuery,
+          triggerDefaultQuery: false,
+          stateChanges: true
+        });
+      }
+
       if (!autosuggest) {
         this.triggerCustomQuery();
       }
@@ -503,6 +529,9 @@ class SearchBox extends React.Component {
         triggerCustomQuery: true
       });
       this.onValueSelected(event.target.value, causes.ENTER_PRESS);
+    }
+    if (event.key === 'Escape') {
+      this.setState({ isOpen: false });
     }
 
     if (this.props.onKeyDown) {
@@ -709,13 +738,16 @@ class SearchBox extends React.Component {
               : (this.popularSuggestionsList || []).map((sugg, index) => (
                   <li
                     {...getItemProps({ item: sugg })}
-                    key={`${index + this.suggestionsList.length + 1}-${
-                      sugg.value
-                    }`}
+                    key={`${index +
+                      (!currentValue ? recentSearches.length : 0) +
+                      this.suggestionsList.length +
+                      1}-${sugg.value}`}
                     style={{
                       backgroundColor: this.getBackgroundColor(
                         highlightedIndex,
-                        index + this.suggestionsList.length
+                        index +
+                          this.suggestionsList.length +
+                          (!currentValue ? recentSearches.length : 0)
                       ),
                       justifyContent: 'flex-start'
                     }}
@@ -882,6 +914,8 @@ class SearchBox extends React.Component {
 
 SearchBox.propTypes = {
   enablePopularSuggestions: bool,
+  maxPopularSuggestions: number,
+  maxRecentSearches: number,
   enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
   aggregationField: string,
@@ -948,7 +982,6 @@ SearchBox.propTypes = {
   distinctField: string,
   distinctFieldConfig: object,
   index: string,
-
   // internal props
   error: any,
   loading: bool,
@@ -986,7 +1019,7 @@ SearchBox.defaultProps = {
 
 export default props => (
   <SearchComponent
-    triggerQueryOnInit={false}
+    triggerQueryOnInit={!!props.enablePopularSuggestions}
     value="" // Init value as empty
     clearOnQueryChange
     {...props}

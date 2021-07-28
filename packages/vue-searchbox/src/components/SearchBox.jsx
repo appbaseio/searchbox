@@ -46,6 +46,8 @@ const SearchBox = {
 		transformResponse: VueTypes.func,
 		beforeValueChange: VueTypes.func,
 		enablePopularSuggestions: VueTypes.bool,
+		maxPopularSuggestions: VueTypes.number,
+		maxRecentSearches: VueTypes.number,
 		enablePredictiveSuggestions: VueTypes.bool,
 		enableRecentSearches: VueTypes.bool,
 		clearOnQueryChange: VueTypes.bool,
@@ -53,7 +55,7 @@ const SearchBox = {
 		URLParams: VueTypes.bool,
 		// RS API properties
 		id: VueTypes.string.isRequired,
-		value: VueTypes.any,
+		value: VueTypes.string.def(undefined),
 		type: types.queryTypes,
 		react: types.reactType,
 		queryFormat: types.queryFormat,
@@ -165,7 +167,10 @@ const SearchBox = {
 		}
 		if (this.enableRecentSearches && this.autosuggest) {
 			const { getRecentSearches } = this.getComponentInstance();
-			getRecentSearches();
+			getRecentSearches({
+				size: this.maxRecentSearches || 5,
+				minChars: 3
+			});
 		}
 	},
 	destroyed() {
@@ -265,6 +270,12 @@ const SearchBox = {
 				componentInstance.triggerCustomQuery();
 			}
 		},
+		isControlled() {
+			if (this.$props.value !== undefined && this.$listeners.change) {
+				return true;
+			}
+			return false;
+		},
 		setValue({ value, isOpen = true, ...rest }) {
 			const { debounce } = this.$props;
 			this.isOpen = isOpen;
@@ -275,15 +286,30 @@ const SearchBox = {
         && componentInstance.value
         && this.autosuggest
 			) {
-				componentInstance.getRecentSearches();
+				componentInstance.getRecentSearches({
+					size: this.maxRecentSearches || 5,
+					minChars: 3
+				});
 			}
-			if (debounce > 0) {
+			if (this.isControlled()) {
+				componentInstance.setValue(value, {
+					triggerDefaultQuery: false,
+					triggerCustomQuery: false
+				});
+				this.$emit('change', value, componentInstance, rest.event);
+			} else if (debounce > 0) {
 				componentInstance.setValue(value, {
 					triggerDefaultQuery: false,
 					triggerCustomQuery: false,
 					stateChanges: true
 				});
 				if (this.autosuggest) {
+					// Clear results for empty query
+					if (value) {
+						debounceFunc(this.triggerDefaultQuery, debounce);
+					} else {
+						componentInstance.clearResults();
+					}
 					debounceFunc(this.triggerDefaultQuery, debounce);
 				} else {
 					debounceFunc(this.triggerCustomQuery, debounce);
@@ -301,16 +327,24 @@ const SearchBox = {
 		triggerSuggestionsQuery(value, triggerCustomQuery) {
 			const componentInstance = this.getComponentInstance();
 			if (componentInstance) {
-				componentInstance.setValue(value || '', {
-					triggerCustomQuery,
-					triggerDefaultQuery: true,
-					stateChanges: true
-				});
+				if (value) {
+					componentInstance.setValue(value, {
+						triggerCustomQuery,
+						triggerDefaultQuery: true,
+						stateChanges: true
+					});
+				} else {
+					componentInstance.setValue(value, {
+						triggerCustomQuery,
+						triggerDefaultQuery: false,
+						stateChanges: true
+					});
+				}
 			}
 		},
 		handleFocus(event) {
 			this.isOpen = true;
-			this.$emit('focus', event);
+			this.withTriggerQuery('focus', event);
 		},
 		handleStateChange(changes) {
 			const { isOpen } = changes;
@@ -327,8 +361,7 @@ const SearchBox = {
 				});
 				this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
 			}
-
-			this.$emit('keyDown', event);
+			this.withTriggerQuery('keyDown', event);
 		},
 		handleMicClick() {
 			const componentInstance = this.getComponentInstance();
@@ -503,7 +536,6 @@ const SearchBox = {
 			) {
 				return;
 			}
-
 			const shortcuts = focusShortcuts.map(key => {
 				if (typeof key === 'string') {
 					return isNumeric(key)
@@ -525,6 +557,9 @@ const SearchBox = {
 			this.focusSearchBox(event);
 			event.stopPropagation();
 			event.preventDefault();
+		},
+		withTriggerQuery(eventName, event) {
+			this.$emit(eventName, this.getComponentInstance(), event);
 		},
 		registerHotkeysListener() {
 			const { focusShortcuts } = this.$props;
@@ -566,6 +601,7 @@ const SearchBox = {
 			});
 		}
 	},
+
 	render() {
 		const {
 			className,
@@ -696,63 +732,70 @@ const SearchBox = {
 															</li>
 														))
 														: null}
-													{instanceValue
-                            && (hasPopularSuggestionsRenderer(this)
-                            	? this.getComponent(
-                            		{
-                            			isOpen,
-                            			getItemProps,
-                            			getItemEvents,
-                            			highlightedIndex
-                            		},
-                            		true
-                            	)
-                            	: (popularSuggestionsList || []).map(
-                            		(sugg, index) => (
-                            			<li
-                            				{...{
-                            					domProps: getItemProps({
-                            						item: sugg
-                            					})
-                            				}}
-                            				{...{
-                            					on: getItemEvents({
-                            						item: sugg
-                            					})
-                            				}}
-                            				key={`${index
-                                        + suggestionsList.length
-                                        + 1}-${sugg.value}`}
-                            				style={{
-                            					backgroundColor: this.getBackgroundColor(
-                            						highlightedIndex,
-                            						index + suggestionsList.length
-                            					),
-                            					justifyContent: 'flex-start'
-                            				}}
-                            			>
-                            				<div style={{ padding: '0 10px 0 0' }}>
-                            					<CustomSvg
-                            						iconId={`${index + 1}-${
-                            							sugg.value
-                            						}-icon`}
-                            						className={
-                            							getClassName(
-                            								innerClass,
-                            								'popular-search-icon'
-                            							) || null
-                            						}
-                            						icon={popularSearchesIcon}
-                            						type="popular-search-icon"
-                            					/>
-                            				</div>
-                            				<SuggestionItem
-                            					currentValue={instanceValue}
-                            					suggestion={sugg}
-                            				/>
-                            			</li>
-                            		)
-                            	))}
+													{hasPopularSuggestionsRenderer(this)
+														? this.getComponent(
+															{
+																isOpen,
+																getItemProps,
+																getItemEvents,
+																highlightedIndex
+															},
+															true
+														)
+														: (popularSuggestionsList || []).map(
+															(sugg, index) => (
+																<li
+																	{...{
+																		domProps: getItemProps({
+																			item: sugg
+																		})
+																	}}
+																	{...{
+																		on: getItemEvents({
+																			item: sugg
+																		})
+																	}}
+																	key={`${
+																		index
+                                      + suggestionsList.length
+                                      + (!instanceValue
+                                      	? recentSearches.length
+                                      	: 0 )+ 1
+																	}-${sugg.value}`}
+																	style={{
+																		backgroundColor: this.getBackgroundColor(
+																			highlightedIndex,
+																			index
+                                          + suggestionsList.length
+                                          + (!instanceValue
+                                          	? recentSearches.length
+                                          	: 0)
+																		),
+																		justifyContent: 'flex-start'
+																	}}
+																>
+																	<div style={{ padding: '0 10px 0 0' }}>
+																		<CustomSvg
+																			iconId={`${index + 1}-${
+																				sugg.value
+																			}-icon`}
+																			className={
+																				getClassName(
+																					innerClass,
+																					'popular-search-icon'
+																				) || null
+																			}
+																			icon={popularSearchesIcon}
+																			type="popular-search-icon"
+																		/>
+																	</div>
+																	<SuggestionItem
+																		currentValue={instanceValue}
+																		suggestion={sugg}
+																	/>
+																</li>
+															)
+														)}
 												</ul>
 											) : (
 												this.renderNoSuggestionComponent()
@@ -779,16 +822,16 @@ const SearchBox = {
 														on: getInputEvents({
 															onInput: this.onInputChange,
 															onBlur: e => {
-																this.$emit('blur', e);
+																this.withTriggerQuery('blur', e);
 															},
 															onFocus: this.handleFocus,
 															onKeyPress: e => {
-																this.$emit('keyPress', e);
+																this.withTriggerQuery('key-press', e);
 															},
 															onKeyDown: e =>
 																this.handleKeyDown(e, highlightedIndex),
 															onKeyUp: e => {
-																this.$emit('keyUp', e);
+																this.withTriggerQuery('key-up', e);
 															}
 														})
 													}}
@@ -870,7 +913,7 @@ const SearchBoxWrapper = {
 		return (
 			<SearchComponent
 				value=""
-				triggerQueryOnInit={false}
+				triggerQueryOnInit={!!context.props.enablePopularSuggestions}
 				clearOnQueryChange={true}
 				{...{
 					on: context.listeners,
