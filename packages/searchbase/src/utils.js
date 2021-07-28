@@ -346,7 +346,6 @@ export const getSuggestions = (
     skipWordMatch = true;
     traverseSuggestions();
   }
-
   if (enablePredictiveSuggestions) {
     return getPredictiveSuggestions({
       suggestions: suggestionsList,
