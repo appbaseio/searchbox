@@ -69,7 +69,13 @@ class Base {
     // Initialize headers
     this.headers = {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-Search-Client': 'Searchbase Headless',
+      ...(appbaseConfig && appbaseConfig.enableTelemetry === false
+        ? {
+            'X-Enable-Telemetry': false
+          }
+        : {})
     };
     if (this.credentials) {
       this.headers = {
