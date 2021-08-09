@@ -14,11 +14,15 @@ const SearchBase = {
 		transformResponse: VueTypes.func
 	},
 	provide() {
+		const headers = {
+			'x-search-client': 'Searchbox Vue',
+			...this.$props.headers
+		};
 		this.searchbase = new Headless({
 			index: this.$props.index,
 			url: this.$props.url,
 			credentials: this.$props.credentials,
-			headers: this.$props.headers,
+			headers,
 			appbaseConfig: this.$props.appbaseConfig,
 			transformRequest: this.$props.transformRequest,
 			transformResponse: this.$props.transformResponse
