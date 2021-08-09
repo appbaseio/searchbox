@@ -70,7 +70,7 @@ class Base {
     this.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-Search-Client': 'Searchbase Headless',
+      'x-search-client': 'Searchbase Headless',
       ...(appbaseConfig && appbaseConfig.enableTelemetry === false
         ? {
             'X-Enable-Telemetry': false
