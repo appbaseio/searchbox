@@ -73,7 +73,8 @@ export const types = {
 		recordAnalytics: VueTypes.bool,
 		enableQueryRules: VueTypes.bool,
 		userId: VueTypes.string,
-		customEvents: VueTypes.object
+		customEvents: VueTypes.object,
+		enableTelemetry: VueTypes.bool
 	}).def({ recordAnalytics: false }),
 	showDistinctSuggestions: VueTypes.bool.def(true),
 	queryString: VueTypes.queryString,

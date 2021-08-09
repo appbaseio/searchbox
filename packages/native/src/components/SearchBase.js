@@ -7,10 +7,8 @@ import { SearchContext } from '../utils/helper';
 class SearchBase extends React.Component {
   constructor(props) {
     super(props);
-    const { enableTelemetry } = props.appbaseConfig || {};
     const headers = {
       'x-search-client': 'Searchbox React Native',
-      ...(enableTelemetry === false && { 'X-Enable-Telemetry': false }),
       ...props.headers
     };
     this.searchbase = new Headless({
