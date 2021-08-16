@@ -82,16 +82,16 @@
 ## 4. Installation
 
 ```bash
-npm install @appbaseio/react-searchbox
+npm install @appbaseio/react-native-searchbox
 # or
-yarn add @appbaseio/react-searchbox
+yarn add @appbaseio/react-native-searchbox
 ```
 
 [⬆ Back to Top](#toc)
 
 ## 5. Docs Manual
 
-The official docs for the library are at [docs/react-searchbox](https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/)
+The official docs for the library are over [here](https://docs.appbase.io/docs/reactivesearch/react-native-searchbox/quickstart/).
 
 [⬆ Back to Top](#toc)
 
@@ -105,12 +105,8 @@ Please check the [contribution guide](https://github.com/appbaseio/searchbox/blo
 
 - [**reactivesearch**](https://github.com/appbaseio/reactivesearch) React, React Native, and Vue UI components for building data-driven apps with Elasticsearch.
 
-- [**arc**](https://github.com/appbaseio/arc) API Gateway for ElasticSearch (Out of the box Security, Rate Limit Features, Record Analytics and Request Logs).
+- [**reactivesarch-api**](https://github.com/appbaseio/reactivesearch-api) ReactiveSearch API is a declarative, open-source API for querying Elasticsearch. It also acts as a reverse proxy and API gateway to an Elasticsearch cluster. ReactiveSearch API is best suited for site search, app search and e-commerce search use-cases.
 
-- **searchbox** Similar to `react-searchbox` we offer lightweight and performance-focused searchbox UI libraries for Vanilla and Vue.
-
-  - [**Vanilla**](https://github.com/appbaseio/searchbox) - (~16kB Minified + Gzipped)
-  - [**Vue**](https://github.com/appbaseio/vue-searchbox) - (~22kB Minified + Gzipped)
 
 * [**dejavu**](https://github.com/appbaseio/dejavu) allows viewing raw data within an appbase.io (or Elasticsearch) app. **Soon to be released feature:** An ability to import custom data from CSV and JSON files, along with a guided walkthrough on applying data mappings.
 
