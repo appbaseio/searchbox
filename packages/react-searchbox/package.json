@@ -33,7 +33,7 @@
         "hotkeys-js": "^3.8.7"
     },
     "dependencies": {
-        "@appbaseio/searchbase": "1.3.4",
+        "@appbaseio/searchbase": "1.5.0",
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
         "downshift": "^3.3.1"
