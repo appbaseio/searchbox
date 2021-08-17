@@ -707,7 +707,7 @@ const SearchBox = {
 																style={{
 																	backgroundColor: this.getBackgroundColor(
 																		highlightedIndex,
-																		index
+																		index + suggestionsList.length
 																	),
 																	justifyContent: 'flex-start'
 																}}
@@ -755,13 +755,12 @@ const SearchBox = {
 																			item: sugg
 																		})
 																	}}
-																	key={`${
-																		index
+																	key={`${index
                                       + suggestionsList.length
                                       + (!instanceValue
                                       	? recentSearches.length
-                                      	: 0 )+ 1
-																	}-${sugg.value}`}
+                                      	: 0)
+                                      + 1}-${sugg.value}`}
 																	style={{
 																		backgroundColor: this.getBackgroundColor(
 																			highlightedIndex,

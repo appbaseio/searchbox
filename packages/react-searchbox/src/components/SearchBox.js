@@ -702,7 +702,7 @@ class SearchBox extends React.Component {
                     style={{
                       backgroundColor: this.getBackgroundColor(
                         highlightedIndex,
-                        index
+                        index + this.suggestionsList.length
                       ),
                       justifyContent: 'flex-start'
                     }}
