@@ -75,7 +75,8 @@ class SearchComponent extends React.Component {
       maxPopularSuggestions,
       distinctField,
       distinctFieldConfig,
-      enablePredictiveSuggestions
+      enablePredictiveSuggestions,
+      subscribeTo
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -132,11 +133,6 @@ class SearchComponent extends React.Component {
       distinctFieldConfig,
       enablePredictiveSuggestions
     });
-  }
-
-  componentDidMount() {
-    const { subscribeTo, triggerQueryOnInit } = this.props;
-
     // Subscribe to state changes
     if (this.hasCustomRenderer && this.componentInstance) {
       this.componentInstance.subscribeToStateChanges(change => {
@@ -147,6 +143,13 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
+    if (value || customQuery) {
+      this.componentInstance.triggerCustomQuery();
+    }
+  }
+
+  componentDidMount() {
+    const { triggerQueryOnInit } = this.props;
     if (triggerQueryOnInit && this.componentInstance) {
       this.componentInstance.triggerDefaultQuery();
     }

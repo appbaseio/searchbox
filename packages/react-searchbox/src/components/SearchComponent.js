@@ -165,7 +165,7 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (value) {
+    if (value || customQuery) {
       this.componentInstance.triggerCustomQuery();
     }
   }

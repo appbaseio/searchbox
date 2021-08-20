@@ -243,7 +243,7 @@ const SearchComponent = {
 			});
 		}, subscribeTo);
 
-		if (value && this.componentInstance) {
+		if ((value || customQuery) && this.componentInstance) {
 			this.componentInstance.triggerCustomQuery();
 		}
 	},
