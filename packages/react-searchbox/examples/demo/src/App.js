@@ -65,7 +65,7 @@ export default () => (
         iconPosition="left"
         style={{ paddingBottom: 10 }}
       />
-      {/* <div className="row">
+      <div className="row">
         <div className="col">
           <SearchComponent
             id="author-filter"
@@ -223,7 +223,7 @@ export default () => (
             }}
           </SearchComponent>
         </div>
-      </div> */}
+      </div>
     </div>
   </SearchBase>
 );
