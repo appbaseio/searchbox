@@ -30,8 +30,6 @@ import {
   searchBaseMappings
 } from './utils';
 
-let count = 0;
-
 type QueryType =
   | queryTypes.Search
   | queryTypes.Term
