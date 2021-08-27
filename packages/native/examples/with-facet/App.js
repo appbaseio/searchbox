@@ -77,6 +77,14 @@ const Filters = () => {
         react={{
           and: ['search-component']
         }}
+        customQuery={() => ({
+          query: {
+            term: {
+              // searchComponent.value
+              'authors.keyword': 'Nora Roberts'
+            }
+          }
+        })}
         // To initialize with default value
         value={[]}
         // Avoid fetching query if component has already been initialized

@@ -53,15 +53,14 @@ export default () => (
         title="Search"
         placeholder="Search for Books"
         autosuggest={true}
-        size={5}
-        queryFormat="or"
-        fuzziness="AUTO"
         showClear
-        showVoiceSearch
         URLParams
         className="custom-class"
-        // enablePopularSuggestions
-        // enableRecentSearches
+        size={5}
+        maxPopularSuggestions={2}
+        maxRecentSearches={3}
+        enablePopularSuggestions
+        enableRecentSearches
         iconPosition="left"
         style={{ paddingBottom: 10 }}
       />

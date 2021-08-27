@@ -314,9 +314,7 @@ class SearchComponent extends Base {
     }
     // dataField is required for components other then search
     if (type && type !== queryTypes.Search) {
-      if (!dataField) {
-        throw new Error(errorMessages.invalidDataField);
-      } else if (Array.isArray(dataField)) {
+      if (Array.isArray(dataField)) {
         throw new Error(errorMessages.dataFieldAsArray);
       }
     }

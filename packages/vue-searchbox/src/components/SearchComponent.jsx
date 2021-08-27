@@ -17,6 +17,7 @@ const SearchComponent = {
 		beforeValueChange: VueTypes.func,
 		enablePopularSuggestions: VueTypes.bool,
 		enablePredictiveSuggestions: VueTypes.bool,
+		maxPopularSuggestions: VueTypes.number,
 		clearOnQueryChange: VueTypes.bool,
 		showDistinctSuggestions: types.showDistinctSuggestions,
 		URLParams: VueTypes.bool,
@@ -120,6 +121,7 @@ const SearchComponent = {
 			pagination,
 			queryString,
 			enablePopularSuggestions,
+			maxPopularSuggestions,
 			enablePredictiveSuggestions,
 			showDistinctSuggestions,
 			subscribeTo,
@@ -181,6 +183,7 @@ const SearchComponent = {
 			pagination,
 			queryString,
 			enablePopularSuggestions,
+			maxPopularSuggestions,
 			enablePredictiveSuggestions,
 			showDistinctSuggestions,
 			preserveResults,
@@ -240,7 +243,7 @@ const SearchComponent = {
 			});
 		}, subscribeTo);
 
-		if (value && this.componentInstance) {
+		if ((value || customQuery) && this.componentInstance) {
 			this.componentInstance.triggerCustomQuery();
 		}
 	},

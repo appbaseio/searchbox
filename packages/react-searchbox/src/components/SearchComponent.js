@@ -79,6 +79,7 @@ class SearchComponent extends React.Component {
       onMicStatusChange,
       enablePopularSuggestions,
       enablePredictiveSuggestions,
+      maxPopularSuggestions,
       preserveResults,
       clearOnQueryChange,
       subscribeTo,
@@ -151,7 +152,8 @@ class SearchComponent extends React.Component {
       preserveResults,
       clearOnQueryChange,
       distinctField,
-      distinctFieldConfig
+      distinctFieldConfig,
+      maxPopularSuggestions
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -163,7 +165,7 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (value) {
+    if (value || customQuery) {
       this.componentInstance.triggerCustomQuery();
     }
   }
@@ -225,6 +227,7 @@ SearchComponent.propTypes = {
   transformResponse: func,
   beforeValueChange: func,
   enablePopularSuggestions: bool,
+  maxPopularSuggestions: number,
   enablePredictiveSuggestions: bool,
   clearOnQueryChange: bool,
   URLParams: bool,

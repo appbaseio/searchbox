@@ -19,7 +19,8 @@ import {
   Modal,
   Pressable,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import {
   appbaseConfig as appbaseConfigDef,
@@ -61,7 +62,8 @@ const defaultRecentSearchIcon = theme => ({
 const defaultPopularSuggestionIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'trending-up'
+  name: 'trending-up',
+  style: { marginRight: 10 }
 });
 
 const defaultAutoFillIcon = theme => ({
@@ -280,6 +282,14 @@ class SearchBox extends React.Component {
       this.flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
   };
 
+  isControlled = () => {
+    const { value, onChange } = this.props;
+    if (value !== undefined && onChange) {
+      return true;
+    }
+    return false;
+  };
+
   setValue = ({ value, clearResults = true, ...rest }) => {
     let triggerDefaultQuery = true;
     const { autoFillInProgress } = this.state;
@@ -294,8 +304,12 @@ class SearchBox extends React.Component {
         autoFillInProgress: false
       });
     }
-    if (onChange) {
-      onChange(value, this.triggerCustomQuery);
+    if (this.isControlled()) {
+      this.componentInstance.setValue(value, {
+        triggerDefaultQuery: !!rest.triggerDefaultQuery,
+        triggerCustomQuery: !!rest.triggerCustomQuery
+      });
+      onChange(value, this.componentInstance);
     } else {
       if (!value && clearResults) {
         // Clear suggestions for empty value
@@ -421,8 +435,15 @@ class SearchBox extends React.Component {
     );
   };
 
+  withTriggerQuery = cb => {
+    if (cb) {
+      return e => cb(this.componentInstance, e);
+    }
+    return undefined;
+  };
+
   renderSearchInput({ isOpenWithModal = false, ...rest } = {}) {
-    const { placeholder, theme, loading, style, searchBarProps } = this.props;
+    const { placeholder, theme, loading, style, searchBarProps, onBlur, onKeyPress, onFocus } = this.props;
     const currentValue = this.componentInstance.value || '';
     return (
       <SearchBar
@@ -437,6 +458,9 @@ class SearchBox extends React.Component {
         returnKeyType="search"
         ref={this.searchbarRef}
         style={style}
+        onBlur={this.withTriggerQuery(onBlur)}
+        onFocus={this.withTriggerQuery(onFocus)}
+        onKeyPress={this.withTriggerQuery(onKeyPress)}
         {...rest}
         {...searchBarProps}
       />
@@ -539,6 +563,13 @@ class SearchBox extends React.Component {
       recentSearchIcon = defaultRecentSearchIcon(theme),
       popularSuggestionIcon = defaultPopularSuggestionIcon(theme)
     } = this.props;
+    const { isPredictiveSuggestion } = item;
+    let normalText = '';
+    let highlightedText = '';
+    if (isPredictiveSuggestion) {
+      normalText = (/[^<]*/).exec(item.label)[0];
+      highlightedText = (/>[^<]*/).exec(item.label)[0].replaceAll('>', '');
+    }
     if (renderItem) {
       return renderItem(item, isRecentSearch);
     }
@@ -558,13 +589,20 @@ class SearchBox extends React.Component {
               ...defaultPopularSuggestionIcon(theme)
             })
           : null}
-        <Text
-          style={styles.itemText}
-          onPress={() => this.onSuggestionSelected(item)}
-          numberOfLines={1}
-        >
-          {item.label}
-        </Text>
+        {isPredictiveSuggestion ? (
+          <TouchableOpacity style={{display: 'flex', flexDirection: 'row', flex: 1}} onPress={() => this.onSuggestionSelected(item)}>
+            <Text>{normalText}</Text>
+            <Text style={{ fontWeight: '700' }} numberOfLines={1}>{highlightedText}</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text
+            style={styles.itemText}
+            onPress={() => this.onSuggestionSelected(item)}
+            numberOfLines={1}
+          >
+            {item.label}
+          </Text>
+        )}
         <View styles={styles.autoFillIcon}>
           {showAutoFill
             ? renderNode(Icon, autoFillIcon, {
@@ -642,6 +680,7 @@ SearchBox.propTypes = {
   appbaseConfig: appbaseConfigDef,
   showDistinctSuggestions: bool,
   queryString: bool,
+  onChange: func,
   // Customize Suggestions
   defaultSuggestions: arrayOf(object),
   autosuggest: bool,
@@ -677,7 +716,8 @@ SearchBox.propTypes = {
   error: any,
   loading: bool,
   results: object,
-  recentSearches: array
+  recentSearches: array,
+  enablePredictiveSuggestions: bool
 };
 
 SearchBox.defaultProps = {
@@ -694,7 +734,9 @@ SearchBox.defaultProps = {
   className: '',
   autoFocus: false,
   downShiftProps: {},
-  showDistinctSuggestions: true
+  showDistinctSuggestions: true,
+  enablePredictiveSuggestions: false,
+  value: undefined
 };
 
 const styles = StyleSheet.create({
