@@ -202,6 +202,12 @@ class SearchComponent extends Base {
   // query search ID
   _queryId: string;
 
+  // tracks the last request time for default query
+  _lastRequestTimeDefaultQuery: number;
+
+  // tracks the last request time for custom query
+  _lastRequestTimeCustomQuery: number;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   beforeValueChange: (value: string) => Promise<any>;
@@ -706,64 +712,69 @@ class SearchComponent extends Base {
     try {
       this._updateQuery();
       this._setRequestStatus(REQUEST_STATUS.pending);
+      // Set the latest request time
+      this._lastRequestTimeDefaultQuery = new Date().getTime();
       return this._fetchRequest({
         query: Array.isArray(this.query) ? this.query : [this.query],
         settings: this.appbaseSettings
       })
         .then(results => {
-          const prev = this.results;
-          const rawResults = results && results[this.id];
-          const afterResponse = () => {
-            if (rawResults.aggregations) {
-              this._handleAggregationResponse(rawResults.aggregations, {
-                defaultOptions,
-                ...options
-              });
+          if (this._lastRequestTimeDefaultQuery < results._timestamp) {
+            const prev = this.results;
+            const rawResults = results && results[this.id];
+            const afterResponse = () => {
+              if (rawResults.aggregations) {
+                this._handleAggregationResponse(rawResults.aggregations, {
+                  defaultOptions,
+                  ...options
+                });
+              }
+              this._setRequestStatus(REQUEST_STATUS.inactive);
+              this._applyOptions(
+                {
+                  stateChanges: options.stateChanges
+                },
+                'results',
+                prev,
+                this.results
+              );
+            };
+            if (
+              (!this.type || this.type === queryTypes.Search) &&
+              this.enablePopularSuggestions
+            ) {
+              this._fetchRequest(this.getSuggestionsQuery(), true)
+                .then(rawPopularSuggestions => {
+                  const popularSuggestionsData =
+                    rawPopularSuggestions[suggestionQueryID];
+                  // Merge popular suggestions as the top suggestions
+                  if (
+                    popularSuggestionsData &&
+                    popularSuggestionsData.hits &&
+                    popularSuggestionsData.hits.hits &&
+                    rawResults.hits &&
+                    rawResults.hits.hits
+                  ) {
+                    rawResults.hits.hits = [
+                      ...(popularSuggestionsData.hits.hits || []).map(hit => ({
+                        ...hit,
+                        // Set the popular suggestion tag for suggestion hits
+                        _popular_suggestion: true
+                      })),
+                      ...rawResults.hits.hits
+                    ];
+                  }
+                  this._appendResults(rawResults);
+                  afterResponse();
+                })
+                .catch(handleError);
+            } else {
+              this._appendResults(rawResults);
+              afterResponse();
             }
-            this._setRequestStatus(REQUEST_STATUS.inactive);
-            this._applyOptions(
-              {
-                stateChanges: options.stateChanges
-              },
-              'results',
-              prev,
-              this.results
-            );
-          };
-          if (
-            (!this.type || this.type === queryTypes.Search) &&
-            this.enablePopularSuggestions
-          ) {
-            this._fetchRequest(this.getSuggestionsQuery(), true)
-              .then(rawPopularSuggestions => {
-                const popularSuggestionsData =
-                  rawPopularSuggestions[suggestionQueryID];
-                // Merge popular suggestions as the top suggestions
-                if (
-                  popularSuggestionsData &&
-                  popularSuggestionsData.hits &&
-                  popularSuggestionsData.hits.hits &&
-                  rawResults.hits &&
-                  rawResults.hits.hits
-                ) {
-                  rawResults.hits.hits = [
-                    ...(popularSuggestionsData.hits.hits || []).map(hit => ({
-                      ...hit,
-                      // Set the popular suggestion tag for suggestion hits
-                      _popular_suggestion: true
-                    })),
-                    ...rawResults.hits.hits
-                  ];
-                }
-                this._appendResults(rawResults);
-                afterResponse();
-              })
-              .catch(handleError);
-          } else {
-            this._appendResults(rawResults);
-            afterResponse();
+            return Promise.resolve(rawResults);
           }
-          return Promise.resolve(rawResults);
+          return Promise.resolve([]);
         })
         .catch(handleError);
     } catch (err) {
@@ -818,6 +829,8 @@ class SearchComponent extends Base {
             componentInstance._updateQuery();
           }
         });
+        // Set the latest request time
+        this._lastRequestTimeCustomQuery = new Date().getTime();
         // Re-generate query after changes
         const { requestBody: finalRequest } = this._generateQuery();
         return this._fetchRequest({
@@ -825,41 +838,44 @@ class SearchComponent extends Base {
           settings: this.appbaseSettings
         })
           .then(results => {
-            // Update the state for components
-            orderOfQueries.forEach(id => {
-              const componentInstance = this._parent.getComponent(id);
-              if (componentInstance) {
-                componentInstance._setRequestStatus(REQUEST_STATUS.inactive);
-                // Update the results
-                const prev = componentInstance.results;
-                // Collect results from the response for a particular component
-                let rawResults = results && results[id];
-                // Set results
-                if (rawResults.hits) {
-                  componentInstance.results.setRaw(rawResults);
-                  componentInstance._applyOptions(
-                    {
-                      stateChanges: options.stateChanges
-                    },
-                    'results',
-                    prev,
-                    componentInstance.results
-                  );
-                }
+            if (this._lastRequestTimeCustomQuery < results._timestamp) {
+              // Update the state for components
+              orderOfQueries.forEach(id => {
+                const componentInstance = this._parent.getComponent(id);
+                if (componentInstance) {
+                  componentInstance._setRequestStatus(REQUEST_STATUS.inactive);
+                  // Update the results
+                  const prev = componentInstance.results;
+                  // Collect results from the response for a particular component
+                  let rawResults = results && results[id];
+                  // Set results
+                  if (rawResults.hits) {
+                    componentInstance.results.setRaw(rawResults);
+                    componentInstance._applyOptions(
+                      {
+                        stateChanges: options.stateChanges
+                      },
+                      'results',
+                      prev,
+                      componentInstance.results
+                    );
+                  }
 
-                if (rawResults.aggregations) {
-                  componentInstance._handleAggregationResponse(
-                    rawResults.aggregations,
-                    {
-                      defaultOptions,
-                      ...options
-                    },
-                    false
-                  );
+                  if (rawResults.aggregations) {
+                    componentInstance._handleAggregationResponse(
+                      rawResults.aggregations,
+                      {
+                        defaultOptions,
+                        ...options
+                      },
+                      false
+                    );
+                  }
                 }
-              }
-            });
-            return Promise.resolve(results);
+              });
+              return Promise.resolve(results);
+            }
+            return Promise.resolve([]);
           })
           .catch(handleError);
       } catch (err) {
