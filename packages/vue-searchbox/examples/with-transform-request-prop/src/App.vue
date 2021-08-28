@@ -31,8 +31,8 @@
         userId: 'jon@appbase.io',
         customEvents: {
           platform: 'ios',
-          device: 'iphoneX',
-        },
+          device: 'iphoneX'
+        }
       }"
     >
       <div>
@@ -49,19 +49,17 @@
           :dataField="[
             {
               field: 'original_title',
-              weight: 1,
+              weight: 1
             },
             {
               field: 'original_title.search',
-              weight: 3,
-            },
+              weight: 3
+            }
           ]"
           title="Search"
           placeholder="Search for Books"
           :transformRequest="transformRequest"
         />
-        <data-muse-suggestions :suggestedWords="suggestedWords" />
-
         <div>
           <search-component
             id="result-component"
@@ -125,7 +123,7 @@
                     v-if="results.numberOfResults"
                     :value="Math.ceil(from / size) + 1"
                     :page-count="Math.ceil(results.numberOfResults / size)"
-                    :click-handler="(page) => setFrom((page - 1) * size)"
+                    :click-handler="page => setFrom((page - 1) * size)"
                     :prev-text="'Prev'"
                     :next-text="'Next'"
                     :container-class="'pagination'"
@@ -142,74 +140,62 @@
 
 <script>
 /* eslint-disable no-console */
-import Paginate from "vuejs-paginate";
+import Paginate from 'vuejs-paginate';
 import {
   SearchBase,
   SearchComponent,
-  SearchBox,
-} from "@appbaseio/vue-searchbox";
-import DataMuseSuggestions from "./components/DataMuseSuggestions";
-import axios from "axios";
-import "./styles.css";
+  SearchBox
+} from '@appbaseio/vue-searchbox';
+import axios from 'axios';
+import './styles.css';
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     SearchBase,
     SearchBox,
     SearchComponent,
-    Paginate,
-    DataMuseSuggestions,
+    Paginate
   },
   data() {
     return {
-      searchText: "",
-      suggestedWords: [],
+      suggestedWords: []
     };
   },
   methods: {
     transformRequest(request) {
       const suggestedWordsList = [];
-      const reqBody = JSON.parse(request.body);
+      let reqBody = JSON.parse(request.body);
       let url =
-        "https://api.datamuse.com/words?sp=" +
+        'https://api.datamuse.com/words?sp=' +
         reqBody.query[0].value +
-        "&max=2";
-      axios
+        '&max=2';
+      return axios
         .get(url)
         .then(({ data }) => {
-          data.forEach(({ word, score }) => {
-            if (
-              word &&
-              reqBody.query[0].value &&
-              word.toLowerCase() !== reqBody.query[0].value.toLowerCase() &&
-              score > 99
-            ) {
-              suggestedWordsList.push({
-                label: word,
-                value: word,
-              });
-            }
-          });
-          this.suggestedWords = suggestedWordsList;
+          if (data.length > 0) {
+            suggestedWordsList.push(data[0].word);
+          }
+          if (suggestedWordsList.length) {
+            reqBody.query[0].value = suggestedWordsList[0];
+          }
+          let newRequest = { ...request, body: JSON.stringify(reqBody) };
+          return Promise.resolve(newRequest);
         })
-        .catch((err) => console.error(err));
-      return Promise.resolve(request);
-    },
-    handlesearchText(value, searchComponent) {
-      this.searchText = `${value}`;
-      // To fetch suggestions
-      searchComponent.triggerDefaultQuery();
-      // To update results
-      searchComponent.triggerCustomQuery();
-    },
-  },
+        .catch(err => console.error(err))
+        .finally(() => {
+          if (!suggestedWordsList.length) {
+            return Promise.resolve(request);
+          }
+        });
+    }
+  }
 };
 </script>
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
