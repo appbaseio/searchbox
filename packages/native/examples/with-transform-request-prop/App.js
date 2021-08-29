@@ -16,6 +16,7 @@ import {
   Image,
   SafeAreaView
 } from 'react-native';
+import axios from 'axios';
 
 const renderResultItem = ({ item }) => {
   return (
@@ -103,21 +104,45 @@ export default function App() {
           onValueSelected={value => {
             setResetPagination(true);
           }}
-          renderNoSuggestion={() => <Text>No suggestions found</Text>}
-          autosuggest={false}
-          enableRecentSearches={false}
-          showAutoFill={false}
-          enablePopularSuggestions
-          // searchBarProps={{
-          //   platform: 'android'
-          // }}
+          transformRequest={request => {
+            const suggestedWordsList = [];
+            let reqBody = JSON.parse(request.body);
+            let url =
+              'https://api.datamuse.com/words?sp=' +
+              reqBody.query[0].value +
+              '&max=2';
+            return (
+              axios
+                .get(url)
+                .then(({ data }) => {
+                  if (data.length > 0) {
+                    suggestedWordsList.push(data[0].word);
+                  }
+                  if (suggestedWordsList.length) {
+                    reqBody.query[0].value = suggestedWordsList[0];
+                  }
+                  let newRequest = {
+                    ...request,
+                    body: JSON.stringify(reqBody)
+                  };
+                  return Promise.resolve(newRequest);
+                })
+                .catch(err => console.error(err))
+                // eslint-disable-next-line
+              .finally(() => {
+                  if (!suggestedWordsList.length) {
+                    return Promise.resolve(request);
+                  }
+                })
+            );
+          }}
         />
         <SearchComponent
           id="result-component"
           dataField="original_title"
           size={10}
           react={{
-            and: ['search-component', 'author-filter']
+            and: ['search-component']
           }}
           onResults={setResults}
         >
