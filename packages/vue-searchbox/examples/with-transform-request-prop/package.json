@@ -11,8 +11,7 @@
         "@appbaseio/vue-searchbox": "1.5.1",
         "core-js": "^2.6.5",
         "vue": "^2.6.10",
-        "vuejs-paginate": "^2.1.0",
-        "axios": "0.21.1"
+        "vuejs-paginate": "^2.1.0"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^3.12.0",

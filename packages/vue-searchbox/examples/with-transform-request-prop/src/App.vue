@@ -146,7 +146,6 @@ import {
   SearchComponent,
   SearchBox
 } from '@appbaseio/vue-searchbox';
-import axios from 'axios';
 import './styles.css';
 
 export default {
@@ -166,13 +165,19 @@ export default {
     transformRequest(request) {
       const suggestedWordsList = [];
       let reqBody = JSON.parse(request.body);
+      let getSearchComponentQueryIndex = 0;
+      reqBody.query.forEach((item, index) => {
+        if (item.id === 'search-component') {
+          getSearchComponentQueryIndex = index;
+        }
+      });
       let url =
         'https://api.datamuse.com/words?sp=' +
-        reqBody.query[0].value +
+        reqBody.query[getSearchComponentQueryIndex].value +
         '&max=2';
-      return axios
-        .get(url)
-        .then(({ data }) => {
+      return fetch(url)
+        .then(res => res.json())
+        .then(data => {
           if (data.length > 0) {
             suggestedWordsList.push(data[0].word);
           }
