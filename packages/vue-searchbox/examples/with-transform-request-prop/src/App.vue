@@ -175,11 +175,6 @@ export default {
           getSearchComponentQueryIndex = index;
         }
       });
-      window.console.log('reqBody', reqBody);
-      window.console.log(
-        'getSearchComponentQueryIndex',
-        getSearchComponentQueryIndex
-      );
       let queryWord = reqBody.query[getSearchComponentQueryIndex].value;
       let url =
         'https://api.datamuse.com/words?sp=' +
