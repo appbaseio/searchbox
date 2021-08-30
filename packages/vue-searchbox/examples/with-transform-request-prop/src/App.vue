@@ -60,12 +60,16 @@
           placeholder="Search for Books"
           :transformRequest="transformRequest"
         />
+        <div v-if="queryVal">
+          Showing results for&nbsp; <b>{{ queryVal }}</b>
+        </div>
         <div>
           <search-component
             id="result-component"
             :dataField="['original_title']"
             :size="5"
             :react="{ and: ['search-component'] }"
+            :pagination="true"
           >
             <div
               class="result-list-container"
@@ -158,7 +162,7 @@ export default {
   },
   data() {
     return {
-      suggestedWords: []
+      queryVal: ''
     };
   },
   methods: {
@@ -171,6 +175,12 @@ export default {
           getSearchComponentQueryIndex = index;
         }
       });
+      window.console.log('reqBody', reqBody);
+      window.console.log(
+        'getSearchComponentQueryIndex',
+        getSearchComponentQueryIndex
+      );
+      let queryWord = reqBody.query[getSearchComponentQueryIndex].value;
       let url =
         'https://api.datamuse.com/words?sp=' +
         reqBody.query[getSearchComponentQueryIndex].value +
@@ -178,17 +188,21 @@ export default {
       return fetch(url)
         .then(res => res.json())
         .then(data => {
-          if (data.length > 0) {
+          if (data && data.length > 0) {
             suggestedWordsList.push(data[0].word);
+            queryWord = suggestedWordsList[0];
           }
           if (suggestedWordsList.length) {
-            reqBody.query[0].value = suggestedWordsList[0];
+            reqBody.query[getSearchComponentQueryIndex].value =
+              suggestedWordsList[0];
           }
           let newRequest = { ...request, body: JSON.stringify(reqBody) };
           return Promise.resolve(newRequest);
         })
         .catch(err => console.error(err))
         .finally(() => {
+          this.queryVal =
+            !queryWord || queryWord === 'undefined' ? '' : queryWord;
           if (!suggestedWordsList.length) {
             return Promise.resolve(request);
           }
