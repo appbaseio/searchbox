@@ -11,7 +11,7 @@ export default function Search({ setResetPagination }) {
       // To fetch suggestions
       searchComponent.triggerDefaultQuery();
     }
-  }, [text]);
+  }, [searchbase, text]);
 
   return (
     <SearchBox
@@ -29,7 +29,7 @@ export default function Search({ setResetPagination }) {
       onValueSelected={value => {
         const searchComponent = searchbase.getComponent('search-component');
         if (searchComponent) {
-          // To fetch suggestions
+          // To fetch results
           searchComponent.triggerCustomQuery();
           setText(value);
         }

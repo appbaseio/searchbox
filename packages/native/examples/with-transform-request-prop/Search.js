@@ -22,7 +22,7 @@ export default function Search({ setResetPagination }) {
         onValueSelected={value => {
           const searchComponent = searchbase.getComponent('search-component');
           if (searchComponent) {
-            // To fetch suggestions
+            // To fetch results
             searchComponent.triggerCustomQuery();
           }
           setResetPagination(true);
