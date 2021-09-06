@@ -11,7 +11,7 @@ export default function Search({ setResetPagination }) {
       // To fetch suggestions
       searchComponent.triggerDefaultQuery();
     }
-  }, [searchbase, text]);
+  }, [text]);
 
   return (
     <SearchBox

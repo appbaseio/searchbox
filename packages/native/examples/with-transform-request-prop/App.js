@@ -1,9 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  SearchBase,
-  SearchComponent,
-  SearchBox
-} from '@appbaseio/react-native-searchbox';
+import { SearchBase, SearchComponent } from '@appbaseio/react-native-searchbox';
 import { AntDesign } from '@expo/vector-icons';
 import {
   StyleSheet,
@@ -16,6 +12,7 @@ import {
   Image,
   SafeAreaView
 } from 'react-native';
+import Search from './Search';
 
 const renderResultItem = ({ item }) => {
   return (
@@ -59,7 +56,6 @@ const renderItemSeparator = () => {
 function AppContent() {
   const [dataSource, setDataSource] = useState([]);
   const [resetPagination, setResetPagination] = useState(false);
-  const [queryVal, setQueryVal] = useState('');
 
   const stateRef = useRef();
   stateRef.current = dataSource;
@@ -76,67 +72,7 @@ function AppContent() {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBox
-        id="search-component"
-        dataField={[
-          {
-            field: 'original_title',
-            weight: 1
-          },
-          {
-            field: 'original_title.search',
-            weight: 3
-          }
-        ]}
-        onValueSelected={value => {
-          setResetPagination(true);
-        }}
-        transformRequest={request => {
-          const suggestedWordsList = [];
-          let reqBody = JSON.parse(request.body);
-          let getSearchComponentQueryIndex = 0;
-          reqBody.query.forEach((item, index) => {
-            if (item.id === 'search-component') {
-              getSearchComponentQueryIndex = index;
-            }
-          });
-          let queryWord = reqBody.query[getSearchComponentQueryIndex].value;
-          let url =
-            'https://api.datamuse.com/words?sp=' +
-            reqBody.query[getSearchComponentQueryIndex].value +
-            '&max=2';
-          return (
-            fetch(url)
-              .then(res => res.json())
-              .then(data => {
-                if (data.length > 0) {
-                  suggestedWordsList.push(data[0].word);
-                  queryWord = suggestedWordsList[0];
-                }
-                if (suggestedWordsList.length) {
-                  reqBody.query[getSearchComponentQueryIndex].value =
-                    suggestedWordsList[0];
-                }
-                let newRequest = {
-                  ...request,
-                  body: JSON.stringify(reqBody)
-                };
-                return Promise.resolve(newRequest);
-              })
-              .catch(err => console.error(err))
-              // eslint-disable-next-line
-              .finally(() => {
-                setQueryVal(
-                  !queryWord || queryWord === 'undefined' ? '' : queryWord
-                );
-                if (!suggestedWordsList.length) {
-                  return Promise.resolve(request);
-                }
-              })
-          );
-        }}
-      />
-      <Text> {queryVal && <Text> Showing results for {queryVal}</Text>} </Text>
+      <Search setResetPagination={setResetPagination} />
       <SearchComponent
         id="result-component"
         dataField="original_title"
