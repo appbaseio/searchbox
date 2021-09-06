@@ -55,8 +55,7 @@ const renderItemSeparator = () => {
     <View style={styles.itemSeparator} />
   );
 };
-
-export default function App() {
+function AppContent() {
   const [dataSource, setDataSource] = useState([]);
   const [resetPagination, setResetPagination] = useState(false);
   const stateRef = useRef();
@@ -74,101 +73,107 @@ export default function App() {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBase
-        index="good-books-ds"
-        credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
-        url="https://appbase-demo-ansible-abxiydt-arc.searchbase.io"
-        appbaseConfig={{
-          recordAnalytics: true,
-          enableQueryRules: true,
-          userId: 'jon@appbase.io',
-          customEvents: {
-            platform: 'ios',
-            device: 'iphoneX'
+      <SearchBox
+        id="search-component"
+        dataField={[
+          {
+            field: 'original_title',
+            weight: 1
+          },
+          {
+            field: 'original_title.search',
+            weight: 3
           }
+        ]}
+        onValueSelected={value => {
+          setResetPagination(true);
         }}
+        renderNoSuggestion={() => <Text>No suggestions found</Text>}
+        autosuggest={true}
+        enableRecentSearches={true}
+        enablePopularSuggestions
+        showVoiceSearch
+        searchBarProps={{
+          platform: 'android'
+        }}
+      />
+      <SearchComponent
+        id="result-component"
+        dataField="original_title"
+        size={10}
+        react={{
+          and: ['search-component', 'author-filter']
+        }}
+        onResults={setResults}
       >
-        <SearchBox
-          id="search-component"
-          dataField={[
-            {
-              field: 'original_title',
-              weight: 1
-            },
-            {
-              field: 'original_title.search',
-              weight: 3
-            }
-          ]}
-          onValueSelected={value => {
-            setResetPagination(true);
-          }}
-          renderNoSuggestion={() => <Text>No suggestions found</Text>}
-          autosuggest={false}
-          enableRecentSearches={false}
-          showAutoFill={false}
-          enablePopularSuggestions
-          // searchBarProps={{
-          //   platform: 'android'
-          // }}
-        />
-        <SearchComponent
-          id="result-component"
-          dataField="original_title"
-          size={10}
-          react={{
-            and: ['search-component', 'author-filter']
-          }}
-          onResults={setResults}
-        >
-          {({ results, loading, size, from, setValue, setFrom }) => {
-            return (
-              <View>
-                {loading && !results.data.length ? (
-                  <ActivityIndicator
-                    style={styles.loader}
-                    size="large"
-                    color="#000"
-                  />
-                ) : (
-                  <View>
-                    {!results.data.length ? (
-                      <Text style={styles.resultStats}>No results found</Text>
-                    ) : (
-                      <View style={styles.resultContainer}>
-                        <Text style={styles.resultStats}>
-                          {results.numberOfResults} results found in{' '}
-                          {results.time}ms
-                        </Text>
-                        <FlatList
-                          data={dataSource}
-                          keyboardShouldPersistTaps={'handled'}
-                          keyExtractor={item => item._id}
-                          ItemSeparatorComponent={renderItemSeparator}
-                          renderItem={renderResultItem}
-                          onEndReached={() => {
-                            const offset = (from || 0) + size;
-                            if (results.numberOfResults > offset) {
-                              setFrom((from || 0) + size);
-                            }
-                          }}
-                          onEndReachedThreshold={0.5}
-                          ListFooterComponent={
-                            loading ? (
-                              <ActivityIndicator size="large" color="#000" />
-                            ) : null
+        {({ results, loading, size, from, setValue, setFrom }) => {
+          return (
+            <View>
+              {loading && !results.data.length ? (
+                <ActivityIndicator
+                  style={styles.loader}
+                  size="large"
+                  color="#000"
+                />
+              ) : (
+                <View>
+                  {!results.data.length ? (
+                    <Text style={styles.resultStats}>No results found</Text>
+                  ) : (
+                    <View style={styles.resultContainer}>
+                      <Text style={styles.resultStats}>
+                        {results.numberOfResults} results found in{' '}
+                        {results.time}ms
+                      </Text>
+                      <FlatList
+                        data={dataSource}
+                        keyboardShouldPersistTaps={'handled'}
+                        keyExtractor={item => item._id}
+                        ItemSeparatorComponent={renderItemSeparator}
+                        renderItem={renderResultItem}
+                        onEndReached={() => {
+                          const offset = (from || 0) + size;
+                          if (results.numberOfResults > offset) {
+                            setFrom((from || 0) + size);
                           }
-                        />
-                      </View>
-                    )}
-                  </View>
-                )}
-              </View>
-            );
-          }}
-        </SearchComponent>
-      </SearchBase>
+                        }}
+                        onEndReachedThreshold={0.5}
+                        ListFooterComponent={
+                          loading ? (
+                            <ActivityIndicator size="large" color="#000" />
+                          ) : null
+                        }
+                      />
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
+          );
+        }}
+      </SearchComponent>
     </SafeAreaView>
+  );
+}
+
+export default function App() {
+  return (
+    <SearchBase
+      index="good-books-ds"
+      credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
+      url="https://appbase-demo-ansible-abxiydt-arc.searchbase.io"
+      appbaseConfig={{
+        recordAnalytics: true,
+        enableQueryRules: true,
+        userId: 'jon@appbase.io',
+        customEvents: {
+          platform: 'ios',
+          device: 'iphoneX'
+        }
+      }}
+    >
+      <AppContent />
+    </SearchBase>
   );
 }
 
