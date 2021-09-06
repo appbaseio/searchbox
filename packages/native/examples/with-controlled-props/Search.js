@@ -31,6 +31,7 @@ export default function Search({ setResetPagination }) {
         if (searchComponent) {
           // To fetch suggestions
           searchComponent.triggerCustomQuery();
+          setText(value);
         }
         setResetPagination(true);
       }}
