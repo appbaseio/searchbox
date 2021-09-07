@@ -56,21 +56,6 @@ const renderItemSeparator = () => {
   );
 };
 function AppContent() {
-  const [dataSource, setDataSource] = useState([]);
-  const [resetPagination, setResetPagination] = useState(false);
-  const stateRef = useRef();
-  stateRef.current = dataSource;
-  const stateRefQuery = useRef();
-  stateRefQuery.current = resetPagination;
-  const setResults = results => {
-    if (stateRefQuery.current) {
-      // Reset paginated data source
-      setDataSource(results.data);
-      setResetPagination(false);
-    } else {
-      setDataSource([...stateRef.current, ...results.data]);
-    }
-  };
   return (
     <SafeAreaView style={styles.container}>
       <SearchBox
@@ -85,9 +70,6 @@ function AppContent() {
             weight: 3
           }
         ]}
-        onValueSelected={value => {
-          setResetPagination(true);
-        }}
         renderNoSuggestion={() => <Text>No suggestions found</Text>}
         autosuggest={true}
         enableRecentSearches={true}
@@ -102,9 +84,9 @@ function AppContent() {
         dataField="original_title"
         size={10}
         react={{
-          and: ['search-component', 'author-filter']
+          and: ['search-component']
         }}
-        onResults={setResults}
+        preserveResults
       >
         {({ results, loading, size, from, setValue, setFrom }) => {
           return (
@@ -126,7 +108,7 @@ function AppContent() {
                         {results.time}ms
                       </Text>
                       <FlatList
-                        data={dataSource}
+                        data={results.data}
                         keyboardShouldPersistTaps={'handled'}
                         keyExtractor={item => item._id}
                         ItemSeparatorComponent={renderItemSeparator}

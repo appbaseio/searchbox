@@ -1,17 +1,24 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { SearchBox, SearchContext } from '@appbaseio/react-native-searchbox';
 
-export default function Search({ setResetPagination }) {
+export default function Search() {
   const [text, setText] = useState('');
+  const resetPaginationRefQuery = useRef();
 
   const searchbase = useContext(SearchContext);
   useEffect(() => {
     const searchComponent = searchbase.getComponent('search-component');
     if (searchComponent) {
-      // To fetch suggestions
-      searchComponent.triggerDefaultQuery();
+      if (resetPaginationRefQuery.current) {
+        resetPaginationRefQuery.current = false;
+        // To fetch results
+        searchComponent.triggerCustomQuery();
+      } else {
+        // To fetch suggestions
+        searchComponent.triggerDefaultQuery();
+      }
     }
-  }, [text]);
+  }, [searchbase, text]);
 
   return (
     <SearchBox
@@ -27,16 +34,14 @@ export default function Search({ setResetPagination }) {
         }
       ]}
       onValueSelected={value => {
+        resetPaginationRefQuery.current = true;
         const searchComponent = searchbase.getComponent('search-component');
         if (searchComponent) {
-          // To fetch results
-          searchComponent.triggerCustomQuery();
           setText(value);
         }
-        setResetPagination(true);
       }}
       value={text}
-      onChange={(value, searchComponent) => {
+      onChange={value => {
         setText(value);
       }}
     />

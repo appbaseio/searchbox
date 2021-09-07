@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { SearchBase, SearchComponent } from '@appbaseio/react-native-searchbox';
 import { AntDesign } from '@expo/vector-icons';
 import {
@@ -54,25 +54,9 @@ const renderItemSeparator = () => {
 };
 
 function AppContent() {
-  const [dataSource, setDataSource] = useState([]);
-  const [resetPagination, setResetPagination] = useState(false);
-
-  const stateRef = useRef();
-  stateRef.current = dataSource;
-  const stateRefQuery = useRef();
-  stateRefQuery.current = resetPagination;
-  const setResults = results => {
-    if (stateRefQuery.current) {
-      // Reset paginated data source
-      setDataSource(results.data);
-      setResetPagination(false);
-    } else {
-      setDataSource([...stateRef.current, ...results.data]);
-    }
-  };
   return (
     <SafeAreaView style={styles.container}>
-      <Search setResetPagination={setResetPagination} />
+      <Search />
       <SearchComponent
         id="result-component"
         dataField="original_title"
@@ -80,7 +64,7 @@ function AppContent() {
         react={{
           and: ['search-component']
         }}
-        onResults={setResults}
+        preserveResults
       >
         {({ results, loading, size, from, setValue, setFrom }) => {
           return (
@@ -102,7 +86,7 @@ function AppContent() {
                         {results.time}ms
                       </Text>
                       <FlatList
-                        data={dataSource}
+                        data={results.data}
                         keyboardShouldPersistTaps={'handled'}
                         keyExtractor={item => item._id}
                         ItemSeparatorComponent={renderItemSeparator}

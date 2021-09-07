@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { SearchBox, SearchContext } from '@appbaseio/react-native-searchbox';
 import { Text } from 'react-native';
-export default function Search({ setResetPagination }) {
+export default function Search() {
   const [queryVal, setQueryVal] = useState('');
   const searchbase = useContext(SearchContext);
 
@@ -25,7 +25,6 @@ export default function Search({ setResetPagination }) {
             // To fetch results
             searchComponent.triggerCustomQuery();
           }
-          setResetPagination(true);
         }}
         transformRequest={request => {
           const suggestedWordsList = [];
