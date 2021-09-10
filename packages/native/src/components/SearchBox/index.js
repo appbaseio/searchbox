@@ -113,7 +113,7 @@ class SearchBox extends React.Component {
     const { aggregationField } = this.props;
     if (aggregationField) {
       console.warn(
-          'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+        'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
       );
     }
   }
@@ -227,7 +227,6 @@ class SearchBox extends React.Component {
       loading,
       data: this.suggestionsList,
       value: this.componentInstance.value,
-      triggerClickAnalytics: this.triggerClickAnalytics,
       promotedData: this.componentInstance.results.promotedData,
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
@@ -236,19 +235,6 @@ class SearchBox extends React.Component {
       recentSearches
     };
     return getComponent(data, this.props);
-  };
-
-  triggerClickAnalytics = (clickPosition, isSuggestion = true, value) => {
-    const { appbaseConfig } = this.props;
-    if (
-      !(appbaseConfig && appbaseConfig.recordAnalytics) ||
-      !this.componentInstance
-    )
-      return;
-    this.componentInstance.recordClick(
-      { [value]: clickPosition },
-      isSuggestion
-    );
   };
 
   get hasCustomRenderer() {
@@ -364,11 +350,6 @@ class SearchBox extends React.Component {
     });
     // Keyboard.dissmiss();
     this.closeModal();
-    this.triggerClickAnalytics(
-      suggestion && suggestion._click_id,
-      true,
-      suggestion.source && suggestion.source._id
-    );
     this.onValueSelected(
       suggestion.value,
       causes.SUGGESTION_SELECT,
@@ -443,7 +424,16 @@ class SearchBox extends React.Component {
   };
 
   renderSearchInput({ isOpenWithModal = false, ...rest } = {}) {
-    const { placeholder, theme, loading, style, searchBarProps, onBlur, onKeyPress, onFocus } = this.props;
+    const {
+      placeholder,
+      theme,
+      loading,
+      style,
+      searchBarProps,
+      onBlur,
+      onKeyPress,
+      onFocus
+    } = this.props;
     const currentValue = this.componentInstance.value || '';
     return (
       <SearchBar
@@ -567,8 +557,8 @@ class SearchBox extends React.Component {
     let normalText = '';
     let highlightedText = '';
     if (isPredictiveSuggestion) {
-      normalText = (/[^<]*/).exec(item.label)[0];
-      highlightedText = (/>[^<]*/).exec(item.label)[0].replaceAll('>', '');
+      normalText = /[^<]*/.exec(item.label)[0];
+      highlightedText = />[^<]*/.exec(item.label)[0].replaceAll('>', '');
     }
     if (renderItem) {
       return renderItem(item, isRecentSearch);
@@ -590,9 +580,14 @@ class SearchBox extends React.Component {
             })
           : null}
         {isPredictiveSuggestion ? (
-          <TouchableOpacity style={{display: 'flex', flexDirection: 'row', flex: 1}} onPress={() => this.onSuggestionSelected(item)}>
+          <TouchableOpacity
+            style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
+            onPress={() => this.onSuggestionSelected(item)}
+          >
             <Text>{normalText}</Text>
-            <Text style={{ fontWeight: '700' }} numberOfLines={1}>{highlightedText}</Text>
+            <Text style={{ fontWeight: '700' }} numberOfLines={1}>
+              {highlightedText}
+            </Text>
           </TouchableOpacity>
         ) : (
           <Text

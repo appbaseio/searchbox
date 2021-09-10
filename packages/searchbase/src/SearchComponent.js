@@ -238,7 +238,6 @@ class SearchComponent extends Base {
   constructor({
     index,
     url,
-    credentials,
     appbaseConfig,
     headers,
     transformRequest,
@@ -263,7 +262,6 @@ class SearchComponent extends Base {
     super({
       index,
       url,
-      credentials,
       headers,
       appbaseConfig,
       transformRequest,
@@ -942,27 +940,6 @@ class SearchComponent extends Base {
     };
   }
 
-  // use this methods to record a search click event
-  recordClick = (objects: Object, isSuggestionClick: boolean = false): void => {
-    if (this._analyticsInstance && this.queryId) {
-      this._analyticsInstance.click({
-        queryID: this.queryId,
-        objects,
-        isSuggestionClick
-      });
-    }
-  };
-
-  // use this methods to record a search conversion
-  recordConversions = (objects: Array<string>) => {
-    if (this._analyticsInstance && this.queryId) {
-      this._analyticsInstance.conversion({
-        queryID: this.queryId,
-        objects
-      });
-    }
-  };
-
   // Method to subscribe the state changes
   subscribeToStateChanges = (
     fn: Function,
@@ -1068,16 +1045,6 @@ class SearchComponent extends Base {
     }
   }
 
-  _getSearchIndex(isPopularSuggestionsAPI: boolean = false) {
-    let index = this.index;
-    if (isPopularSuggestionsAPI) {
-      index = '.suggestions';
-    } else if (this._parent && this._parent.index) {
-      index = this._parent.index;
-    }
-    return index;
-  }
-
   getRecentSearches = (
     queryOptions?: RecentSearchOptions = {
       size: 5,
@@ -1123,9 +1090,7 @@ class SearchComponent extends Base {
     }
     return new Promise((resolve, reject) => {
       fetch(
-        `${
-          this.url
-        }/_analytics/${this._getSearchIndex()}/recent-searches?${queryString}`,
+        `${this.url}/_analytics/recent-searches?${queryString}`,
         requestOptions
       )
         .then(res => {
@@ -1190,9 +1155,7 @@ class SearchComponent extends Base {
         .then(finalRequestOptions => {
           // set timestamp in request
           const timestamp = Date.now();
-          let suffix = '_reactivesearch.v3';
-          const index = this._getSearchIndex(isPopularSuggestionsAPI);
-          return fetch(`${this.url}/${index}/${suffix}`, finalRequestOptions)
+          return fetch(this.url, finalRequestOptions)
             .then(res => {
               const responseHeaders = res.headers;
 

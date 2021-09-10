@@ -11,9 +11,6 @@ class Base {
   // to enable the recording of analytics
   appbaseConfig: AppbaseSettings;
 
-  // auth credentials if any
-  credentials: string;
-
   // custom headers object
   headers: Object;
 
@@ -29,17 +26,12 @@ class Base {
 
   transformResponse: (response: any) => Promise<any>;
 
-  /* ------ Private properties only for the internal use ----------- */
-  // analytics instance
-  _analyticsInstance: Object;
-
   // query search ID
   _queryId: string;
 
   constructor({
     index,
     url,
-    credentials,
     headers,
     appbaseConfig,
     transformRequest,
@@ -53,7 +45,6 @@ class Base {
     }
     this.index = index;
     this.url = url;
-    this.credentials = credentials || '';
 
     if (appbaseConfig) {
       this.appbaseConfig = appbaseConfig;
@@ -71,21 +62,9 @@ class Base {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     };
-    if (this.credentials) {
-      this.headers = {
-        ...this.headers,
-        Authorization: `Basic ${btoa(this.credentials)}`
-      };
-    }
     if (headers) {
       this.setHeaders(headers);
     }
-    // Create analytics index
-    this._analyticsInstance = AppbaseAnalytics.init({
-      index,
-      url,
-      credentials
-    });
   }
 
   // To to set the custom headers

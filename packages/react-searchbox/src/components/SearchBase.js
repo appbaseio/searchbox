@@ -9,7 +9,6 @@ class SearchBase extends React.Component {
     this.searchbase = new Headless({
       index: props.index,
       url: props.url,
-      credentials: props.credentials,
       headers: props.headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
@@ -43,7 +42,6 @@ class SearchBase extends React.Component {
 SearchBase.propTypes = {
   index: stringRequired,
   url: stringRequired,
-  credentials: stringRequired,
   headers: object,
   appbaseConfig: appbaseConfig,
   transformRequest: func,

@@ -6,7 +6,6 @@ export default class SearchBase extends Base {
     constructor({
         index,
         url,
-        credentials,
         headers,
         appbaseConfig
       }: BaseConfig)

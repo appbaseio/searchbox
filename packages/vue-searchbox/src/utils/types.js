@@ -20,7 +20,6 @@ export const types = {
 	url: VueTypes.string.def('https://scalr.api.appbase.io'),
 	enableAppbase: VueTypes.bool.def(false),
 	enablePopularSuggestions: VueTypes.bool.def(false),
-	credentials: VueTypes.string.isRequired,
 	analytics: VueTypes.bool.def(false),
 	headers: VueTypes.object,
 	dataField: VueTypes.oneOfType([

@@ -162,7 +162,6 @@ export class SearchComponent extends Base {
   constructor({
     index,
     url,
-    credentials,
     appbaseConfig,
     headers,
     transformRequest,
@@ -262,12 +261,6 @@ export class SearchComponent extends Base {
 
   // Method to get the recent searches
   getRecentSearches(queryOptions?: types.RecentSearchOptions): Promise<any>;
-
-  // use this methods to record a search click event
-  recordClick(objects: Object, isSuggestionClick?: boolean): void;
-
-  // use this methods to record a search conversion
-  recordConversions(objects: Array<string>): void;
 
   // Method to subscribe the state changes
   subscribeToStateChanges(

@@ -7,7 +7,6 @@ const SearchBase = {
 	props: {
 		index: types.app,
 		url: types.url,
-		credentials: types.credentials,
 		headers: types.headers,
 		appbaseConfig: types.appbaseConfig,
 		transformRequest: VueTypes.func,
@@ -17,7 +16,6 @@ const SearchBase = {
 		this.searchbase = new Headless({
 			index: this.$props.index,
 			url: this.$props.url,
-			credentials: this.$props.credentials,
 			headers: this.$props.headers,
 			appbaseConfig: this.$props.appbaseConfig,
 			transformRequest: this.$props.transformRequest,

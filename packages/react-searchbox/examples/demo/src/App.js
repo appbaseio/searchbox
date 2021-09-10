@@ -11,9 +11,8 @@ import './styles.css';
 
 export default () => (
   <SearchBase
-    index="good-books-ds"
-    credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
-    url="https://appbase-demo-ansible-abxiydt-arc.searchbase.io"
+    index="default"
+    url="http://localhost:8080/_reactivesearch"
     appbaseConfig={{
       recordAnalytics: true,
       enableQueryRules: true,
@@ -22,6 +21,9 @@ export default () => (
         platform: 'ios',
         device: 'iphoneX'
       }
+    }}
+    transformRequest={req => {
+      return Promise.resolve(req);
     }}
   >
     <div>
@@ -42,12 +44,8 @@ export default () => (
         id="search-component"
         dataField={[
           {
-            field: 'original_title',
+            field: 'name',
             weight: 1
-          },
-          {
-            field: 'original_title.search',
-            weight: 3
           }
         ]}
         title="Search"
@@ -59,8 +57,8 @@ export default () => (
         size={5}
         maxPopularSuggestions={2}
         maxRecentSearches={3}
-        enablePopularSuggestions
-        enableRecentSearches
+        // enablePopularSuggestions
+        // enableRecentSearches
         iconPosition="left"
         style={{ paddingBottom: 10 }}
       />
@@ -69,8 +67,7 @@ export default () => (
           <SearchComponent
             id="author-filter"
             type="term"
-            dataField="authors.keyword"
-            subscribeTo={['aggregationData', 'requestStatus', 'value']}
+            dataField="property_type"
             URLParams
             react={{
               and: ['search-component']
@@ -143,54 +140,25 @@ export default () => (
                       )}
                       {results.data.map(item => (
                         <div
-                          className="flex book-content text-left"
+                          className="book-content text-left"
                           key={item._id}
+                          style={{ padding: 10 }}
                         >
-                          <img
-                            src={item.image}
-                            alt="Book Cover"
-                            className="book-image"
-                          />
-                          <div
-                            className="flex column justify-center"
-                            style={{ marginLeft: 20 }}
+                          <h1>{item.name}</h1>
+                          <p>{item.description}</p>
+
+                          <span
+                            style={{
+                              background: '#efefef',
+                              padding: 3,
+                              borderRadius: 3,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              width: 'auto'
+                            }}
                           >
-                            <div
-                              className="book-header"
-                              dangerouslySetInnerHTML={{
-                                __html: item.original_title
-                              }}
-                            />
-                            <div className="flex column justify-space-between">
-                              <div>
-                                <div>
-                                  by{' '}
-                                  <span className="authors-list">
-                                    {item.authors}
-                                  </span>
-                                </div>
-                                <div className="ratings-list flex align-center">
-                                  <span className="stars">
-                                    {Array(item.average_rating_rounded)
-                                      .fill('x')
-                                      .map((i, index) => (
-                                        <i
-                                          className="fas fa-star"
-                                          key={item._id + `_${index}`}
-                                        />
-                                      )) // eslint-disable-line
-                                    }
-                                  </span>
-                                  <span className="avg-rating">
-                                    ({item.average_rating} avg)
-                                  </span>
-                                </div>
-                              </div>
-                              <span className="pub-year">
-                                Pub {item.original_publication_year}
-                              </span>
-                            </div>
-                          </div>
+                            #{item.property_type}
+                          </span>
                         </div>
                       ))}
                     </div>

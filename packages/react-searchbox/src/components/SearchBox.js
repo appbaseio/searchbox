@@ -192,7 +192,6 @@ class SearchBox extends React.Component {
       downshiftProps,
       data: this.suggestionsList,
       value: this.componentInstance.value,
-      triggerClickAnalytics: this.triggerClickAnalytics,
       promotedData: this.componentInstance.results.promotedData,
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
@@ -213,19 +212,6 @@ class SearchBox extends React.Component {
       );
     }
     return getComponent(data, this.props);
-  };
-
-  triggerClickAnalytics = (clickPosition, isSuggestion = true, value) => {
-    const { appbaseConfig } = this.props;
-    if (
-      !(appbaseConfig && appbaseConfig.recordAnalytics) ||
-      !this.componentInstance
-    )
-      return;
-    this.componentInstance.recordClick(
-      { [value]: clickPosition },
-      isSuggestion
-    );
   };
 
   get hasCustomRenderer() {
@@ -376,11 +362,6 @@ class SearchBox extends React.Component {
       isOpen: false,
       triggerCustomQuery: true
     });
-    this.triggerClickAnalytics(
-      suggestion._click_id,
-      true,
-      suggestion.source && suggestion.source._id
-    );
     this.onValueSelected(
       suggestion.value,
       causes.SUGGESTION_SELECT,

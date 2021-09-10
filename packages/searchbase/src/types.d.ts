@@ -38,7 +38,6 @@ export type AppbaseSettings = {
 export type BaseConfig = {
   index?: string;
   url?: string;
-  credentials?: string;
   appbaseConfig?: AppbaseSettings;
   headers?: Object;
   transformRequest?: (requestOptions: Object) => Promise<Object>;

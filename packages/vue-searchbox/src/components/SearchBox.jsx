@@ -39,7 +39,6 @@ const SearchBox = {
 		index: VueTypes.string,
 		// search component props
 		url: VueTypes.string,
-		credentials: VueTypes.string,
 		headers: VueTypes.object,
 		appbaseConfig: types.appbaseConfig,
 		transformRequest: VueTypes.func,
@@ -224,17 +223,6 @@ const SearchBox = {
 				component[setterFunc](next);
 			}
 		},
-		triggerClickAnalytics(clickPosition, isSuggestion = true, value) {
-			const component = this.getComponentInstance();
-			if (!component) return;
-			if (
-				component
-        && component.appbaseSettings
-        && component.appbaseSettings.recordAnalytics
-			) {
-				component.recordClick({ [value]: clickPosition }, isSuggestion);
-			}
-		},
 		onValueSelectedHandler(currentValue = this.$props.instanceValue, ...cause) {
 			this.$emit('valueSelected', currentValue, ...cause);
 		},
@@ -247,11 +235,6 @@ const SearchBox = {
 				isOpen: false,
 				triggerCustomQuery: true
 			});
-			this.triggerClickAnalytics(
-				suggestion && suggestion._click_id,
-				true,
-				suggestion.source && suggestion.source._id
-			);
 			this.onValueSelectedHandler(
 				suggestion.value,
 				causes.SUGGESTION_SELECT,
@@ -498,7 +481,6 @@ const SearchBox = {
 				rawData: results.rawData,
 				recentSearches,
 				popularSuggestions: popularSuggestionsList,
-				triggerClickAnalytics: this.triggerClickAnalytics
 			};
 			if (isPopularSuggestionsRender) {
 				return getPopularSuggestionsComponent(

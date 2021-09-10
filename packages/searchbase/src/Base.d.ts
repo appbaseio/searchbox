@@ -8,7 +8,6 @@ declare abstract class Base {
   constructor({
     index,
     url,
-    credentials,
     headers,
     appbaseConfig,
     transformRequest,
@@ -17,9 +16,6 @@ declare abstract class Base {
 
   // to enable the recording of analytics
   appbaseConfig: AppbaseSettings;
-
-  // auth credentials if any
-  credentials: string;
 
   // custom headers object
   headers: Object;

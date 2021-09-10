@@ -450,8 +450,6 @@ export const searchBaseMappings = {
   onMicClick: 'handleMicClick',
   triggerDefaultQuery: 'triggerDefaultQuery',
   triggerCustomQuery: 'triggerCustomQuery',
-  recordClick: 'recordClick',
-  recordConversions: 'recordConversions',
   subscribeToStateChanges: 'subscribeToStateChanges',
   unsubscribeToStateChanges: 'unsubscribeToStateChanges',
   // ---------------- Setter Methods ----------------
