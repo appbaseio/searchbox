@@ -1,11 +1,11 @@
 {
-  "name": "@appbaseio/searchbase",
-  "version": "1.5.1",
+  "name": "@appbaseio/searchbase-mongodb",
+  "version": "0.0.1",
   "private": false,
   "description": "Headless core + common utilities for search",
-  "main": "dist/@appbaseio/searchbase.cjs.js",
-  "jsnext:main": "dist/@appbaseio/searchbase.es.js",
-  "module": "dist/@appbaseio/searchbase.es.js",
+  "main": "dist/@appbaseio/searchbase-mongodb.cjs.js",
+  "jsnext:main": "dist/@appbaseio/searchbase-mongodb.es.js",
+  "module": "dist/@appbaseio/searchbase-mongodb.es.js",
   "types": "dist/@appbaseio/index.d.ts",
   "scripts": {
     "watch": "nps watch",

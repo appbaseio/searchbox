@@ -4,7 +4,7 @@ import {
   SearchBox,
   SearchBase,
   SearchComponent
-} from '@appbaseio/react-searchbox';
+} from '@appbaseio/react-searchbox-mongodb';
 import ReactPaginate from 'react-paginate';
 
 import './styles.css';
@@ -21,9 +21,6 @@ export default () => (
         platform: 'ios',
         device: 'iphoneX'
       }
-    }}
-    transformRequest={req => {
-      return Promise.resolve(req);
     }}
   >
     <div>

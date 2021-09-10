@@ -37,10 +37,11 @@ walk(__dirname, function(err, results) {
     if (
       true &&
       jsonFile.dependencies &&
-      jsonFile.dependencies['@appbaseio/searchbase']
+      jsonFile.dependencies['@appbaseio/searchbase-mongodb']
     ) {
       console.log('Updating version of', file.replace('$var', ''));
-      jsonFile.dependencies['@appbaseio/searchbase'] = packageJSON.version;
+      jsonFile.dependencies['@appbaseio/searchbase-mongodb'] =
+        packageJSON.version;
       var updatedJSON = JSON.stringify(jsonFile, null, 4);
       fs.writeFile(file, updatedJSON, 'utf8', err => {
         if (err) {

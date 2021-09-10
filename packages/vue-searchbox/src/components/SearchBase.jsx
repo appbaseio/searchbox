@@ -1,4 +1,4 @@
-import { SearchBase as Headless } from '@appbaseio/searchbase';
+import { SearchBase as Headless } from '@appbaseio/searchbase-mongodb';
 import VueTypes from 'vue-types';
 import { types } from '../utils/types';
 

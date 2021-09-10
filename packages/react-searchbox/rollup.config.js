@@ -17,7 +17,7 @@ export default {
     'downshift',
     '@emotion/core',
     '@emotion/styled',
-    '@appbaseio/searchbase'
+    '@appbaseio/searchbase-mongodb'
   ],
   output: [
     {

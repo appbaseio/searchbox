@@ -36,10 +36,10 @@ walk(__dirname, function(err, results) {
 		if (
 			true
       && jsonFile.dependencies
-      && jsonFile.dependencies['@appbaseio/vue-searchbox']
+      && jsonFile.dependencies['@appbaseio/vue-searchbox-mongodb']
 		) {
 			console.log('Updating version of', file.replace('$var', ''));
-			jsonFile.dependencies['@appbaseio/vue-searchbox'] = packageJSON.version;
+			jsonFile.dependencies['@appbaseio/vue-searchbox-mongodb'] = packageJSON.version;
 			const updatedJSON = JSON.stringify(jsonFile, null, 4);
 			fs.writeFile(file, updatedJSON, 'utf8', (err2) => {
 				if (err2) {

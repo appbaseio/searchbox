@@ -36,12 +36,13 @@ walk(__dirname, function(err, results) {
     if (
       true &&
       jsonFile.dependencies &&
-      jsonFile.dependencies['@appbaseio/react-searchbox']
+      jsonFile.dependencies['@appbaseio/react-searchbox-mongodb']
     ) {
       console.log('Updating version of', file.replace('$var', ''));
-      jsonFile.dependencies['@appbaseio/react-searchbox'] = packageJSON.version;
+      jsonFile.dependencies['@appbaseio/react-searchbox-mongodb'] =
+        packageJSON.version;
       const updatedJSON = JSON.stringify(jsonFile, null, 4);
-      fs.writeFile(file, updatedJSON, 'utf8', (err2) => {
+      fs.writeFile(file, updatedJSON, 'utf8', err2 => {
         if (err2) {
           console.log(
             'Error while updating version of',
