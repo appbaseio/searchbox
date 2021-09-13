@@ -1,5 +1,5 @@
 {
-    "name": "@appbaseio/react-searchbox-native-example",
+    "name": "@appbaseio/react-searchbox-native-example-with-transform-request-prop",
     "version": "0.0.0",
     "main": "__generated__/AppEntry.js",
     "scripts": {
