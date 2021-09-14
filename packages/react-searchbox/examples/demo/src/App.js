@@ -11,16 +11,11 @@ import './styles.css';
 
 export default () => (
   <SearchBase
-    index="default"
     url="http://localhost:8080/_reactivesearch"
-    appbaseConfig={{
-      recordAnalytics: true,
-      enableQueryRules: true,
-      userId: 'jon@appbase.io',
-      customEvents: {
-        platform: 'ios',
-        device: 'iphoneX'
-      }
+    index="default"
+    mongodb={{
+      db: 'ded',
+      collection: 'collection'
     }}
   >
     <div>

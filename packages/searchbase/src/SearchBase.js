@@ -16,6 +16,8 @@ class SearchBase extends Base {
   constructor({
     index,
     url,
+    mongodb,
+    credentials,
     headers,
     appbaseConfig,
     transformRequest,
@@ -24,6 +26,8 @@ class SearchBase extends Base {
     super({
       index,
       url,
+      mongodb,
+      credentials,
       headers,
       appbaseConfig,
       transformRequest,
@@ -46,17 +50,14 @@ class SearchBase extends Base {
     }
     let componentInstance = component;
     if (component && !(component instanceof SearchComponent)) {
-      console.log(
-        'THSI IS INSTANCE',
-        this.transformRequest,
-        component.transformRequest
-      );
       // create instance from object with all the options
       componentInstance = new SearchComponent({
         ...component,
         id: componentId,
         index: component.index || this.index,
         url: component.url || this.url,
+        mongodb: component.mongodb || this.mongodb,
+        credentials: component.credentials || this.credentials,
         headers: component.headers || this.headers,
         transformRequest: component.transformRequest || this.transformRequest,
         transformResponse:

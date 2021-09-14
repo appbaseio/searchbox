@@ -238,6 +238,8 @@ class SearchComponent extends Base {
   constructor({
     index,
     url,
+    credentials,
+    mongodb,
     appbaseConfig,
     headers,
     transformRequest,
@@ -262,6 +264,8 @@ class SearchComponent extends Base {
     super({
       index,
       url,
+      credentials,
+      mongodb,
       headers,
       appbaseConfig,
       transformRequest,
@@ -971,80 +975,6 @@ class SearchComponent extends Base {
     );
   };
 
-  /* -------- Private methods only for the internal use -------- */
-  _appendResults(rawResults: Object) {
-    if (
-      this.preserveResults &&
-      rawResults &&
-      Array.isArray(rawResults.hits && rawResults.hits.hits) &&
-      Array.isArray(
-        this.results.rawData &&
-          this.results.rawData.hits &&
-          this.results.rawData.hits.hits
-      )
-    ) {
-      this.results.setRaw({
-        ...rawResults,
-        hits: {
-          ...rawResults.hits,
-          hits: [...this.results.rawData.hits.hits, ...rawResults.hits.hits]
-        }
-      });
-    } else {
-      this.results.setRaw(rawResults);
-    }
-  }
-
-  // Method to apply the changed based on set options
-  _applyOptions(
-    options: Options,
-    key: string,
-    prevValue: any,
-    nextValue: any
-  ): void {
-    // // Trigger mic events
-    if (key === 'micStatus' && this.onMicStatusChange) {
-      this.onMicStatusChange(nextValue, prevValue);
-    }
-    // Trigger events
-    if (key === 'query' && this.onQueryChange) {
-      this.onQueryChange(nextValue, prevValue);
-    }
-    if (key === 'value' && this.onValueChange) {
-      this.onValueChange(nextValue, prevValue);
-    }
-    if (key === 'error' && this.onError) {
-      this.onError(nextValue);
-    }
-    if (key === 'results' && this.onResults) {
-      this.onResults(nextValue, prevValue);
-    }
-    if (key === 'aggregationData' && this.onAggregationData) {
-      this.onAggregationData(nextValue, prevValue);
-    }
-    if (key === 'requestStatus' && this.onRequestStatusChange) {
-      this.onRequestStatusChange(nextValue, prevValue);
-    }
-    if (options.triggerDefaultQuery) {
-      this.triggerDefaultQuery();
-    }
-    if (options.triggerCustomQuery) {
-      this.triggerCustomQuery();
-    }
-    if (options.stateChanges !== false) {
-      this.stateChanges.next(
-        {
-          [key]: {
-            prev: prevValue,
-            next: nextValue
-          }
-        },
-        key,
-        this
-      );
-    }
-  }
-
   getRecentSearches = (
     queryOptions?: RecentSearchOptions = {
       size: 5,
@@ -1137,6 +1067,96 @@ class SearchComponent extends Base {
     });
   };
 
+  /* -------- Private methods only for the internal use -------- */
+  _appendResults(rawResults: Object) {
+    if (
+      this.preserveResults &&
+      rawResults &&
+      Array.isArray(rawResults.hits && rawResults.hits.hits) &&
+      Array.isArray(
+        this.results.rawData &&
+          this.results.rawData.hits &&
+          this.results.rawData.hits.hits
+      )
+    ) {
+      this.results.setRaw({
+        ...rawResults,
+        hits: {
+          ...rawResults.hits,
+          hits: [...this.results.rawData.hits.hits, ...rawResults.hits.hits]
+        }
+      });
+    } else {
+      this.results.setRaw(rawResults);
+    }
+  }
+
+  // Method to apply the changed based on set options
+  _applyOptions(
+    options: Options,
+    key: string,
+    prevValue: any,
+    nextValue: any
+  ): void {
+    // // Trigger mic events
+    if (key === 'micStatus' && this.onMicStatusChange) {
+      this.onMicStatusChange(nextValue, prevValue);
+    }
+    // Trigger events
+    if (key === 'query' && this.onQueryChange) {
+      this.onQueryChange(nextValue, prevValue);
+    }
+    if (key === 'value' && this.onValueChange) {
+      this.onValueChange(nextValue, prevValue);
+    }
+    if (key === 'error' && this.onError) {
+      this.onError(nextValue);
+    }
+    if (key === 'results' && this.onResults) {
+      this.onResults(nextValue, prevValue);
+    }
+    if (key === 'aggregationData' && this.onAggregationData) {
+      this.onAggregationData(nextValue, prevValue);
+    }
+    if (key === 'requestStatus' && this.onRequestStatusChange) {
+      this.onRequestStatusChange(nextValue, prevValue);
+    }
+    if (options.triggerDefaultQuery) {
+      this.triggerDefaultQuery();
+    }
+    if (options.triggerCustomQuery) {
+      this.triggerCustomQuery();
+    }
+    if (options.stateChanges !== false) {
+      this.stateChanges.next(
+        {
+          [key]: {
+            prev: prevValue,
+            next: nextValue
+          }
+        },
+        key,
+        this
+      );
+    }
+  }
+
+  _getMongoRequest() {
+    const mongodb = {};
+    if (this.index) {
+      mongodb.index = this.index;
+    }
+    if (this.mongodb) {
+      if (this.mongodb.db) {
+        mongodb.db = this.mongodb.db;
+      }
+      if (this.mongodb.collection) {
+        mongodb.collection = this.mongodb.collection;
+      }
+    }
+    return mongodb;
+  }
+
   _fetchRequest(
     requestBody: Object,
     isPopularSuggestionsAPI: boolean = false
@@ -1144,7 +1164,10 @@ class SearchComponent extends Base {
     // remove undefined properties from request body
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        ...requestBody,
+        mongodb: this._getMongoRequest()
+      }),
       headers: {
         ...this.headers
       }

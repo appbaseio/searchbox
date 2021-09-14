@@ -1,5 +1,4 @@
 // @flow
-import AppbaseAnalytics from '@appbaseio/analytics';
 import { errorMessages, btoa } from './utils';
 import type { AppbaseSettings, BaseConfig } from './types';
 
@@ -20,6 +19,12 @@ class Base {
   // es url
   url: string;
 
+  // auth credentials if any
+  credentials: string;
+
+  // mongodb
+  mongodb: Object;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   transformRequest: (requestOptions: Object) => Promise<Object>;
@@ -32,19 +37,21 @@ class Base {
   constructor({
     index,
     url,
+    credentials,
+    mongodb,
     headers,
     appbaseConfig,
     transformRequest,
     transformResponse
   }: BaseConfig) {
-    if (!index) {
-      throw new Error(errorMessages.invalidIndex);
-    }
     if (!url) {
       throw new Error(errorMessages.invalidURL);
     }
     this.index = index;
     this.url = url;
+    this.credentials = credentials || '';
+
+    this.mongodb = mongodb;
 
     if (appbaseConfig) {
       this.appbaseConfig = appbaseConfig;
@@ -64,6 +71,12 @@ class Base {
     };
     if (headers) {
       this.setHeaders(headers);
+    }
+    if (this.credentials) {
+      this.headers = {
+        ...this.headers,
+        Authorization: `Basic ${btoa(this.credentials)}`
+      };
     }
   }
 

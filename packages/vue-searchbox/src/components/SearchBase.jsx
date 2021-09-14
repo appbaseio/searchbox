@@ -5,8 +5,10 @@ import { types } from '../utils/types';
 const SearchBase = {
 	name: 'search-base',
 	props: {
-		index: types.app,
+		index: VueTypes.string,
 		url: types.url,
+		mongodb: VueTypes.object,
+		credentials: VueTypes.string,
 		headers: types.headers,
 		appbaseConfig: types.appbaseConfig,
 		transformRequest: VueTypes.func,
@@ -16,6 +18,8 @@ const SearchBase = {
 		this.searchbase = new Headless({
 			index: this.$props.index,
 			url: this.$props.url,
+			mongodb: this.$props.mongodb,
+			credentials: this.$props.credentials,
 			headers: this.$props.headers,
 			appbaseConfig: this.$props.appbaseConfig,
 			transformRequest: this.$props.transformRequest,

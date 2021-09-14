@@ -34,6 +34,8 @@ class SearchComponent extends React.Component {
       id,
       index,
       url,
+      mongodb,
+      credentials,
       headers,
       appbaseConfig,
       transformRequest,
@@ -102,6 +104,8 @@ class SearchComponent extends React.Component {
     context.register(id, {
       index,
       url,
+      credentials,
+      mongodb,
       headers,
       appbaseConfig,
       transformRequest,
@@ -218,6 +222,8 @@ SearchComponent.defaultProps = {
 SearchComponent.propTypes = {
   index: string,
   url: string,
+  credentials: string,
+  mongodb: object,
   headers: object,
   appbaseConfig: appbaseConfigDef,
   transformRequest: func,

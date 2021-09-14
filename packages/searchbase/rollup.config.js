@@ -16,18 +16,21 @@ const cjs = format === 'cjs';
 let output;
 
 if (es) {
-  output = { file: 'dist/@appbaseio/searchbase.es.js', format: 'es' };
+  output = { file: 'dist/@appbaseio/searchbase-mongodb.es.js', format: 'es' };
 } else if (umd) {
   if (minify) {
     output = {
-      file: 'dist/@appbaseio/searchbase.umd.min.js',
+      file: 'dist/@appbaseio/searchbase-mongodb.umd.min.js',
       format: 'umd'
     };
   } else {
-    output = { file: 'dist/@appbaseio/searchbase.umd.js', format: 'umd' };
+    output = {
+      file: 'dist/@appbaseio/searchbase-mongodb.umd.js',
+      format: 'umd'
+    };
   }
 } else if (cjs) {
-  output = { file: 'dist/@appbaseio/searchbase.cjs.js', format: 'cjs' };
+  output = { file: 'dist/@appbaseio/searchbase-mongodb.cjs.js', format: 'cjs' };
 } else if (format) {
   throw new Error(`invalid format specified: "${format}".`);
 } else {
@@ -37,7 +40,7 @@ if (es) {
 export default {
   input: 'src/index.js',
   output: {
-    name: umd ? 'Searchbase' : '@appbaseio/searchbase',
+    name: umd ? 'Searchbase' : '@appbaseio/searchbase-mongodb',
     ...output
   },
   external: umd

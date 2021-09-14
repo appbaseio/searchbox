@@ -77,9 +77,9 @@
 ## 4. Installation
 
 ```bash
-npm install @appbaseio/react-searchbox
+npm install @appbaseio/react-searchbox-mongodb
 # or
-yarn add @appbaseio/react-searchbox
+yarn add @appbaseio/react-searchbox-mongodb
 ```
 
 [⬆ Back to Top](#toc)

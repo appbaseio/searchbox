@@ -39,6 +39,8 @@ const SearchBox = {
 		index: VueTypes.string,
 		// search component props
 		url: VueTypes.string,
+		mongodb: VueTypes.object,
+		credentials: VueTypes.string,
 		headers: VueTypes.object,
 		appbaseConfig: types.appbaseConfig,
 		transformRequest: VueTypes.func,

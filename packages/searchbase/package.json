@@ -6,7 +6,7 @@
   "main": "dist/@appbaseio/searchbase-mongodb.cjs.js",
   "jsnext:main": "dist/@appbaseio/searchbase-mongodb.es.js",
   "module": "dist/@appbaseio/searchbase-mongodb.es.js",
-  "types": "dist/@appbaseio/index.d.ts",
+  "types": "dist/@appbaseio/searchbase-mongodb/index.d.ts",
   "scripts": {
     "watch": "nps watch",
     "start": "nps",
@@ -36,7 +36,6 @@
     "search"
   ],
   "dependencies": {
-    "@appbaseio/analytics": "^2.1.0-beta",
     "cross-fetch": "^3.0.4"
   },
   "devDependencies": {

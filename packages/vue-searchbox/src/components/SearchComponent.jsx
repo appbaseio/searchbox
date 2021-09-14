@@ -9,6 +9,8 @@ const SearchComponent = {
 	props: {
 		index: VueTypes.string,
 		url: VueTypes.string,
+		mongodb: VueTypes.object,
+		credentials: VueTypes.string,
 		headers: VueTypes.object,
 		appbaseConfig: types.appbaseConfig,
 		transformRequest: VueTypes.func,
@@ -83,6 +85,8 @@ const SearchComponent = {
 			id,
 			index,
 			url,
+			mongodb,
+			credentials,
 			headers,
 			appbaseConfig,
 			transformRequest,
@@ -143,6 +147,8 @@ const SearchComponent = {
 		const componentInstance = this.searchbase.register(id, {
 			index,
 			url,
+			mongodb,
+			credentials,
 			headers,
 			appbaseConfig,
 			transformRequest,

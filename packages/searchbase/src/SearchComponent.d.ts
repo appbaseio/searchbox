@@ -162,6 +162,7 @@ export class SearchComponent extends Base {
   constructor({
     index,
     url,
+    credentials,
     appbaseConfig,
     headers,
     transformRequest,
