@@ -1,6 +1,6 @@
 {
   "name": "@appbaseio/searchbase-mongodb",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Headless core + common utilities for search",
   "main": "dist/@appbaseio/searchbase-mongodb.cjs.js",

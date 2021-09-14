@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/react-searchbox-mongodb",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "React library kit based on ReactiveSearch's DataSearch",
     "license": "MIT",
     "repository": {
@@ -33,7 +33,7 @@
         "hotkeys-js": "^3.8.7"
     },
     "dependencies": {
-        "@appbaseio/searchbase-mongodb": "0.0.1",
+        "@appbaseio/searchbase-mongodb": "0.0.2",
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
         "downshift": "^3.3.1"
