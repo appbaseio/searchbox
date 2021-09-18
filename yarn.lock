@@ -275,6 +275,14 @@
   dependencies:
     cross-fetch "^3.0.4"
 
+"@appbaseio/searchbase@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.0.tgz#00fc6160905c9bc41fe886f5dbb99c14e4b211ec"
+  integrity sha512-kOaAhv+dq8RBN/QhX3xcjP1F4Hj7qFUUN2gJuH0Ttf03b2aR9pVba8kH81iN5Q6TY46ZU42X+SNdL0G6lKc5CA==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
+    cross-fetch "^3.0.4"
+
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"
@@ -282,6 +290,18 @@
   dependencies:
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
+
+"@appbaseio/vue-searchbox@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.5.1.tgz#1e6c5af9a3328a82acd4c350509e35c6f602fc17"
+  integrity sha512-qOcV6rUUVklpXL4i4jW1tuoqOYtVGvKccx7DvIIWmSA6Pd+8QQghDGOAyO+sF9NAWSmBncMDGTGNTbrAlWWJzw==
+  dependencies:
+    "@appbaseio/searchbase" "1.5.0"
+    "@appbaseio/vue-emotion" "^0.4.4"
+    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
+    compute-scroll-into-view "^1.0.11"
+    emotion "9.2.12"
+    vue-types "^1.6.0"
 
 "@babel/code-frame@7.5.5":
   version "7.5.5"
