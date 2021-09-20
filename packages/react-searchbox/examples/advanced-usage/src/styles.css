@@ -203,18 +203,37 @@ li.page-item.active > a {
 .selected-filters {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .selected-filters h4 {
   margin-right: 10px;
   text-decoration: underline;
 }
+.selected-filters button {
+  cursor: pointer;
+}
 
-.selected-filters span {
-  margin-right: 8px;
-  margin-bottom: 5px;
-  border: 1px solid black;
-  border-radius: 4px;
-  padding: 0 4px;
-  font-size: 13px;
+button.filter-btn {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem;
+  position: relative;
+}
+button.filter-btn {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+button.filter-btn h5 {
+  text-transform: uppercase;
+}
+button.filter-btn span {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
