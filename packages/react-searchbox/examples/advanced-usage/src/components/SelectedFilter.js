@@ -70,8 +70,7 @@ class SelectedFilters extends React.Component {
   };
 
   clearAll = () => {
-    const components = this.context.getComponents();
-    Object.keys(components).forEach(key => {
+    COMPONENTS_TO_SUBSCRIBE.forEach(key => {
       this.removeFilter(key);
     });
   };
