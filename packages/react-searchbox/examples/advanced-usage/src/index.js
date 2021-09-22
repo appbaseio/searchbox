@@ -6,6 +6,7 @@ import './styles.css';
 import Search from './components/Search';
 import Filter from './components/Filter';
 import Results from './components/Results';
+import SelectedFilters from './components/SelectedFilter';
 
 const App = () => (
   <SearchBase
@@ -21,6 +22,8 @@ const App = () => (
         </div>
 
         <div className="col">
+          {/* a component to render the selected authors from filter facet with id='author-filter' */}
+          <SelectedFilters />
           <Results />
         </div>
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { SearchComponent } from '@appbaseio/react-searchbox';
-import SelectedFilters from './SelectedFilter';
 export default () => {
   return (
     <SearchComponent
@@ -14,9 +13,6 @@ export default () => {
       {({ results, loading, size, setValue }) => {
         return (
           <React.Fragment>
-            {/* a component to render the selected authors from filter facet with id='author-filter' */}
-            <SelectedFilters />
-
             {/* below code renders the result cards inside a div */}
             <div className="result-list-container">
               {loading ? (

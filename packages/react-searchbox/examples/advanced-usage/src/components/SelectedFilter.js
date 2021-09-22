@@ -1,48 +1,65 @@
 import React from 'react';
 import { SearchContext } from '@appbaseio/react-searchbox';
-
+/* eslint-disable */
+const COMPONENTS_TO_SUBSCRIBE = ['author-filter', 'search-component'];
 class SelectedFilters extends React.Component {
   static contextType = SearchContext;
 
-  get SelectedFilters() {
-    const selectedFilters = {};
-    const components = this.context.getComponents();
-    const componentIds = Object.keys(components);
-    const componentValues = Object.values(components);
-    componentValues.forEach((component, index) => {
-      if (!!component.value && component.value.length) {
-        Object.assign(selectedFilters, {
-          [componentIds[index]]: component.value
-        });
-      }
-    });
+  state = {};
 
-    return selectedFilters;
+  componentDidMount() {
+    setTimeout(() => {
+      const componentIds = COMPONENTS_TO_SUBSCRIBE;
+      const components = this.context.getComponents();
+      componentIds.forEach((componentId, index) => {
+        components[componentId].subscribeToStateChanges(change => {
+          const state = {};
+          Object.keys(change).forEach(property => {
+            state[componentId] = change[property].next;
+          });
+          this.setState(state);
+        }, 'value');
+      });
+    }, 100);
   }
 
-  renderFilters = filtersObj => {
-    if (!Object.keys(filtersObj).length) return null;
-    const filtersLabels = Object.keys(filtersObj);
-    const filtersValues = Object.values(filtersObj);
-    return filtersLabels.map((label, index) => {
+  renderFilters = () => {
+    if (!Object.keys(this.state).length) return null;
+    const filtersLabels = Object.keys(this.state);
+    const filtersValues = Object.values(this.state);
+
+    const jsxArray = [];
+    filtersLabels.forEach((label, index) => {
       let currentFilterValue = '';
       if (Array.isArray(filtersValues[index])) {
         currentFilterValue = filtersValues[index].join(', ');
-      } else {
+      } else if (filtersValues[index]) {
         currentFilterValue = filtersValues[index];
       }
-      return (
-        <button
-          onClick={() => this.removeFilter(label)}
-          className="filter-btn"
-          key={label}
-        >
-          {' '}
-          <h5>{label}&nbsp;|&nbsp;</h5>
-          <span title={currentFilterValue}>{currentFilterValue}</span>
-        </button>
-      );
+
+      if (!!currentFilterValue)
+        return jsxArray.push(
+          <button
+            onClick={() => this.removeFilter(label)}
+            className="filter-btn"
+            key={label}
+          >
+            {' '}
+            <h5>{label}&nbsp;|&nbsp;</h5>
+            <span title={currentFilterValue}>{currentFilterValue}</span>
+          </button>
+        );
     });
+    if (jsxArray.length) {
+      return (
+        <div className="selected-filters">
+          <h4>Selected Filters:</h4>
+          {jsxArray}
+          <button onClick={this.clearAll}>Clear All</button>
+        </div>
+      );
+    }
+    return null;
   };
 
   removeFilter = label => {
@@ -60,14 +77,7 @@ class SelectedFilters extends React.Component {
   };
 
   render() {
-    const selectedFilters = this.SelectedFilters;
-    return Object.keys(selectedFilters).length ? (
-      <div className="selected-filters">
-        <h4>Selected Filters:</h4>
-        {this.renderFilters(selectedFilters)}{' '}
-        <button onClick={this.clearAll}>Clear All</button>
-      </div>
-    ) : null;
+    return this.renderFilters();
   }
 }
 
