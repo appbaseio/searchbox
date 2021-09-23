@@ -8,19 +8,17 @@ class SelectedFilters extends React.Component {
   state = {};
 
   componentDidMount() {
-    setTimeout(() => {
-      const componentIds = COMPONENTS_TO_SUBSCRIBE;
-      const components = this.context.getComponents();
-      componentIds.forEach((componentId, index) => {
-        components[componentId].subscribeToStateChanges(change => {
-          const state = {};
-          Object.keys(change).forEach(property => {
-            state[componentId] = change[property].next;
-          });
-          this.setState(state);
-        }, 'value');
-      });
-    }, 100);
+    const componentIds = COMPONENTS_TO_SUBSCRIBE;
+    const components = this.context.getComponents();
+    componentIds.forEach((componentId, index) => {
+      components[componentId].subscribeToStateChanges(change => {
+        const state = {};
+        Object.keys(change).forEach(property => {
+          state[componentId] = change[property].next;
+        });
+        this.setState(state);
+      }, 'value');
+    });
   }
 
   renderFilters = () => {
