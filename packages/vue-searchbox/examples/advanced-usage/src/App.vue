@@ -10,6 +10,7 @@
         >
       </span>
     </h2>
+    <!-- searchbase for wrapping our components, acts as a platform provider to connect various components in the backend -->
     <search-base
       index="good-books-ds"
       credentials="a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61"
@@ -25,13 +26,17 @@
       }"
     >
       <div>
+        <!-- search houses the searchbox for firing text search queries -->
         <search />
         <div class="row">
           <div class="col">
+            <!-- filters houses the searchcomponent for rendering the filter facets that can be utilised to enhance search relevancy -->
             <filters />
           </div>
           <div class="col">
+            <!-- selected-filters displays the active filters applied to the fired query -->
             <selected-filters />
+            <!-- result houses the searchcomponent for rendering the results -->
             <result />
           </div>
         </div>

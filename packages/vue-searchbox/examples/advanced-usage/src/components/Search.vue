@@ -15,6 +15,7 @@
     title="Search"
     placeholder="Search for Books"
     :size="5"
+    :autosuggest="false"
   />
 </template>
 
