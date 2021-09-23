@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { SearchContext } from "@appbaseio/react-searchbox";
+import React, { useContext, useEffect, useState } from 'react';
+import { SearchContext } from '@appbaseio/react-searchbox';
 /* eslint-disable */
-const COMPONENTS_TO_SUBSCRIBE = ["author-filter"];
+const COMPONENTS_TO_SUBSCRIBE = ['author-filter'];
 const SelectedFilters = () => {
   const [state, setState] = useState({});
   const appContext = useContext(SearchContext);
@@ -9,13 +9,13 @@ const SelectedFilters = () => {
     const componentIds = COMPONENTS_TO_SUBSCRIBE;
     const components = appContext.getComponents();
     componentIds.forEach((componentId, index) => {
-      components[componentId].subscribeToStateChanges((change) => {
+      components[componentId].subscribeToStateChanges(change => {
         const state = {};
-        Object.keys(change).forEach((property) => {
+        Object.keys(change).forEach(property => {
           state[componentId] = change[property].next;
         });
         setState(state);
-      }, "value");
+      }, 'value');
     });
   }, []);
 
@@ -26,9 +26,9 @@ const SelectedFilters = () => {
 
     const jsxArray = [];
     filtersLabels.forEach((label, index) => {
-      let currentFilterValue = "";
+      let currentFilterValue = '';
       if (Array.isArray(filtersValues[index])) {
-        currentFilterValue = filtersValues[index].join(", ");
+        currentFilterValue = filtersValues[index].join(', ');
       } else if (filtersValues[index]) {
         currentFilterValue = filtersValues[index];
       }
@@ -40,7 +40,7 @@ const SelectedFilters = () => {
             className="filter-btn"
             key={label}
           >
-            {" "}
+            {' '}
             <h5>{label}&nbsp;|&nbsp;</h5>
             <span title={currentFilterValue}>{currentFilterValue}</span>
           </button>
@@ -58,15 +58,15 @@ const SelectedFilters = () => {
     return null;
   };
 
-  const removeFilter = (label) => {
+  const removeFilter = label => {
     const components = appContext.getComponents();
-    components[label].setValue("", {
+    components[label].setValue('', {
       triggerCustomQuery: true
     });
   };
 
   const clearAll = () => {
-    COMPONENTS_TO_SUBSCRIBE.forEach((key) => {
+    COMPONENTS_TO_SUBSCRIBE.forEach(key => {
       removeFilter(key);
     });
   };
