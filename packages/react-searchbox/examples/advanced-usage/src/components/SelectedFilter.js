@@ -1,7 +1,7 @@
 import React from 'react';
 import { SearchContext } from '@appbaseio/react-searchbox';
 /* eslint-disable */
-const COMPONENTS_TO_SUBSCRIBE = ['author-filter', 'search-component'];
+const COMPONENTS_TO_SUBSCRIBE = ['author-filter'];
 class SelectedFilters extends React.Component {
   static contextType = SearchContext;
 
