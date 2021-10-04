@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { SearchBase, SearchComponent } from '@appbaseio/react-native-searchbox';
 import { AntDesign } from '@expo/vector-icons';
 import {
