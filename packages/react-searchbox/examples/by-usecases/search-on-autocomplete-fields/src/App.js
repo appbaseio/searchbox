@@ -36,12 +36,14 @@ export default () => (
         id="search-component"
         dataField={[
           {
-            field: 'name',
-            weight: 3
-          },
-          {
             field: 'description',
             weight: 1
+          }
+        ]}
+        autocompleteField={[
+          {
+            field: 'name',
+            weight: 3
           }
         ]}
         title="Search"
