@@ -57,26 +57,12 @@ export default () => (
         URLParams
         className="custom-class"
         size={5}
-        maxPopularSuggestions={2}
-        maxRecentSearches={10}
         enablePopularSuggestions
-        enableRecentSuggestions
+        enableRecentSearches
         iconPosition="left"
         style={{ paddingBottom: 10 }}
-        recentSuggestionsConfig={{
-          size: 5
-        }}
-        popularSuggestionsConfig={{
-          size: 10,
-          showGlobal: true
-        }}
-        showDistinctSuggestions={true}
-        enablePredictiveSuggestions={false}
-        maxPredictedWords={2}
-        // urlField="$urlField" // string value of field name to provide
-        // rankFeature={{}}
       />
-      {/* <div className="row">
+      <div className="row">
         <div className="col">
           <SearchComponent
             id="author-filter"
@@ -234,7 +220,7 @@ export default () => (
             }}
           </SearchComponent>
         </div>
-      </div> */}
+      </div>
     </div>
   </SearchBase>
 );

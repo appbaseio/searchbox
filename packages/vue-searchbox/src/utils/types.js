@@ -77,7 +77,7 @@ export const types = {
 	}).def({ recordAnalytics: false }),
 	showDistinctSuggestions: VueTypes.bool.def(true),
 	queryString: VueTypes.queryString,
-	queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range']),
+	queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range', 'suggestion']),
 	reactType: VueTypes.shape({
 		and: reactKeyType,
 		or: reactKeyType,

@@ -43,7 +43,6 @@ import {
   isModifierKeyUsed,
   extractModifierKeysFromFocusShortcuts,
   queryTypes,
-  sortSuggestions,
   suggestionTypes
 } from '../utils/helper';
 import Downshift from 'downshift';
@@ -306,19 +305,11 @@ class SearchBox extends React.Component {
         this.triggerCustomQuery();
       }
     } else {
-      if (value) {
-        this.componentInstance.setValue(value, {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: !!autosuggest,
-          stateChanges: true
-        });
-      } else {
-        this.componentInstance.setValue(value, {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: false,
-          stateChanges: true
-        });
-      }
+      this.componentInstance.setValue(value, {
+        triggerCustomQuery: rest.triggerCustomQuery,
+        triggerDefaultQuery: autosuggest,
+        stateChanges: true
+      });
 
       if (!autosuggest) {
         this.triggerCustomQuery();
@@ -905,8 +896,6 @@ class SearchBox extends React.Component {
 
 SearchBox.propTypes = {
   enablePopularSuggestions: bool,
-  maxPopularSuggestions: number,
-  maxRecentSearches: number,
   enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
   aggregationField: string,
@@ -1024,7 +1013,7 @@ SearchBox.defaultProps = {
 
 export default props => (
   <SearchComponent
-    triggerQueryOnInit={!!props.enablePopularSuggestions}
+    triggerQueryOnInit={!!props.autosuggest}
     value="" // Init value as empty
     type={queryTypes.Suggestion}
     clearOnQueryChange

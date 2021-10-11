@@ -205,24 +205,3 @@ export const suggestionTypes = {
   Index: 'index',
   Recent: 'recent'
 };
-
-/**
- * To sort the suggestions array, where order is, recent searches? > index searches > popular searches
- * @returns {Array}
- */
-export function sortSuggestions(suggestionsArray) {
-  const sortedSuggetionsArray = [];
-  if (!Array.isArray(suggestionsArray) || suggestionsArray.length === 0) {
-    return sortedSuggetionsArray;
-  }
-
-  suggestionsArray.forEach(suggestion => {
-    if (suggestion._suggestion_type === suggestionTypes.Popular) {
-      sortedSuggetionsArray.push(suggestion);
-    } else {
-      sortedSuggetionsArray.unshift(suggestion);
-    }
-  });
-
-  return sortedSuggetionsArray;
-}

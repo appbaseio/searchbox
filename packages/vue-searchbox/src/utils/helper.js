@@ -226,3 +226,18 @@ export function extractModifierKeysFromFocusShortcuts(focusShortcutsArray) {
 export function isModifierKeyUsed(focusShortcutsArray) {
 	return !!extractModifierKeysFromFocusShortcuts(focusShortcutsArray).length;
 }
+
+
+export const queryTypes = {
+	Search: 'search',
+	Term: 'term',
+	Geo: 'geo',
+	Range: 'range',
+	Suggestion: 'suggestion'
+};
+
+export const suggestionTypes = {
+	Popular: 'popular',
+	Index: 'index',
+	Recent: 'recent'
+};
