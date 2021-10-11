@@ -41,7 +41,10 @@ import {
   SearchContext,
   isHotkeyCombinationUsed,
   isModifierKeyUsed,
-  extractModifierKeysFromFocusShortcuts
+  extractModifierKeysFromFocusShortcuts,
+  queryTypes,
+  sortSuggestions,
+  suggestionTypes
 } from '../utils/helper';
 import Downshift from 'downshift';
 import Icons from './Icons';
@@ -96,23 +99,12 @@ class SearchBox extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
     this.registerHotkeysListener();
-    const {
-      enableRecentSearches,
-      autosuggest,
-      aggregationField,
-      maxRecentSearches
-    } = this.props;
+    const { aggregationField } = this.props;
     if (aggregationField) {
       // eslint-disable-next-line no-console
       console.warn(
         'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
       );
-    }
-    if (enableRecentSearches && autosuggest) {
-      this.componentInstance.getRecentSearches({
-        size: maxRecentSearches || 5,
-        minChars: 3
-      });
     }
   }
 
@@ -146,9 +138,10 @@ class SearchBox extends React.Component {
   }
 
   get popularSuggestionsList() {
-    const suggestions = this.componentInstance.suggestions;
+    const suggestions = this.componentInstance.results.data;
+
     return (suggestions || []).filter(
-      suggestion => suggestion.source._popular_suggestion
+      suggestion => suggestion._suggestion_type === suggestionTypes.Popular
     );
   }
 
@@ -160,9 +153,21 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value) {
       return [];
     }
-    const suggestions = this.componentInstance.suggestions;
+    const suggestions = this.componentInstance.results.data;
+
     return (suggestions || []).filter(
-      suggestion => !suggestion.source._popular_suggestion
+      suggestion => suggestion._suggestion_type === suggestionTypes.Index
+    );
+  }
+
+  get recentSuggestionsList() {
+    if (this.componentInstance.value) {
+      return [];
+    }
+    const suggestions = this.componentInstance.results.data;
+
+    return (suggestions || []).filter(
+      suggestion => suggestion._suggestion_type === suggestionTypes.Recent
     );
   }
 
@@ -198,7 +203,7 @@ class SearchBox extends React.Component {
       resultStats: this.stats,
       rawData: this.componentInstance.results.rawData,
       popularSuggestions: this.popularSuggestionsList,
-      recentSearches: this.componentInstance.recentSearches
+      recentSearches: this.recentSuggestionsList
     };
     if (isPopularSuggestionsRender) {
       return getPopularSuggestionsComponent(
@@ -270,23 +275,9 @@ class SearchBox extends React.Component {
   };
 
   setValue = ({ value, isOpen = true, ...rest }) => {
-    const {
-      onChange,
-      debounce,
-      enableRecentSearches,
-      autosuggest,
-      maxRecentSearches
-    } = this.props;
-    if (
-      enableRecentSearches &&
-      !value &&
-      this.componentInstance.value &&
-      autosuggest
-    ) {
-      this.componentInstance.getRecentSearches({
-        size: maxRecentSearches || 5,
-        minChars: 3
-      });
+    const { onChange, debounce, autosuggest } = this.props;
+    if (!value && autosuggest) {
+      this.componentInstance.triggerDefaultQuery();
     }
     this.setState({ isOpen });
     if (this.isControlled()) {
@@ -985,11 +976,18 @@ SearchBox.propTypes = {
   // internal props
   error: any,
   loading: bool,
-  results: object
+  results: object,
+  recentSuggestionsConfig: object,
+  popularSuggestionsConfig: object,
+  maxPredictedWords: number,
+  urlField: string,
+  rankFeature: object,
+  categoryField: string,
+  categoryValue: string
 };
 
 SearchBox.defaultProps = {
-  enableRecentSearches: false,
+  enableRecentSuggestions: false,
   placeholder: 'Search',
   showIcon: true,
   iconPosition: 'right',
@@ -1014,13 +1012,21 @@ SearchBox.defaultProps = {
   addonAfter: undefined,
   expandSuggestionsContainer: true,
   index: undefined,
-  value: undefined
+  value: undefined,
+  recentSuggestionsConfig: undefined,
+  popularSuggestionsConfig: undefined,
+  maxPredictedWords: 2,
+  urlField: '',
+  rankFeature: undefined,
+  categoryField: '',
+  categoryValue: ''
 };
 
 export default props => (
   <SearchComponent
     triggerQueryOnInit={!!props.enablePopularSuggestions}
     value="" // Init value as empty
+    type={queryTypes.Suggestion}
     clearOnQueryChange
     {...props}
     subscribeTo={[

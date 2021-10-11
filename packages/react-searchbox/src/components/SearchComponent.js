@@ -84,7 +84,14 @@ class SearchComponent extends React.Component {
       clearOnQueryChange,
       subscribeTo,
       distinctField,
-      distinctFieldConfig
+      distinctFieldConfig,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      showDistinctSuggestions,
+      maxPredictedWords,
+      urlField,
+      rankFeature
     } = this.props;
     let { value } = this.props;
     if (window && window.location && window.location.search) {
@@ -153,7 +160,14 @@ class SearchComponent extends React.Component {
       clearOnQueryChange,
       distinctField,
       distinctFieldConfig,
-      maxPopularSuggestions
+      maxPopularSuggestions,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      showDistinctSuggestions,
+      maxPredictedWords,
+      urlField,
+      rankFeature
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -291,7 +305,12 @@ SearchComponent.propTypes = {
   onQueryChange: func,
 
   // called when mic status changes
-  onMicStatusChange: func
+  onMicStatusChange: func,
+  recentSuggestionsConfig: object,
+  popularSuggestionsConfig: object,
+  maxPredictedWords: number,
+  urlField: string,
+  rankFeature: object
 };
 
 export default SearchComponent;

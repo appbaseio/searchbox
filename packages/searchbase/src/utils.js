@@ -10,7 +10,7 @@ export const errorMessages = {
   invalidComponentId: getErrorMessage('Please provide component id.'),
   invalidDataField: getErrorMessage('Please provide data field.'),
   dataFieldAsArray: getErrorMessage(
-    'Only components with `search` type supports the multiple data fields. Please define `dataField` as a string.'
+    'Only components with `search` and `suggestion` type supports the multiple data fields. Please define `dataField` as a string.'
   )
 };
 
@@ -20,7 +20,8 @@ export const queryTypes = {
   Search: 'search',
   Term: 'term',
   Geo: 'geo',
-  Range: 'range'
+  Range: 'range',
+  Suggestion: 'suggestion'
 };
 
 export const queryFormats = {

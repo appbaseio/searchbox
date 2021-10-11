@@ -191,3 +191,38 @@ export function extractModifierKeysFromFocusShortcuts(focusShortcutsArray) {
 export function isModifierKeyUsed(focusShortcutsArray) {
   return !!extractModifierKeysFromFocusShortcuts(focusShortcutsArray).length;
 }
+
+export const queryTypes = {
+  Search: 'search',
+  Term: 'term',
+  Geo: 'geo',
+  Range: 'range',
+  Suggestion: 'suggestion'
+};
+
+export const suggestionTypes = {
+  Popular: 'popular',
+  Index: 'index',
+  Recent: 'recent'
+};
+
+/**
+ * To sort the suggestions array, where order is, recent searches? > index searches > popular searches
+ * @returns {Array}
+ */
+export function sortSuggestions(suggestionsArray) {
+  const sortedSuggetionsArray = [];
+  if (!Array.isArray(suggestionsArray) || suggestionsArray.length === 0) {
+    return sortedSuggetionsArray;
+  }
+
+  suggestionsArray.forEach(suggestion => {
+    if (suggestion._suggestion_type === suggestionTypes.Popular) {
+      sortedSuggetionsArray.push(suggestion);
+    } else {
+      sortedSuggetionsArray.unshift(suggestion);
+    }
+  });
+
+  return sortedSuggetionsArray;
+}
