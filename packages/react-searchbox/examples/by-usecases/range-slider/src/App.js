@@ -61,7 +61,6 @@ export default () => (
                           max={16}
                           values={[value.start, value.end]}
                           handle={({ style, ...passProps }) => {
-                            console.log(passProps);
                             return (
                               <div
                                 {...passProps}
