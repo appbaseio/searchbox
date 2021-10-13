@@ -53,6 +53,11 @@
           :enablePopularSuggestions="true"
           :enableRecentSearches="true"
           iconPosition="left"
+          :popularSuggestionsConfig="{ size: 10, showGlobal: true }"
+          :showDistinctSuggestions="true"
+          :enablePredictiveSuggestions="false"
+          :maxPredictedWords="2"
+          :recentSuggestionsConfig="{ size: 5 }"
         />
         <div class="row">
           <div class="col">
