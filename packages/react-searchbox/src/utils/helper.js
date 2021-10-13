@@ -51,29 +51,6 @@ export const debounce = (method, delay) => {
 
 export const isEmpty = val => !(val && val.length && Object.keys(val).length);
 
-/**
- * To determine whether a component has renderPopularSuggestions prop defined or not
- * @returns {Boolean}
- */
-export const hasPopularSuggestionsRenderer = (props = {}) => {
-  const { renderPopularSuggestions } = props;
-  return isFunction(renderPopularSuggestions);
-};
-
-/**
- * Extracts the renderPopularSuggestions prop from props and returns a valid React element
- * @param {Object} data
- * @param {Object} props
- */
-export const getPopularSuggestionsComponent = (data = {}, props = {}) => {
-  const { renderPopularSuggestions } = props;
-  // Render function as render prop
-  if (isFunction(renderPopularSuggestions)) {
-    return renderPopularSuggestions(data);
-  }
-  return null;
-};
-
 export const checkValidValue = value => {
   if (value) {
     if (Array.isArray(value) && !value.length) return false;
@@ -203,5 +180,6 @@ export const queryTypes = {
 export const suggestionTypes = {
   Popular: 'popular',
   Index: 'index',
-  Recent: 'recent'
+  Recent: 'recent',
+  Promoted: 'promoted'
 };

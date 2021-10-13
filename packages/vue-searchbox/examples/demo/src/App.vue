@@ -28,8 +28,14 @@
         <search-box
           id="search-component"
           :dataField="[
-            { field: 'original_title', weight: 1 },
-            { field: 'original_title.search', weight: 3 }
+            {
+              field: 'original_title',
+              weight: 1
+            },
+            {
+              field: 'original_title.search',
+              weight: 3
+            }
           ]"
           title="Search"
           placeholder="Search for Books"
@@ -47,13 +53,8 @@
           :enablePopularSuggestions="true"
           :enableRecentSearches="true"
           iconPosition="left"
-          :popularSuggestionsConfig="{ size: 10, showGlobal: true }"
-          :showDistinctSuggestions="true"
-          :enablePredictiveSuggestions="false"
-          :maxPredictedWords="2"
-          :recentSuggestionsConfig="{ size: 5 }"
         />
-        <!-- <div class="row">
+        <div class="row">
           <div class="col">
             <search-component
               id="author-filter"
@@ -165,7 +166,7 @@
               </div>
             </search-component>
           </div>
-        </div> -->
+        </div>
       </div>
     </search-base>
   </div>

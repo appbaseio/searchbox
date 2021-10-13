@@ -153,8 +153,6 @@ export type ComponentConfig = BaseConfig & {
 
   queryString?: boolean;
 
-  enableRecentSuggestions?: boolean;
-
   recentSuggestionsConfig?: Object;
 
   popularSuggestionsConfig?: Object;
@@ -165,7 +163,7 @@ export type ComponentConfig = BaseConfig & {
 
   rankFeature?: Object;
 
-  autosuggest: boolean;
+  enableRecentSearches?: boolean;
 };
 
 export type MIC_STATUS = {

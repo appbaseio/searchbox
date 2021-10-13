@@ -55,7 +55,6 @@ export const types = {
 	showVoiceSearch: VueTypes.bool.def(false),
 	searchOperators: VueTypes.bool.def(false),
 	render: VueTypes.func,
-	renderPopularSuggestions: VueTypes.func,
 	renderError: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
 	renderNoSuggestion: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
 	renderMic: VueTypes.func,

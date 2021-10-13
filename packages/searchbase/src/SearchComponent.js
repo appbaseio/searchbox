@@ -144,6 +144,8 @@ class SearchComponent extends Base {
 
   distinctFieldConfig: Object;
 
+  enableRecentSearches: boolean;
+
   enableRecentSuggestions: boolean;
 
   recentSuggestionsConfig: Object;
@@ -311,12 +313,13 @@ class SearchComponent extends Base {
       queryString,
       distinctField,
       distinctFieldConfig,
-      enableRecentSuggestions,
       recentSuggestionsConfig,
       popularSuggestionsConfig,
       maxPredictedWords,
       urlField,
-      rankFeature
+      rankFeature,
+      enableRecentSearches,
+      enableRecentSuggestions
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
@@ -371,6 +374,7 @@ class SearchComponent extends Base {
     this.onMicStatusChange = onMicStatusChange;
     this.distinctField = distinctField;
     this.distinctFieldConfig = distinctFieldConfig;
+    this.enableRecentSearches = enableRecentSearches;
     this.enableRecentSuggestions = enableRecentSuggestions;
     this.recentSuggestionsConfig = recentSuggestionsConfig;
     this.popularSuggestionsConfig = popularSuggestionsConfig;
@@ -379,7 +383,6 @@ class SearchComponent extends Base {
     this.rankFeature = rankFeature;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
-
     this.maxPopularSuggestions = maxPopularSuggestions;
 
     this.showDistinctSuggestions = showDistinctSuggestions;
@@ -505,7 +508,7 @@ class SearchComponent extends Base {
       customHighlight: this.customHighlight,
       customQuery: this.customQuery ? this.customQuery(this) : undefined,
       defaultQuery: this.defaultQuery ? this.defaultQuery(this) : undefined,
-      value: this.value,
+      ...(this.value && { value: this.value }),
       categoryValue: this.categoryValue,
       after: this.after,
       aggregations: this.aggregations,
@@ -524,6 +527,7 @@ class SearchComponent extends Base {
       popularSuggestionsConfig: this.popularSuggestionsConfig,
       recentSuggestionsConfig: this.recentSuggestionsConfig,
       enablePopularSuggestions: this.enablePopularSuggestions,
+      enableRecentSearches: this.enableRecentSearches,
       enableRecentSuggestions: this.enableRecentSuggestions
     };
   }
@@ -745,9 +749,10 @@ class SearchComponent extends Base {
         settings: this.appbaseSettings
       })
         .then(results => {
-          if (this._lastRequestTimeDefaultQuery < results._timestamp) {
+          if (this._lastRequestTimeDefaultQuery <= results._timestamp) {
             const prev = this.results;
             const rawResults = results && results[this.id];
+
             const afterResponse = () => {
               if (rawResults.aggregations) {
                 this._handleAggregationResponse(rawResults.aggregations, {
@@ -834,7 +839,7 @@ class SearchComponent extends Base {
           settings: this.appbaseSettings
         })
           .then(results => {
-            if (this._lastRequestTimeCustomQuery < results._timestamp) {
+            if (this._lastRequestTimeCustomQuery <= results._timestamp) {
               // Update the state for components
               orderOfQueries.forEach(id => {
                 const componentInstance = this._parent.getComponent(id);

@@ -57,6 +57,8 @@ export default () => (
         URLParams
         className="custom-class"
         size={5}
+        maxPopularSuggestions={2}
+        maxRecentSearches={3}
         enablePopularSuggestions
         enableRecentSearches
         iconPosition="left"

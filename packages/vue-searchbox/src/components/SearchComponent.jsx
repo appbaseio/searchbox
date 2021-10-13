@@ -66,7 +66,9 @@ const SearchComponent = {
   		popularSuggestionsConfig: VueTypes.object,
  		maxPredictedWords: VueTypes.number,
  		urlField: VueTypes.string,
-  		rankFeature: VueTypes.object,
+		rankFeature: VueTypes.object,
+		enableRecentSearches: VueTypes.bool,
+		enableRecentSuggestions: VueTypes.bool,
 	},
 	data() {
 		return {
@@ -134,6 +136,7 @@ const SearchComponent = {
 			clearOnQueryChange,
 			distinctField,
 			distinctFieldConfig,
+			enableRecentSearches,
 			enableRecentSuggestions,
       		recentSuggestionsConfig,
       		popularSuggestionsConfig,
@@ -201,6 +204,7 @@ const SearchComponent = {
 			clearOnQueryChange,
 			distinctField,
 			distinctFieldConfig,
+			enableRecentSearches,
 			enableRecentSuggestions,
       		recentSuggestionsConfig,
       		popularSuggestionsConfig,
