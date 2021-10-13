@@ -30,13 +30,15 @@
               :URLParams="true"
               :value="[]"
               title="Facet"
+              sortBy="asc"
               :aggregationSize="5"
+              :includeFields="['name']"
             >
               <div
                 class="filter-container"
                 slot-scope="{ aggregationData, loading, value, setValue }"
               >
-                <h3>Facet with 5 items</h3>
+                <h3>Sorted Facets</h3>
                 <div v-if="loading">Fetching Results ....</div>
                 <div v-if="!loading">
                   <div

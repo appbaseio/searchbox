@@ -38,7 +38,7 @@
                 class="filter-container"
                 slot-scope="{ aggregationData, loading, value, setValue }"
               >
-                <h3>Facet with 5 items</h3>
+                <h3>Facet with and operator</h3>
                 <div v-if="loading">Fetching Results ....</div>
                 <div v-if="!loading">
                   <div
