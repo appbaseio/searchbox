@@ -1,0 +1,26 @@
+{
+  "name": "@appbaseio/react-searchbox-demo-example",
+  "homepage": "https://appbaseio.github.io/react-searchbox",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@appbaseio/react-searchbox-mongodb": "*",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-paginate": "^6.5.0",
+    "react-scripts": "^1.1.4",
+    "rheostat": "2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "babel-loader": "^8.0.6"
+  }
+}
