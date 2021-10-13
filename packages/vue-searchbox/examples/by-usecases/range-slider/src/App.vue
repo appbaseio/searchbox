@@ -31,7 +31,7 @@
               title="Facet"
             >
               <div class="filter-container" slot-scope="{ setValue }">
-                <h3>Facet with 5 items</h3>
+                <h3>How many people you want to accommodate?</h3>
                 <vue-slider
                   :value="internalValue"
                   :min="0"
