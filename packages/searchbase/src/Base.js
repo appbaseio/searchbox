@@ -55,7 +55,7 @@ class Base {
     this.index = index;
     this.url = url;
     this.credentials = credentials || '';
-
+    this.mongodb = mongodb;
     if (appbaseConfig) {
       this.appbaseConfig = appbaseConfig;
     }
@@ -81,6 +81,7 @@ class Base {
     if (headers) {
       this.setHeaders(headers);
     }
+    console.log('this.mongodb', this.mongodb);
     if (!this.mongodb) {
       // Create analytics index
       this._analyticsInstance = AppbaseAnalytics.init({
