@@ -5,9 +5,10 @@ import { types } from '../utils/types';
 const SearchBase = {
 	name: 'search-base',
 	props: {
-		index: types.app,
+		index: VueTypes.string,
 		url: types.url,
-		credentials: types.credentials,
+		mongodb: VueTypes.object,
+		credentials: VueTypes.string,
 		headers: types.headers,
 		appbaseConfig: types.appbaseConfig,
 		transformRequest: VueTypes.func,
@@ -18,6 +19,7 @@ const SearchBase = {
 			index: this.$props.index,
 			url: this.$props.url,
 			credentials: this.$props.credentials,
+			mongodb: this.$props.mongodb,
 			headers: this.$props.headers,
 			appbaseConfig: this.$props.appbaseConfig,
 			transformRequest: this.$props.transformRequest,

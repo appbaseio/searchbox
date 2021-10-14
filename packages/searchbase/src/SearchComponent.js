@@ -239,6 +239,7 @@ class SearchComponent extends Base {
     index,
     url,
     credentials,
+    mongodb,
     appbaseConfig,
     headers,
     transformRequest,
@@ -264,6 +265,7 @@ class SearchComponent extends Base {
       index,
       url,
       credentials,
+      mongodb,
       headers,
       appbaseConfig,
       transformRequest,
@@ -516,6 +518,11 @@ class SearchComponent extends Base {
 
   get mappedProps(): Object {
     const mappedProps = {};
+    const searchBaseMappingsLocal = { ...searchBaseMappings };
+    if (this.mongodb) {
+      delete searchBaseMappingsLocal.recordClick;
+      delete searchBaseMappingsLocal.recordConversions;
+    }
     Object.keys(searchBaseMappings).forEach(key => {
       // $FlowFixMe
       mappedProps[searchBaseMappings[key]] = this[key];
@@ -1078,6 +1085,22 @@ class SearchComponent extends Base {
     return index;
   }
 
+  _getMongoRequest() {
+    const mongodb = {};
+    if (this.index) {
+      mongodb.index = this.index;
+    }
+    if (this.mongodb) {
+      if (this.mongodb.db) {
+        mongodb.db = this.mongodb.db;
+      }
+      if (this.mongodb.collection) {
+        mongodb.collection = this.mongodb.collection;
+      }
+    }
+    return mongodb;
+  }
+
   getRecentSearches = (
     queryOptions?: RecentSearchOptions = {
       size: 5,
@@ -1123,9 +1146,9 @@ class SearchComponent extends Base {
     }
     return new Promise((resolve, reject) => {
       fetch(
-        `${
-          this.url
-        }/_analytics/${this._getSearchIndex()}/recent-searches?${queryString}`,
+        `${this.url}/_analytics${
+          this.mongodb ? '' : `/${this._getSearchIndex()}`
+        }/recent-searches?${queryString}`,
         requestOptions
       )
         .then(res => {
@@ -1179,7 +1202,10 @@ class SearchComponent extends Base {
     // remove undefined properties from request body
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        ...requestBody,
+        ...(!!this.mongodb && { mongodb: this._getMongoRequest() })
+      }),
       headers: {
         ...this.headers
       }
@@ -1190,9 +1216,16 @@ class SearchComponent extends Base {
         .then(finalRequestOptions => {
           // set timestamp in request
           const timestamp = Date.now();
+
+          // START: applicable for es
           let suffix = '_reactivesearch.v3';
           const index = this._getSearchIndex(isPopularSuggestionsAPI);
-          return fetch(`${this.url}/${index}/${suffix}`, finalRequestOptions)
+          // END: applicable for es
+
+          return fetch(
+            `${this.url}${this.mongodb ? '' : `/${index}/${suffix}`}`,
+            finalRequestOptions
+          )
             .then(res => {
               const responseHeaders = res.headers;
 

@@ -1,6 +1,12 @@
 import React from 'react';
 import { SearchBase as Headless } from '@appbaseio/searchbase';
-import { appbaseConfig, func, object, stringRequired } from '../utils/types';
+import {
+  appbaseConfig,
+  func,
+  object,
+  stringRequired,
+  string
+} from '../utils/types';
 import { SearchContext } from '../utils/helper';
 
 class SearchBase extends React.Component {
@@ -10,6 +16,7 @@ class SearchBase extends React.Component {
       index: props.index,
       url: props.url,
       credentials: props.credentials,
+      mongodb: props.mongodb,
       headers: props.headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
@@ -41,13 +48,14 @@ class SearchBase extends React.Component {
 }
 
 SearchBase.propTypes = {
-  index: stringRequired,
+  index: string,
   url: stringRequired,
-  credentials: stringRequired,
+  credentials: string,
   headers: object,
   appbaseConfig: appbaseConfig,
   transformRequest: func,
-  transformResponse: func
+  transformResponse: func,
+  mongodb: object
 };
 
 export default SearchBase;

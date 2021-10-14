@@ -7,6 +7,7 @@ export default class SearchBase extends Base {
         index,
         url,
         credentials,
+        mongodb,
         headers,
         appbaseConfig
       }: BaseConfig)

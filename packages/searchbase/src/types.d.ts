@@ -40,6 +40,7 @@ export type BaseConfig = {
   url?: string;
   credentials?: string;
   appbaseConfig?: AppbaseSettings;
+  mongodb?: Object;
   headers?: Object;
   transformRequest?: (requestOptions: Object) => Promise<Object>;
   transformResponse?: (response: any) => Promise<any>;

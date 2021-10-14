@@ -14,6 +14,9 @@ class Base {
   // auth credentials if any
   credentials: string;
 
+  // mongodb
+  mongodb: Object;
+
   // custom headers object
   headers: Object;
 
@@ -41,13 +44,11 @@ class Base {
     url,
     credentials,
     headers,
+    mongodb,
     appbaseConfig,
     transformRequest,
     transformResponse
   }: BaseConfig) {
-    if (!index) {
-      throw new Error(errorMessages.invalidIndex);
-    }
     if (!url) {
       throw new Error(errorMessages.invalidURL);
     }
@@ -80,12 +81,14 @@ class Base {
     if (headers) {
       this.setHeaders(headers);
     }
-    // Create analytics index
-    this._analyticsInstance = AppbaseAnalytics.init({
-      index,
-      url,
-      credentials
-    });
+    if (!this.mongodb) {
+      // Create analytics index
+      this._analyticsInstance = AppbaseAnalytics.init({
+        index,
+        url,
+        credentials
+      });
+    }
   }
 
   // To to set the custom headers

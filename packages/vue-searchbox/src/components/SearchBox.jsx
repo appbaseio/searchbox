@@ -39,6 +39,7 @@ const SearchBox = {
 		index: VueTypes.string,
 		// search component props
 		url: VueTypes.string,
+		mongodb: VueTypes.object,
 		credentials: VueTypes.string,
 		headers: VueTypes.object,
 		appbaseConfig: types.appbaseConfig,
@@ -247,11 +248,15 @@ const SearchBox = {
 				isOpen: false,
 				triggerCustomQuery: true
 			});
-			this.triggerClickAnalytics(
-				suggestion && suggestion._click_id,
-				true,
-				suggestion.source && suggestion.source._id
-			);
+
+			// analytics works only for ES backend
+			if (!this.$props.mongodb) {
+				this.triggerClickAnalytics(
+					suggestion && suggestion._click_id,
+					true,
+					suggestion.source && suggestion.source._id
+				);
+			}
 			this.onValueSelectedHandler(
 				suggestion.value,
 				causes.SUGGESTION_SELECT,
@@ -498,7 +503,9 @@ const SearchBox = {
 				rawData: results.rawData,
 				recentSearches,
 				popularSuggestions: popularSuggestionsList,
-				triggerClickAnalytics: this.triggerClickAnalytics
+				...(!this.mongodb && {
+					triggerClickAnalytics: this.triggerClickAnalytics
+				})
 			};
 			if (isPopularSuggestionsRender) {
 				return getPopularSuggestionsComponent(

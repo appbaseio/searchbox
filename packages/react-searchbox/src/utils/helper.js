@@ -191,3 +191,14 @@ export function extractModifierKeysFromFocusShortcuts(focusShortcutsArray) {
 export function isModifierKeyUsed(focusShortcutsArray) {
   return !!extractModifierKeysFromFocusShortcuts(focusShortcutsArray).length;
 }
+
+export const componentsAlias = {
+  SEARCHBASE: 'searchbase',
+  SEARCHBOX: 'searchbox',
+  SEARCHCOMPONENT: 'searchcomponent'
+};
+
+export const backendAlias = {
+  MONGODB: 'mongodb',
+  ELASTICSEARCH: 'elasticsearch'
+};
