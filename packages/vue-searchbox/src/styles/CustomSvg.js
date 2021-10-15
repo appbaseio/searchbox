@@ -3,7 +3,7 @@ const CustomSvg = {
 	props: {
 		className: String,
 		icon: Function,
-		type: String,
+		type: String
 	},
 	data() {
 		return {
@@ -33,6 +33,21 @@ const CustomSvg = {
 				</svg>
 			);
 		}
+		if (this.$props.type === 'promoted-search-icon') {
+			return (
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					alt="promoted search"
+					height="20"
+					viewBox="0 0 24 24"
+					class={this.$props.className}
+					style={{ fill: '#707070' }}
+				>
+					<path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
+				</svg>
+			);
+		}
 		return (
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -43,10 +58,10 @@ const CustomSvg = {
 				style={{ fill: '#707070' }}
 				class={this.$props.className}
 			>
-				<path d="M0 0h24v24H0z" fill="none"/>
-				<path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+				<path d="M0 0h24v24H0z" fill="none" />
+				<path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
 			</svg>
-		)
+		);
 	}
 };
 
