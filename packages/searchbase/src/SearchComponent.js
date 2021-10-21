@@ -279,7 +279,6 @@ class SearchComponent extends Base {
       transformResponse
     });
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
-
     validateSchema(
       {
         enablePopularSuggestions,

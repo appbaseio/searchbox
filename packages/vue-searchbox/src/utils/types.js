@@ -17,7 +17,7 @@ const reactKeyType = VueTypes.oneOfType([
 // eslint-disable-next-line
 export const types = {
 	app: VueTypes.string.isRequired,
-	url: VueTypes.string.def('https://scalr.api.appbase.io'),
+	url: VueTypes.string,
 	enableAppbase: VueTypes.bool.def(false),
 	enablePopularSuggestions: VueTypes.bool.def(false),
 	analytics: VueTypes.bool.def(false),

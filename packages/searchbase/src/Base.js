@@ -57,7 +57,6 @@ class Base {
     transformResponse
   }: BaseConfig) {
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
-
     validateSchema(
       {
         index,

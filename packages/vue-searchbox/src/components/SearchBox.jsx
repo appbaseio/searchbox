@@ -918,6 +918,7 @@ const SearchBoxWrapper = {
 	render(h, context) {
 		return (
 			<SearchComponent
+				componentName="SearchBox"
 				value=""
 				triggerQueryOnInit={!!context.props.enablePopularSuggestions}
 				clearOnQueryChange={true}
