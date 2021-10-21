@@ -11,6 +11,7 @@ class SearchBase extends React.Component {
       index: props.index,
       url: props.url,
       credentials: props.credentials,
+      mongodb: props.mongodb,
       headers: props.headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
@@ -51,7 +52,8 @@ SearchBase.propTypes = {
   headers: object,
   appbaseConfig,
   transformRequest: func,
-  transformResponse: func
+  transformResponse: func,
+  mongodb: object
 };
 
 export default SearchBase;

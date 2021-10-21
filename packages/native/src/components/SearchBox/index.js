@@ -658,6 +658,7 @@ class SearchBox extends React.Component {
 SearchBox.propTypes = {
   // RS API
   dataField: dataFieldDef,
+  autocompleteField: dataFieldDef,
   aggregationField: string,
   aggregationSize: number,
   nestedField: string,
@@ -775,6 +776,7 @@ const styles = StyleSheet.create({
 export default props => (
   <SearchComponent
     triggerQueryOnInit={false}
+    componentName="SearchBox"
     value="" // Init value as empty
     {...props}
     subscribeTo={[

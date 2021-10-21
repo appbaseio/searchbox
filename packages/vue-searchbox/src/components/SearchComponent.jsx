@@ -66,6 +66,8 @@ const SearchComponent = {
 		// meta info about instantiated component
 		componentName: VueTypes.oneOf(['SearchBox', 'SearchComponent'])
 			.def('SearchComponent'),
+		//mongodb specific
+		autocompleteField: types.dataField,
 	},
 	data() {
 		return {
@@ -98,6 +100,7 @@ const SearchComponent = {
 			react,
 			queryFormat,
 			dataField,
+			autocompleteField,
 			categoryField,
 			categoryValue,
 			nestedField,
@@ -161,6 +164,7 @@ const SearchComponent = {
 			react,
 			queryFormat,
 			dataField,
+			autocompleteField,
 			categoryField,
 			categoryValue,
 			nestedField,
