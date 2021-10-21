@@ -83,6 +83,8 @@ class SearchComponent extends Base {
 
   dataField: string | Array<string | DataField>;
 
+  autocompleteField: string | Array<string | DataField>;
+
   categoryField: string;
 
   categoryValue: string;
@@ -259,6 +261,7 @@ class SearchComponent extends Base {
     enablePredictiveSuggestions,
     preserveResults,
     clearOnQueryChange,
+    autocompleteField,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -324,6 +327,7 @@ class SearchComponent extends Base {
     this.react = react;
     this.queryFormat = queryFormat;
     this.dataField = dataField;
+    this.autocompleteField = autocompleteField;
     this.categoryField = categoryField;
     this.categoryValue = categoryValue;
     this.nestedField = nestedField;
@@ -467,6 +471,9 @@ class SearchComponent extends Base {
       id: this.id,
       type: this.type,
       dataField: getNormalizedField(this.dataField),
+      ...(this.mongodb && {
+        autocompleteField: this.autocompleteField
+      }),
       react: this.react,
       highlight: this.highlight,
       highlightField: getNormalizedField(this.highlightField),
@@ -1371,19 +1378,21 @@ class SearchComponent extends Base {
     if (!aggregationField && typeof this.dataField === 'string') {
       aggregationField = this.dataField;
     }
-    const prev = this.aggregationData;
-    this.aggregationData.setRaw(aggsResponse[aggregationField]);
-    this.aggregationData.setData(
-      aggregationField,
-      aggsResponse[aggregationField].buckets,
-      this.preserveResults && append
-    );
-    this._applyOptions(
-      { stateChanges: options.stateChanges },
-      'aggregationData',
-      prev,
-      this.aggregationData
-    );
+    if (aggregationField) {
+      const prev = this.aggregationData;
+      this.aggregationData.setRaw(aggsResponse[aggregationField]);
+      this.aggregationData.setData(
+        aggregationField,
+        aggsResponse[aggregationField]?.buckets,
+        this.preserveResults && append
+      );
+      this._applyOptions(
+        { stateChanges: options.stateChanges },
+        'aggregationData',
+        prev,
+        this.aggregationData
+      );
+    }
   }
 
   _setError(error: any, options?: Options = defaultOptions) {

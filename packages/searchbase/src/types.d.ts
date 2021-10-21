@@ -96,6 +96,8 @@ export type ComponentConfig = BaseConfig & {
 
   dataField?: string | Array<string | DataField>;
 
+  autocompleteField?: string | Array<string | DataField>;
+
   categoryField?: string;
 
   categoryValue?: string;

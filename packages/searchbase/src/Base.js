@@ -1,6 +1,13 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
-import { errorMessages, btoa } from './utils';
+import {
+  errorMessages,
+  btoa,
+  validateSchema,
+  backendAlias,
+  componentsAlias
+} from './utils';
+import schema from './schema';
 import type { AppbaseSettings, BaseConfig } from './types';
 
 /**
@@ -49,9 +56,24 @@ class Base {
     transformRequest,
     transformResponse
   }: BaseConfig) {
-    if (!url) {
-      throw new Error(errorMessages.invalidURL);
-    }
+    const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
+
+    validateSchema(
+      {
+        index,
+        url,
+        credentials,
+        headers,
+        mongodb,
+        appbaseConfig,
+        transformRequest,
+        transformResponse
+      },
+      schema,
+      backendName,
+      componentsAlias.SEARCHBASE
+    );
+
     this.index = index;
     this.url = url;
     this.credentials = credentials || '';
@@ -81,7 +103,6 @@ class Base {
     if (headers) {
       this.setHeaders(headers);
     }
-    console.log('this.mongodb', this.mongodb);
     if (!this.mongodb) {
       // Create analytics index
       this._analyticsInstance = AppbaseAnalytics.init({

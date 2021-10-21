@@ -918,6 +918,7 @@ SearchBox.propTypes = {
   maxRecentSearches: number,
   enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
+  autocompleteField: dataFieldValidator,
   aggregationField: string,
   aggregationSize: number,
   nestedField: string,

@@ -494,3 +494,89 @@ export function btoa(input = '') {
 
   return output;
 }
+
+export const componentsAlias = {
+  SEARCHBASE: 'SearchBase',
+  SEARCHBOX: 'SearchBox',
+  SEARCHCOMPONENT: 'SearchComponent'
+};
+
+export const backendAlias = {
+  MONGODB: 'mongodb',
+  ELASTICSEARCH: 'elasticsearch'
+};
+
+export const dataTypes = {
+  ARRAY: 'array',
+  FUNCTION: 'function',
+  OBJECT: 'object',
+  NUMBER: 'number',
+  BOOLEAN: 'boolean',
+  STRING: 'string'
+};
+
+const checkDataType = temp => {
+  if (typeof temp === dataTypes.OBJECT) {
+    if (Array.isArray(temp)) {
+      return dataTypes.ARRAY;
+    }
+
+    return dataTypes.OBJECT;
+  }
+  return typeof temp;
+};
+
+export function validateSchema(
+  passedProperties = {},
+  schema = {},
+  backendName = '',
+  componentName = ''
+) {
+  const passedPropertiesKeys = Object.keys(passedProperties).filter(
+    propertyKey => !!passedProperties[propertyKey]
+  );
+  const schemaPropertiesKeys = Object.keys(schema);
+  const requiredProperties = [];
+  const acceptedProperties = [];
+  // fetch required properties
+  schemaPropertiesKeys.forEach(propName => {
+    const currentProperty = schema[propName];
+    if (currentProperty.components.includes(componentName)) {
+      acceptedProperties.push(propName);
+      if (currentProperty.required) {
+        requiredProperties.push(propName);
+      }
+    }
+  });
+  // check for required properties
+  requiredProperties.forEach(requiredProperty => {
+    if (!passedPropertiesKeys.includes(requiredProperty)) {
+      throw new Error(
+        `${requiredProperty} is required for <${componentName} /> component when used with an ${backendName} Search backend.`
+      );
+    }
+  });
+
+  // check for accepted properties
+  passedPropertiesKeys.forEach(passedPropertyKey => {
+    if (!acceptedProperties.includes(passedPropertyKey)) {
+      throw new Error(
+        `<${componentName} /> component doesn't accept a property ${passedPropertyKey}.`
+      );
+    }
+
+    const acceptedTypes = Array.isArray(schema[passedPropertyKey].type)
+      ? schema[passedPropertyKey].type
+      : [...schema[passedPropertyKey].type];
+    const receivedPropertyType = checkDataType(
+      passedProperties[passedPropertyKey]
+    );
+    if (!acceptedTypes.includes(receivedPropertyType)) {
+      throw new Error(
+        `<${componentName} /> component accepts a property ${passedPropertyKey} with type(s) [${acceptedTypes.join(
+          ', '
+        )}], but type was set as ${receivedPropertyType}.`
+      );
+    }
+  });
+}

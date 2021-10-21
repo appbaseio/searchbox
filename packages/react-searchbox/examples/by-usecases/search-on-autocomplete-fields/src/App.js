@@ -48,6 +48,7 @@ export default () => (
         ]}
         title="Search"
         placeholder="Search for apartments"
+        index="custom"
       />
 
       <SearchComponent

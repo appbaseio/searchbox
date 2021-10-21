@@ -43,6 +43,7 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
+      autocompleteField,
       categoryField,
       categoryValue,
       nestedField,
@@ -113,6 +114,7 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
+      autocompleteField,
       categoryField,
       categoryValue,
       nestedField,
@@ -291,7 +293,9 @@ SearchComponent.propTypes = {
   onQueryChange: func,
 
   // called when mic status changes
-  onMicStatusChange: func
+  onMicStatusChange: func,
+  // mongodb specific
+  autocompleteField: dataFieldDef
 };
 
 export default SearchComponent;
