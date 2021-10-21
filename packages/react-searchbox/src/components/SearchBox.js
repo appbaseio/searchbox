@@ -1023,6 +1023,7 @@ export default props => (
     triggerQueryOnInit={!!props.enablePopularSuggestions}
     value="" // Init value as empty
     clearOnQueryChange
+    componentName="SearchBox"
     {...props}
     subscribeTo={[
       'micStatus',

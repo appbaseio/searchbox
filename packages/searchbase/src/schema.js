@@ -291,5 +291,5 @@ export default {
     backend: [ELASTICSEARCH, MONGODB],
     type: [dataTypes.FUNCTION, dataTypes.OBJECT],
     required: false
-  }
+  },
 };

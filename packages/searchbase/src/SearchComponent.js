@@ -27,8 +27,11 @@ import {
   getSuggestions,
   popularSuggestionFields,
   isEqual,
-  searchBaseMappings
+  searchBaseMappings,
+  backendAlias,
+  validateSchema,
 } from './utils';
+import schema from './schema';
 
 type QueryType =
   | queryTypes.Search
@@ -262,6 +265,7 @@ class SearchComponent extends Base {
     preserveResults,
     clearOnQueryChange,
     autocompleteField,
+    componentName,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -274,6 +278,19 @@ class SearchComponent extends Base {
       transformRequest,
       transformResponse
     });
+    const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
+
+    validateSchema(
+      {
+        enablePopularSuggestions,
+        enablePredictiveSuggestions,
+        autocompleteField,
+        ...rsAPIConfig
+      },
+      schema,
+      backendName,
+      componentName
+    );
     const {
       id,
       type,
