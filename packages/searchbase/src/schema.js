@@ -292,4 +292,16 @@ export default {
     type: [dataTypes.FUNCTION, dataTypes.OBJECT],
     required: false
   },
+  value: {
+    components: [SEARCHBOX, SEARCHCOMPONENT],
+    backend: [ELASTICSEARCH, MONGODB],
+    type: [dataTypes.STRING, dataTypes.ARRAY, dataTypes.OBJECT],
+    required: false
+  },
+  type: {
+    components: [SEARCHBOX, SEARCHCOMPONENT],
+    backend: [ELASTICSEARCH, MONGODB],
+    type: dataTypes.STRING,
+    required: false
+  }
 };
