@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@appbaseio/vue-searchbox": "1.6.1-beta",
+    "@appbaseio/vue-searchbox": "1.6.2-beta",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-slider-component": "^3.2.15",
