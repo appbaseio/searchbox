@@ -4,7 +4,7 @@ import Rheostat from 'rheostat';
 import {
   SearchBase,
   SearchComponent
-} from '@appbaseio/react-searchbox-mongodb';
+} from '@appbaseio/react-searchbox';
 import ReactPaginate from 'react-paginate';
 
 import './styles.css';

@@ -107,7 +107,7 @@
 
 <script>
 import Paginate from 'vuejs-paginate';
-import { SearchBase, SearchComponent } from '@appbaseio/vue-searchbox-mongodb';
+import { SearchBase, SearchComponent } from '@appbaseio/vue-searchbox';
 import VueSlider from 'vue-slider-component';
 
 import 'vue-slider-component/theme/default.css';

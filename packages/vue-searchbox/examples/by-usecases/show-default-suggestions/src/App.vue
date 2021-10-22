@@ -125,7 +125,7 @@ import {
   SearchBase,
   SearchComponent,
   SearchBox
-} from '@appbaseio/vue-searchbox-mongodb';
+} from '@appbaseio/vue-searchbox';
 import './styles.css';
 
 export default {
