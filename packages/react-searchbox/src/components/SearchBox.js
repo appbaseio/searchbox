@@ -674,7 +674,7 @@ class SearchBox extends React.Component {
                 }}
               >
                 {item._suggestion_type !== suggestionTypes.Index ? (
-                  <div style={{ padding: '0 10px 0 0' }}>
+                  <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
                     <CustomSvg
                       iconId={`${index + 1}-${item.value}-icon`}
                       className={
