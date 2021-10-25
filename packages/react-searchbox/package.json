@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/react-searchbox",
-    "version": "1.5.2",
+    "version": "1.6.0-alpha",
     "description": "React library kit based on ReactiveSearch's DataSearch",
     "license": "MIT",
     "repository": {
@@ -33,7 +33,7 @@
         "hotkeys-js": "^3.8.7"
     },
     "dependencies": {
-        "@appbaseio/searchbase": "1.5.1",
+        "@appbaseio/searchbase": "1.6.0-alpha",
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
         "downshift": "^3.3.1"
