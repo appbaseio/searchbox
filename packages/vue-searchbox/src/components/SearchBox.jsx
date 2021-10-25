@@ -30,6 +30,7 @@ import Title from '../styles/Title';
 import Icons from './Icons.jsx';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
+import SelectArrowSvg from '../styles/SelectArrowSvg';
 
 const SearchBox = {
 	name: 'search-box',
@@ -127,10 +128,10 @@ const SearchBox = {
 		addonAfter: VueTypes.any,
 		expandSuggestionsContainer: types.expandSuggestionsContainer,
 		recentSuggestionsConfig: VueTypes.object,
-  		popularSuggestionsConfig: VueTypes.object,
- 		maxPredictedWords: VueTypes.number,
- 		urlField: VueTypes.string,
-  		rankFeature: VueTypes.object,
+		popularSuggestionsConfig: VueTypes.object,
+		maxPredictedWords: VueTypes.number,
+		urlField: VueTypes.string,
+		rankFeature: VueTypes.object
 	},
 	data() {
 		this.state = {
@@ -202,7 +203,9 @@ const SearchBox = {
 			if (!instanceValue && defaultSuggestions) {
 				return defaultSuggestions;
 			}
-			const { results:{data:suggestions} } = this.getComponentInstance();
+			const {
+				results: { data: suggestions }
+			} = this.getComponentInstance();
 			return suggestions;
 		},
 		_applySetter(prev, next, setterFunc) {
@@ -229,8 +232,41 @@ const SearchBox = {
 			this.setValue({ value: event.target.value, event });
 		},
 		onSuggestionSelected(suggestion) {
+			if (!suggestion) {
+
+				const componentInstance = this.getComponentInstance();
+				if (componentInstance) {
+					componentInstance.setValue('', {
+						triggerDefaultQuery: true,
+						triggerCustomQuery: true,
+						stateChanges: true
+					});
+					return;
+				}
+			}
+
+			if (
+				suggestion.url
+        // check valid url: https://stackoverflow.com/a/43467144/10822996
+        && new RegExp(
+        	'^(https?:\\/\\/)?' // protocol
+          + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
+          + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
+          + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
+          + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
+            + '(\\#[-a-z\\d_]*)?$',
+        	'i'
+        ).test(suggestion.url)
+			) {
+				window.open(suggestion.url);
+				return;
+			}
+
+			const suggestionValue = suggestion._category
+				? suggestion.label
+				: suggestion.value;
 			this.setValue({
-				value: suggestion && suggestion.value,
+				value: suggestionValue,
 				isOpen: false,
 				triggerCustomQuery: true
 			});
@@ -244,6 +280,13 @@ const SearchBox = {
 				causes.SUGGESTION_SELECT,
 				suggestion.source
 			);
+		},
+		onSelectArrowClick(suggestion) {
+			this.setValue({
+				value: suggestion._category ? suggestion.label : suggestion.value,
+				isOpen: true,
+				triggerDefaultQuery: true
+			});
 		},
 		triggerDefaultQuery() {
 			const componentInstance = this.getComponentInstance();
@@ -295,17 +338,16 @@ const SearchBox = {
 					debounceFunc(this.triggerCustomQuery, debounce);
 				}
 			} else {
-				this.componentInstance.setValue(value, {
-                	triggerCustomQuery: rest.triggerCustomQuery,
-                	triggerDefaultQuery: this.autosuggest,
-                	stateChanges: true
-              	});
+				componentInstance.setValue(value, {
+					triggerCustomQuery: rest.triggerCustomQuery,
+					triggerDefaultQuery: this.autosuggest,
+					stateChanges: true
+				});
 
 				if (!this.autosuggest) {
 					this.triggerCustomQuery();
 				}
 			}
-
 		},
 		handleFocus(event) {
 			this.isOpen = true;
@@ -442,12 +484,7 @@ const SearchBox = {
 			return highlightedIndex === index ? '#eee' : '#fff';
 		},
 		getComponent(downshiftProps = {}) {
-			const {
-				instanceValue,
-				loading,
-				error,
-				results,
-			} = this.$props;
+			const { instanceValue, loading, error, results } = this.$props;
 			const suggestionsList = this.getSuggestionsList();
 			const data = {
 				loading,
@@ -569,7 +606,7 @@ const SearchBox = {
 			expandSuggestionsContainer
 		} = this.$props;
 		const { recentSearchesIcon, popularSearchesIcon } = this.$scopedSlots;
-		const getIcon = (iconType) => {
+		const getIcon = iconType => {
 			switch (iconType) {
 				case suggestionTypes.Recent:
 					return recentSearchesIcon;
@@ -578,12 +615,12 @@ const SearchBox = {
 				default:
 					return null;
 			}
-		}
+		};
 		const suggestionsList = this.getSuggestionsList();
 		const hasSuggestions
       = (defaultSuggestions && defaultSuggestions.length)
-			|| (suggestionsList && suggestionsList.length);
-		
+      || (suggestionsList && suggestionsList.length);
+
 		return (
 			<div class={className}>
 				{title && (
@@ -622,7 +659,6 @@ const SearchBox = {
 														'list'
 													)}`}
 												>
-													
 													{suggestionsList.map((item, index) => (
 														<li
 															{...{
@@ -639,7 +675,8 @@ const SearchBox = {
 																	highlightedIndex,
 																	index
 																),
-																
+																justifyContent: 'flex-start',
+																alignItems: 'center'
 															}}
 														>
 															{item._suggestion_type
@@ -661,6 +698,12 @@ const SearchBox = {
 															<SuggestionItem
 																currentValue={instanceValue}
 																suggestion={item}
+															/>
+															<SelectArrowSvg
+																onClick={e => {
+																	e.stopPropagation();
+																	this.onSelectArrowClick(item);
+																}}
 															/>
 														</li>
 													))}
@@ -782,20 +825,16 @@ const SearchBoxWrapper = {
 			<SearchComponent
 				value=""
 				type={queryTypes.Suggestion}
-				triggerQueryOnInit={!!context.props.enableRecentSearches
-					|| context.props.enableRecentSuggestions}
+				triggerQueryOnInit={
+					!!context.props.enableRecentSearches
+          || context.props.enableRecentSuggestions
+				}
 				clearOnQueryChange={true}
 				{...{
 					on: context.listeners,
 					props: context.props,
 					scopedSlots: {
-						default: ({
-							loading,
-							error,
-							micStatus,
-							results,
-							value,
-						}) => {
+						default: ({ loading, error, micStatus, results, value }) => {
 							return (
 								<SearchBox
 									loading={loading}
@@ -819,7 +858,7 @@ const SearchBoxWrapper = {
 					'error',
 					'requestPending',
 					'results',
-					'value',
+					'value'
 				]}
 			/>
 		);
