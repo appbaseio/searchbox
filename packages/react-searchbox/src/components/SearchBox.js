@@ -960,7 +960,7 @@ SearchBox.defaultProps = {
 export default props => (
   <SearchComponent
     triggerQueryOnInit={
-      !!props.enableRecentSearches || !!props.enablerecentSuggestions
+      props.enableRecentSearches || props.enableRecentSuggestions
     }
     value="" // Init value as empty
     type={queryTypes.Suggestion}

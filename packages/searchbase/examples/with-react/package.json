@@ -6,7 +6,7 @@
         "react": "^16.9.0",
         "react-dom": "^16.9.0",
         "react-scripts": "3.1.1",
-        "@appbaseio/searchbase": "1.6.0-alpha"
+        "@appbaseio/searchbase": "1.6.1-alpha"
     },
     "scripts": {
         "start": "react-scripts start",
