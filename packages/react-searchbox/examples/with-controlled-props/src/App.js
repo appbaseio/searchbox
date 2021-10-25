@@ -30,6 +30,14 @@ export class App extends Component {
           </h2>
           <SearchBox
             id="search-component"
+            // categoryField="authors.keyword"
+            urlField="authors"
+            enablePopularSuggestions={true}
+            enableRecentSearches={true}
+            popularSuggestionsConfig={{
+              size: 5,
+              showGlobal: true
+            }}
             dataField={[
               {
                 field: 'original_title',
@@ -43,19 +51,23 @@ export class App extends Component {
             title="Search"
             placeholder="Search for Books"
             size={5}
-            value={this.state.text}
-            onChange={(value, searchComponent, e) => {
-              // Perform actions after updating the value
-              this.setState(
-                {
-                  text: value
-                },
-                () => {
-                  // To update results
-                  searchComponent.triggerCustomQuery();
-                }
-              );
+            enablerecentSuggestions={true}
+            recentSuggestionsConfig={{
+              size: 5
             }}
+            // value={this.state.text}
+            // onChange={(value, searchComponent, e) => {
+            //   // Perform actions after updating the value
+            //   this.setState(
+            //     {
+            //       text: value
+            //     },
+            //     () => {
+            //       // To update results
+            //       searchComponent.triggerCustomQuery();
+            //     }
+            //   );
+            // }}
           />
           <SearchComponent
             id="result-component"

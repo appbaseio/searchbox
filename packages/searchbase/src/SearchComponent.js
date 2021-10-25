@@ -474,7 +474,7 @@ class SearchComponent extends Base {
         this.value,
         this.showDistinctSuggestions,
         this.enablePredictiveSuggestions
-      ).slice(0, this.size);
+      );
     }
     return [];
   }
@@ -1184,19 +1184,21 @@ class SearchComponent extends Base {
     if (!aggregationField && typeof this.dataField === 'string') {
       aggregationField = this.dataField;
     }
-    const prev = this.aggregationData;
-    this.aggregationData.setRaw(aggsResponse[aggregationField]);
-    this.aggregationData.setData(
-      aggregationField,
-      aggsResponse[aggregationField].buckets,
-      this.preserveResults && append
-    );
-    this._applyOptions(
-      { stateChanges: options.stateChanges },
-      'aggregationData',
-      prev,
-      this.aggregationData
-    );
+    if (aggregationField) {
+      const prev = this.aggregationData;
+      this.aggregationData.setRaw(aggsResponse[aggregationField]);
+      this.aggregationData.setData(
+        aggregationField,
+        aggsResponse[aggregationField].buckets,
+        this.preserveResults && append
+      );
+      this._applyOptions(
+        { stateChanges: options.stateChanges },
+        'aggregationData',
+        prev,
+        this.aggregationData
+      );
+    }
   }
 
   _setError(error: any, options?: Options = defaultOptions) {

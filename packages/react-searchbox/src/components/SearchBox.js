@@ -53,6 +53,7 @@ import {
 import SuggestionWrapper from '../addons/SuggestionsWrapper';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
+import SelectArrowSvg from '../styles/SelectArrowSvg';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -313,8 +314,28 @@ class SearchBox extends React.Component {
       });
       return;
     }
+    if (
+      suggestion.url &&
+      // check valid url: https://stackoverflow.com/a/43467144/10822996
+      new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$',
+        'i'
+      ).test(suggestion.url)
+    ) {
+      window.open(suggestion.url);
+      return;
+    }
+
+    const suggestionValue = suggestion._category
+      ? suggestion.label
+      : suggestion.value;
     this.setValue({
-      value: suggestion.value,
+      value: suggestionValue,
       isOpen: false,
       triggerCustomQuery: true
     });
@@ -324,10 +345,18 @@ class SearchBox extends React.Component {
       suggestion.source && suggestion.source._id
     );
     this.onValueSelected(
-      suggestion.value,
+      suggestionValue,
       causes.SUGGESTION_SELECT,
       suggestion.source
     );
+  };
+
+  onSelectArrowClick = suggestion => {
+    this.setValue({
+      value: suggestion._category ? suggestion.label : suggestion.value,
+      isOpen: true,
+      triggerDefaultQuery: true
+    });
   };
 
   handleStateChange = changes => {
@@ -640,7 +669,8 @@ class SearchBox extends React.Component {
                     highlightedIndex,
                     index
                   ),
-                  justifyContent: 'flex-start'
+                  justifyContent: 'flex-start',
+                  alignItems: 'center'
                 }}
               >
                 {item._suggestion_type !== suggestionTypes.Index ? (
@@ -659,6 +689,12 @@ class SearchBox extends React.Component {
                   </div>
                 ) : null}
                 <SuggestionItem currentValue={currentValue} suggestion={item} />
+                <SelectArrowSvg
+                  onClick={e => {
+                    e.stopPropagation();
+                    this.onSelectArrowClick(item);
+                  }}
+                />
               </li>
             ))}
           </ul>

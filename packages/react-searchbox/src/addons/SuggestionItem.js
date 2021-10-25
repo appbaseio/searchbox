@@ -3,7 +3,9 @@ import React from 'react';
 const SuggestionItem = ({ currentValue, suggestion }) => {
   const { label, value, isPredictiveSuggestion } = suggestion;
 
-  const stringToReplace = currentValue.split(' ').join('|');
+  const stringToReplace = suggestion._category
+    ? 'in ' + suggestion._category
+    : currentValue.split(' ').join('|');
   // label has highest precedence
   if (label) {
     if (typeof label === 'string') {
