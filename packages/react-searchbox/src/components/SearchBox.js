@@ -728,7 +728,7 @@ class SearchBox extends React.Component {
       value
     } = this.props;
     const currentValue = this.componentInstance.value || '';
-    const hasSuggestions = defaultSuggestions || this.recentSuggestionsList;
+    const hasSuggestions = defaultSuggestions || this.suggestionsList;
     return (
       <div style={style} className={className}>
         {title && (
