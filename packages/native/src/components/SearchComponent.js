@@ -72,11 +72,20 @@ class SearchComponent extends React.Component {
       onQueryChange,
       onMicStatusChange,
       enablePopularSuggestions,
-      maxPopularSuggestions,
       distinctField,
       distinctFieldConfig,
       enablePredictiveSuggestions,
-      subscribeTo
+      subscribeTo,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      showDistinctSuggestions,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      enableRecentSearches,
+      applyStopwords,
+      stopwords
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -128,10 +137,19 @@ class SearchComponent extends React.Component {
       onMicStatusChange,
       enablePopularSuggestions,
       preserveResults,
-      maxPopularSuggestions,
       distinctField,
       distinctFieldConfig,
-      enablePredictiveSuggestions
+      enablePredictiveSuggestions,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      showDistinctSuggestions,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      enableRecentSearches,
+      applyStopwords,
+      stopwords
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer && this.componentInstance) {
@@ -197,7 +215,6 @@ SearchComponent.propTypes = {
   transformResponse: func,
   beforeValueChange: func,
   enablePopularSuggestions: bool,
-  maxPopularSuggestions: number,
   preserveResults: bool,
   // RS API properties
   // eslint-disable-next-line react/no-typos
@@ -264,7 +281,33 @@ SearchComponent.propTypes = {
   onMicStatusChange: func,
 
   // to destroy the component state
-  destroyOnUnmount: bool
+  destroyOnUnmount: bool,
+
+  // to configure recent suggestions
+  recentSuggestionsConfig: object,
+
+  // to configure popular suggestions
+  popularSuggestionsConfig: object,
+
+  // to set max perdicted words
+  maxPredictedWords: number,
+
+  // to set the urlfield to get back url for in suggestions
+  urlField: string,
+
+  rankFeature: object,
+
+  // to toggle recent suggestions
+  enableRecentSearches: bool,
+
+  // to toggle recent suggestions
+  enableRecentSuggestions: bool,
+
+  // to toggle stopwords
+  applyStopwords: bool,
+
+  // list of stopwords
+  stopwords: arrayOf(string)
 };
 
 export default SearchComponent;

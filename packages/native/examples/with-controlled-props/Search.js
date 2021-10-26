@@ -11,12 +11,12 @@ export default function Search() {
       // To fetch results
       searchComponent.triggerCustomQuery();
     }
-  }, [text]);
+  }, [searchbase, text]);
 
   return (
     <SearchBox
       id="search-component"
-      autoSuggest={false}
+      autosuggest={true}
       dataField={[
         {
           field: 'original_title',
@@ -27,10 +27,11 @@ export default function Search() {
           weight: 3
         }
       ]}
-      value={text}
-      onChange={value => {
-        setText(value);
-      }}
+      enableRecentSearches={true}
+      // value={text}
+      // onChange={value => {
+      //   setText(value);
+      // }}
     />
   );
 }

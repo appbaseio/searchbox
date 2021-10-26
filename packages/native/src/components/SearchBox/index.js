@@ -41,7 +41,10 @@ import {
   getComponent,
   hasCustomRenderer,
   SearchContext,
-  isFunction
+  isFunction,
+  queryTypes,
+  sortSuggestions,
+  suggestionTypes
 } from '../../utils/helper';
 import SearchBar from './SearchBar';
 import causes from '../../utils/causes';
@@ -113,7 +116,7 @@ class SearchBox extends React.Component {
     const { aggregationField } = this.props;
     if (aggregationField) {
       console.warn(
-          'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+        'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
       );
     }
   }
@@ -153,7 +156,6 @@ class SearchBox extends React.Component {
   };
 
   openModal = () => {
-    const { enableRecentSearches } = this.props;
     const { showModal } = this.state;
     if (!showModal) {
       this.setState(
@@ -162,15 +164,6 @@ class SearchBox extends React.Component {
         },
         this.setFocus
       );
-      // Refresh recent searches
-      if (enableRecentSearches) {
-        // Only fetch if value is empty
-        if (!this.componentInstance.value) {
-          // Empty suggestions
-          this.componentInstance.clearResults();
-          this.componentInstance.getRecentSearches();
-        }
-      }
     }
   };
 
@@ -179,23 +172,13 @@ class SearchBox extends React.Component {
     return this.context.getComponent(id);
   }
 
-  get popularSuggestionsList() {
-    const suggestions = this.componentInstance.suggestions;
-    return (suggestions || []).filter(
-      suggestion => suggestion.source && suggestion.source._popular_suggestion
-    );
-  }
-
   get suggestionsList() {
     const { defaultSuggestions } = this.props;
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance.suggestions;
-    return (suggestions || []).filter(
-      suggestion =>
-        !(suggestion.source && suggestion.source._popular_suggestion)
-    );
+    const suggestions = this.componentInstance?.results?.data ?? [];
+    return suggestions;
   }
 
   get stats() {
@@ -212,7 +195,7 @@ class SearchBox extends React.Component {
   }
 
   get totalSuggestions() {
-    return [...this.suggestionsList, ...this.popularSuggestionsList];
+    return [...this.suggestionsList];
   }
 
   _applySetter = (prev, next, setterFunc) => {
@@ -220,8 +203,8 @@ class SearchBox extends React.Component {
       this.componentInstance && this.componentInstance[setterFunc](next);
   };
 
-  getComponent = (isPopularSuggestionsRender = false) => {
-    const { error, loading, recentSearches } = this.props;
+  getComponent = () => {
+    const { error, loading } = this.props;
     const data = {
       error,
       loading,
@@ -231,9 +214,7 @@ class SearchBox extends React.Component {
       promotedData: this.componentInstance.results.promotedData,
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
-      rawData: this.componentInstance.results.rawData,
-      popularSuggestions: this.popularSuggestionsList,
-      recentSearches
+      rawData: this.componentInstance.results.rawData
     };
     return getComponent(data, this.props);
   };
@@ -424,7 +405,7 @@ class SearchBox extends React.Component {
     }, 40);
   }
 
-  handleAutoFill = (item, recentSearch) => {
+  handleAutoFill = item => {
     this.setState(
       {
         autoFillInProgress: true
@@ -443,7 +424,16 @@ class SearchBox extends React.Component {
   };
 
   renderSearchInput({ isOpenWithModal = false, ...rest } = {}) {
-    const { placeholder, theme, loading, style, searchBarProps, onBlur, onKeyPress, onFocus } = this.props;
+    const {
+      placeholder,
+      theme,
+      loading,
+      style,
+      searchBarProps,
+      onBlur,
+      onKeyPress,
+      onFocus
+    } = this.props;
     const currentValue = this.componentInstance.value || '';
     return (
       <SearchBar
@@ -473,7 +463,6 @@ class SearchBox extends React.Component {
       goBackIcon = defaultGoBackIcon(theme),
       size,
       searchHeaderStyle,
-      recentSearches,
       suggestionsContainerStyle
     } = this.props;
     return (
@@ -523,14 +512,14 @@ class SearchBox extends React.Component {
                 {this.totalSuggestions.length ? (
                   <FlatList
                     ref={this.flatListRef}
-                    data={this.totalSuggestions.slice(0, size)}
+                    data={this.totalSuggestions}
                     keyboardShouldPersistTaps={'handled'}
                     keyExtractor={item => item.label}
                     ItemSeparatorComponent={this.renderItemSeparator}
                     renderItem={this.renderSuggestionItem}
                   />
                 ) : null}
-                {!this.componentInstance.value &&
+                {/* {!this.componentInstance.value &&
                   recentSearches &&
                   recentSearches.length && (
                     <FlatList
@@ -545,7 +534,7 @@ class SearchBox extends React.Component {
                         })
                       }
                     />
-                  )}
+                  )} */}
               </KeyboardAvoidingView>
             )}
           </View>
@@ -554,7 +543,7 @@ class SearchBox extends React.Component {
     );
   }
 
-  renderSuggestionItem = ({ item, isRecentSearch }) => {
+  renderSuggestionItem = ({ item }) => {
     const {
       renderItem,
       theme,
@@ -567,32 +556,41 @@ class SearchBox extends React.Component {
     let normalText = '';
     let highlightedText = '';
     if (isPredictiveSuggestion) {
-      normalText = (/[^<]*/).exec(item.label)[0];
-      highlightedText = (/>[^<]*/).exec(item.label)[0].replaceAll('>', '');
+      normalText = /[^<]*/.exec(item.label)[0];
+      highlightedText = />[^<]*/.exec(item.label)[0].replaceAll('>', '');
     }
     if (renderItem) {
-      return renderItem(item, isRecentSearch);
+      return renderItem(item);
     }
+
+    const getIcon = iconType => {
+      switch (iconType) {
+        case suggestionTypes.Recent:
+          return recentSearchIcon;
+        case suggestionTypes.Popular:
+          return popularSuggestionIcon;
+        default:
+          return null;
+      }
+    };
+
     return (
       <View style={styles.itemStyle}>
-        {isRecentSearch
-          ? renderNode(Icon, recentSearchIcon, {
-              theme,
-              onPress: () => this.onSuggestionSelected(item),
-              ...defaultRecentSearchIcon(theme)
-            })
-          : null}
-        {item.source && item.source._popular_suggestion
-          ? renderNode(Icon, popularSuggestionIcon, {
-              theme,
-              onPress: () => this.onSuggestionSelected(item),
-              ...defaultPopularSuggestionIcon(theme)
-            })
-          : null}
+        {renderNode(Icon, getIcon(item._suggestion_type), {
+          theme,
+          onPress: () => this.onSuggestionSelected(item),
+          ...getIcon(item._suggestion_type)(theme)
+        })}
+
         {isPredictiveSuggestion ? (
-          <TouchableOpacity style={{display: 'flex', flexDirection: 'row', flex: 1}} onPress={() => this.onSuggestionSelected(item)}>
+          <TouchableOpacity
+            style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
+            onPress={() => this.onSuggestionSelected(item)}
+          >
             <Text>{normalText}</Text>
-            <Text style={{ fontWeight: '700' }} numberOfLines={1}>{highlightedText}</Text>
+            <Text style={{ fontWeight: '700' }} numberOfLines={1}>
+              {highlightedText}
+            </Text>
           </TouchableOpacity>
         ) : (
           <Text
@@ -607,7 +605,7 @@ class SearchBox extends React.Component {
           {showAutoFill
             ? renderNode(Icon, autoFillIcon, {
                 theme,
-                onPress: () => this.handleAutoFill(item, isRecentSearch),
+                onPress: () => this.handleAutoFill(item),
                 ...defaultAutoFillIcon(theme)
               })
             : null}
@@ -687,7 +685,6 @@ SearchBox.propTypes = {
   showAutoFill: bool,
   enablePopularSuggestions: bool,
   enableRecentSearches: bool,
-  maxPopularSuggestions: number,
   distinctField: string,
   distinctFieldConfig: object,
   // icons
@@ -716,12 +713,18 @@ SearchBox.propTypes = {
   error: any,
   loading: bool,
   results: object,
-  recentSearches: array,
-  enablePredictiveSuggestions: bool
+  enablePredictiveSuggestions: bool,
+  recentSuggestionsConfig: object,
+  popularSuggestionsConfig: object,
+  maxPredictedWords: number,
+  urlField: string,
+  rankFeature: object,
+  categoryField: string,
+  categoryValue: string,
+  enableRecentSuggestions: bool
 };
 
 SearchBox.defaultProps = {
-  maxPopularSuggestions: 5,
   enablePopularSuggestions: false,
   enableRecentSearches: false,
   showAutoFill: true,
@@ -736,7 +739,15 @@ SearchBox.defaultProps = {
   downShiftProps: {},
   showDistinctSuggestions: true,
   enablePredictiveSuggestions: false,
-  value: undefined
+  value: undefined,
+  enableRecentSuggestions: false,
+  recentSuggestionsConfig: undefined,
+  popularSuggestionsConfig: undefined,
+  maxPredictedWords: 2,
+  urlField: '',
+  rankFeature: undefined,
+  categoryField: '',
+  categoryValue: ''
 };
 
 const styles = StyleSheet.create({
@@ -774,26 +785,21 @@ const styles = StyleSheet.create({
 
 export default props => (
   <SearchComponent
-    triggerQueryOnInit={false}
+    triggerQueryOnInit={
+      props.enableRecentSearches || props.enableRecentSuggestions
+    }
     value="" // Init value as empty
+    type={queryTypes.Suggestion}
     {...props}
-    subscribeTo={[
-      'micStatus',
-      'error',
-      'requestPending',
-      'results',
-      'value',
-      'recentSearches'
-    ]}
+    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
   >
-    {({ error, loading, results, value, recentSearches }) => {
+    {({ error, loading, results, value }) => {
       return (
         <SearchBox
           {...props}
           error={error}
           loading={loading}
           results={results}
-          recentSearches={recentSearches}
         />
       );
     }}

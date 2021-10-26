@@ -10,7 +10,13 @@ import {
   any
 } from 'prop-types';
 
-export const queryTypes = oneOf(['search', 'term', 'geo', 'range']);
+export const queryTypes = oneOf([
+  'search',
+  'term',
+  'geo',
+  'range',
+  'suggestion'
+]);
 
 export const sourceFields = arrayOf(string);
 
