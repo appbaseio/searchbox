@@ -113,7 +113,7 @@ class SearchBox extends React.Component {
     const { aggregationField } = this.props;
     if (aggregationField) {
       console.warn(
-          'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.',
+        'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
       );
     }
   }
@@ -443,7 +443,16 @@ class SearchBox extends React.Component {
   };
 
   renderSearchInput({ isOpenWithModal = false, ...rest } = {}) {
-    const { placeholder, theme, loading, style, searchBarProps, onBlur, onKeyPress, onFocus } = this.props;
+    const {
+      placeholder,
+      theme,
+      loading,
+      style,
+      searchBarProps,
+      onBlur,
+      onKeyPress,
+      onFocus
+    } = this.props;
     const currentValue = this.componentInstance.value || '';
     return (
       <SearchBar
@@ -567,8 +576,8 @@ class SearchBox extends React.Component {
     let normalText = '';
     let highlightedText = '';
     if (isPredictiveSuggestion) {
-      normalText = (/[^<]*/).exec(item.label)[0];
-      highlightedText = (/>[^<]*/).exec(item.label)[0].replaceAll('>', '');
+      normalText = /[^<]*/.exec(item.label)[0];
+      highlightedText = />[^<]*/.exec(item.label)[0].replaceAll('>', '');
     }
     if (renderItem) {
       return renderItem(item, isRecentSearch);
@@ -590,9 +599,14 @@ class SearchBox extends React.Component {
             })
           : null}
         {isPredictiveSuggestion ? (
-          <TouchableOpacity style={{display: 'flex', flexDirection: 'row', flex: 1}} onPress={() => this.onSuggestionSelected(item)}>
+          <TouchableOpacity
+            style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
+            onPress={() => this.onSuggestionSelected(item)}
+          >
             <Text>{normalText}</Text>
-            <Text style={{ fontWeight: '700' }} numberOfLines={1}>{highlightedText}</Text>
+            <Text style={{ fontWeight: '700' }} numberOfLines={1}>
+              {highlightedText}
+            </Text>
           </TouchableOpacity>
         ) : (
           <Text

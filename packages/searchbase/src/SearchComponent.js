@@ -158,9 +158,9 @@ class SearchComponent extends Base {
 
   rankFeature: Object;
 
-  applyStopwords : boolean,
+  applyStopwords: boolean;
 
-  stopwords: Array<string> ,
+  stopwords: Array<string>;
 
   // other properties
 
@@ -539,8 +539,8 @@ class SearchComponent extends Base {
       enablePopularSuggestions: this.enablePopularSuggestions,
       enableRecentSearches: this.enableRecentSearches,
       enableRecentSuggestions: this.enableRecentSuggestions,
-      applyStopwords:this.applyStopwords,
-      stopwords:this.stopwords,
+      applyStopwords: this.applyStopwords,
+      stopwords: this.stopwords
     };
   }
 
