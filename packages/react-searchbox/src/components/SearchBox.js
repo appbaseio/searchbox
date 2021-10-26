@@ -54,6 +54,7 @@ import SuggestionWrapper from '../addons/SuggestionsWrapper';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
 import SelectArrowSvg from '../styles/SelectArrowSvg';
+import { arrayOf } from 'prop-types';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -918,7 +919,9 @@ SearchBox.propTypes = {
   categoryField: string,
   categoryValue: string,
   enableRecentSearches: bool,
-  enableRecentSuggestions: bool
+  enableRecentSuggestions: bool,
+  applyStopwords: bool,
+  stopwords: arrayOf(string)
 };
 
 SearchBox.defaultProps = {

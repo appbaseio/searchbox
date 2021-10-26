@@ -63,12 +63,14 @@ const SearchComponent = {
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
 		triggerQueryOnInit: VueTypes.bool.def(true),
 		recentSuggestionsConfig: VueTypes.object,
-  		popularSuggestionsConfig: VueTypes.object,
- 		maxPredictedWords: VueTypes.number,
- 		urlField: VueTypes.string,
+		popularSuggestionsConfig: VueTypes.object,
+		maxPredictedWords: VueTypes.number,
+		urlField: VueTypes.string,
 		rankFeature: VueTypes.object,
 		enableRecentSearches: VueTypes.bool,
 		enableRecentSuggestions: VueTypes.bool,
+		applyStopwords: VueTypes.bool,
+		stopwords: VueTypes.arrayOf(VueTypes.string)
 	},
 	data() {
 		return {
@@ -138,11 +140,13 @@ const SearchComponent = {
 			distinctFieldConfig,
 			enableRecentSearches,
 			enableRecentSuggestions,
-      		recentSuggestionsConfig,
-      		popularSuggestionsConfig,
-      		maxPredictedWords,
-      		urlField,
-      		rankFeature
+			recentSuggestionsConfig,
+			popularSuggestionsConfig,
+			maxPredictedWords,
+			urlField,
+			rankFeature,
+			applyStopwords,
+			stopwords
 		} = this.rawProps;
 		let { value } = this.rawProps;
 		if (window && window.location && window.location.search) {
@@ -206,11 +210,13 @@ const SearchComponent = {
 			distinctFieldConfig,
 			enableRecentSearches,
 			enableRecentSuggestions,
-      		recentSuggestionsConfig,
-      		popularSuggestionsConfig,
-      		maxPredictedWords,
-      		urlField,
-      		rankFeature,
+			recentSuggestionsConfig,
+			popularSuggestionsConfig,
+			maxPredictedWords,
+			urlField,
+			rankFeature,
+			applyStopwords,
+			stopwords,
 			onValueChange: (prev, next) => {
 				this.$emit('value', {
 					prev,

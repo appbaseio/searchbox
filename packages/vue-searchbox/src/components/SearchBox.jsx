@@ -131,7 +131,9 @@ const SearchBox = {
 		popularSuggestionsConfig: VueTypes.object,
 		maxPredictedWords: VueTypes.number,
 		urlField: VueTypes.string,
-		rankFeature: VueTypes.object
+		rankFeature: VueTypes.object,
+		applyStopwords: VueTypes.bool,
+		stopwords: VueTypes.arrayOf(VueTypes.string)
 	},
 	data() {
 		this.state = {
@@ -233,7 +235,6 @@ const SearchBox = {
 		},
 		onSuggestionSelected(suggestion) {
 			if (!suggestion) {
-
 				const componentInstance = this.getComponentInstance();
 				if (componentInstance) {
 					componentInstance.setValue('', {

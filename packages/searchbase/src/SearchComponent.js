@@ -158,6 +158,10 @@ class SearchComponent extends Base {
 
   rankFeature: Object;
 
+  applyStopwords : boolean,
+
+  stopwords: Array<string> ,
+
   // other properties
 
   // To enable the popular suggestions
@@ -319,7 +323,9 @@ class SearchComponent extends Base {
       urlField,
       rankFeature,
       enableRecentSearches,
-      enableRecentSuggestions
+      enableRecentSuggestions,
+      applyStopwords,
+      stopwords
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
@@ -381,6 +387,10 @@ class SearchComponent extends Base {
     this.maxPredictedWords = maxPredictedWords;
     this.urlField = urlField;
     this.rankFeature = rankFeature;
+
+    this.applyStopwords = applyStopwords;
+
+    this.stopwords = stopwords;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
     this.maxPopularSuggestions = maxPopularSuggestions;
@@ -528,7 +538,9 @@ class SearchComponent extends Base {
       recentSuggestionsConfig: this.recentSuggestionsConfig,
       enablePopularSuggestions: this.enablePopularSuggestions,
       enableRecentSearches: this.enableRecentSearches,
-      enableRecentSuggestions: this.enableRecentSuggestions
+      enableRecentSuggestions: this.enableRecentSuggestions,
+      applyStopwords:this.applyStopwords,
+      stopwords:this.stopwords,
     };
   }
 
