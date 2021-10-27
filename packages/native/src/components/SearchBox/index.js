@@ -20,7 +20,8 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Linking
 } from 'react-native';
 import {
   appbaseConfig as appbaseConfigDef,
@@ -43,7 +44,6 @@ import {
   SearchContext,
   isFunction,
   queryTypes,
-  sortSuggestions,
   suggestionTypes
 } from '../../utils/helper';
 import SearchBar from './SearchBar';
@@ -59,7 +59,15 @@ const defaultGoBackIcon = theme => ({
 const defaultRecentSearchIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'history'
+  name: 'history',
+  style: { marginRight: 10 }
+});
+
+const defaultPromotedResultIcon = theme => ({
+  type: 'material',
+  size: 24,
+  name: 'star',
+  style: { marginRight: 10 }
 });
 
 const defaultPopularSuggestionIcon = theme => ({
@@ -339,6 +347,22 @@ class SearchBox extends React.Component {
   };
 
   onSuggestionSelected = suggestion => {
+    if (
+      suggestion.url &&
+      // check valid url: https://stackoverflow.com/a/43467144/10822996
+      new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$',
+        'i'
+      ).test(suggestion.url)
+    ) {
+      Linking.openURL('https://google.com');
+      return;
+    }
     this.setValue({
       value: suggestion && suggestion.value,
       triggerCustomQuery: true
@@ -461,7 +485,6 @@ class SearchBox extends React.Component {
     const {
       theme,
       goBackIcon = defaultGoBackIcon(theme),
-      size,
       searchHeaderStyle,
       suggestionsContainerStyle
     } = this.props;
@@ -553,14 +576,21 @@ class SearchBox extends React.Component {
       popularSuggestionIcon = defaultPopularSuggestionIcon(theme)
     } = this.props;
     const { isPredictiveSuggestion } = item;
+    let isCategorySuggestion = !!item._category;
     let normalText = '';
     let highlightedText = '';
-    if (isPredictiveSuggestion) {
-      normalText = /[^<]*/.exec(item.label)[0];
-      highlightedText = />[^<]*/.exec(item.label)[0].replaceAll('>', '');
-    }
     if (renderItem) {
       return renderItem(item);
+    }
+    if (isCategorySuggestion) {
+      normalText = item.label.split('in')[0];
+      highlightedText =
+        'in ' + item?.label?.split('in')?.[1]
+          ? 'in ' + item.label.split('in')[1]
+          : '';
+    } else if (isPredictiveSuggestion) {
+      normalText = /[^<]*/.exec(item.label)[0];
+      highlightedText = />[^<]*/.exec(item.label)[0].replaceAll('>', '');
     }
 
     const getIcon = iconType => {
@@ -569,9 +599,31 @@ class SearchBox extends React.Component {
           return recentSearchIcon;
         case suggestionTypes.Popular:
           return popularSuggestionIcon;
+        case suggestionTypes.Promoted:
+          return defaultPromotedResultIcon(theme);
         default:
           return null;
       }
+    };
+
+    const renderSuggestionLabel = labelText => {
+      return labelText
+        ?.split(/(<\w+\s+(?!term).*?>.*?().*?<\/[a-zA-Z]*>)/g)
+        ?.filter(i => i)
+        ?.map(text => {
+          return (
+            <Text
+              style={
+                text.match(/(<\w+\s+(?!term).*?>.*?().*?<\/[a-zA-Z]*>)/g)
+                  ? { fontWeight: '700' }
+                  : {}
+              }
+              numberOfLines={1}
+            >
+              {text.replace(/<[^>]+>/g, '')}
+            </Text>
+          );
+        });
     };
 
     return (
@@ -579,28 +631,24 @@ class SearchBox extends React.Component {
         {renderNode(Icon, getIcon(item._suggestion_type), {
           theme,
           onPress: () => this.onSuggestionSelected(item),
-          ...getIcon(item._suggestion_type)(theme)
+          ...getIcon(item._suggestion_type)
         })}
+        <TouchableOpacity
+          style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
+          onPress={() => this.onSuggestionSelected(item)}
+        >
+          {isPredictiveSuggestion || isCategorySuggestion ? (
+            <>
+              <Text>{normalText}</Text>
+              <Text style={{ fontWeight: '700' }} numberOfLines={1}>
+                {highlightedText}
+              </Text>
+            </>
+          ) : (
+            renderSuggestionLabel(item.label)
+          )}
+        </TouchableOpacity>
 
-        {isPredictiveSuggestion ? (
-          <TouchableOpacity
-            style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
-            onPress={() => this.onSuggestionSelected(item)}
-          >
-            <Text>{normalText}</Text>
-            <Text style={{ fontWeight: '700' }} numberOfLines={1}>
-              {highlightedText}
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <Text
-            style={styles.itemText}
-            onPress={() => this.onSuggestionSelected(item)}
-            numberOfLines={1}
-          >
-            {item.label}
-          </Text>
-        )}
         <View styles={styles.autoFillIcon}>
           {showAutoFill
             ? renderNode(Icon, autoFillIcon, {
