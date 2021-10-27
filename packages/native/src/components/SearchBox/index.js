@@ -363,8 +363,11 @@ class SearchBox extends React.Component {
       Linking.openURL('https://google.com');
       return;
     }
+    const suggestionValue = suggestion?._category
+      ? suggestion.label
+      : suggestion.value;
     this.setValue({
-      value: suggestion && suggestion.value,
+      value: suggestionValue,
       triggerCustomQuery: true
     });
     // Keyboard.dissmiss();
@@ -375,7 +378,7 @@ class SearchBox extends React.Component {
       suggestion.source && suggestion.source._id
     );
     this.onValueSelected(
-      suggestion.value,
+      suggestionValue,
       causes.SUGGESTION_SELECT,
       suggestion.source
     );
@@ -435,7 +438,9 @@ class SearchBox extends React.Component {
         autoFillInProgress: true
       },
       () => {
-        this.componentInstance.setValue(item.value);
+        this.componentInstance.setValue(
+          item?._category ? item.label : item.value
+        );
       }
     );
   };
