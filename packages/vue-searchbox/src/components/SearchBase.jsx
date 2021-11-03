@@ -15,8 +15,8 @@ const SearchBase = {
 	},
 	provide() {
 		const headers = {
-			'x-search-client': 'Searchbox Vue',
-			...this.$props.headers
+		        ...this.$props.headers,
+			'x-search-client': 'Searchbox Vue'
 		};
 		this.searchbase = new Headless({
 			index: this.$props.index,
