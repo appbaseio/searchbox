@@ -16,9 +16,6 @@ class App extends React.Component {
       index,
       url,
       credentials,
-      appbaseConfig: {
-        enableTelemetry: false
-      }
     });
 
     // Register search component => To render the suggestions
