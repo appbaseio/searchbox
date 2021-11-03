@@ -7,8 +7,8 @@ class SearchBase extends React.Component {
   constructor(props) {
     super(props);
     const headers = {
-      'x-search-client': 'Searchbox React',
-      ...props.headers
+      ...props.headers,
+      'x-search-client': 'Searchbox React'
     };
     this.searchbase = new Headless({
       index: props.index,
