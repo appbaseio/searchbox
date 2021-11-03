@@ -62,5 +62,6 @@ export const appbaseConfig = shape({
   recordAnalytics: bool,
   enableQueryRules: bool,
   userId: string,
-  customEvents: object
+  customEvents: object,
+  enableTelemetry: bool
 });

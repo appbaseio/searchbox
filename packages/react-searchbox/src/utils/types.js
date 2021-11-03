@@ -72,7 +72,8 @@ export const appbaseConfig = PropTypes.shape({
   recordAnalytics: bool,
   enableQueryRules: bool,
   userId: string,
-  customEvents: object
+  customEvents: object,
+  enableTelemetry: bool
 });
 
 export const dataFieldValidator = (props, propName, componentName) => {
