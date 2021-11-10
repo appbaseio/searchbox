@@ -12,12 +12,16 @@ import { SearchContext } from '../utils/helper';
 class SearchBase extends React.Component {
   constructor(props) {
     super(props);
+    const headers = {
+      ...props.headers,
+      'x-search-client': 'Searchbox React'
+    };
     this.searchbase = new Headless({
       index: props.index,
       url: props.url,
       credentials: props.credentials,
       mongodb: props.mongodb,
-      headers: props.headers,
+      headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
       transformResponse: props.transformResponse
