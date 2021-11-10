@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/react-searchbox-with-distinct-field-prop-example",
-    "homepage": "https://appbaseio.github.io/react-searchbox",
+    "homepage": ".",
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
@@ -10,7 +10,7 @@
         "react-dom": "^16.4.1",
         "react-paginate": "^6.5.0",
         "react-scripts": "^1.1.4",
-        "@appbaseio/react-searchbox": "1.6.1-beta"
+        "@appbaseio/react-searchbox": "1.5.2"
     },
     "scripts": {
         "start": "react-scripts start",
