@@ -135,7 +135,8 @@ class SearchBox extends React.Component {
       headers,
       fuzziness,
       nestedField,
-      appbaseConfig
+      appbaseConfig,
+      enableRecentSuggestions
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
@@ -146,6 +147,10 @@ class SearchBox extends React.Component {
     ) {
       if (this.componentInstance)
         this.componentInstance.appbaseConfig = appbaseConfig;
+    }
+
+    if (enableRecentSuggestions && this.suggestionsList?.length === 0) {
+      this.triggerDefaultQuery();
     }
   }
 
@@ -441,6 +446,7 @@ class SearchBox extends React.Component {
         this.componentInstance.setValue(
           item?._category ? item.label : item.value
         );
+        this.setState({ autoFillInProgress: false });
       }
     );
   };
@@ -547,22 +553,6 @@ class SearchBox extends React.Component {
                     renderItem={this.renderSuggestionItem}
                   />
                 ) : null}
-                {/* {!this.componentInstance.value &&
-                  recentSearches &&
-                  recentSearches.length && (
-                    <FlatList
-                      data={(recentSearches || []).slice(0, size)}
-                      keyboardShouldPersistTaps={'handled'}
-                      keyExtractor={item => item.label}
-                      ItemSeparatorComponent={this.renderItemSeparator}
-                      renderItem={rest =>
-                        this.renderSuggestionItem({
-                          isRecentSearch: true,
-                          ...rest
-                        })
-                      }
-                    />
-                  )} */}
               </KeyboardAvoidingView>
             )}
           </View>
@@ -615,9 +605,10 @@ class SearchBox extends React.Component {
       return labelText
         ?.split(/(<\w+\s+(?!term).*?>.*?().*?<\/[a-zA-Z]*>)/g)
         ?.filter(i => i)
-        ?.map(text => {
+        ?.map((text, index) => {
           return (
             <Text
+              key={`${text} ${index}`}
               style={
                 text.match(/(<\w+\s+(?!term).*?>.*?().*?<\/[a-zA-Z]*>)/g)
                   ? { fontWeight: '700' }
