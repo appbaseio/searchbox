@@ -43,20 +43,41 @@ export class App extends Component {
             title="Search"
             placeholder="Search for Books"
             size={5}
-            value={this.state.text}
-            onChange={(value, searchComponent, e) => {
-              // Perform actions after updating the value
-              this.setState(
-                {
-                  text: value
-                },
-                () => {
-                  // To update results
-                  searchComponent.triggerCustomQuery();
-                }
-              );
+            // value={this.state.text}
+            // onChange={(value, searchComponent, e) => {
+            //   // Perform actions after updating the value
+            //   this.setState(
+            //     {
+            //       text: value
+            //     },
+            //     () => {
+            //       // To update results
+            //       searchComponent.triggerCustomQuery();
+            //     }
+            //   );
+            // }}
+            autosuggest={true}
+            enablePopularSuggestions={true}
+            popularSuggestionsConfig={{
+              size: 3,
+              minChars: 2
             }}
+            enableRecentSuggestions={true}
+            recentSuggestionsConfig={{
+              size: 3,
+              minHits: 2
+            }}
+            debounce={100}
+            fuzziness="AUTO"
+            showClear
+            showVoiceSearch
+            URLParams
+            className="result-search-box"
+            showDistinctSuggestions
+            iconPosition="left"
+            queryFormat="and"
           />
+
           <SearchComponent
             id="result-component"
             highlight

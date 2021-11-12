@@ -671,7 +671,7 @@ class SearchBox extends React.Component {
                     index
                   ),
                   justifyContent: 'flex-start',
-                  alignItems: 'center'
+                  alignItems: 'stretch'
                 }}
               >
                 {item._suggestion_type !== suggestionTypes.Index ? (
