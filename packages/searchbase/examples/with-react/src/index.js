@@ -15,7 +15,7 @@ class App extends React.Component {
     this.searchBase = new SearchBase({
       index,
       url,
-      credentials
+      credentials,
     });
 
     // Register search component => To render the suggestions

@@ -66,10 +66,17 @@ class Base {
       this.transformResponse = transformResponse;
     }
 
+    const { enableTelemetry } = appbaseConfig || {};
     // Initialize headers
     this.headers = {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'x-search-client': 'Searchbase Headless',
+      ...(enableTelemetry === false
+        ? {
+            'X-Enable-Telemetry': false
+          }
+        : {})
     };
     if (this.credentials) {
       this.headers = {
