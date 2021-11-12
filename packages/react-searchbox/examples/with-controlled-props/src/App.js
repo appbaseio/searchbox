@@ -28,7 +28,7 @@ export class App extends Component {
               </a>
             </span>
           </h2>
-          {/* <SearchBox
+          <SearchBox
             id="search-component"
             dataField={[
               {
@@ -43,76 +43,20 @@ export class App extends Component {
             title="Search"
             placeholder="Search for Books"
             size={5}
-            // value={this.state.text}
-            // onChange={(value, searchComponent, e) => {
-            //   // Perform actions after updating the value
-            //   this.setState(
-            //     {
-            //       text: value
-            //     },
-            //     () => {
-            //       // To update results
-            //       searchComponent.triggerCustomQuery();
-            //     }
-            //   );
-            // }}
-            highlight
-            enablePredictiveSuggestions
-            autosuggest={true}
-            enablePopularSuggestions={true}
-            popularSuggestionsConfig={{
-              size: 3,
-              minChars: 2,
-              index: 'good-books-ds'
+            value={this.state.text}
+            onChange={(value, searchComponent, e) => {
+              // Perform actions after updating the value
+              this.setState(
+                {
+                  text: value
+                },
+                () => {
+                  // To update results
+                  searchComponent.triggerCustomQuery();
+                }
+              );
             }}
-            enableRecentSuggestions={true}
-            recentSuggestionsConfig={{
-              size: 3,
-              minHits: 2,
-              index: 'good-books-ds'
-            }}
-            debounce={100}
-            fuzziness="AUTO"
-            showClear
-            showVoiceSearch
-            URLParams
-            className="result-search-box"
-            // showDistinctSuggestions
-            iconPosition="left"
-            queryFormat="and"
-            categoryField="authors.keyword"
-          /> */}
-          <SearchBox
-            id="search-component"
-            dataField={[
-              {
-                field: 'original_title',
-                weight: 1
-              },
-              {
-                field: 'original_title.search',
-                weight: 3
-              }
-            ]}
-            title="Search - 'good-books-ds' index"
-            placeholder="Search for Books"
-            categoryField="authors.keyword"
-            aggregationSize={2}
-            urlField="authors"
-            enableRecentSuggestions={true}
-            recentSuggestionsConfig={{
-              size: 3
-            }}
-            enablePopularSuggestions={true}
-            popularSuggestionsConfig={{
-              size: 5,
-              showGlobal: true
-            }}
-            enablePredictiveSuggestions={true}
-            size={5}
-            showClear={true}
           />
-
           <SearchComponent
             id="result-component"
             highlight
