@@ -53,7 +53,7 @@ import {
 import SuggestionWrapper from '../addons/SuggestionsWrapper';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
-import SelectArrowSvg from '../styles/SelectArrowSvg';
+import AutofillSvg from '../styles/AutofillSvg';
 import { arrayOf } from 'prop-types';
 
 class SearchBox extends React.Component {
@@ -237,7 +237,7 @@ class SearchBox extends React.Component {
 
   setValue = ({ value, isOpen = true, ...rest }) => {
     const { onChange, debounce, autosuggest } = this.props;
-    if (!value && autosuggest) {
+    if (!value && autosuggest && rest.cause !== causes.CLEAR_VALUE) {
       this.componentInstance.triggerDefaultQuery();
     }
     this.setState({ isOpen });
@@ -249,7 +249,7 @@ class SearchBox extends React.Component {
       onChange(value, this.componentInstance, rest.event);
     } else if (debounce > 0) {
       this.componentInstance.setValue(value, {
-        triggerDefaultQuery: false,
+        triggerDefaultQuery: rest.cause === causes.CLEAR_VALUE,
         triggerCustomQuery: false,
         stateChanges: true
       });
@@ -302,7 +302,12 @@ class SearchBox extends React.Component {
   };
 
   clearValue = () => {
-    this.setValue({ value: '', isOpen: false, triggerCustomQuery: true });
+    this.setValue({
+      value: '',
+      isOpen: false,
+      triggerCustomQuery: true,
+      cause: causes.CLEAR_VALUE
+    });
     this.onValueSelected(null, causes.CLEAR_VALUE);
   };
 
@@ -690,7 +695,7 @@ class SearchBox extends React.Component {
                   </div>
                 ) : null}
                 <SuggestionItem currentValue={currentValue} suggestion={item} />
-                <SelectArrowSvg
+                <AutofillSvg
                   onClick={e => {
                     e.stopPropagation();
                     this.onSelectArrowClick(item);
