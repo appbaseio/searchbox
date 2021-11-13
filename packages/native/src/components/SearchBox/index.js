@@ -59,22 +59,19 @@ const defaultGoBackIcon = theme => ({
 const defaultRecentSearchIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'history',
-  style: { marginRight: 10 }
+  name: 'history'
 });
 
 const defaultPromotedResultIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'star',
-  style: { marginRight: 10 }
+  name: 'star'
 });
 
 const defaultPopularSuggestionIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'trending-up',
-  style: { marginRight: 10 }
+  name: 'trending-up'
 });
 
 const defaultAutoFillIcon = theme => ({
@@ -624,11 +621,14 @@ class SearchBox extends React.Component {
 
     return (
       <View style={styles.itemStyle}>
-        {renderNode(Icon, getIcon(item._suggestion_type), {
-          theme,
-          onPress: () => this.onSuggestionSelected(item),
-          ...getIcon(item._suggestion_type)
-        })}
+        <View style={styles.iconStyle}>
+          {renderNode(Icon, getIcon(item._suggestion_type), {
+            theme,
+            onPress: () => this.onSuggestionSelected(item),
+            ...getIcon(item._suggestion_type)
+          })}
+        </View>
+
         <TouchableOpacity
           style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
           onPress={() => this.onSuggestionSelected(item)}
@@ -824,6 +824,9 @@ const styles = StyleSheet.create({
   }),
   flex1: {
     flex: 1
+  },
+  iconStyle: {
+    marginRight: 10
   }
 });
 

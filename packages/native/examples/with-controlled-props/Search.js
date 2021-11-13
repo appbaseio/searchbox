@@ -28,10 +28,10 @@ export default function Search() {
         }
       ]}
       enableRecentSearches={true}
-      // value={text}
-      // onChange={value => {
-      //   setText(value);
-      // }}
+      value={text}
+      onChange={value => {
+        setText(value);
+      }}
     />
   );
 }
