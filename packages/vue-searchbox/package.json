@@ -1,6 +1,10 @@
 {
     "name": "@appbaseio/vue-searchbox",
+<<<<<<< HEAD
     "version": "1.6.2-alpha",
+=======
+    "version": "1.5.3",
+>>>>>>> master
     "private": false,
     "description": "Lightweight searchbox component for Vue",
     "author": "Anuj Shah <anujshah584@gmail.com>",
@@ -31,7 +35,11 @@
     ],
     "homepage": "https://github.com/appbaseio/searchbase/packages/vue-searchbox#readme",
     "dependencies": {
+<<<<<<< HEAD
         "@appbaseio/searchbase": "1.6.1-alpha",
+=======
+        "@appbaseio/searchbase": "1.5.3",
+>>>>>>> master
         "@appbaseio/vue-emotion": "^0.4.4",
         "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
         "compute-scroll-into-view": "^1.0.11",

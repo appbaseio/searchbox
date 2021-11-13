@@ -1037,8 +1037,18 @@ class SearchComponent extends Base {
           // set timestamp in request
           const timestamp = Date.now();
           let suffix = '_reactivesearch.v3';
-          const index = this._getSearchIndex();
-          return fetch(`${this.url}/${index}/${suffix}`, finalRequestOptions)
+          const requestOptionsWithHeader = {
+            ...finalRequestOptions,
+            headers: {
+              ...finalRequestOptions.headers,
+              'x-timestamp': timestamp
+            }
+          };
+          const index = this._getSearchIndex(isPopularSuggestionsAPI);
+          return fetch(
+            `${this.url}/${index}/${suffix}`,
+            requestOptionsWithHeader
+          )
             .then(res => {
               const responseHeaders = res.headers;
 

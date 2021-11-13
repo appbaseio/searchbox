@@ -33,6 +33,7 @@ export type AppbaseSettings = {
   enableQueryRules?: boolean;
   userId?: string;
   customEvents?: Object;
+  enableTelemetry?: boolean;
 };
 
 export type BaseConfig = {
