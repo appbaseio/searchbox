@@ -29,7 +29,6 @@ import {
   isEqual,
   searchBaseMappings,
   backendAlias,
-  componentsAlias,
   validateSchema
 } from './utils';
 
@@ -286,18 +285,14 @@ class SearchComponent extends Base {
 
     validateSchema(
       {
-        index,
-        url,
-        credentials,
-        headers,
-        mongodb,
-        appbaseConfig,
-        transformRequest,
-        transformResponse
+        enablePopularSuggestions,
+        enablePredictiveSuggestions,
+        autocompleteField,
+        ...rsAPIConfig
       },
       schema,
       backendName,
-      componentsAlias.SEARCHBASE
+      componentName
     );
     const {
       id,
