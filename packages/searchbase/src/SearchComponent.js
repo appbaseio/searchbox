@@ -29,9 +29,10 @@ import {
   isEqual,
   searchBaseMappings,
   backendAlias,
-  validateSchema,
+  validateSchema
 } from './utils';
-import schema from './schema';
+
+import SCHEMA from './schema';
 
 type QueryType =
   | queryTypes.Search
@@ -279,16 +280,23 @@ class SearchComponent extends Base {
       transformResponse
     });
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
+    // eslint-disable-next-line
+    const schema = SCHEMA[backendName];
+
     validateSchema(
       {
-        enablePopularSuggestions,
-        enablePredictiveSuggestions,
-        autocompleteField,
-        ...rsAPIConfig
+        index,
+        url,
+        credentials,
+        headers,
+        mongodb,
+        appbaseConfig,
+        transformRequest,
+        transformResponse
       },
       schema,
       backendName,
-      componentName
+      componentsAlias.SEARCHBASE
     );
     const {
       id,

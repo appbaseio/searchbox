@@ -1,14 +1,13 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
 import {
-  errorMessages,
   btoa,
   validateSchema,
   backendAlias,
   componentsAlias
 } from './utils';
-import schema from './schema';
 import type { AppbaseSettings, BaseConfig } from './types';
+import SCHEMA from './schema';
 
 /**
  * Base class is the abstract class for SearchBase and SearchComponent classes.
@@ -57,6 +56,8 @@ class Base {
     transformResponse
   }: BaseConfig) {
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
+    // eslint-disable-next-line
+    const schema = SCHEMA[backendName];
     validateSchema(
       {
         index,

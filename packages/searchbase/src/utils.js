@@ -502,8 +502,8 @@ export const componentsAlias = {
 };
 
 export const backendAlias = {
-  MONGODB: 'mongodb',
-  ELASTICSEARCH: 'elasticsearch'
+  MONGODB: 'mongodb', // mongodb
+  ELASTICSEARCH: 'elasticsearch' // elasticsearch
 };
 
 export const dataTypes = {
@@ -552,7 +552,7 @@ export function validateSchema(
   requiredProperties.forEach(requiredProperty => {
     if (!passedPropertiesKeys.includes(requiredProperty)) {
       throw new Error(
-        `${requiredProperty} is required for <${componentName} /> component when used with an ${backendName} Search backend.`
+        `${requiredProperty} is required for <${componentName} /> component when used with the ${backendName} Search backend.`
       );
     }
   });
