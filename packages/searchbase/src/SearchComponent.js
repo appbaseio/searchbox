@@ -29,6 +29,7 @@ import {
   isEqual,
   searchBaseMappings,
   backendAlias,
+  componentsAlias,
   validateSchema
 } from './utils';
 
