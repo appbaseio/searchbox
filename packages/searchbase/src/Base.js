@@ -7,7 +7,7 @@ import {
   componentsAlias
 } from './utils';
 import type { AppbaseSettings, BaseConfig } from './types';
-import SCHEMA from './schema';
+import SCHEMA from './schema/index';
 
 /**
  * Base class is the abstract class for SearchBase and SearchComponent classes.

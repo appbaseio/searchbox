@@ -1,4 +1,4 @@
-import { componentsAlias, dataTypes } from './utils';
+import { componentsAlias, dataTypes } from '../utils';
 
 const { SEARCHBASE, SEARCHBOX, SEARCHCOMPONENT } = componentsAlias;
 

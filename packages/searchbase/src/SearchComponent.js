@@ -32,7 +32,7 @@ import {
   validateSchema
 } from './utils';
 
-import SCHEMA from './schema';
+import SCHEMA from './schema/index';
 
 type QueryType =
   | queryTypes.Search
