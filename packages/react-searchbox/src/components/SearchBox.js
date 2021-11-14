@@ -986,7 +986,8 @@ SearchBox.propTypes = {
   // internal props
   error: any,
   loading: bool,
-  results: object
+  results: object,
+  highlightConfig: object,
 };
 
 SearchBox.defaultProps = {

@@ -62,6 +62,7 @@ const SearchBox = {
 		queryFormat: types.queryFormat,
 		dataField: types.dataField,
 		autocompleteField: types.dataField,
+		highlightConfig: VueTypes.object,
 		categoryField: VueTypes.string,
 		categoryValue: VueTypes.string,
 		nestedField: VueTypes.string,

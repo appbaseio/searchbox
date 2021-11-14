@@ -44,6 +44,7 @@ class SearchComponent extends React.Component {
       queryFormat,
       dataField,
       autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -115,7 +116,7 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
-      autocompleteField,
+      autocompleteField,highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -299,6 +300,7 @@ SearchComponent.propTypes = {
   onMicStatusChange: func,
   // mongodb specific
   autocompleteField: dataFieldDef,
+  highlightConfig: object,
   // meta info about instantiated component
   componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent'])
 };

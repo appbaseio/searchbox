@@ -659,6 +659,7 @@ SearchBox.propTypes = {
   // RS API
   dataField: dataFieldDef,
   autocompleteField: dataFieldDef,
+  highlightConfig: object,
   aggregationField: string,
   aggregationSize: number,
   nestedField: string,

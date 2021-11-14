@@ -89,6 +89,8 @@ class SearchComponent extends Base {
 
   autocompleteField: string | Array<string | DataField>;
 
+  highlightConfig: Object;
+
   categoryField: string;
 
   categoryValue: string;
@@ -265,7 +267,7 @@ class SearchComponent extends Base {
     enablePredictiveSuggestions,
     preserveResults,
     clearOnQueryChange,
-    autocompleteField,
+    autocompleteField,highlightConfig,
     componentName,
     ...rsAPIConfig
   }: ComponentConfig) {
@@ -287,7 +289,7 @@ class SearchComponent extends Base {
       {
         enablePopularSuggestions,
         enablePredictiveSuggestions,
-        autocompleteField,
+        autocompleteField,highlightConfig,
         ...rsAPIConfig
       },
       schema,
@@ -348,6 +350,7 @@ class SearchComponent extends Base {
     this.queryFormat = queryFormat;
     this.dataField = dataField;
     this.autocompleteField = autocompleteField;
+    this.highlightConfig; = highlightConfig;
     this.categoryField = categoryField;
     this.categoryValue = categoryValue;
     this.nestedField = nestedField;
@@ -492,7 +495,8 @@ class SearchComponent extends Base {
       type: this.type,
       dataField: getNormalizedField(this.dataField),
       ...(this.mongodb && {
-        autocompleteField: this.autocompleteField
+        autocompleteField: this.autocompleteField,
+        highlightConfig: this.highlightConfig,
       }),
       react: this.react,
       highlight: this.highlight,
