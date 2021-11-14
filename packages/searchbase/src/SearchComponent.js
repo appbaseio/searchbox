@@ -1234,12 +1234,17 @@ class SearchComponent extends Base {
 
           // START: applicable for es
           let suffix = '_reactivesearch.v3';
+          const requestOptionsWithHeader = {
+            ...finalRequestOptions,
+            headers: {
+              ...finalRequestOptions.headers,
+              'x-timestamp': timestamp
+            }
+          };
           const index = this._getSearchIndex(isPopularSuggestionsAPI);
-          // END: applicable for es
-
           return fetch(
-            `${this.url}${this.mongodb ? '' : `/${index}/${suffix}`}`,
-            finalRequestOptions
+            `${this.url}/${index}/${suffix}`,
+            requestOptionsWithHeader
           )
             .then(res => {
               const responseHeaders = res.headers;
