@@ -1108,22 +1108,6 @@ class SearchComponent extends Base {
     return index;
   }
 
-  _getMongoRequest() {
-    const mongodb = {};
-    if (this.index) {
-      mongodb.index = this.index;
-    }
-    if (this.mongodb) {
-      if (this.mongodb.db) {
-        mongodb.db = this.mongodb.db;
-      }
-      if (this.mongodb.collection) {
-        mongodb.collection = this.mongodb.collection;
-      }
-    }
-    return mongodb;
-  }
-
   getRecentSearches = (
     queryOptions?: RecentSearchOptions = {
       size: 5,
@@ -1496,6 +1480,22 @@ class SearchComponent extends Base {
     this._micStatus = status;
     this._applyOptions(options, 'micStatus', prevStatus, this._micStatus);
   };
+
+  _getMongoRequest() {
+    const mongodb = {};
+    if (this.index) {
+      mongodb.index = this.index;
+    }
+    if (this.mongodb) {
+      if (this.mongodb.db) {
+        mongodb.db = this.mongodb.db;
+      }
+      if (this.mongodb.collection) {
+        mongodb.collection = this.mongodb.collection;
+      }
+    }
+    return mongodb;
+  }
 }
 
 export default SearchComponent;
