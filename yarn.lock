@@ -275,35 +275,6 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-<<<<<<< HEAD
-"@appbaseio/react-searchbox@1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.5.2.tgz#4dc18f5bd5438029c18ab191f101374a808a2055"
-  integrity sha512-O/YlX+1LvSfaimNBfnWLwl+KmZSppwJaB7ZuD2kCOIS6jLitm9ug1xoL9amma/cMzMnf/W80orYra4orua706w==
-  dependencies:
-    "@appbaseio/searchbase" "1.5.1"
-    "@emotion/core" "^10.0.17"
-    "@emotion/styled" "^10.0.17"
-    downshift "^3.3.1"
-
-"@appbaseio/searchbase@1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.0.tgz#00fc6160905c9bc41fe886f5dbb99c14e4b211ec"
-  integrity sha512-kOaAhv+dq8RBN/QhX3xcjP1F4Hj7qFUUN2gJuH0Ttf03b2aR9pVba8kH81iN5Q6TY46ZU42X+SNdL0G6lKc5CA==
-  dependencies:
-    "@appbaseio/analytics" "^2.1.0-beta"
-    cross-fetch "^3.0.4"
-
-"@appbaseio/searchbase@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.1.tgz#c5a755ac2bf77772f7db27456b40619227549d0b"
-  integrity sha512-G7RVqQ+HPK8jfd1pDTqspyKEMIdTTVrpiZSBrLUk+bVTcmG96bUvf1nehHp34b6XpYBEg/aSqkKQWW1okaa4zA==
-  dependencies:
-    "@appbaseio/analytics" "^2.1.0-beta"
-    cross-fetch "^3.0.4"
-
-=======
->>>>>>> master
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"
@@ -312,89 +283,8 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
-<<<<<<< HEAD
-"@appbaseio/vue-searchbox@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.5.1.tgz#1e6c5af9a3328a82acd4c350509e35c6f602fc17"
-  integrity sha512-qOcV6rUUVklpXL4i4jW1tuoqOYtVGvKccx7DvIIWmSA6Pd+8QQghDGOAyO+sF9NAWSmBncMDGTGNTbrAlWWJzw==
-  dependencies:
-    "@appbaseio/searchbase" "1.5.0"
-    "@appbaseio/vue-emotion" "^0.4.4"
-    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
-    compute-scroll-into-view "^1.0.11"
-    emotion "9.2.12"
-    vue-types "^1.6.0"
-
-"@appbaseio/vue-searchbox@1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.5.2.tgz#601e72718a0522b379a2a764e163772a375caa6d"
-  integrity sha512-7R5ry2CMqYXf440mGNBpIZw+eKIZsmD8NhlzQ8andrhzTWCUj2xa2+BZUo/qyRj2EdkC+x3/CfoEl6PdGtKs2g==
-  dependencies:
-    "@appbaseio/searchbase" "1.5.1"
-    "@appbaseio/vue-emotion" "^0.4.4"
-    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
-    compute-scroll-into-view "^1.0.11"
-    emotion "9.2.12"
-    vue-types "^1.6.0"
-
-=======
->>>>>>> master
 "@babel/code-frame@7.5.5":
   version "7.5.5"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
-  integrity sha512-27d4lZoomVyo51VegxI20xZPuSHusqbQag/ztrBC7wegWoQ1nLREPVSKSW8byhTlzTKyNE4ifaTA6lCp7JjpFw==
-  dependencies:
-    "@babel/highlight" "^7.0.0"
-
-"@babel/code-frame@7.8.3":
-  version "7.8.3"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.8.3.tgz#33e25903d7481181534e12ec0a25f16b6fcf419e"
-  integrity sha512-a9gxpmdXtZEInkCSHUJDLHZVBgb1QS0jhss4cPP93EW7s+uC5bikET2twEF3KV+7rDblJcmNvTR7VJejqd2C2g==
-  dependencies:
-    "@babel/highlight" "^7.8.3"
-
-"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.44", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5", "@babel/code-frame@^7.8.3":
-  version "7.10.4"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
-  integrity sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==
-  dependencies:
-    "@babel/highlight" "^7.10.4"
-
-"@babel/code-frame@^7.12.13":
-  version "7.12.13"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.13.tgz#dcfc826beef65e75c50e21d3837d7d95798dd658"
-  integrity sha512-HV1Cm0Q3ZrpCR93tkWOYiuYIgLxZXZFVG2VgK+MBWjUqZTundupbfx2aXarXuw5Ko5aMcjtJgbSs4vUGBS5v6g==
-  dependencies:
-    "@babel/highlight" "^7.12.13"
-
-"@babel/compat-data@^7.12.1", "@babel/compat-data@^7.12.5", "@babel/compat-data@^7.9.0":
-  version "7.12.5"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.12.5.tgz#f56db0c4bb1bbbf221b4e81345aab4141e7cb0e9"
-  integrity sha512-DTsS7cxrsH3by8nqQSpFSyjSfSYl57D6Cf4q8dW3LK83tBKBDCkfcay1nYkXq1nIHXnpX8WMMb/O25HOy3h1zg==
-
-"@babel/compat-data@^7.12.7", "@babel/compat-data@^7.13.0":
-  version "7.13.6"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.13.6.tgz#11972d07db4c2317afdbf41d6feb3a730301ef4e"
-  integrity sha512-VhgqKOWYVm7lQXlvbJnWOzwfAQATd2nV52koT0HZ/LdDH0m4DUDwkKYsH+IwpXb+bKPyBJzawA4I6nBKqZcpQw==
-
-"@babel/compat-data@^7.13.8":
-  version "7.13.11"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.13.11.tgz#9c8fe523c206979c9a81b1e12fe50c1254f1aa35"
-  integrity sha512-BwKEkO+2a67DcFeS3RLl0Z3Gs2OvdXewuWjc1Hfokhb5eQWP9YRYH1/+VrVZvql2CfjOiNGqSAFOYt4lsqTHzg==
-
-"@babel/core@7.12.10":
-  version "7.12.10"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.12.10.tgz#b79a2e1b9f70ed3d84bbfb6d8c4ef825f606bccd"
-  integrity sha512-eTAlQKq65zHfkHZV0sIVODCPGVgoo1HdBlbSLi9CqOzuZanMv2ihzY+4paiKr1mH+XmYESMAmJ/dpZ68eN6d8w==
-  dependencies:
-    "@babel/code-frame" "^7.10.4"
-    "@babel/generator" "^7.12.10"
-    "@babel/helper-module-transforms" "^7.12.1"
-    "@babel/helpers" "^7.12.5"
-    "@babel/parser" "^7.12.10"
-    "@babel/template" "^7.12.7"
-    "@babel/traverse" "^7.12.10"
-    "@babel/types" "^7.12.10"
     convert-source-map "^1.7.0"
     debug "^4.1.0"
     gensync "^1.0.0-beta.1"

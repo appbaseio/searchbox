@@ -1,10 +1,6 @@
 {
   "name": "@appbaseio/searchbase",
-<<<<<<< HEAD
-  "version": "1.6.4-beta",
-=======
   "version": "1.5.3",
->>>>>>> master
   "private": false,
   "description": "Headless core + common utilities for search",
   "main": "dist/@appbaseio/searchbase.cjs.js",
