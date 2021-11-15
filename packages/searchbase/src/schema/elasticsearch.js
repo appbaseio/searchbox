@@ -11,7 +11,7 @@ export default {
   index: {
     components: [SEARCHBASE, SEARCHBOX, SEARCHCOMPONENT],
     type: dataTypes.STRING,
-    required: false
+    required: true
   },
   credentials: {
     components: [SEARCHBASE],

@@ -142,5 +142,10 @@ export default {
     components: [SEARCHBOX, SEARCHCOMPONENT],
     type: dataTypes.STRING,
     required: false
+  },
+  queryFormat: {
+    components: [SEARCHBOX, SEARCHCOMPONENT],
+    type: dataTypes.STRING,
+    required: false
   }
 };
