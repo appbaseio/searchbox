@@ -350,7 +350,7 @@ class SearchComponent extends Base {
     this.queryFormat = queryFormat;
     this.dataField = dataField;
     this.autocompleteField = autocompleteField;
-    this.highlightConfig; = highlightConfig;
+    this.highlightConfig = highlightConfig;
     this.categoryField = categoryField;
     this.categoryValue = categoryValue;
     this.nestedField = nestedField;
@@ -1238,7 +1238,7 @@ class SearchComponent extends Base {
             ...finalRequestOptions,
             headers: {
               ...finalRequestOptions.headers,
-              'x-timestamp': timestamp
+              ...(!this.mongodb ? { 'x-timestamp': timestamp } : {})
             }
           };
           const index = this._getSearchIndex(isPopularSuggestionsAPI);

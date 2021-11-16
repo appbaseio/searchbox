@@ -94,12 +94,14 @@ class Base {
     this.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-search-client': 'Searchbase Headless',
-      ...(enableTelemetry === false
-        ? {
+      ...(!this.mongodb ? {
+        'x-search-client': 'Searchbase Headless',
+        ...(enableTelemetry === false
+          ? {
             'X-Enable-Telemetry': false
           }
-        : {})
+          : {})
+      } : {})
     };
     if (this.credentials) {
       this.headers = {

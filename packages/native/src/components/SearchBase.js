@@ -9,7 +9,7 @@ class SearchBase extends React.Component {
     super(props);
     const headers = {
       ...props.headers,
-      'x-search-client': 'Searchbox React Native'
+      ...(!props.mongodb ? { 'x-search-client': 'Searchbox React Native' } : {})
     };
     this.searchbase = new Headless({
       index: props.index,
