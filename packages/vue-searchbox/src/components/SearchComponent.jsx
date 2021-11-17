@@ -9,7 +9,6 @@ const SearchComponent = {
   props: {
     index: VueTypes.string,
     url: VueTypes.string,
-    mongodb: VueTypes.object,
     credentials: VueTypes.string,
     headers: VueTypes.object,
     appbaseConfig: types.appbaseConfig,
@@ -63,6 +62,15 @@ const SearchComponent = {
     // subscribe on changes,
     subscribeTo: VueTypes.arrayOf(VueTypes.string),
     triggerQueryOnInit: VueTypes.bool.def(true),
+    recentSuggestionsConfig: VueTypes.object,
+    popularSuggestionsConfig: VueTypes.object,
+    maxPredictedWords: VueTypes.number,
+    urlField: VueTypes.string,
+    rankFeature: VueTypes.object,
+    enableRecentSearches: VueTypes.bool,
+    enableRecentSuggestions: VueTypes.bool,
+    applyStopwords: VueTypes.bool,
+    stopwords: VueTypes.arrayOf(VueTypes.string),
     // meta info about instantiated component
     componentName: VueTypes.oneOf(['SearchBox', 'SearchComponent']).def(
       'SearchComponent'
@@ -70,6 +78,7 @@ const SearchComponent = {
     //mongodb specific
     autocompleteField: types.dataField,
     highlightConfig: VueTypes.object,
+    mongodb: VueTypes.object,
     mongodb: VueTypes.object
   },
   data() {
@@ -93,7 +102,6 @@ const SearchComponent = {
       id,
       index,
       url,
-      mongodb,
       credentials,
       headers,
       appbaseConfig,
@@ -103,8 +111,6 @@ const SearchComponent = {
       react,
       queryFormat,
       dataField,
-      autocompleteField,
-      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -140,7 +146,19 @@ const SearchComponent = {
       preserveResults,
       clearOnQueryChange,
       distinctField,
-      distinctFieldConfig
+      distinctFieldConfig,
+      enableRecentSearches,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      applyStopwords,
+      stopwords,
+      mongodb,
+      autocompleteField,
+      highlightConfig
     } = this.rawProps;
     let { value } = this.rawProps;
     if (window && window.location && window.location.search) {
@@ -157,7 +175,6 @@ const SearchComponent = {
     const componentInstance = this.searchbase.register(id, {
       index,
       url,
-      mongodb,
       credentials,
       headers,
       appbaseConfig,
@@ -168,8 +185,6 @@ const SearchComponent = {
       react,
       queryFormat,
       dataField,
-      autocompleteField,
-      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -205,7 +220,19 @@ const SearchComponent = {
       clearOnQueryChange,
       distinctField,
       distinctFieldConfig,
+      enableRecentSearches,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      applyStopwords,
+      stopwords,
       componentName: this.$props.componentName,
+      mongodb,
+      autocompleteField,
+      highlightConfig,
       onValueChange: (prev, next) => {
         this.$emit('value', {
           prev,

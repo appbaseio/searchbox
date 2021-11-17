@@ -20,7 +20,8 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Linking
 } from 'react-native';
 import {
   appbaseConfig as appbaseConfigDef,
@@ -41,7 +42,9 @@ import {
   getComponent,
   hasCustomRenderer,
   SearchContext,
-  isFunction
+  isFunction,
+  queryTypes,
+  suggestionTypes
 } from '../../utils/helper';
 import SearchBar from './SearchBar';
 import causes from '../../utils/causes';
@@ -59,11 +62,16 @@ const defaultRecentSearchIcon = theme => ({
   name: 'history'
 });
 
+const defaultPromotedResultIcon = theme => ({
+  type: 'material',
+  size: 24,
+  name: 'star'
+});
+
 const defaultPopularSuggestionIcon = theme => ({
   type: 'material',
   size: 24,
-  name: 'trending-up',
-  style: { marginRight: 10 }
+  name: 'trending-up'
 });
 
 const defaultAutoFillIcon = theme => ({
@@ -124,7 +132,8 @@ class SearchBox extends React.Component {
       headers,
       fuzziness,
       nestedField,
-      appbaseConfig
+      appbaseConfig,
+      enableRecentSuggestions
     } = this.props;
     this._applySetter(prevProps.dataField, dataField, 'setDataField');
     this._applySetter(prevProps.headers, headers, 'setHeaders');
@@ -135,6 +144,10 @@ class SearchBox extends React.Component {
     ) {
       if (this.componentInstance)
         this.componentInstance.appbaseConfig = appbaseConfig;
+    }
+
+    if (enableRecentSuggestions && this.suggestionsList?.length === 0) {
+      this.triggerDefaultQuery();
     }
   }
 
@@ -153,7 +166,6 @@ class SearchBox extends React.Component {
   };
 
   openModal = () => {
-    const { enableRecentSearches } = this.props;
     const { showModal } = this.state;
     if (!showModal) {
       this.setState(
@@ -162,15 +174,6 @@ class SearchBox extends React.Component {
         },
         this.setFocus
       );
-      // Refresh recent searches
-      if (enableRecentSearches) {
-        // Only fetch if value is empty
-        if (!this.componentInstance.value) {
-          // Empty suggestions
-          this.componentInstance.clearResults();
-          this.componentInstance.getRecentSearches();
-        }
-      }
     }
   };
 
@@ -179,23 +182,13 @@ class SearchBox extends React.Component {
     return this.context.getComponent(id);
   }
 
-  get popularSuggestionsList() {
-    const suggestions = this.componentInstance.suggestions;
-    return (suggestions || []).filter(
-      suggestion => suggestion.source && suggestion.source._popular_suggestion
-    );
-  }
-
   get suggestionsList() {
     const { defaultSuggestions } = this.props;
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance.suggestions;
-    return (suggestions || []).filter(
-      suggestion =>
-        !(suggestion.source && suggestion.source._popular_suggestion)
-    );
+    const suggestions = this.componentInstance?.results?.data ?? [];
+    return suggestions;
   }
 
   get stats() {
@@ -212,7 +205,7 @@ class SearchBox extends React.Component {
   }
 
   get totalSuggestions() {
-    return [...this.suggestionsList, ...this.popularSuggestionsList];
+    return [...this.suggestionsList];
   }
 
   _applySetter = (prev, next, setterFunc) => {
@@ -220,8 +213,8 @@ class SearchBox extends React.Component {
       this.componentInstance && this.componentInstance[setterFunc](next);
   };
 
-  getComponent = (isPopularSuggestionsRender = false) => {
-    const { error, loading, recentSearches } = this.props;
+  getComponent = () => {
+    const { error, loading } = this.props;
     const data = {
       error,
       loading,
@@ -231,9 +224,7 @@ class SearchBox extends React.Component {
       promotedData: this.componentInstance.results.promotedData,
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
-      rawData: this.componentInstance.results.rawData,
-      popularSuggestions: this.popularSuggestionsList,
-      recentSearches
+      rawData: this.componentInstance.results.rawData
     };
     return getComponent(data, this.props);
   };
@@ -358,8 +349,27 @@ class SearchBox extends React.Component {
   };
 
   onSuggestionSelected = suggestion => {
+    if (
+      suggestion.url &&
+      // check valid url: https://stackoverflow.com/a/43467144/10822996
+      new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$',
+        'i'
+      ).test(suggestion.url)
+    ) {
+      Linking.openURL(suggestion.url);
+      return;
+    }
+    const suggestionValue = suggestion?._category
+      ? suggestion.label
+      : suggestion.value;
     this.setValue({
-      value: suggestion && suggestion.value,
+      value: suggestionValue,
       triggerCustomQuery: true
     });
     // Keyboard.dissmiss();
@@ -370,7 +380,7 @@ class SearchBox extends React.Component {
       suggestion.source && suggestion.source._id
     );
     this.onValueSelected(
-      suggestion.value,
+      suggestionValue,
       causes.SUGGESTION_SELECT,
       suggestion.source
     );
@@ -424,13 +434,16 @@ class SearchBox extends React.Component {
     }, 40);
   }
 
-  handleAutoFill = (item, recentSearch) => {
+  handleAutoFill = item => {
     this.setState(
       {
         autoFillInProgress: true
       },
       () => {
-        this.componentInstance.setValue(item.value);
+        this.componentInstance.setValue(
+          item?._category ? item.label : item.value
+        );
+        this.setState({ autoFillInProgress: false });
       }
     );
   };
@@ -480,9 +493,7 @@ class SearchBox extends React.Component {
     const {
       theme,
       goBackIcon = defaultGoBackIcon(theme),
-      size,
       searchHeaderStyle,
-      recentSearches,
       suggestionsContainerStyle
     } = this.props;
     return (
@@ -532,29 +543,13 @@ class SearchBox extends React.Component {
                 {this.totalSuggestions.length ? (
                   <FlatList
                     ref={this.flatListRef}
-                    data={this.totalSuggestions.slice(0, size)}
+                    data={this.totalSuggestions}
                     keyboardShouldPersistTaps={'handled'}
                     keyExtractor={item => item.label}
                     ItemSeparatorComponent={this.renderItemSeparator}
                     renderItem={this.renderSuggestionItem}
                   />
                 ) : null}
-                {!this.componentInstance.value &&
-                  recentSearches &&
-                  recentSearches.length && (
-                    <FlatList
-                      data={(recentSearches || []).slice(0, size)}
-                      keyboardShouldPersistTaps={'handled'}
-                      keyExtractor={item => item.label}
-                      ItemSeparatorComponent={this.renderItemSeparator}
-                      renderItem={rest =>
-                        this.renderSuggestionItem({
-                          isRecentSearch: true,
-                          ...rest
-                        })
-                      }
-                    />
-                  )}
               </KeyboardAvoidingView>
             )}
           </View>
@@ -563,7 +558,7 @@ class SearchBox extends React.Component {
     );
   }
 
-  renderSuggestionItem = ({ item, isRecentSearch }) => {
+  renderSuggestionItem = ({ item }) => {
     const {
       renderItem,
       theme,
@@ -573,55 +568,88 @@ class SearchBox extends React.Component {
       popularSuggestionIcon = defaultPopularSuggestionIcon(theme)
     } = this.props;
     const { isPredictiveSuggestion } = item;
+    let isCategorySuggestion = !!item._category;
     let normalText = '';
     let highlightedText = '';
-    if (isPredictiveSuggestion) {
+    if (renderItem) {
+      return renderItem(item);
+    }
+    if (isCategorySuggestion) {
+      normalText = item.label.split('in')[0];
+      highlightedText =
+        'in ' + item?.label?.split('in')?.[1]
+          ? 'in ' + item.label.split('in')[1]
+          : '';
+    } else if (isPredictiveSuggestion) {
       normalText = /[^<]*/.exec(item.label)[0];
       highlightedText = />[^<]*/.exec(item.label)[0].replaceAll('>', '');
     }
-    if (renderItem) {
-      return renderItem(item, isRecentSearch);
-    }
+
+    const getIcon = iconType => {
+      switch (iconType) {
+        case suggestionTypes.Recent:
+          return recentSearchIcon;
+        case suggestionTypes.Popular:
+          return popularSuggestionIcon;
+        case suggestionTypes.Promoted:
+          return defaultPromotedResultIcon(theme);
+        default:
+          return null;
+      }
+    };
+
+    const renderSuggestionLabel = labelText => {
+      return labelText
+        ?.split(/(<\w+\s+(?!term).*?>.*?().*?<\/[a-zA-Z]*>)/g)
+        ?.filter(i => i)
+        ?.map((text, index) => {
+          return (
+            <Text
+              key={`${text} ${index}`}
+              style={
+                text.match(/(<\w+\s+(?!term).*?>.*?().*?<\/[a-zA-Z]*>)/g)
+                  ? { fontWeight: '700' }
+                  : {}
+              }
+              numberOfLines={1}
+            >
+              {text.replace(/<[^>]+>/g, '')}
+            </Text>
+          );
+        });
+    };
+
     return (
       <View style={styles.itemStyle}>
-        {isRecentSearch
-          ? renderNode(Icon, recentSearchIcon, {
-              theme,
-              onPress: () => this.onSuggestionSelected(item),
-              ...defaultRecentSearchIcon(theme)
-            })
-          : null}
-        {item.source && item.source._popular_suggestion
-          ? renderNode(Icon, popularSuggestionIcon, {
-              theme,
-              onPress: () => this.onSuggestionSelected(item),
-              ...defaultPopularSuggestionIcon(theme)
-            })
-          : null}
-        {isPredictiveSuggestion ? (
-          <TouchableOpacity
-            style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
-            onPress={() => this.onSuggestionSelected(item)}
-          >
-            <Text>{normalText}</Text>
-            <Text style={{ fontWeight: '700' }} numberOfLines={1}>
-              {highlightedText}
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <Text
-            style={styles.itemText}
-            onPress={() => this.onSuggestionSelected(item)}
-            numberOfLines={1}
-          >
-            {item.label}
-          </Text>
-        )}
+        <View style={styles.iconStyle}>
+          {renderNode(Icon, getIcon(item._suggestion_type), {
+            theme,
+            onPress: () => this.onSuggestionSelected(item),
+            ...getIcon(item._suggestion_type)
+          })}
+        </View>
+
+        <TouchableOpacity
+          style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
+          onPress={() => this.onSuggestionSelected(item)}
+        >
+          {isPredictiveSuggestion || isCategorySuggestion ? (
+            <>
+              <Text>{normalText}</Text>
+              <Text style={{ fontWeight: '700' }} numberOfLines={1}>
+                {highlightedText}
+              </Text>
+            </>
+          ) : (
+            renderSuggestionLabel(item.label)
+          )}
+        </TouchableOpacity>
+
         <View styles={styles.autoFillIcon}>
           {showAutoFill
             ? renderNode(Icon, autoFillIcon, {
                 theme,
-                onPress: () => this.handleAutoFill(item, isRecentSearch),
+                onPress: () => this.handleAutoFill(item),
                 ...defaultAutoFillIcon(theme)
               })
             : null}
@@ -703,7 +731,6 @@ SearchBox.propTypes = {
   showAutoFill: bool,
   enablePopularSuggestions: bool,
   enableRecentSearches: bool,
-  maxPopularSuggestions: number,
   distinctField: string,
   distinctFieldConfig: object,
   // icons
@@ -733,12 +760,19 @@ SearchBox.propTypes = {
   loading: bool,
   results: object,
   recentSearches: array,
+  mongodb: object,
   enablePredictiveSuggestions: bool,
-  mongodb: object
+  recentSuggestionsConfig: object,
+  popularSuggestionsConfig: object,
+  maxPredictedWords: number,
+  urlField: string,
+  rankFeature: object,
+  categoryField: string,
+  categoryValue: string,
+  enableRecentSuggestions: bool
 };
 
 SearchBox.defaultProps = {
-  maxPopularSuggestions: 5,
   enablePopularSuggestions: false,
   enableRecentSearches: false,
   showAutoFill: true,
@@ -753,7 +787,15 @@ SearchBox.defaultProps = {
   downShiftProps: {},
   showDistinctSuggestions: true,
   enablePredictiveSuggestions: false,
-  value: undefined
+  value: undefined,
+  enableRecentSuggestions: false,
+  recentSuggestionsConfig: undefined,
+  popularSuggestionsConfig: undefined,
+  maxPredictedWords: 2,
+  urlField: '',
+  rankFeature: undefined,
+  categoryField: '',
+  categoryValue: ''
 };
 
 const styles = StyleSheet.create({
@@ -786,32 +828,30 @@ const styles = StyleSheet.create({
   }),
   flex1: {
     flex: 1
+  },
+  iconStyle: {
+    marginRight: 10
   }
 });
 
 export default props => (
   <SearchComponent
-    triggerQueryOnInit={false}
     componentName="SearchBox"
+    triggerQueryOnInit={
+      props.enableRecentSearches || props.enableRecentSuggestions
+    }
     value="" // Init value as empty
+    type={queryTypes.Suggestion}
     {...props}
-    subscribeTo={[
-      'micStatus',
-      'error',
-      'requestPending',
-      'results',
-      'value',
-      'recentSearches'
-    ]}
+    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
   >
-    {({ error, loading, results, value, recentSearches }) => {
+    {({ error, loading, results, value }) => {
       return (
         <SearchBox
           {...props}
           error={error}
           loading={loading}
           results={results}
-          recentSearches={recentSearches}
         />
       );
     }}

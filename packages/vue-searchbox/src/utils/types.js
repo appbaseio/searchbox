@@ -17,9 +17,10 @@ const reactKeyType = VueTypes.oneOfType([
 // eslint-disable-next-line
 export const types = {
   app: VueTypes.string.isRequired,
-  url: VueTypes.string,
+  url: VueTypes.string.def('https://scalr.api.appbase.io'),
   enableAppbase: VueTypes.bool.def(false),
   enablePopularSuggestions: VueTypes.bool.def(false),
+  credentials: VueTypes.string.isRequired,
   analytics: VueTypes.bool.def(false),
   headers: VueTypes.object,
   dataField: VueTypes.oneOfType([
@@ -54,7 +55,6 @@ export const types = {
   showVoiceSearch: VueTypes.bool.def(false),
   searchOperators: VueTypes.bool.def(false),
   render: VueTypes.func,
-  renderPopularSuggestions: VueTypes.func,
   renderError: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
   renderNoSuggestion: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
   renderMic: VueTypes.func,
@@ -74,10 +74,10 @@ export const types = {
     userId: VueTypes.string,
     customEvents: VueTypes.object,
     enableTelemetry: VueTypes.bool
-  }),
+  }).def({ recordAnalytics: false }),
   showDistinctSuggestions: VueTypes.bool.def(true),
   queryString: VueTypes.queryString,
-  queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range']),
+  queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range', 'suggestion']),
   reactType: VueTypes.shape({
     and: reactKeyType,
     or: reactKeyType,

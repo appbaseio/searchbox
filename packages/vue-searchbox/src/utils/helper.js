@@ -56,25 +56,6 @@ export function escapeRegExp(string) {
 }
 
 /**
- * Extracts the renderPopularSuggestions prop from props or slot and returns a valid JSX element
- * @param {Object} data
- * @param _ref
- */
-export const getPopularSuggestionsComponent = (data = {}, _ref = {}) => {
-	const { renderPopularSuggestions } = _ref.$scopedSlots || _ref.$props;
-	if (renderPopularSuggestions) return renderPopularSuggestions(data);
-	return null;
-};
-/**
- * To determine whether a component has renderPopularSuggestions prop or slot defined or not
- * @returns {Boolean}
- */
-export const hasPopularSuggestionsRenderer = (_ref = {}) => {
-	const { renderPopularSuggestions } = _ref.$scopedSlots || _ref.$props;
-	return Boolean(renderPopularSuggestions);
-};
-
-/**
  * Extracts the render prop from props or slot and returns a valid JSX element
  * @param {Object} data
  * @param _ref
@@ -226,3 +207,19 @@ export function extractModifierKeysFromFocusShortcuts(focusShortcutsArray) {
 export function isModifierKeyUsed(focusShortcutsArray) {
 	return !!extractModifierKeysFromFocusShortcuts(focusShortcutsArray).length;
 }
+
+
+export const queryTypes = {
+	Search: 'search',
+	Term: 'term',
+	Geo: 'geo',
+	Range: 'range',
+	Suggestion: 'suggestion'
+};
+
+export const suggestionTypes = {
+	Popular: 'popular',
+	Index: 'index',
+	Recent: 'recent',
+	Promoted: 'promoted'
+};

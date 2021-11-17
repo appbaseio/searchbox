@@ -81,14 +81,23 @@ class SearchComponent extends React.Component {
       onMicStatusChange,
       enablePopularSuggestions,
       enablePredictiveSuggestions,
-      maxPopularSuggestions,
       preserveResults,
       clearOnQueryChange,
       subscribeTo,
       distinctField,
       distinctFieldConfig,
       componentName,
-      mongodb
+      mongodb,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      showDistinctSuggestions,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      enableRecentSearches,
+      applyStopwords,
+      stopwords
     } = this.props;
     let { value } = this.props;
     if (window && window.location && window.location.search) {
@@ -161,7 +170,17 @@ class SearchComponent extends React.Component {
       distinctFieldConfig,
       maxPopularSuggestions,
       componentName,
-      mongodb
+      mongodb,
+      enableRecentSuggestions,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      showDistinctSuggestions,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      enableRecentSearches,
+      applyStopwords,
+      stopwords
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -307,6 +326,15 @@ SearchComponent.propTypes = {
   // meta info about instantiated component
   componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent']),
   mongodb: object
+  recentSuggestionsConfig: object,
+  popularSuggestionsConfig: object,
+  maxPredictedWords: number,
+  urlField: string,
+  rankFeature: object,
+  enableRecentSearches: bool,
+  enableRecentSuggestions: bool,
+  applyStopwords: bool,
+  stopwords: PropTypes.arrayOf(string)
 };
 
 export default SearchComponent;

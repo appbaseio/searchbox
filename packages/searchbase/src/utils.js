@@ -10,17 +10,16 @@ export const errorMessages = {
   invalidComponentId: getErrorMessage('Please provide component id.'),
   invalidDataField: getErrorMessage('Please provide data field.'),
   dataFieldAsArray: getErrorMessage(
-    'Only components with `search` type supports the multiple data fields. Please define `dataField` as a string.'
+    'Only components with `search` and `suggestion` type supports the multiple data fields. Please define `dataField` as a string.'
   )
 };
-
-export const popularSuggestionFields = ['key', 'key.autosuggest'];
 
 export const queryTypes = {
   Search: 'search',
   Term: 'term',
   Geo: 'geo',
-  Range: 'range'
+  Range: 'range',
+  Suggestion: 'suggestion'
 };
 
 export const queryFormats = {
@@ -160,200 +159,6 @@ export const extractSuggestion = (val: any) => {
     return null;
   }
   return val;
-};
-
-function escapeRegExp(string = '') {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-export const getPredictiveSuggestions = ({
-  suggestions,
-  currentValue,
-  wordsToShowAfterHighlight
-}) => {
-  const suggestionMap = {};
-  if (currentValue) {
-    const currentValueTrimmed = currentValue.trim();
-    const parsedSuggestion = suggestions.reduce((agg, { label, ...rest }) => {
-      // to handle special strings with pattern '<mark>xyz</mark> <a href="test'
-      const parsedContent = new DOMParser().parseFromString(label, 'text/html')
-        .documentElement.textContent;
-
-      // to match the partial start of word.
-      // example if searchTerm is `select` and string contains `selected`
-      let regexString = `^(${escapeRegExp(currentValueTrimmed)})\\w+`;
-      let regex = new RegExp(regexString, 'i');
-      let regexExecution = regex.exec(parsedContent);
-      // if execution value is null it means either there is no match or there are chances
-      // that exact word is present
-      if (!regexExecution) {
-        // regex to match exact word
-        regexString = `^(${escapeRegExp(currentValueTrimmed)})`;
-        regex = new RegExp(regexString, 'i');
-        regexExecution = regex.exec(parsedContent);
-      }
-
-      if (regexExecution) {
-        const matchedString = parsedContent.slice(
-          regexExecution.index,
-          parsedContent.length
-        );
-        const highlightedWord = matchedString
-          .slice(currentValueTrimmed.length)
-          .split(' ')
-          .slice(0, wordsToShowAfterHighlight + 1)
-          .join(' ');
-        const suggestionPhrase = `${currentValueTrimmed}<mark class="highlight">${highlightedWord}</mark>`;
-        const suggestionValue = `${currentValueTrimmed}${highlightedWord}`;
-        // to show unique results only
-        if (!suggestionMap[suggestionPhrase]) {
-          suggestionMap[suggestionPhrase] = 1;
-          return [
-            ...agg,
-            {
-              ...rest,
-              label: suggestionPhrase,
-              value: suggestionValue,
-              isPredictiveSuggestion: true
-            }
-          ];
-        }
-
-        return agg;
-      }
-
-      return agg;
-    }, []);
-
-    return parsedSuggestion;
-  }
-
-  return [];
-};
-/**
- *
- * @param {array} fields DataFields passed on Search Components
- * @param {array} suggestions Raw Suggestions received from ES
- * @param {string} currentValue Search Term
- * @param {boolean} showDistinctSuggestions When set to true will only return 1 suggestion per document
- * @param {boolean} enablePredictiveSuggestions When set to true will return the predictive suggestions list instead of the deafult list
- */
-export const getSuggestions = (
-  fields: Array<string> = [],
-  suggestions: Array<Object>,
-  value: string = '',
-  showDistinctSuggestions: boolean = true,
-  enablePredictiveSuggestions: boolean = false
-) => {
-  let suggestionsList = [];
-  let labelsList = [];
-  let skipWordMatch = false; //  Use to skip the word match logic, important for synonym
-  const currentValue = value || '';
-  const populateSuggestionsList = (val, parsedSource, source) => {
-    // check if the suggestion includes the current value
-    // and not already included in other suggestions
-    const isWordMatch =
-      skipWordMatch ||
-      currentValue
-        .trim()
-        .split(' ')
-        .some(term =>
-          String(val)
-            .toLowerCase()
-            .includes(term)
-        );
-    // promoted results should always include in suggestions even there is no match
-    if ((isWordMatch && !labelsList.includes(val)) || source._promoted) {
-      const defaultOption = {
-        label: val,
-        value: val,
-        source
-      };
-      const option = {
-        ...defaultOption
-      };
-      labelsList = [...labelsList, val];
-      suggestionsList = [...suggestionsList, option];
-
-      if (showDistinctSuggestions) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  const parseField = (parsedSource, field = '', source = parsedSource) => {
-    if (typeof parsedSource === 'object') {
-      const fieldNodes = field.split('.');
-      const label = parsedSource[fieldNodes[0]];
-      if (label) {
-        if (fieldNodes.length > 1) {
-          // nested fields of the 'foo.bar.zoo' variety
-          const children = field.substring(fieldNodes[0].length + 1);
-          if (Array.isArray(label)) {
-            label.forEach(arrayItem => {
-              parseField(arrayItem, children, source);
-            });
-          } else {
-            parseField(label, children, source);
-          }
-        } else {
-          const val = extractSuggestion(label);
-          if (val) {
-            if (Array.isArray(val)) {
-              if (showDistinctSuggestions) {
-                return val.some(suggestion =>
-                  populateSuggestionsList(suggestion, parsedSource, source)
-                );
-              }
-              val.forEach(suggestion =>
-                populateSuggestionsList(suggestion, parsedSource, source)
-              );
-            }
-            return populateSuggestionsList(val, parsedSource, source);
-          }
-        }
-      }
-    }
-    return false;
-  };
-
-  const traverseSuggestions = () => {
-    if (showDistinctSuggestions) {
-      suggestions.forEach(item => {
-        fields.some(field => parseField(item, field));
-      });
-    } else {
-      suggestions.forEach(item => {
-        fields.forEach(field => {
-          parseField(item, field);
-        });
-      });
-    }
-  };
-
-  traverseSuggestions();
-
-  if (suggestionsList.length < suggestions.length && !skipWordMatch) {
-    /*
-			When we have synonym we set skipWordMatch to false as it may discard
-			the suggestion if word doesnt match term.
-			For eg: iphone, ios are synonyms and on searching iphone isWordMatch
-			in  populateSuggestionList may discard ios source which decreases no.
-			of items in suggestionsList
-		*/
-    skipWordMatch = true;
-    traverseSuggestions();
-  }
-  if (enablePredictiveSuggestions) {
-    return getPredictiveSuggestions({
-      suggestions: suggestionsList,
-      currentValue: value,
-      wordsToShowAfterHighlight: true
-    });
-  }
-  return suggestionsList;
 };
 
 export function parseCompAggToHits(
