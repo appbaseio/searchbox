@@ -267,7 +267,8 @@ class SearchComponent extends Base {
     enablePredictiveSuggestions,
     preserveResults,
     clearOnQueryChange,
-    autocompleteField,highlightConfig,
+    autocompleteField,
+    highlightConfig,
     componentName,
     ...rsAPIConfig
   }: ComponentConfig) {
@@ -289,7 +290,8 @@ class SearchComponent extends Base {
       {
         enablePopularSuggestions,
         enablePredictiveSuggestions,
-        autocompleteField,highlightConfig,
+        autocompleteField,
+        highlightConfig,
         ...rsAPIConfig
       },
       schema,
@@ -496,7 +498,7 @@ class SearchComponent extends Base {
       dataField: getNormalizedField(this.dataField),
       ...(this.mongodb && {
         autocompleteField: this.autocompleteField,
-        highlightConfig: this.highlightConfig,
+        highlightConfig: this.highlightConfig
       }),
       react: this.react,
       highlight: this.highlight,
@@ -1243,7 +1245,7 @@ class SearchComponent extends Base {
           };
           const index = this._getSearchIndex(isPopularSuggestionsAPI);
           return fetch(
-            `${this.url}/${index}/${suffix}`,
+            `${this.url}${this.mongodb ? '' : `/${index}/${suffix}`}`,
             requestOptionsWithHeader
           )
             .then(res => {

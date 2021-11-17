@@ -1,11 +1,6 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
-import {
-  btoa,
-  validateSchema,
-  backendAlias,
-  componentsAlias
-} from './utils';
+import { btoa, validateSchema, backendAlias, componentsAlias } from './utils';
 import type { AppbaseSettings, BaseConfig } from './types';
 import SCHEMA from './schema/index';
 
@@ -94,14 +89,16 @@ class Base {
     this.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...(!this.mongodb ? {
-        'x-search-client': 'Searchbase Headless',
-        ...(enableTelemetry === false
-          ? {
-            'X-Enable-Telemetry': false
+      ...(!this.mongodb
+        ? {
+            'x-search-client': 'Searchbase Headless',
+            ...(enableTelemetry === false
+              ? {
+                  'X-Enable-Telemetry': false
+                }
+              : {})
           }
-          : {})
-      } : {})
+        : {})
     };
     if (this.credentials) {
       this.headers = {
