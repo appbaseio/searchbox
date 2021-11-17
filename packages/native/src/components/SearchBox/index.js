@@ -362,7 +362,7 @@ class SearchBox extends React.Component {
         'i'
       ).test(suggestion.url)
     ) {
-      Linking.openURL('https://google.com');
+      Linking.openURL(suggestion.url);
       return;
     }
     const suggestionValue = suggestion?._category
