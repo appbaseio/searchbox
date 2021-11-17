@@ -8,11 +8,7 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
-<<<<<<< HEAD
         "@appbaseio/vue-searchbox": "1.6.3-alpha",
-=======
-        "@appbaseio/vue-searchbox": "1.5.3",
->>>>>>> master
         "core-js": "^2.6.5",
         "vue": "^2.6.10",
         "vuejs-paginate": "^2.1.0"

@@ -45,3 +45,18 @@ export const debounce = (method, delay) => {
     method();
   }, delay);
 };
+
+export const queryTypes = {
+  Search: 'search',
+  Term: 'term',
+  Geo: 'geo',
+  Range: 'range',
+  Suggestion: 'suggestion'
+};
+
+export const suggestionTypes = {
+  Popular: 'popular',
+  Index: 'index',
+  Recent: 'recent',
+  Promoted: 'promoted'
+};
