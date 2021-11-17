@@ -17,7 +17,7 @@ const SearchBase = {
   provide() {
     const headers = {
       ...this.$props.headers,
-      ...(this.$props.mongodb ? { 'x-search-client': 'Searchbox Vue' } : {})
+      ...(!this.$props.mongodb ? { 'x-search-client': 'Searchbox Vue' } : {})
     };
     this.searchbase = new Headless({
       index: this.$props.index,

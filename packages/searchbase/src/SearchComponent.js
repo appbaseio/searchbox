@@ -286,7 +286,6 @@ class SearchComponent extends Base {
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
     // eslint-disable-next-line
     const schema = SCHEMA[backendName];
-
     validateSchema(
       {
         enablePopularSuggestions,
