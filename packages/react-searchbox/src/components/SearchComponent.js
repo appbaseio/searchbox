@@ -91,7 +91,9 @@ class SearchComponent extends React.Component {
       maxPredictedWords,
       urlField,
       rankFeature,
-      enableRecentSearches
+      enableRecentSearches,
+      applyStopwords,
+      stopwords
     } = this.props;
     let { value } = this.props;
     if (window && window.location && window.location.search) {
@@ -167,7 +169,9 @@ class SearchComponent extends React.Component {
       maxPredictedWords,
       urlField,
       rankFeature,
-      enableRecentSearches
+      enableRecentSearches,
+      applyStopwords,
+      stopwords
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -312,7 +316,9 @@ SearchComponent.propTypes = {
   urlField: string,
   rankFeature: object,
   enableRecentSearches: bool,
-  enableRecentSuggestions: bool
+  enableRecentSuggestions: bool,
+  applyStopwords: bool,
+  stopwords: PropTypes.arrayOf(string)
 };
 
 export default SearchComponent;

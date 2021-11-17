@@ -30,7 +30,7 @@ import Title from '../styles/Title';
 import Icons from './Icons.jsx';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
-import SelectArrowSvg from '../styles/SelectArrowSvg';
+import AutofillSvg from '../styles/AutofillSvg';
 
 const SearchBox = {
 	name: 'search-box',
@@ -131,7 +131,9 @@ const SearchBox = {
 		popularSuggestionsConfig: VueTypes.object,
 		maxPredictedWords: VueTypes.number,
 		urlField: VueTypes.string,
-		rankFeature: VueTypes.object
+		rankFeature: VueTypes.object,
+		applyStopwords: VueTypes.bool,
+		stopwords: VueTypes.arrayOf(VueTypes.string)
 	},
 	data() {
 		this.state = {
@@ -233,7 +235,6 @@ const SearchBox = {
 		},
 		onSuggestionSelected(suggestion) {
 			if (!suggestion) {
-
 				const componentInstance = this.getComponentInstance();
 				if (componentInstance) {
 					componentInstance.setValue('', {
@@ -310,7 +311,7 @@ const SearchBox = {
 			const { debounce } = this.$props;
 			this.isOpen = isOpen;
 			const componentInstance = this.getComponentInstance();
-			if (!value && this.autosuggest) {
+			if (!value && this.autosuggest && rest.cause !== causes.CLEAR_VALUE) {
 				this.triggerDefaultQuery();
 			}
 			if (this.isControlled()) {
@@ -321,7 +322,7 @@ const SearchBox = {
 				this.$emit('change', value, componentInstance, rest.event);
 			} else if (debounce > 0) {
 				componentInstance.setValue(value, {
-					triggerDefaultQuery: false,
+					triggerDefaultQuery: rest.cause === causes.CLEAR_VALUE,
 					triggerCustomQuery: false,
 					stateChanges: true
 				});
@@ -466,7 +467,12 @@ const SearchBox = {
 			return null;
 		},
 		clearValue() {
-			this.setValue({ value: '', isOpen: false, triggerCustomQuery: true });
+			this.setValue({
+				value: '',
+				isOpen: false,
+				triggerCustomQuery: true,
+				cause: causes.CLEAR_VALUE
+			});
 			this.onValueSelectedHandler(null, causes.CLEAR_VALUE);
 		},
 		handleSearchIconClick() {
@@ -704,7 +710,7 @@ const SearchBox = {
 																currentValue={instanceValue}
 																suggestion={item}
 															/>
-															<SelectArrowSvg
+															<AutofillSvg
 																onClick={e => {
 																	e.stopPropagation();
 																	this.onSelectArrowClick(item);

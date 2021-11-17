@@ -8,7 +8,7 @@
         "build": "parcel build index.html"
     },
     "dependencies": {
-        "@appbaseio/searchbase": "1.6.1-alpha",
+        "@appbaseio/searchbase": "1.6.2-alpha",
         "@trevoreyre/autocomplete-js": "^2.0.2"
     },
     "devDependencies": {

@@ -165,6 +165,10 @@ export type ComponentConfig = BaseConfig & {
   rankFeature?: Object;
 
   enableRecentSearches?: boolean;
+
+  applyStopwords?: boolean;
+
+  stopwords?: Array<string>;
 };
 
 export type MIC_STATUS = {

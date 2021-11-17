@@ -23,10 +23,8 @@ import {
   getNormalizedField,
   getNormalizedWeights,
   flatReactProp,
-  getSuggestions,
-  popularSuggestionFields,
   isEqual,
-  searchBaseMappings
+  searchBaseMappings,
 } from './utils';
 
 type QueryType =
@@ -60,8 +58,6 @@ const REQUEST_STATUS = {
   pending: 'PENDING',
   error: 'ERROR'
 };
-
-const suggestionQueryID = 'DataSearch__suggestions';
 
 /**
  * SearchComponent class is responsible for the following things:
@@ -157,6 +153,10 @@ class SearchComponent extends Base {
   urlField: string;
 
   rankFeature: Object;
+
+  applyStopwords: boolean;
+
+  stopwords: Array<string>;
 
   // other properties
 
@@ -319,7 +319,9 @@ class SearchComponent extends Base {
       urlField,
       rankFeature,
       enableRecentSearches,
-      enableRecentSuggestions
+      enableRecentSuggestions,
+      applyStopwords,
+      stopwords
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
@@ -381,6 +383,10 @@ class SearchComponent extends Base {
     this.maxPredictedWords = maxPredictedWords;
     this.urlField = urlField;
     this.rankFeature = rankFeature;
+
+    this.applyStopwords = applyStopwords;
+
+    this.stopwords = stopwords;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
     this.maxPopularSuggestions = maxPopularSuggestions;
@@ -388,7 +394,6 @@ class SearchComponent extends Base {
     this.showDistinctSuggestions = showDistinctSuggestions;
 
     this.enablePredictiveSuggestions = enablePredictiveSuggestions;
-
     this.preserveResults = preserveResults;
 
     this.clearOnQueryChange = clearOnQueryChange;
@@ -444,41 +449,6 @@ class SearchComponent extends Base {
     return { recordAnalytics, customEvents, enableQueryRules, userId };
   }
 
-  // To get the parsed suggestions from the results
-  get suggestions(): Array<Object> {
-    if (this.type && this.type !== queryTypes.Search) {
-      return [];
-    }
-    if (this.results) {
-      let fields = getNormalizedField(this.dataField) || [];
-      if (
-        fields.length === 0 &&
-        this.results.data &&
-        Array.isArray(this.results.data) &&
-        this.results.data.length > 0 &&
-        this.results.data[0]
-      ) {
-        // Extract fields from _source
-        fields = Object.keys(this.results.data[0]).filter(
-          key =>
-            !['_id', '_click_id', '_index', '_score', '_type'].includes(key)
-        );
-      }
-      if (this.enablePopularSuggestions) {
-        // extract suggestions from popular suggestion fields too
-        fields = [...fields, ...popularSuggestionFields];
-      }
-      return getSuggestions(
-        fields,
-        this.results.data,
-        this.value,
-        this.showDistinctSuggestions,
-        this.enablePredictiveSuggestions
-      );
-    }
-    return [];
-  }
-
   // Method to get the raw query based on the current state
   get componentQuery(): Object {
     return {
@@ -528,7 +498,9 @@ class SearchComponent extends Base {
       recentSuggestionsConfig: this.recentSuggestionsConfig,
       enablePopularSuggestions: this.enablePopularSuggestions,
       enableRecentSearches: this.enableRecentSearches,
-      enableRecentSuggestions: this.enableRecentSuggestions
+      enableRecentSuggestions: this.enableRecentSuggestions,
+      applyStopwords: this.applyStopwords,
+      stopwords: this.stopwords
     };
   }
 
