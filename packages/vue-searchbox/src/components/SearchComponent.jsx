@@ -140,8 +140,7 @@ const SearchComponent = {
       preserveResults,
       clearOnQueryChange,
       distinctField,
-      distinctFieldConfig,
-      mongodb
+      distinctFieldConfig
     } = this.rawProps;
     let { value } = this.rawProps;
     if (window && window.location && window.location.search) {
@@ -207,7 +206,6 @@ const SearchComponent = {
       distinctField,
       distinctFieldConfig,
       componentName: this.$props.componentName,
-      mongodb,
       onValueChange: (prev, next) => {
         this.$emit('value', {
           prev,
