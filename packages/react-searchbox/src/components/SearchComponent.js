@@ -43,6 +43,8 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
+      autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -84,6 +86,8 @@ class SearchComponent extends React.Component {
       subscribeTo,
       distinctField,
       distinctFieldConfig,
+      componentName,
+      mongodb,
       enableRecentSuggestions,
       recentSuggestionsConfig,
       popularSuggestionsConfig,
@@ -122,6 +126,8 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
+      autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -162,6 +168,9 @@ class SearchComponent extends React.Component {
       clearOnQueryChange,
       distinctField,
       distinctFieldConfig,
+      maxPopularSuggestions,
+      componentName,
+      mongodb,
       enableRecentSuggestions,
       recentSuggestionsConfig,
       popularSuggestionsConfig,
@@ -232,7 +241,8 @@ SearchComponent.defaultProps = {
   triggerQueryOnInit: true,
   URLParams: false,
   enablePredictiveSuggestions: false,
-  clearOnQueryChange: false
+  clearOnQueryChange: false,
+  componentName: 'SearchComponent'
 };
 
 SearchComponent.propTypes = {
@@ -310,6 +320,12 @@ SearchComponent.propTypes = {
 
   // called when mic status changes
   onMicStatusChange: func,
+  // mongodb specific
+  autocompleteField: dataFieldDef,
+  highlightConfig: object,
+  // meta info about instantiated component
+  componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent']),
+  mongodb: object
   recentSuggestionsConfig: object,
   popularSuggestionsConfig: object,
   maxPredictedWords: number,

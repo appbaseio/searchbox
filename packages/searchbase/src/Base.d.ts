@@ -11,6 +11,7 @@ declare abstract class Base {
     credentials,
     headers,
     appbaseConfig,
+    mongodb,
     transformRequest,
     transformResponse
   }: BaseConfig);

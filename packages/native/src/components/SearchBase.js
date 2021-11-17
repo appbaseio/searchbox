@@ -8,13 +8,14 @@ class SearchBase extends React.Component {
   constructor(props) {
     super(props);
     const headers = {
-       ...props.headers,
-      'x-search-client': 'Searchbox React Native'
+      ...props.headers,
+      ...(!props.mongodb ? { 'x-search-client': 'Searchbox React Native' } : {})
     };
     this.searchbase = new Headless({
       index: props.index,
       url: props.url,
       credentials: props.credentials,
+      mongodb: props.mongodb,
       headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
@@ -47,15 +48,16 @@ class SearchBase extends React.Component {
 
 SearchBase.propTypes = {
   // eslint-disable-next-line react/no-typos
-  index: string.isRequired,
+  index: string,
   // eslint-disable-next-line react/no-typos
-  url: string.isRequired,
+  url: string,
   // eslint-disable-next-line react/no-typos
-  credentials: string.isRequired,
+  credentials: string,
   headers: object,
   appbaseConfig,
   transformRequest: func,
-  transformResponse: func
+  transformResponse: func,
+  mongodb: object
 };
 
 export default SearchBase;

@@ -25,7 +25,12 @@ import {
   flatReactProp,
   isEqual,
   searchBaseMappings,
+  backendAlias,
+  validateSchema,
+  componentsAlias
 } from './utils';
+
+import SCHEMA from './schema/index';
 
 type QueryType =
   | queryTypes.Search
@@ -77,6 +82,10 @@ class SearchComponent extends Base {
   queryFormat: QueryFormat;
 
   dataField: string | Array<string | DataField>;
+
+  autocompleteField: string | Array<string | DataField>;
+
+  highlightConfig: Object;
 
   categoryField: string;
 
@@ -246,6 +255,7 @@ class SearchComponent extends Base {
     index,
     url,
     credentials,
+    mongodb,
     appbaseConfig,
     headers,
     transformRequest,
@@ -265,17 +275,38 @@ class SearchComponent extends Base {
     enablePredictiveSuggestions,
     preserveResults,
     clearOnQueryChange,
+    autocompleteField,
+    highlightConfig,
+    componentName,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
       index,
       url,
       credentials,
+      mongodb,
       headers,
       appbaseConfig,
       transformRequest,
       transformResponse
     });
+    const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
+    // eslint-disable-next-line
+    const schema = SCHEMA[backendName];
+    validateSchema(
+      {
+        enablePopularSuggestions,
+        enablePredictiveSuggestions,
+        autocompleteField,
+        highlightConfig,
+        mongodb,
+        ...rsAPIConfig
+      },
+      schema,
+      backendName,
+      componentsAlias.SEARCHCOMPONENT,
+      componentName
+    );
     const {
       id,
       type,
@@ -338,6 +369,8 @@ class SearchComponent extends Base {
     this.react = react;
     this.queryFormat = queryFormat;
     this.dataField = dataField;
+    this.autocompleteField = autocompleteField;
+    this.highlightConfig = highlightConfig;
     this.categoryField = categoryField;
     this.categoryValue = categoryValue;
     this.nestedField = nestedField;
@@ -455,6 +488,10 @@ class SearchComponent extends Base {
       id: this.id,
       type: this.type,
       dataField: getNormalizedField(this.dataField),
+      ...(this.mongodb && {
+        autocompleteField: this.autocompleteField,
+        highlightConfig: this.highlightConfig
+      }),
       react: this.react,
       highlight: this.highlight,
       highlightField: getNormalizedField(this.highlightField),
@@ -518,6 +555,11 @@ class SearchComponent extends Base {
 
   get mappedProps(): Object {
     const mappedProps = {};
+    const searchBaseMappingsLocal = { ...searchBaseMappings };
+    if (this.mongodb) {
+      delete searchBaseMappingsLocal.recordClick;
+      delete searchBaseMappingsLocal.recordConversions;
+    }
     Object.keys(searchBaseMappings).forEach(key => {
       // $FlowFixMe
       mappedProps[searchBaseMappings[key]] = this[key];
@@ -997,7 +1039,10 @@ class SearchComponent extends Base {
     // remove undefined properties from request body
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        ...requestBody,
+        ...(!!this.mongodb && { mongodb: this._getMongoRequest() })
+      }),
       headers: {
         ...this.headers
       }
@@ -1008,17 +1053,19 @@ class SearchComponent extends Base {
         .then(finalRequestOptions => {
           // set timestamp in request
           const timestamp = Date.now();
+
+          // START: applicable for es
           let suffix = '_reactivesearch.v3';
           const requestOptionsWithHeader = {
             ...finalRequestOptions,
             headers: {
               ...finalRequestOptions.headers,
-              'x-timestamp': timestamp
+              ...(!this.mongodb ? { 'x-timestamp': timestamp } : {})
             }
           };
           const index = this._getSearchIndex(isPopularSuggestionsAPI);
           return fetch(
-            `${this.url}/${index}/${suffix}`,
+            `${this.url}${this.mongodb ? '' : `/${index}/${suffix}`}`,
             requestOptionsWithHeader
           )
             .then(res => {
@@ -1171,7 +1218,7 @@ class SearchComponent extends Base {
       this.aggregationData.setRaw(aggsResponse[aggregationField]);
       this.aggregationData.setData(
         aggregationField,
-        aggsResponse[aggregationField].buckets,
+        aggsResponse[aggregationField]?.buckets,
         this.preserveResults && append
       );
       this._applyOptions(
@@ -1268,6 +1315,22 @@ class SearchComponent extends Base {
     this._micStatus = status;
     this._applyOptions(options, 'micStatus', prevStatus, this._micStatus);
   };
+
+  _getMongoRequest() {
+    const mongodb = {};
+    if (this.index) {
+      mongodb.index = this.index;
+    }
+    if (this.mongodb) {
+      if (this.mongodb.db) {
+        mongodb.db = this.mongodb.db;
+      }
+      if (this.mongodb.collection) {
+        mongodb.collection = this.mongodb.collection;
+      }
+    }
+    return mongodb;
+  }
 }
 
 export default SearchComponent;

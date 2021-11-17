@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { any, func, object, string, bool, number, arrayOf } from 'prop-types';
 import {
   appbaseConfig as appbaseConfigDef,
@@ -76,6 +77,10 @@ class SearchComponent extends React.Component {
       distinctFieldConfig,
       enablePredictiveSuggestions,
       subscribeTo,
+      componentName,
+      autocompleteField,
+      highlightConfig,
+      mongodb,
       enableRecentSuggestions,
       recentSuggestionsConfig,
       popularSuggestionsConfig,
@@ -101,6 +106,8 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
+      autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -140,6 +147,8 @@ class SearchComponent extends React.Component {
       distinctField,
       distinctFieldConfig,
       enablePredictiveSuggestions,
+      componentName,
+      mongodb,
       enableRecentSuggestions,
       recentSuggestionsConfig,
       popularSuggestionsConfig,
@@ -202,7 +211,8 @@ SearchComponent.defaultProps = {
   // Triggers the default query on init
   triggerQueryOnInit: true,
   destroyOnUnmount: true,
-  enablePredictiveSuggestions: false
+  enablePredictiveSuggestions: false,
+  componentName: 'SearchComponent'
 };
 
 SearchComponent.propTypes = {
@@ -282,6 +292,12 @@ SearchComponent.propTypes = {
 
   // to destroy the component state
   destroyOnUnmount: bool,
+  // mongodb specific
+  autocompleteField: dataFieldDef,
+  highlightConfig: object,
+  // meta info about instantiated component
+  componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent']),
+  mongodb: object,
 
   // to configure recent suggestions
   recentSuggestionsConfig: object,

@@ -1,7 +1,8 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
-import { errorMessages, btoa } from './utils';
+import { btoa, validateSchema, backendAlias, componentsAlias } from './utils';
 import type { AppbaseSettings, BaseConfig } from './types';
+import SCHEMA from './schema/index';
 
 /**
  * Base class is the abstract class for SearchBase and SearchComponent classes.
@@ -13,6 +14,9 @@ class Base {
 
   // auth credentials if any
   credentials: string;
+
+  // mongodb
+  mongodb: Object;
 
   // custom headers object
   headers: Object;
@@ -41,20 +45,35 @@ class Base {
     url,
     credentials,
     headers,
+    mongodb,
     appbaseConfig,
     transformRequest,
     transformResponse
   }: BaseConfig) {
-    if (!index) {
-      throw new Error(errorMessages.invalidIndex);
-    }
-    if (!url) {
-      throw new Error(errorMessages.invalidURL);
-    }
+    const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
+    // eslint-disable-next-line
+    const schema = SCHEMA[backendName];
+    validateSchema(
+      {
+        index,
+        url,
+        credentials,
+        headers,
+        mongodb,
+        appbaseConfig,
+        transformRequest,
+        transformResponse
+      },
+      schema,
+      backendName,
+      componentsAlias.SEARCHBASE,
+      componentsAlias.SEARCHBASE
+    );
+
     this.index = index;
     this.url = url;
     this.credentials = credentials || '';
-
+    this.mongodb = mongodb;
     if (appbaseConfig) {
       this.appbaseConfig = appbaseConfig;
     }
@@ -71,10 +90,14 @@ class Base {
     this.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-search-client': 'Searchbase Headless',
-      ...(enableTelemetry === false
+      ...(!this.mongodb
         ? {
-            'X-Enable-Telemetry': false
+            'x-search-client': 'Searchbase Headless',
+            ...(enableTelemetry === false
+              ? {
+                  'X-Enable-Telemetry': false
+                }
+              : {})
           }
         : {})
     };
@@ -87,12 +110,14 @@ class Base {
     if (headers) {
       this.setHeaders(headers);
     }
-    // Create analytics index
-    this._analyticsInstance = AppbaseAnalytics.init({
-      index,
-      url,
-      credentials
-    });
+    if (!this.mongodb) {
+      // Create analytics index
+      this._analyticsInstance = AppbaseAnalytics.init({
+        index,
+        url,
+        credentials
+      });
+    }
   }
 
   // To to set the custom headers

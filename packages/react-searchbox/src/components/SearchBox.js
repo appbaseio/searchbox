@@ -18,7 +18,8 @@ import {
   wholeNumber,
   dataFieldValidator,
   element,
-  array
+  array,
+  autocompleteField
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
 import InputGroup from '../styles/InputGroup';
@@ -849,6 +850,7 @@ SearchBox.propTypes = {
   enablePopularSuggestions: bool,
   enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
+  autocompleteField: autocompleteField,
   aggregationField: string,
   aggregationSize: number,
   nestedField: string,
@@ -916,6 +918,7 @@ SearchBox.propTypes = {
   error: any,
   loading: bool,
   results: object,
+  highlightConfig: object,
   recentSuggestionsConfig: object,
   popularSuggestionsConfig: object,
   maxPredictedWords: number,
@@ -956,6 +959,7 @@ SearchBox.defaultProps = {
   expandSuggestionsContainer: true,
   index: undefined,
   value: undefined,
+  mongodb: object,
   recentSuggestionsConfig: undefined,
   popularSuggestionsConfig: undefined,
   maxPredictedWords: 2,
@@ -973,6 +977,7 @@ export default props => (
     value="" // Init value as empty
     type={queryTypes.Suggestion}
     clearOnQueryChange
+    componentName="SearchBox"
     {...props}
     subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
   >

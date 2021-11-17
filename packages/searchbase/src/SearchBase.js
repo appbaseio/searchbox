@@ -17,15 +17,21 @@ class SearchBase extends Base {
     index,
     url,
     credentials,
+    mongodb,
     headers,
-    appbaseConfig
+    appbaseConfig,
+    transformRequest,
+    transformResponse
   }: SearchBaseConfig) {
     super({
       index,
       url,
       credentials,
+      mongodb,
       headers,
-      appbaseConfig
+      appbaseConfig,
+      transformRequest,
+      transformResponse
     });
     this._components = {};
   }
@@ -50,6 +56,7 @@ class SearchBase extends Base {
         id: componentId,
         index: component.index || this.index,
         url: component.url || this.url,
+        mongodb: component.mongodb || this.mongodb,
         credentials: component.credentials || this.credentials,
         headers: component.headers || this.headers,
         transformRequest: component.transformRequest || this.transformRequest,

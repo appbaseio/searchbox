@@ -700,6 +700,8 @@ class SearchBox extends React.Component {
 SearchBox.propTypes = {
   // RS API
   dataField: dataFieldDef,
+  autocompleteField: dataFieldDef,
+  highlightConfig: object,
   aggregationField: string,
   aggregationSize: number,
   nestedField: string,
@@ -757,6 +759,8 @@ SearchBox.propTypes = {
   error: any,
   loading: bool,
   results: object,
+  recentSearches: array,
+  mongodb: object,
   enablePredictiveSuggestions: bool,
   recentSuggestionsConfig: object,
   popularSuggestionsConfig: object,
@@ -832,6 +836,7 @@ const styles = StyleSheet.create({
 
 export default props => (
   <SearchComponent
+    componentName="SearchBox"
     triggerQueryOnInit={
       props.enableRecentSearches || props.enableRecentSuggestions
     }

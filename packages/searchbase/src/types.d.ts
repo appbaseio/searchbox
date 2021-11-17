@@ -41,6 +41,7 @@ export type BaseConfig = {
   url?: string;
   credentials?: string;
   appbaseConfig?: AppbaseSettings;
+  mongodb?: Object;
   headers?: Object;
   transformRequest?: (requestOptions: Object) => Promise<Object>;
   transformResponse?: (response: any) => Promise<any>;
@@ -95,6 +96,10 @@ export type ComponentConfig = BaseConfig & {
   queryFormat?: QueryFormat;
 
   dataField?: string | Array<string | DataField>;
+
+  autocompleteField?: string | Array<string | DataField>;
+
+  highlightConfig?: Object;
 
   categoryField?: string;
 
