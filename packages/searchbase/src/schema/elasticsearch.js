@@ -20,7 +20,7 @@ export default {
         required: true
       },
       [SEARCHCOMPONENT]: {
-        required: false
+        required: true
       }
     },
     type: dataTypes.STRING
