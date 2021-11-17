@@ -80,7 +80,8 @@ class SearchComponent extends React.Component {
       subscribeTo,
       componentName,
       autocompleteField,
-      highlightConfig
+      highlightConfig,
+      mongodb
     } = this.props;
     // Register search base component
     context.register(id, {
@@ -138,7 +139,8 @@ class SearchComponent extends React.Component {
       distinctField,
       distinctFieldConfig,
       enablePredictiveSuggestions,
-      componentName
+      componentName,
+      mongodb
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer && this.componentInstance) {
@@ -277,7 +279,8 @@ SearchComponent.propTypes = {
   autocompleteField: dataFieldDef,
   highlightConfig: object,
   // meta info about instantiated component
-  componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent'])
+  componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent']),
+  mongodb: object
 };
 
 export default SearchComponent;

@@ -69,7 +69,8 @@ const SearchComponent = {
     ),
     //mongodb specific
     autocompleteField: types.dataField,
-    highlightConfig: VueTypes.object
+    highlightConfig: VueTypes.object,
+    mongodb: VueTypes.object
   },
   data() {
     return {
@@ -102,7 +103,8 @@ const SearchComponent = {
       react,
       queryFormat,
       dataField,
-      autocompleteField,highlightConfig,
+      autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -138,7 +140,8 @@ const SearchComponent = {
       preserveResults,
       clearOnQueryChange,
       distinctField,
-      distinctFieldConfig
+      distinctFieldConfig,
+      mongodb
     } = this.rawProps;
     let { value } = this.rawProps;
     if (window && window.location && window.location.search) {
@@ -166,7 +169,8 @@ const SearchComponent = {
       react,
       queryFormat,
       dataField,
-      autocompleteField,highlightConfig,
+      autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -203,6 +207,7 @@ const SearchComponent = {
       distinctField,
       distinctFieldConfig,
       componentName: this.$props.componentName,
+      mongodb,
       onValueChange: (prev, next) => {
         this.$emit('value', {
           prev,
@@ -288,7 +293,7 @@ const SearchComponent = {
 };
 
 SearchComponent.install = function(Vue) {
-	Vue.component(SearchComponent.name, SearchComponent);
+  Vue.component(SearchComponent.name, SearchComponent);
 };
 
 export default SearchComponent;
