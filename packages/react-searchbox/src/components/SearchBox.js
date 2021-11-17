@@ -987,7 +987,7 @@ SearchBox.propTypes = {
   error: any,
   loading: bool,
   results: object,
-  highlightConfig: object,
+  highlightConfig: object
 };
 
 SearchBox.defaultProps = {
@@ -1016,7 +1016,8 @@ SearchBox.defaultProps = {
   addonAfter: undefined,
   expandSuggestionsContainer: true,
   index: undefined,
-  value: undefined
+  value: undefined,
+  mongodb: object
 };
 
 export default props => (

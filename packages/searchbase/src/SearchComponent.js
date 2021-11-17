@@ -293,6 +293,7 @@ class SearchComponent extends Base {
         enablePredictiveSuggestions,
         autocompleteField,
         highlightConfig,
+        mongodb,
         ...rsAPIConfig
       },
       schema,

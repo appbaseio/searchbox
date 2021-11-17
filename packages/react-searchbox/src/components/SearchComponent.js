@@ -87,7 +87,8 @@ class SearchComponent extends React.Component {
       subscribeTo,
       distinctField,
       distinctFieldConfig,
-      componentName
+      componentName,
+      mongodb
     } = this.props;
     let { value } = this.props;
     if (window && window.location && window.location.search) {
@@ -116,7 +117,8 @@ class SearchComponent extends React.Component {
       react,
       queryFormat,
       dataField,
-      autocompleteField,highlightConfig,
+      autocompleteField,
+      highlightConfig,
       categoryField,
       categoryValue,
       nestedField,
@@ -158,7 +160,8 @@ class SearchComponent extends React.Component {
       distinctField,
       distinctFieldConfig,
       maxPopularSuggestions,
-      componentName
+      componentName,
+      mongodb
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
@@ -302,7 +305,8 @@ SearchComponent.propTypes = {
   autocompleteField: dataFieldDef,
   highlightConfig: object,
   // meta info about instantiated component
-  componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent'])
+  componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent']),
+  mongodb: object
 };
 
 export default SearchComponent;
