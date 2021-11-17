@@ -153,6 +153,22 @@ export type ComponentConfig = BaseConfig & {
   pagination?: boolean;
 
   queryString?: boolean;
+
+  recentSuggestionsConfig?: Object;
+
+  popularSuggestionsConfig?: Object;
+
+  maxPredictedWords?: number;
+
+  urlField?: string;
+
+  rankFeature?: Object;
+
+  enableRecentSearches?: boolean;
+
+  applyStopwords?: boolean;
+
+  stopwords?: Array<string>;
 };
 
 export type MIC_STATUS = {

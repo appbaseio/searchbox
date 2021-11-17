@@ -260,8 +260,6 @@ export class SearchComponent extends Base {
 
   getSuggestionsQuery(): Object;
 
-  // Method to get the recent searches
-  getRecentSearches(queryOptions?: types.RecentSearchOptions): Promise<any>;
 
   // use this methods to record a search click event
   recordClick(objects: Object, isSuggestionClick?: boolean): void;

@@ -31,9 +31,7 @@ import {
   equals,
   getClassName,
   getComponent,
-  getPopularSuggestionsComponent,
   hasCustomRenderer,
-  hasPopularSuggestionsRenderer,
   isEmpty,
   isFunction,
   isNumeric,
@@ -41,7 +39,9 @@ import {
   SearchContext,
   isHotkeyCombinationUsed,
   isModifierKeyUsed,
-  extractModifierKeysFromFocusShortcuts
+  extractModifierKeysFromFocusShortcuts,
+  queryTypes,
+  suggestionTypes
 } from '../utils/helper';
 import Downshift from 'downshift';
 import Icons from './Icons';
@@ -53,6 +53,8 @@ import {
 import SuggestionWrapper from '../addons/SuggestionsWrapper';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
+import AutofillSvg from '../styles/AutofillSvg';
+import { arrayOf } from 'prop-types';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -96,23 +98,12 @@ class SearchBox extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
     this.registerHotkeysListener();
-    const {
-      enableRecentSearches,
-      autosuggest,
-      aggregationField,
-      maxRecentSearches
-    } = this.props;
+    const { aggregationField } = this.props;
     if (aggregationField) {
       // eslint-disable-next-line no-console
       console.warn(
         'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.'
       );
-    }
-    if (enableRecentSearches && autosuggest) {
-      this.componentInstance.getRecentSearches({
-        size: maxRecentSearches || 5,
-        minChars: 3
-      });
     }
   }
 
@@ -145,25 +136,14 @@ class SearchBox extends React.Component {
     return this.context.getComponent(id);
   }
 
-  get popularSuggestionsList() {
-    const suggestions = this.componentInstance.suggestions;
-    return (suggestions || []).filter(
-      suggestion => suggestion.source._popular_suggestion
-    );
-  }
-
   get suggestionsList() {
     const { defaultSuggestions } = this.props;
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    if (!this.componentInstance.value) {
-      return [];
-    }
-    const suggestions = this.componentInstance.suggestions;
-    return (suggestions || []).filter(
-      suggestion => !suggestion.source._popular_suggestion
-    );
+    const suggestions = this.componentInstance?.results?.data ?? [];
+
+    return suggestions;
   }
 
   get stats() {
@@ -184,7 +164,7 @@ class SearchBox extends React.Component {
       this.componentInstance && this.componentInstance[setterFunc](next);
   };
 
-  getComponent = (downshiftProps = {}, isPopularSuggestionsRender = false) => {
+  getComponent = (downshiftProps = {}) => {
     const { error, loading } = this.props;
     const data = {
       error,
@@ -196,22 +176,8 @@ class SearchBox extends React.Component {
       promotedData: this.componentInstance.results.promotedData,
       customData: this.componentInstance.results.customData,
       resultStats: this.stats,
-      rawData: this.componentInstance.results.rawData,
-      popularSuggestions: this.popularSuggestionsList,
-      recentSearches: this.componentInstance.recentSearches
+      rawData: this.componentInstance.results.rawData
     };
-    if (isPopularSuggestionsRender) {
-      return getPopularSuggestionsComponent(
-        {
-          downshiftProps,
-          data: this.popularSuggestionsList,
-          value: this.componentInstance.value,
-          loading,
-          error
-        },
-        this.props
-      );
-    }
     return getComponent(data, this.props);
   };
 
@@ -270,23 +236,9 @@ class SearchBox extends React.Component {
   };
 
   setValue = ({ value, isOpen = true, ...rest }) => {
-    const {
-      onChange,
-      debounce,
-      enableRecentSearches,
-      autosuggest,
-      maxRecentSearches
-    } = this.props;
-    if (
-      enableRecentSearches &&
-      !value &&
-      this.componentInstance.value &&
-      autosuggest
-    ) {
-      this.componentInstance.getRecentSearches({
-        size: maxRecentSearches || 5,
-        minChars: 3
-      });
+    const { onChange, debounce, autosuggest } = this.props;
+    if (!value && autosuggest && rest.cause !== causes.CLEAR_VALUE) {
+      this.componentInstance.triggerDefaultQuery();
     }
     this.setState({ isOpen });
     if (this.isControlled()) {
@@ -297,7 +249,7 @@ class SearchBox extends React.Component {
       onChange(value, this.componentInstance, rest.event);
     } else if (debounce > 0) {
       this.componentInstance.setValue(value, {
-        triggerDefaultQuery: false,
+        triggerDefaultQuery: rest.cause === causes.CLEAR_VALUE,
         triggerCustomQuery: false,
         stateChanges: true
       });
@@ -315,19 +267,11 @@ class SearchBox extends React.Component {
         this.triggerCustomQuery();
       }
     } else {
-      if (value) {
-        this.componentInstance.setValue(value, {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: !!autosuggest,
-          stateChanges: true
-        });
-      } else {
-        this.componentInstance.setValue(value, {
-          triggerCustomQuery: rest.triggerCustomQuery,
-          triggerDefaultQuery: false,
-          stateChanges: true
-        });
-      }
+      this.componentInstance.setValue(value, {
+        triggerCustomQuery: rest.triggerCustomQuery,
+        triggerDefaultQuery: autosuggest,
+        stateChanges: true
+      });
 
       if (!autosuggest) {
         this.triggerCustomQuery();
@@ -358,7 +302,12 @@ class SearchBox extends React.Component {
   };
 
   clearValue = () => {
-    this.setValue({ value: '', isOpen: false, triggerCustomQuery: true });
+    this.setValue({
+      value: '',
+      isOpen: false,
+      triggerCustomQuery: true,
+      cause: causes.CLEAR_VALUE
+    });
     this.onValueSelected(null, causes.CLEAR_VALUE);
   };
 
@@ -371,8 +320,28 @@ class SearchBox extends React.Component {
       });
       return;
     }
+    if (
+      suggestion.url &&
+      // check valid url: https://stackoverflow.com/a/43467144/10822996
+      new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$',
+        'i'
+      ).test(suggestion.url)
+    ) {
+      window.open(suggestion.url);
+      return;
+    }
+
+    const suggestionValue = suggestion._category
+      ? suggestion.label
+      : suggestion.value;
     this.setValue({
-      value: suggestion.value,
+      value: suggestionValue,
       isOpen: false,
       triggerCustomQuery: true
     });
@@ -382,10 +351,18 @@ class SearchBox extends React.Component {
       suggestion.source && suggestion.source._id
     );
     this.onValueSelected(
-      suggestion.value,
+      suggestionValue,
       causes.SUGGESTION_SELECT,
       suggestion.source
     );
+  };
+
+  onSelectArrowClick = suggestion => {
+    this.setValue({
+      value: suggestion._category ? suggestion.label : suggestion.value,
+      isOpen: true,
+      triggerDefaultQuery: true
+    });
   };
 
   handleStateChange = changes => {
@@ -649,7 +626,6 @@ class SearchBox extends React.Component {
     autoFocus,
     value,
     size,
-    recentSearches,
     recentSearchesIcon,
     popularSearchesIcon,
     getInputProps,
@@ -660,6 +636,16 @@ class SearchBox extends React.Component {
     currentValue,
     ...rest
   }) => {
+    const getIcon = iconType => {
+      switch (iconType) {
+        case suggestionTypes.Recent:
+          return recentSearchesIcon;
+        case suggestionTypes.Popular:
+          return popularSearchesIcon;
+        default:
+          return null;
+      }
+    };
     return (
       <>
         {' '}
@@ -680,7 +666,7 @@ class SearchBox extends React.Component {
         {this.renderError()}
         {!this.hasCustomRenderer && isOpen ? (
           <ul css={suggestionsCss} className={getClassName(innerClass, 'list')}>
-            {this.suggestionsList.slice(0, size).map((item, index) => (
+            {this.suggestionsList.map((item, index) => (
               <li
                 {...getItemProps({ item })}
                 key={`${index + 1}-${item.value}`}
@@ -688,87 +674,35 @@ class SearchBox extends React.Component {
                   backgroundColor: this.getBackgroundColor(
                     highlightedIndex,
                     index
-                  )
+                  ),
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch'
                 }}
               >
+                {item._suggestion_type !== suggestionTypes.Index ? (
+                  <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
+                    <CustomSvg
+                      iconId={`${index + 1}-${item.value}-icon`}
+                      className={
+                        getClassName(
+                          innerClass,
+                          `${item._suggestion_type}-search-icon`
+                        ) || null
+                      }
+                      icon={getIcon(item._suggestion_type)}
+                      type={`${item._suggestion_type}-search-icon`}
+                    />
+                  </div>
+                ) : null}
                 <SuggestionItem currentValue={currentValue} suggestion={item} />
+                <AutofillSvg
+                  onClick={e => {
+                    e.stopPropagation();
+                    this.onSelectArrowClick(item);
+                  }}
+                />
               </li>
             ))}
-            {!currentValue
-              ? (recentSearches || []).map((sugg, index) => (
-                  <li
-                    {...getItemProps({ item: sugg })}
-                    key={`${index + 1}-${sugg.value}`}
-                    style={{
-                      backgroundColor: this.getBackgroundColor(
-                        highlightedIndex,
-                        index + this.suggestionsList.length
-                      ),
-                      justifyContent: 'flex-start'
-                    }}
-                  >
-                    <div style={{ padding: '0 10px 0 0' }}>
-                      <CustomSvg
-                        iconId={`${index + 1}-${sugg.value}-icon`}
-                        className={
-                          getClassName(innerClass, 'recent-search-icon') || null
-                        }
-                        icon={recentSearchesIcon}
-                        type="recent-search-icon"
-                      />
-                    </div>
-                    <SuggestionItem
-                      currentValue={currentValue}
-                      suggestion={sugg}
-                    />
-                  </li>
-                ))
-              : null}
-            {hasPopularSuggestionsRenderer(this.props)
-              ? this.getComponent(
-                  {
-                    getInputProps,
-                    getItemProps,
-                    isOpen,
-                    highlightedIndex,
-                    ...rest
-                  },
-                  true
-                )
-              : (this.popularSuggestionsList || []).map((sugg, index) => (
-                  <li
-                    {...getItemProps({ item: sugg })}
-                    key={`${index +
-                      (!currentValue ? recentSearches.length : 0) +
-                      this.suggestionsList.length +
-                      1}-${sugg.value}`}
-                    style={{
-                      backgroundColor: this.getBackgroundColor(
-                        highlightedIndex,
-                        index +
-                          this.suggestionsList.length +
-                          (!currentValue ? recentSearches.length : 0)
-                      ),
-                      justifyContent: 'flex-start'
-                    }}
-                  >
-                    <div style={{ padding: '0 10px 0 0' }}>
-                      <CustomSvg
-                        iconId={`${index + 1}-${sugg.value}-icon`}
-                        className={
-                          getClassName(innerClass, 'popular-search-icon') ||
-                          null
-                        }
-                        icon={popularSearchesIcon}
-                        type="popular-search-icon"
-                      />
-                    </div>
-                    <SuggestionItem
-                      currentValue={currentValue}
-                      suggestion={sugg}
-                    />
-                  </li>
-                ))}
           </ul>
         ) : (
           this.renderNoSuggestion()
@@ -797,11 +731,10 @@ class SearchBox extends React.Component {
       onFocus,
       onKeyDown,
       autoFocus,
-      value,
-      recentSearches
+      value
     } = this.props;
     const currentValue = this.componentInstance.value || '';
-    const hasSuggestions = defaultSuggestions || recentSearches;
+    const hasSuggestions = defaultSuggestions || this.suggestionsList;
     return (
       <div style={style} className={className}>
         {title && (
@@ -914,8 +847,6 @@ class SearchBox extends React.Component {
 
 SearchBox.propTypes = {
   enablePopularSuggestions: bool,
-  maxPopularSuggestions: number,
-  maxRecentSearches: number,
   enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
   aggregationField: string,
@@ -944,7 +875,6 @@ SearchBox.propTypes = {
   showVoiceSearch: bool,
   searchOperators: bool,
   render: func,
-  renderPopularSuggestions: func,
   renderError: func,
   renderNoSuggestion: titleDef,
   getMicInstance: func,
@@ -985,11 +915,22 @@ SearchBox.propTypes = {
   // internal props
   error: any,
   loading: bool,
-  results: object
+  results: object,
+  recentSuggestionsConfig: object,
+  popularSuggestionsConfig: object,
+  maxPredictedWords: number,
+  urlField: string,
+  rankFeature: object,
+  categoryField: string,
+  categoryValue: string,
+  enableRecentSearches: bool,
+  enableRecentSuggestions: bool,
+  applyStopwords: bool,
+  stopwords: arrayOf(string)
 };
 
 SearchBox.defaultProps = {
-  enableRecentSearches: false,
+  enableRecentSuggestions: false,
   placeholder: 'Search',
   showIcon: true,
   iconPosition: 'right',
@@ -1005,8 +946,8 @@ SearchBox.defaultProps = {
   showDistinctSuggestions: true,
   enablePopularSuggestions: false,
   enablePredictiveSuggestions: false,
+  enableRecentSearches: false,
   clearOnQueryChange: true,
-  recentSearches: [],
   recentSearchesIcon: undefined,
   popularSearchesIcon: undefined,
   focusShortcuts: ['/'],
@@ -1014,31 +955,33 @@ SearchBox.defaultProps = {
   addonAfter: undefined,
   expandSuggestionsContainer: true,
   index: undefined,
-  value: undefined
+  value: undefined,
+  recentSuggestionsConfig: undefined,
+  popularSuggestionsConfig: undefined,
+  maxPredictedWords: 2,
+  urlField: '',
+  rankFeature: undefined,
+  categoryField: '',
+  categoryValue: ''
 };
 
 export default props => (
   <SearchComponent
-    triggerQueryOnInit={!!props.enablePopularSuggestions}
+    triggerQueryOnInit={
+      props.enableRecentSearches || props.enableRecentSuggestions
+    }
     value="" // Init value as empty
+    type={queryTypes.Suggestion}
     clearOnQueryChange
     {...props}
-    subscribeTo={[
-      'micStatus',
-      'error',
-      'requestPending',
-      'results',
-      'value',
-      'recentSearches'
-    ]}
+    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
   >
-    {({ error, loading, results, value, recentSearches, micStatus }) => (
+    {({ error, loading, results, value, micStatus }) => (
       <SearchBox
         {...props}
         error={error}
         loading={loading}
         results={results}
-        recentSearches={recentSearches}
         micStatus={micStatus}
       />
     )}

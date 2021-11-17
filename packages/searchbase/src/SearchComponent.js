@@ -7,8 +7,7 @@ import type {
   RequestStatus,
   AppbaseSettings,
   GenerateQueryResponse,
-  MicStatusField,
-  RecentSearchOptions
+  MicStatusField
 } from './types';
 import Observable from './Observable';
 import Base from './Base';
@@ -24,10 +23,8 @@ import {
   getNormalizedField,
   getNormalizedWeights,
   flatReactProp,
-  getSuggestions,
-  popularSuggestionFields,
   isEqual,
-  searchBaseMappings
+  searchBaseMappings,
 } from './utils';
 
 type QueryType =
@@ -61,8 +58,6 @@ const REQUEST_STATUS = {
   pending: 'PENDING',
   error: 'ERROR'
 };
-
-const suggestionQueryID = 'DataSearch__suggestions';
 
 /**
  * SearchComponent class is responsible for the following things:
@@ -145,6 +140,24 @@ class SearchComponent extends Base {
 
   distinctFieldConfig: Object;
 
+  enableRecentSearches: boolean;
+
+  enableRecentSuggestions: boolean;
+
+  recentSuggestionsConfig: Object;
+
+  popularSuggestionsConfig: Object;
+
+  maxPredictedWords: number;
+
+  urlField: string;
+
+  rankFeature: Object;
+
+  applyStopwords: boolean;
+
+  stopwords: Array<string>;
+
   // other properties
 
   // To enable the popular suggestions
@@ -179,12 +192,6 @@ class SearchComponent extends Base {
 
   // aggregations
   aggregationData: Aggregations;
-
-  // recent searches
-  recentSearches: Array<{
-    label: String,
-    value: String
-  }>;
 
   /* ------ Private properties only for the internal use ----------- */
   _parent: SearchBase;
@@ -305,13 +312,22 @@ class SearchComponent extends Base {
       pagination,
       queryString,
       distinctField,
-      distinctFieldConfig
+      distinctFieldConfig,
+      recentSuggestionsConfig,
+      popularSuggestionsConfig,
+      maxPredictedWords,
+      urlField,
+      rankFeature,
+      enableRecentSearches,
+      enableRecentSuggestions,
+      applyStopwords,
+      stopwords
     } = rsAPIConfig;
     if (!id) {
       throw new Error(errorMessages.invalidComponentId);
     }
     // dataField is required for components other then search
-    if (type && type !== queryTypes.Search) {
+    if (type && type !== queryTypes.Search && type !== queryTypes.Suggestion) {
       if (Array.isArray(dataField)) {
         throw new Error(errorMessages.dataFieldAsArray);
       }
@@ -360,15 +376,24 @@ class SearchComponent extends Base {
     this.onMicStatusChange = onMicStatusChange;
     this.distinctField = distinctField;
     this.distinctFieldConfig = distinctFieldConfig;
+    this.enableRecentSearches = enableRecentSearches;
+    this.enableRecentSuggestions = enableRecentSuggestions;
+    this.recentSuggestionsConfig = recentSuggestionsConfig;
+    this.popularSuggestionsConfig = popularSuggestionsConfig;
+    this.maxPredictedWords = maxPredictedWords;
+    this.urlField = urlField;
+    this.rankFeature = rankFeature;
+
+    this.applyStopwords = applyStopwords;
+
+    this.stopwords = stopwords;
     // other properties
     this.enablePopularSuggestions = enablePopularSuggestions;
-
     this.maxPopularSuggestions = maxPopularSuggestions;
 
     this.showDistinctSuggestions = showDistinctSuggestions;
 
     this.enablePredictiveSuggestions = enablePredictiveSuggestions;
-
     this.preserveResults = preserveResults;
 
     this.clearOnQueryChange = clearOnQueryChange;
@@ -424,41 +449,6 @@ class SearchComponent extends Base {
     return { recordAnalytics, customEvents, enableQueryRules, userId };
   }
 
-  // To get the parsed suggestions from the results
-  get suggestions(): Array<Object> {
-    if (this.type && this.type !== queryTypes.Search) {
-      return [];
-    }
-    if (this.results) {
-      let fields = getNormalizedField(this.dataField) || [];
-      if (
-        fields.length === 0 &&
-        this.results.data &&
-        Array.isArray(this.results.data) &&
-        this.results.data.length > 0 &&
-        this.results.data[0]
-      ) {
-        // Extract fields from _source
-        fields = Object.keys(this.results.data[0]).filter(
-          key =>
-            !['_id', '_click_id', '_index', '_score', '_type'].includes(key)
-        );
-      }
-      if (this.enablePopularSuggestions) {
-        // extract suggestions from popular suggestion fields too
-        fields = [...fields, ...popularSuggestionFields];
-      }
-      return getSuggestions(
-        fields,
-        this.results.data,
-        this.value,
-        this.showDistinctSuggestions,
-        this.enablePredictiveSuggestions
-      ).slice(0, this.size);
-    }
-    return [];
-  }
-
   // Method to get the raw query based on the current state
   get componentQuery(): Object {
     return {
@@ -488,7 +478,7 @@ class SearchComponent extends Base {
       customHighlight: this.customHighlight,
       customQuery: this.customQuery ? this.customQuery(this) : undefined,
       defaultQuery: this.defaultQuery ? this.defaultQuery(this) : undefined,
-      value: this.value,
+      ...(this.value && { value: this.value }),
       categoryValue: this.categoryValue,
       after: this.after,
       aggregations: this.aggregations,
@@ -498,7 +488,19 @@ class SearchComponent extends Base {
       queryString: this.queryString,
       distinctField: this.distinctField,
       distinctFieldConfig: this.distinctFieldConfig,
-      index: this.index
+      index: this.index,
+      showDistinctSuggestions: this.showDistinctSuggestions,
+      enablePredictiveSuggestions: this.enablePredictiveSuggestions,
+      maxPredictedWords: this.maxPredictedWords,
+      urlField: this.urlField,
+      rankFeature: this.rankFeature,
+      popularSuggestionsConfig: this.popularSuggestionsConfig,
+      recentSuggestionsConfig: this.recentSuggestionsConfig,
+      enablePopularSuggestions: this.enablePopularSuggestions,
+      enableRecentSearches: this.enableRecentSearches,
+      enableRecentSuggestions: this.enableRecentSuggestions,
+      applyStopwords: this.applyStopwords,
+      stopwords: this.stopwords
     };
   }
 
@@ -719,9 +721,10 @@ class SearchComponent extends Base {
         settings: this.appbaseSettings
       })
         .then(results => {
-          if (this._lastRequestTimeDefaultQuery < results._timestamp) {
+          if (this._lastRequestTimeDefaultQuery <= results._timestamp) {
             const prev = this.results;
             const rawResults = results && results[this.id];
+
             const afterResponse = () => {
               if (rawResults.aggregations) {
                 this._handleAggregationResponse(rawResults.aggregations, {
@@ -739,39 +742,9 @@ class SearchComponent extends Base {
                 this.results
               );
             };
-            if (
-              (!this.type || this.type === queryTypes.Search) &&
-              this.enablePopularSuggestions
-            ) {
-              this._fetchRequest(this.getSuggestionsQuery(), true)
-                .then(rawPopularSuggestions => {
-                  const popularSuggestionsData =
-                    rawPopularSuggestions[suggestionQueryID];
-                  // Merge popular suggestions as the top suggestions
-                  if (
-                    popularSuggestionsData &&
-                    popularSuggestionsData.hits &&
-                    popularSuggestionsData.hits.hits &&
-                    rawResults.hits &&
-                    rawResults.hits.hits
-                  ) {
-                    rawResults.hits.hits = [
-                      ...(popularSuggestionsData.hits.hits || []).map(hit => ({
-                        ...hit,
-                        // Set the popular suggestion tag for suggestion hits
-                        _popular_suggestion: true
-                      })),
-                      ...rawResults.hits.hits
-                    ];
-                  }
-                  this._appendResults(rawResults);
-                  afterResponse();
-                })
-                .catch(handleError);
-            } else {
-              this._appendResults(rawResults);
-              afterResponse();
-            }
+            this._appendResults(rawResults);
+            afterResponse();
+
             return Promise.resolve(rawResults);
           }
           return Promise.resolve([]);
@@ -838,7 +811,7 @@ class SearchComponent extends Base {
           settings: this.appbaseSettings
         })
           .then(results => {
-            if (this._lastRequestTimeCustomQuery < results._timestamp) {
+            if (this._lastRequestTimeCustomQuery <= results._timestamp) {
               // Update the state for components
               orderOfQueries.forEach(id => {
                 const componentInstance = this._parent.getComponent(id);
@@ -885,62 +858,6 @@ class SearchComponent extends Base {
       return Promise.resolve({});
     }
   };
-
-  getSuggestionsQuery(): Object {
-    return {
-      query: [
-        {
-          id: suggestionQueryID,
-          dataField: popularSuggestionFields,
-          size: this.maxPopularSuggestions || 5,
-          value: this.value,
-          defaultQuery: {
-            query: {
-              bool: {
-                minimum_should_match: 1,
-                should: [
-                  {
-                    function_score: {
-                      field_value_factor: {
-                        field: 'count',
-                        modifier: 'sqrt',
-                        missing: 1
-                      }
-                    }
-                  },
-                  {
-                    multi_match: {
-                      fields: ['key^9', 'key.autosuggest^1', 'key.keyword^10'],
-                      fuzziness: 0,
-                      operator: 'or',
-                      query: this.value,
-                      type: 'best_fields'
-                    }
-                  },
-                  {
-                    multi_match: {
-                      fields: ['key^9', 'key.autosuggest^1', 'key.keyword^10'],
-                      operator: 'or',
-                      query: this.value,
-                      type: 'phrase'
-                    }
-                  },
-                  {
-                    multi_match: {
-                      fields: ['key^9'],
-                      operator: 'or',
-                      query: this.value,
-                      type: 'phrase_prefix'
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ]
-    };
-  }
 
   // use this methods to record a search click event
   recordClick = (objects: Object, isSuggestionClick: boolean = false): void => {
@@ -1068,114 +985,15 @@ class SearchComponent extends Base {
     }
   }
 
-  _getSearchIndex(isPopularSuggestionsAPI: boolean = false) {
+  _getSearchIndex() {
     let index = this.index;
-    if (isPopularSuggestionsAPI) {
-      index = '.suggestions';
-    } else if (this._parent && this._parent.index) {
+    if (this._parent && this._parent.index) {
       index = this._parent.index;
     }
     return index;
   }
 
-  getRecentSearches = (
-    queryOptions?: RecentSearchOptions = {
-      size: 5,
-      minChars: 3
-    },
-    options?: Option = defaultOption
-  ): Promise<any> => {
-    const requestOptions = {
-      headers: {
-        ...this.headers
-      }
-    };
-    let queryString = '';
-    const addParam = (key, value) => {
-      if (queryString) {
-        queryString += `&${key}=${value}`;
-      } else {
-        queryString += `${key}=${value}`;
-      }
-    };
-    if (this.appbaseSettings && this.appbaseSettings.userId) {
-      addParam('user_id', this.appbaseSettings.userId);
-    }
-    if (queryOptions) {
-      if (queryOptions.size) {
-        addParam('size', String(queryOptions.size));
-      }
-      if (queryOptions.from) {
-        addParam('from', queryOptions.from);
-      }
-      if (queryOptions.to) {
-        addParam('to', queryOptions.to);
-      }
-      if (queryOptions.minChars) {
-        addParam('min_chars', String(queryOptions.minChars));
-      }
-      if (queryOptions.customEvents) {
-        Object.keys(queryOptions.customEvents).forEach((key: string) => {
-          // $FlowFixMe
-          addParam(key, queryOptions.customEvents[key]);
-        });
-      }
-    }
-    return new Promise((resolve, reject) => {
-      fetch(
-        `${
-          this.url
-        }/_analytics/${this._getSearchIndex()}/recent-searches?${queryString}`,
-        requestOptions
-      )
-        .then(res => {
-          if (res.status >= 500) {
-            return reject(res);
-          }
-          if (res.status >= 400) {
-            return reject(res);
-          }
-          return res
-            .json()
-            .then(recentSearches => {
-              const prev = this.recentSearches;
-              this.recentSearches = recentSearches.map(searchObject => ({
-                label: searchObject.key,
-                value: searchObject.key
-              }));
-              this._applyOptions(
-                {
-                  stateChanges: options.stateChanges
-                },
-                'recentSearches',
-                prev,
-                this.recentSearches
-              );
-              resolve(this.recentSearches);
-              // Populate the recent searches
-            })
-            .catch(e => {
-              console.warn(
-                'SearchBase: error while fetching the recent searches ',
-                e
-              );
-              return reject(e);
-            });
-        })
-        .catch(e => {
-          console.warn(
-            'SearchBase: error while fetching the recent searches ',
-            e
-          );
-          return reject(e);
-        });
-    });
-  };
-
-  _fetchRequest(
-    requestBody: Object,
-    isPopularSuggestionsAPI: boolean = false
-  ): Promise<any> {
+  _fetchRequest(requestBody: Object): Promise<any> {
     // remove undefined properties from request body
     const requestOptions = {
       method: 'POST',
@@ -1348,19 +1166,21 @@ class SearchComponent extends Base {
     if (!aggregationField && typeof this.dataField === 'string') {
       aggregationField = this.dataField;
     }
-    const prev = this.aggregationData;
-    this.aggregationData.setRaw(aggsResponse[aggregationField]);
-    this.aggregationData.setData(
-      aggregationField,
-      aggsResponse[aggregationField].buckets,
-      this.preserveResults && append
-    );
-    this._applyOptions(
-      { stateChanges: options.stateChanges },
-      'aggregationData',
-      prev,
-      this.aggregationData
-    );
+    if (aggregationField) {
+      const prev = this.aggregationData;
+      this.aggregationData.setRaw(aggsResponse[aggregationField]);
+      this.aggregationData.setData(
+        aggregationField,
+        aggsResponse[aggregationField].buckets,
+        this.preserveResults && append
+      );
+      this._applyOptions(
+        { stateChanges: options.stateChanges },
+        'aggregationData',
+        prev,
+        this.aggregationData
+      );
+    }
   }
 
   _setError(error: any, options?: Options = defaultOptions) {

@@ -55,7 +55,6 @@ export const types = {
 	showVoiceSearch: VueTypes.bool.def(false),
 	searchOperators: VueTypes.bool.def(false),
 	render: VueTypes.func,
-	renderPopularSuggestions: VueTypes.func,
 	renderError: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
 	renderNoSuggestion: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
 	renderMic: VueTypes.func,
@@ -78,7 +77,7 @@ export const types = {
 	}).def({ recordAnalytics: false }),
 	showDistinctSuggestions: VueTypes.bool.def(true),
 	queryString: VueTypes.queryString,
-	queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range']),
+	queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range', 'suggestion']),
 	reactType: VueTypes.shape({
 		and: reactKeyType,
 		or: reactKeyType,

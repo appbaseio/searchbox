@@ -275,6 +275,35 @@
   dependencies:
     cross-fetch "^3.0.4"
 
+<<<<<<< HEAD
+"@appbaseio/react-searchbox@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.5.2.tgz#4dc18f5bd5438029c18ab191f101374a808a2055"
+  integrity sha512-O/YlX+1LvSfaimNBfnWLwl+KmZSppwJaB7ZuD2kCOIS6jLitm9ug1xoL9amma/cMzMnf/W80orYra4orua706w==
+  dependencies:
+    "@appbaseio/searchbase" "1.5.1"
+    "@emotion/core" "^10.0.17"
+    "@emotion/styled" "^10.0.17"
+    downshift "^3.3.1"
+
+"@appbaseio/searchbase@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.0.tgz#00fc6160905c9bc41fe886f5dbb99c14e4b211ec"
+  integrity sha512-kOaAhv+dq8RBN/QhX3xcjP1F4Hj7qFUUN2gJuH0Ttf03b2aR9pVba8kH81iN5Q6TY46ZU42X+SNdL0G6lKc5CA==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
+    cross-fetch "^3.0.4"
+
+"@appbaseio/searchbase@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.1.tgz#c5a755ac2bf77772f7db27456b40619227549d0b"
+  integrity sha512-G7RVqQ+HPK8jfd1pDTqspyKEMIdTTVrpiZSBrLUk+bVTcmG96bUvf1nehHp34b6XpYBEg/aSqkKQWW1okaa4zA==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
+    cross-fetch "^3.0.4"
+
+=======
+>>>>>>> master
 "@appbaseio/vue-emotion@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@appbaseio/vue-emotion/-/vue-emotion-0.4.4.tgz#a2187691a5dce090a8571250c1a7911d2ceee58a"

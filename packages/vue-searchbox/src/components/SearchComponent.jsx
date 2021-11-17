@@ -61,7 +61,16 @@ const SearchComponent = {
 		distinctFieldConfig: VueTypes.object,
 		// subscribe on changes,
 		subscribeTo: VueTypes.arrayOf(VueTypes.string),
-		triggerQueryOnInit: VueTypes.bool.def(true)
+		triggerQueryOnInit: VueTypes.bool.def(true),
+		recentSuggestionsConfig: VueTypes.object,
+		popularSuggestionsConfig: VueTypes.object,
+		maxPredictedWords: VueTypes.number,
+		urlField: VueTypes.string,
+		rankFeature: VueTypes.object,
+		enableRecentSearches: VueTypes.bool,
+		enableRecentSuggestions: VueTypes.bool,
+		applyStopwords: VueTypes.bool,
+		stopwords: VueTypes.arrayOf(VueTypes.string)
 	},
 	data() {
 		return {
@@ -128,7 +137,16 @@ const SearchComponent = {
 			preserveResults,
 			clearOnQueryChange,
 			distinctField,
-			distinctFieldConfig
+			distinctFieldConfig,
+			enableRecentSearches,
+			enableRecentSuggestions,
+			recentSuggestionsConfig,
+			popularSuggestionsConfig,
+			maxPredictedWords,
+			urlField,
+			rankFeature,
+			applyStopwords,
+			stopwords
 		} = this.rawProps;
 		let { value } = this.rawProps;
 		if (window && window.location && window.location.search) {
@@ -190,6 +208,15 @@ const SearchComponent = {
 			clearOnQueryChange,
 			distinctField,
 			distinctFieldConfig,
+			enableRecentSearches,
+			enableRecentSuggestions,
+			recentSuggestionsConfig,
+			popularSuggestionsConfig,
+			maxPredictedWords,
+			urlField,
+			rankFeature,
+			applyStopwords,
+			stopwords,
 			onValueChange: (prev, next) => {
 				this.$emit('value', {
 					prev,
