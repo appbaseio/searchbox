@@ -48,11 +48,11 @@ class SearchBase extends React.Component {
 
 SearchBase.propTypes = {
   // eslint-disable-next-line react/no-typos
-  index: string.isRequired,
+  index: string,
   // eslint-disable-next-line react/no-typos
-  url: string.isRequired,
+  url: string,
   // eslint-disable-next-line react/no-typos
-  credentials: string.isRequired,
+  credentials: string,
   headers: object,
   appbaseConfig,
   transformRequest: func,
