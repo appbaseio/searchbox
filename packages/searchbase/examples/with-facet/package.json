@@ -12,7 +12,7 @@
         "@trevoreyre/autocomplete-js": "^2.0.2"
     },
     "devDependencies": {
-        "@babel/core": "7.2.0",
+        "@babel/core": "7.12.0",
         "parcel-bundler": "^1.6.1"
     }
 }
