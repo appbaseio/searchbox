@@ -66,6 +66,7 @@ class Base {
       },
       schema,
       backendName,
+      componentsAlias.SEARCHBASE,
       componentsAlias.SEARCHBASE
     );
 

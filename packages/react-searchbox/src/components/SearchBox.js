@@ -18,7 +18,8 @@ import {
   wholeNumber,
   dataFieldValidator,
   element,
-  array
+  array,
+  autocompleteField
 } from '../utils/types';
 import SearchComponent from './SearchComponent';
 import InputGroup from '../styles/InputGroup';
@@ -918,7 +919,7 @@ SearchBox.propTypes = {
   maxRecentSearches: number,
   enablePredictiveSuggestions: bool,
   dataField: dataFieldValidator,
-  autocompleteField: dataFieldValidator,
+  autocompleteField: autocompleteField,
   aggregationField: string,
   aggregationSize: number,
   nestedField: string,

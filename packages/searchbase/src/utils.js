@@ -541,9 +541,9 @@ export function validateSchema(
   // fetch required properties
   schemaPropertiesKeys.forEach(propName => {
     const currentProperty = schema[propName];
-    if (currentProperty.components.includes(componentName)) {
+    if (Object.keys(currentProperty.components).includes(componentName)) {
       acceptedProperties.push(propName);
-      if (currentProperty.required) {
+      if (currentProperty.components[componentName].required) {
         requiredProperties.push(propName);
       }
     }

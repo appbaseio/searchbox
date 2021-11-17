@@ -86,3 +86,5 @@ export const dataFieldValidator = (props, propName, componentName) => {
     }
   }
 };
+
+export const autocompleteField = PropTypes.oneOfType([string, array]);

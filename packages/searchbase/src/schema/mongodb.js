@@ -4,148 +4,256 @@ const { SEARCHBASE, SEARCHCOMPONENT } = componentsAlias;
 
 export default {
   url: {
-    components: [SEARCHBASE],
-    type: dataTypes.STRING,
-    required: true
+    components: {
+      [SEARCHBASE]: {
+        required: true
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   index: {
-    components: [SEARCHBASE, SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHBASE]: {
+        required: false
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   credentials: {
-    components: [SEARCHBASE, SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHBASE]: {
+        required: false
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   headers: {
-    components: [SEARCHBASE, SEARCHCOMPONENT],
-    type: dataTypes.OBJECT,
-    required: false
+    components: {
+      [SEARCHBASE]: {
+        required: false
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.OBJECT
   },
   transformRequest: {
-    components: [SEARCHBASE, SEARCHCOMPONENT],
-    type: dataTypes.FUNCTION,
-    required: false
+    components: {
+      [SEARCHBASE]: {
+        required: false
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.FUNCTION
   },
   transformResponse: {
-    components: [SEARCHBASE, SEARCHCOMPONENT],
-    type: dataTypes.FUNCTION,
-    required: false
+    components: {
+      [SEARCHBASE]: {
+        required: false
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.FUNCTION
   },
   mongodb: {
-    components: [SEARCHBASE, SEARCHCOMPONENT],
-    type: dataTypes.OBJECT,
-    required: true
+    components: {
+      [SEARCHBASE]: {
+        required: true
+      },
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.OBJECT
   },
   id: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: true
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   dataField: {
-    components: [SEARCHCOMPONENT],
-    type: [dataTypes.ARRAY, dataTypes.STRING],
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: [dataTypes.ARRAY, dataTypes.STRING]
   },
   autocompleteField: {
-    components: [SEARCHCOMPONENT],
-    type: [dataTypes.ARRAY, dataTypes.STRING],
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: [dataTypes.ARRAY, dataTypes.STRING]
   },
   react: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.OBJECT,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.OBJECT
   },
   size: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.NUMBER,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.NUMBER
   },
   from: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.NUMBER,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.NUMBER
   },
   includeFields: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.ARRAY,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.ARRAY
   },
   excludeFields: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.ARRAY,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.ARRAY
   },
   sortBy: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   aggregationSize: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.NUMBER,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.NUMBER
   },
   highlight: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.BOOLEAN,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.BOOLEAN
   },
   highlightField: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   highlightConfig: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.OBJECT,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.OBJECT
   },
   fuzziness: {
-    components: [SEARCHCOMPONENT],
-    type: [dataTypes.STRING, dataTypes.NUMBER],
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: [dataTypes.STRING, dataTypes.NUMBER]
   },
   enableSynonyms: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.BOOLEAN,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.BOOLEAN
   },
   searchOperators: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.BOOLEAN,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.BOOLEAN
   },
   queryString: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   defaultQuery: {
-    components: [SEARCHCOMPONENT],
-    type: [dataTypes.FUNCTION, dataTypes.OBJECT],
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: [dataTypes.FUNCTION, dataTypes.OBJECT]
   },
   customQuery: {
-    components: [SEARCHCOMPONENT],
-    type: [dataTypes.FUNCTION, dataTypes.OBJECT],
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: [dataTypes.FUNCTION, dataTypes.OBJECT]
   },
   value: {
-    components: [SEARCHCOMPONENT],
-    type: [dataTypes.STRING, dataTypes.ARRAY, dataTypes.OBJECT],
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: [dataTypes.STRING, dataTypes.ARRAY, dataTypes.OBJECT]
   },
   type: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   },
   queryFormat: {
-    components: [SEARCHCOMPONENT],
-    type: dataTypes.STRING,
-    required: false
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.STRING
   }
 };
