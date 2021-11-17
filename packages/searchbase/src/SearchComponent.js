@@ -29,7 +29,8 @@ import {
   isEqual,
   searchBaseMappings,
   backendAlias,
-  validateSchema
+  validateSchema,
+  componentsAlias
 } from './utils';
 
 import SCHEMA from './schema/index';
@@ -296,6 +297,7 @@ class SearchComponent extends Base {
       },
       schema,
       backendName,
+      componentsAlias.SEARCHCOMPONENT,
       componentName
     );
     const {

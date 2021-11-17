@@ -497,7 +497,6 @@ export function btoa(input = '') {
 
 export const componentsAlias = {
   SEARCHBASE: 'SearchBase',
-  SEARCHBOX: 'SearchBox',
   SEARCHCOMPONENT: 'SearchComponent'
 };
 
@@ -530,7 +529,8 @@ export function validateSchema(
   passedProperties = {},
   schema = {},
   backendName = '',
-  componentName = ''
+  componentName = '',
+  componentNameForErrorDisplay = ''
 ) {
   const passedPropertiesKeys = Object.keys(passedProperties).filter(
     propertyKey => !!passedProperties[propertyKey]
@@ -552,7 +552,7 @@ export function validateSchema(
   requiredProperties.forEach(requiredProperty => {
     if (!passedPropertiesKeys.includes(requiredProperty)) {
       throw new Error(
-        `${requiredProperty} is required for <${componentName} /> component when used with the ${backendName} Search backend.`
+        `${requiredProperty} is required for <${componentNameForErrorDisplay} /> component when used with the ${backendName} Search backend.`
       );
     }
   });
@@ -561,7 +561,7 @@ export function validateSchema(
   passedPropertiesKeys.forEach(passedPropertyKey => {
     if (!acceptedProperties.includes(passedPropertyKey)) {
       throw new Error(
-        `<${componentName} /> component doesn't accept a property ${passedPropertyKey}.`
+        `<${componentNameForErrorDisplay} /> component doesn't accept a property ${passedPropertyKey}.`
       );
     }
 
@@ -573,7 +573,7 @@ export function validateSchema(
     );
     if (!acceptedTypes.includes(receivedPropertyType)) {
       throw new Error(
-        `<${componentName} /> component accepts a property ${passedPropertyKey} with type(s) [${acceptedTypes.join(
+        `<${componentNameForErrorDisplay} /> component accepts a property ${passedPropertyKey} with type(s) [${acceptedTypes.join(
           ', '
         )}], but type was set as ${receivedPropertyType}.`
       );
