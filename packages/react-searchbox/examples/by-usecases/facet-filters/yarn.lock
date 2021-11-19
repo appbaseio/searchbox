@@ -2,21 +2,29 @@
 # yarn lockfile v1
 
 
-"@appbaseio/react-searchbox-mongodb@*":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox-mongodb/-/react-searchbox-mongodb-0.0.2.tgz#14214edd7fa911feeb1b9707dbc8de39ee15bbcb"
-  integrity sha512-aVqfPyVJenTLoMIrdN/aARJAEX9ME1igHbBP8uT4Usw9EDKfyj4RCMKEANKF6mYGPLh3LP/qqF291GXPwqmDog==
+"@appbaseio/analytics@^2.1.0-beta":
+  version "2.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-2.1.0-beta.tgz#0633486e4bfd4a7760a3dd204a74505d0f5e3810"
+  integrity sha512-99e7SkDVoFW99PEVnpp9n+MM5u7ZTK9hwVAuOJN9fpR7EkftHYEmvCiPf7HzObweb3PwqFjCQT4597cGNNTOgQ==
   dependencies:
-    "@appbaseio/searchbase-mongodb" "0.0.2"
+    cross-fetch "^3.0.4"
+
+"@appbaseio/react-searchbox@1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.5.3.tgz#15f966cd765c7df6e295ce4ad5f19fa916650c97"
+  integrity sha512-VV0aGBVZIu1b1JFU6ysUU/PvfAC/3Fr7TT1MX5WWpUHIREsx2ClIJgZ5GPRC3oRIlCNtnCCIiXOEQTkowEAfyw==
+  dependencies:
+    "@appbaseio/searchbase" "1.5.3"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase-mongodb@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase-mongodb/-/searchbase-mongodb-0.0.2.tgz#341a0be1650f2a5daa16edee1371eb06de1a3422"
-  integrity sha512-/Yep6u15FOvxSfBdG1PP1kSRNT4Bt5B66+tauC4u6U2ofizkOfSiyHpz8Dxqxs9uhSRidTJByb1UY+RF4G7qIQ==
+"@appbaseio/searchbase@1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.3.tgz#d0b8a6f040a62052b681dd1ee18c387c4736dcf8"
+  integrity sha512-edApNVUJKNUh82KBtSq5Tiiil/ktVuBSMpOEpchVMWAziADCqvbTnFOTllMj5CaB6xu2VhUK8ChJzEjlc2hDig==
   dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.14.5", "@babel/code-frame@^7.15.8":
