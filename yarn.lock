@@ -276,18 +276,10 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-native-searchbox@1.6.2-alpha":
+"@appbaseio/searchbase@1.6.2-alpha":
   version "1.6.2-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-native-searchbox/-/react-native-searchbox-1.6.2-alpha.tgz#dd4c01e2b1f210a473829eaed1edf2770e296467"
-  integrity sha512-Q6aQcwoNjOFZ0efXtMP0Sp4OMYnFnsU+wxkbugjZ8NUJupV+Ca3iJtePUFXadY5qy+Gc8oOwWcxv+gFKwUg/xg==
-  dependencies:
-    "@appbaseio/searchbase" "^1.6.2-alpha"
-    color "^3.1.3"
-
-"@appbaseio/searchbase@1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.3.tgz#d0b8a6f040a62052b681dd1ee18c387c4736dcf8"
-  integrity sha512-edApNVUJKNUh82KBtSq5Tiiil/ktVuBSMpOEpchVMWAziADCqvbTnFOTllMj5CaB6xu2VhUK8ChJzEjlc2hDig==
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.6.2-alpha.tgz#d502d639ae02223a59199ab29c48d76173c8f21e"
+  integrity sha512-cvz3Q9ZxwXSc3VGCG58EPLkjfkVxvz9HGhYKpx7iAlUTweZ1ef0Wk3xTAFhKuuSDya8Sg7uRD1Ek8E/tvD0lcg==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -307,18 +299,6 @@
   dependencies:
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
-
-"@appbaseio/vue-searchbox@1.6.3-alpha":
-  version "1.6.3-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.6.3-alpha.tgz#3d0d59cb92199f57365c91e171a3b76dbfccb676"
-  integrity sha512-dFWK8qAjxDUTfmSgKMaL/16/IcxGPP9VwddG8m5DOHSkDlAsU047sKcR3wnbaEj5JFyM1+larbLAEBzrl1g5Xg==
-  dependencies:
-    "@appbaseio/searchbase" "1.6.2-alpha"
-    "@appbaseio/vue-emotion" "^0.4.4"
-    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
-    compute-scroll-into-view "^1.0.11"
-    emotion "9.2.12"
-    vue-types "^1.6.0"
 
 "@babel/code-frame@7.10.4", "@babel/code-frame@~7.10.4":
   version "7.10.4"
