@@ -14,22 +14,16 @@ const STATUS = {
 
 const Icon = props => {
   const { status, ...rest } = props;
-  let url;
-  if (!window.SpeechRecognition) {
-    url =
-      'https://cdn3.iconfinder.com/data/icons/glypho-music-and-sound/64/microphone-off-512.png';
-  }
 
   switch (status) {
-			case STATUS.active:
-				return <ListenSvg {...rest} />;
-			case STATUS.stopped:
-			case STATUS.denied:
-				return <MuteSvg {...rest}  />;
-			default:
-				return <MicSvg {...rest}  />;
-		}
-
+    case STATUS.active:
+      return <ListenSvg {...rest} />;
+    case STATUS.stopped:
+    case STATUS.denied:
+      return <MuteSvg {...rest} />;
+    default:
+      return <MicSvg {...rest} />;
+  }
 };
 
 class Mic extends Component {
@@ -64,8 +58,7 @@ class Mic extends Component {
     const hasCustomRenderer = hcr(this.props);
 
     return (
-      <IconWrapper
-      >
+      <IconWrapper>
         {hasCustomRenderer ? (
           getComponent()
         ) : (

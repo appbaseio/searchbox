@@ -97,8 +97,8 @@ class SearchComponent extends React.Component {
       rankFeature,
       enableRecentSearches,
       applyStopwords,
-      stopwords,
-      maxPopularSuggestions
+      maxPopularSuggestions,
+      stopwords
     } = this.props;
     let { value } = this.props;
     if (window && window.location && window.location.search) {
