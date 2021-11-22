@@ -97,6 +97,7 @@ class SearchComponent extends React.Component {
       rankFeature,
       enableRecentSearches,
       applyStopwords,
+      maxPopularSuggestions,
       stopwords
     } = this.props;
     let { value } = this.props;
@@ -325,7 +326,7 @@ SearchComponent.propTypes = {
   highlightConfig: object,
   // meta info about instantiated component
   componentName: PropTypes.oneOf(['SearchBox', 'SearchComponent']),
-  mongodb: object
+  mongodb: object,
   recentSuggestionsConfig: object,
   popularSuggestionsConfig: object,
   maxPredictedWords: number,
