@@ -1,7 +1,7 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
 import { btoa, validateSchema, backendAlias, componentsAlias } from './utils';
-import type { AppbaseSettings, BaseConfig } from './types';
+import type { AppbaseSettings, BaseConfig } from './types.js.flow';
 import SCHEMA from './schema/index';
 
 /**

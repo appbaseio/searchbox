@@ -24,7 +24,8 @@ class Aggregations {
   setRaw(rawResponse: Object) {
     // set response
     this.raw = rawResponse;
-    if (rawResponse?.after_key) this.setAfterKey(rawResponse.after_key);
+    if (rawResponse && rawResponse.after_key)
+      this.setAfterKey(rawResponse.after_key);
   }
 
   setAfterKey(key: Object) {

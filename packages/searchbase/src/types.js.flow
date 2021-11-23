@@ -29,7 +29,8 @@ export type AppbaseSettings = {
   recordAnalytics?: boolean,
   enableQueryRules?: boolean,
   userId?: string,
-  customEvents?: Object
+  customEvents?: Object,
+  enableTelemetry?: boolean
 };
 
 export type BaseConfig = {
@@ -38,6 +39,7 @@ export type BaseConfig = {
   credentials: string,
   mongodb: Object,
   appbaseConfig?: AppbaseSettings,
+  enableTelemetry?: boolean,
   headers: Object,
   transformRequest?: (requestOptions: Object) => Promise<Object>,
   transformResponse?: (response: any) => Promise<any>

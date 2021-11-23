@@ -74,7 +74,8 @@ export default {
       ],
       plugins: [
         '@babel/plugin-transform-flow-strip-types',
-        '@babel/plugin-proposal-class-properties'
+        ['@babel/plugin-proposal-private-methods', { loose: true }],
+        ['@babel/plugin-proposal-class-properties', { loose: true }]
       ]
     }),
     umd ? builtins() : {},
