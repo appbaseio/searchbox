@@ -9,20 +9,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@1.6.4-alpha":
-  version "1.6.4-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.6.4-alpha.tgz#38982d7df64ee8ca230351caabca49e36121b745"
-  integrity sha512-eRs447SIkuaIuh5c2m6bxtooW9IjAEKTZpWnRTo9vTMCQNNco4a9lJQdhdnk6yTotVdNMcKG5VOs+Gf1V9p21g==
+"@appbaseio/react-searchbox@1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.5.3.tgz#15f966cd765c7df6e295ce4ad5f19fa916650c97"
+  integrity sha512-VV0aGBVZIu1b1JFU6ysUU/PvfAC/3Fr7TT1MX5WWpUHIREsx2ClIJgZ5GPRC3oRIlCNtnCCIiXOEQTkowEAfyw==
   dependencies:
-    "@appbaseio/searchbase" "1.6.2-alpha"
+    "@appbaseio/searchbase" "1.5.3"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@1.6.2-alpha":
-  version "1.6.2-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.6.2-alpha.tgz#d502d639ae02223a59199ab29c48d76173c8f21e"
-  integrity sha512-cvz3Q9ZxwXSc3VGCG58EPLkjfkVxvz9HGhYKpx7iAlUTweZ1ef0Wk3xTAFhKuuSDya8Sg7uRD1Ek8E/tvD0lcg==
+"@appbaseio/searchbase@1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.3.tgz#d0b8a6f040a62052b681dd1ee18c387c4736dcf8"
+  integrity sha512-edApNVUJKNUh82KBtSq5Tiiil/ktVuBSMpOEpchVMWAziADCqvbTnFOTllMj5CaB6xu2VhUK8ChJzEjlc2hDig==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -8291,9 +8291,9 @@ uri-js@^4.2.2:
     punycode "^2.1.0"
 
 urijs@^1.16.1:
-  version "1.19.6"
-  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.6.tgz#51f8cb17ca16faefb20b9a31ac60f84aa2b7c870"
-  integrity sha512-eSXsXZ2jLvGWeLYlQA3Gh36BcjF+0amo92+wHPyN1mdR8Nxf75fuEuYTd9c0a+m/vhCjRK0ESlE9YNLW+E1VEw==
+  version "1.19.7"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.7.tgz#4f594e59113928fea63c00ce688fb395b1168ab9"
+  integrity sha512-Id+IKjdU0Hx+7Zx717jwLPsPeUqz7rAtuVBRLLs+qn+J2nf9NGITWVCxcijgYxBqe83C7sqsQPs6H1pyz3x9gA==
 
 urix@^0.1.0:
   version "0.1.0"
