@@ -1,6 +1,6 @@
 {
     "name": "@appbaseio/react-native-searchbox",
-    "version": "1.6.3-alpha",
+    "version": "1.5.3",
     "description": "Lightweight searchbox component for React Native",
     "main": "src/index.js",
     "scripts": {

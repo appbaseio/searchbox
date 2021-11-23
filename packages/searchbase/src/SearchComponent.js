@@ -295,11 +295,18 @@ class SearchComponent extends Base {
     const schema = SCHEMA[backendName];
     validateSchema(
       {
+        index,
+        url,
+        credentials,
+        mongodb,
+        appbaseConfig,
+        headers,
+        transformRequest,
+        transformResponse,
         enablePopularSuggestions,
         enablePredictiveSuggestions,
         autocompleteField,
         highlightConfig,
-        mongodb,
         ...rsAPIConfig
       },
       schema,
@@ -1063,7 +1070,7 @@ class SearchComponent extends Base {
               ...(!this.mongodb ? { 'x-timestamp': timestamp } : {})
             }
           };
-          const index = this._getSearchIndex(isPopularSuggestionsAPI);
+          const index = this._getSearchIndex();
           return fetch(
             `${this.url}${this.mongodb ? '' : `/${index}/${suffix}`}`,
             requestOptionsWithHeader
