@@ -9,20 +9,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@1.6.4-alpha":
-  version "1.6.4-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.6.4-alpha.tgz#38982d7df64ee8ca230351caabca49e36121b745"
-  integrity sha512-eRs447SIkuaIuh5c2m6bxtooW9IjAEKTZpWnRTo9vTMCQNNco4a9lJQdhdnk6yTotVdNMcKG5VOs+Gf1V9p21g==
+"@appbaseio/react-searchbox@1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.5.3.tgz#15f966cd765c7df6e295ce4ad5f19fa916650c97"
+  integrity sha512-VV0aGBVZIu1b1JFU6ysUU/PvfAC/3Fr7TT1MX5WWpUHIREsx2ClIJgZ5GPRC3oRIlCNtnCCIiXOEQTkowEAfyw==
   dependencies:
-    "@appbaseio/searchbase" "1.6.2-alpha"
+    "@appbaseio/searchbase" "1.5.3"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@1.6.2-alpha":
-  version "1.6.2-alpha"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.6.2-alpha.tgz#d502d639ae02223a59199ab29c48d76173c8f21e"
-  integrity sha512-cvz3Q9ZxwXSc3VGCG58EPLkjfkVxvz9HGhYKpx7iAlUTweZ1ef0Wk3xTAFhKuuSDya8Sg7uRD1Ek8E/tvD0lcg==
+"@appbaseio/searchbase@1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.3.tgz#d0b8a6f040a62052b681dd1ee18c387c4736dcf8"
+  integrity sha512-edApNVUJKNUh82KBtSq5Tiiil/ktVuBSMpOEpchVMWAziADCqvbTnFOTllMj5CaB6xu2VhUK8ChJzEjlc2hDig==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -2646,9 +2646,9 @@ dns-equal@^1.0.0:
   integrity sha1-s55/HabrCnW6nBcySzR1PEfgZU0=
 
 dns-packet@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/dns-packet/-/dns-packet-1.3.1.tgz#12aa426981075be500b910eedcd0b47dd7deda5a"
-  integrity sha512-0UxfQkMhYAUaZI+xrNZOz/as5KgDU0M/fQ9b6SpkyLbk3GEswDi6PADJVaYJradtRVsRIlF1zLyOodbcTCDzUg==
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/dns-packet/-/dns-packet-1.3.4.tgz#e3455065824a2507ba886c55a89963bb107dec6f"
+  integrity sha512-BQ6F4vycLXBvdrJZ6S3gZewt6rcrks9KBgM9vrhW+knGRqc8uEdT7fuCwloc7nny5xNoMJ17HGH0R/6fpo8ECA==
   dependencies:
     ip "^1.1.0"
     safe-buffer "^5.0.1"
