@@ -6,6 +6,7 @@
     "packages/*",
     "packages/searchbase/examples/*",
     "packages/vue-searchbox/examples/*",
+    "packages/vue-searchbox/examples/by-usecases/*",
     "packages/react-searchbox/examples/*",
     "packages/react-searchbox/examples/by-usecases/*",
     "packages/native/examples/*",
