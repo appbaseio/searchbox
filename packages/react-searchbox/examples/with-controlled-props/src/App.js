@@ -17,7 +17,7 @@ export class App extends Component {
       <div>
         <div>
           <h2>
-            React Searchbox Demo{`${this.state.text}`}
+            React Searchbox Demo
             <span style={{ fontSize: '1rem' }}>
               <a
                 href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
@@ -51,6 +51,8 @@ export class App extends Component {
                   text: value
                 },
                 () => {
+                  // to fetch the suggestions
+                  // searchComponent.triggerDefaultQuery();
                   // To update results
                   searchComponent.triggerCustomQuery();
                 }
