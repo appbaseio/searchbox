@@ -180,7 +180,7 @@ new Autocomplete('#autocomplete', {
   onSubmit: result => {
     if (result) {
       console.log('Selected', result);
-      searchComponent.setValue(input.value, {
+      searchComponent.setValue(input.name, {
         // Trigger query for dependent components to update results
         triggerDefaultQuery: false,
         triggerCustomQuery: true
