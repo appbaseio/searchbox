@@ -163,7 +163,7 @@ new Autocomplete('#autocomplete', {
   search: () => {
     return searchComponent.results?.data ?? [];
   },
-  getResultValue: result => result.label,
+  getResultValue: result => result.name,
   renderResult: (result, props) => `
     <li ${props}>
       <div class="suggestion">
@@ -180,7 +180,7 @@ new Autocomplete('#autocomplete', {
   onSubmit: result => {
     if (result) {
       console.log('Selected', result);
-      searchComponent.setValue(input.name, {
+      searchComponent.setValue(input.value, {
         // Trigger query for dependent components to update results
         triggerDefaultQuery: false,
         triggerCustomQuery: true
