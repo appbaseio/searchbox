@@ -82,9 +82,7 @@
                         <div>
                           <div>
                             by
-                            <span class="authors-list">{{
-                              item.authors
-                            }}</span>
+                            <span class="authors-list">{{ item.authors }}</span>
                           </div>
                           <div class="ratings-list flex align-center">
                             <span class="stars">
@@ -146,11 +144,11 @@ export default {
     Paginate
   },
   data() {
-		const state = {
-			text: ''
-		};
-		return state;
-	},
+    const state = {
+      text: ''
+    };
+    return state;
+  },
   methods: {
     isChecked(value, key) {
       return value ? value.includes(key) : false;
@@ -158,7 +156,7 @@ export default {
     handleChange(value, searchComponent, e) {
       this.$data.text = value;
       // To fetch suggestions
-      // searchComponent.triggerDefaultQuery();
+      searchComponent.triggerDefaultQuery();
       // To update results
       searchComponent.triggerCustomQuery();
     },
@@ -177,7 +175,7 @@ export default {
     },
     handleKeyUp(searchComponent, e) {
       // console.log('handleKeyUp called ==>> ', searchComponent, e);
-    },
+    }
   }
 };
 </script>
