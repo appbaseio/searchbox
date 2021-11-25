@@ -635,7 +635,7 @@ const SearchBox = {
 				{title && (
 					<Title class={getClassName(innerClass, 'title') || ''}>{title}</Title>
 				)}
-				{hasSuggestions || autosuggest ? (
+				{hasSuggestions && autosuggest ? (
 					<DownShift
 						id="searchbox-downshift"
 						handleChange={this.onSuggestionSelected}
