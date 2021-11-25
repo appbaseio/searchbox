@@ -43,6 +43,7 @@ export class App extends Component {
             title="Search"
             placeholder="Search for Books"
             size={5}
+            autosuggest={false}
             value={this.state.text}
             onChange={(value, searchComponent, e) => {
               // Perform actions after updating the value
