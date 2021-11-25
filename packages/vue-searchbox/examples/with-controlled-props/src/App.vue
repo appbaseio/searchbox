@@ -156,7 +156,7 @@ export default {
     handleChange(value, searchComponent, e) {
       this.$data.text = value;
       // To fetch suggestions
-      searchComponent.triggerDefaultQuery();
+      // searchComponent.triggerDefaultQuery();
       // To update results
       searchComponent.triggerCustomQuery();
     },

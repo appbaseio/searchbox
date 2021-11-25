@@ -366,7 +366,7 @@ export function validateSchema(
   passedPropertiesKeys.forEach(passedPropertyKey => {
     if (!acceptedProperties.includes(passedPropertyKey)) {
       throw new Error(
-        `<${componentNameForErrorDisplay} /> component doesn't accept a property ${passedPropertyKey}.`
+        `<${componentNameForErrorDisplay} /> component doesn't accept a property ${passedPropertyKey}, backend used is ${backendName}.`
       );
     }
 
