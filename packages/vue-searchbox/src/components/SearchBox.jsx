@@ -208,9 +208,10 @@ const SearchBox = {
 			if (!instanceValue && defaultSuggestions) {
 				return defaultSuggestions;
 			}
-			const {
-				results: { data: suggestions }
-			} = this.getComponentInstance();
+			const suggestions = this.getComponentInstance().mongodb
+				? this.getComponentInstance().suggestions
+				: this.getComponentInstance()?.results?.data;
+
 			return suggestions;
 		},
 		_applySetter(prev, next, setterFunc) {
@@ -689,7 +690,8 @@ const SearchBox = {
 															}}
 														>
 															{item._suggestion_type
-                              !== suggestionTypes.Index ? (
+                                !== suggestionTypes.Index
+                              && item._suggestion_type !== undefined ? (
 																	<div
 																		style={{
 																			padding: '0 10px 0 0',
