@@ -23,6 +23,7 @@
       <div>
         <search-box
           id="search-component"
+          index="custom"
           :dataField="[
             {
               field: 'description',
