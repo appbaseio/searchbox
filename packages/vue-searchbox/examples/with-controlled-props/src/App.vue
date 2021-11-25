@@ -163,19 +163,19 @@ export default {
     },
     handleBlur(searchComponent, e) {
       // searchComponent.triggerCustomQuery();
-      // console.log('handleBlur called ==>> ', searchComponent, e);
+      window.console.log('handleBlur called ==>> ', searchComponent, e);
     },
     handleKeyPress(searchComponent, e) {
-      // console.log('handleKeyPress called ==>> ', searchComponent, e);
+      window.console.log('handleKeyPress called ==>> ', searchComponent, e);
     },
     handleFocus(searchComponent, e) {
-      // console.log('handleFocus called ==>> ', searchComponent, e);
+      window.console.log('handleFocus called ==>> ', searchComponent, e);
     },
     handleKeyDown(searchComponent, e) {
-      // console.log('handleKeyDown called ==>> ', searchComponent, e);
+      window.console.log('handleKeyDown called ==>> ', searchComponent, e);
     },
     handleKeyUp(searchComponent, e) {
-      // console.log('handleKeyUp called ==>> ', searchComponent, e);
+      window.console.log('handleKeyUp called ==>> ', searchComponent, e);
     }
   }
 };

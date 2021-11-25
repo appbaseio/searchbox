@@ -37,6 +37,7 @@
               weight: 3
             }
           ]"
+          distinctField="original_title.keyword"
           title="Search"
           placeholder="Search for Books"
         />
