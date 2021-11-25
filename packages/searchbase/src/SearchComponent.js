@@ -27,7 +27,8 @@ import {
   searchBaseMappings,
   backendAlias,
   validateSchema,
-  componentsAlias
+  componentsAlias,
+  getSuggestions
 } from './utils';
 
 import SCHEMA from './schema/index';
@@ -372,7 +373,8 @@ class SearchComponent extends Base {
     }
 
     this.id = id;
-    this.type = type;
+    this.type =
+      mongodb && type === queryTypes.Suggestion ? queryTypes.Search : type;
     this.react = react;
     this.queryFormat = queryFormat;
     this.dataField = dataField;
@@ -487,6 +489,43 @@ class SearchComponent extends Base {
     const { recordAnalytics, customEvents, enableQueryRules, userId } =
       this.appbaseConfig || {};
     return { recordAnalytics, customEvents, enableQueryRules, userId };
+  }
+
+  // To remove when mongo-backend starts supporting type:suggestion
+  // To get the parsed suggestions from the results
+  get suggestions(): Array<Object> {
+    if (this.type && this.type !== queryTypes.Search) {
+      return [];
+    }
+    if (this.results) {
+      let fields = getNormalizedField(this.dataField) || [];
+      if (
+        fields.length === 0 &&
+        this.results.data &&
+        Array.isArray(this.results.data) &&
+        this.results.data.length > 0 &&
+        this.results.data[0]
+      ) {
+        // Extract fields from _source
+        fields = Object.keys(this.results.data[0]).filter(
+          key =>
+            !['_id', '_click_id', '_index', '_score', '_type'].includes(key)
+        );
+      }
+      if (this.enablePopularSuggestions) {
+        // extract suggestions from popular suggestion fields too
+        fields = [...fields];
+      }
+      return getSuggestions(
+        fields,
+        this.results.data,
+        this.value,
+        this.showDistinctSuggestions,
+        this.enablePredictiveSuggestions
+      );
+      // .slice(0, this.size);
+    }
+    return [];
   }
 
   // Method to get the raw query based on the current state
@@ -1048,13 +1087,14 @@ class SearchComponent extends Base {
       method: 'POST',
       body: JSON.stringify({
         ...requestBody,
-        ...(!!this.mongodb && { mongodb: this._getMongoRequest() })
+        ...(!!this.mongodb && {
+          mongodb: this._getMongoRequest()
+        })
       }),
       headers: {
         ...this.headers
       }
     };
-
     return new Promise((resolve, reject) => {
       this._handleTransformRequest(requestOptions)
         .then(finalRequestOptions => {
@@ -1225,7 +1265,8 @@ class SearchComponent extends Base {
       this.aggregationData.setRaw(aggsResponse[aggregationField]);
       this.aggregationData.setData(
         aggregationField,
-        aggsResponse[aggregationField]?.buckets,
+        aggsResponse[aggregationField] &&
+          aggsResponse[aggregationField].buckets,
         this.preserveResults && append
       );
       this._applyOptions(

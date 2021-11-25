@@ -142,8 +142,9 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance?.results?.data ?? [];
-
+    const suggestions = this.componentInstance.mongodb
+      ? this.componentInstance.suggestions
+      : this.componentInstance?.results?.data ?? [];
     return suggestions;
   }
 
@@ -680,7 +681,8 @@ class SearchBox extends React.Component {
                   alignItems: 'stretch'
                 }}
               >
-                {item._suggestion_type !== suggestionTypes.Index ? (
+                {item._suggestion_type !== suggestionTypes.Index &&
+                item._suggestion_type !== undefined ? (
                   <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
                     <CustomSvg
                       iconId={`${index + 1}-${item.value}-icon`}
