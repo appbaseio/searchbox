@@ -47,6 +47,7 @@
           @focus="handleFocus"
           @key-down="handleKeyDown"
           @key-up="handleKeyUp"
+          :autosuggest="false"
         />
         <div>
           <search-component
