@@ -745,7 +745,7 @@ class SearchBox extends React.Component {
             {title}
           </Title>
         )}
-        {hasSuggestions || autosuggest ? (
+        {hasSuggestions && autosuggest ? (
           <Downshift
             onChange={this.onSuggestionSelected}
             onStateChange={this.handleStateChange}
