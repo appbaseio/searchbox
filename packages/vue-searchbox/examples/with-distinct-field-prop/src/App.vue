@@ -100,7 +100,9 @@
                             >
                             <span class="avg-rating"
                               >({{
-                                item.inner_hits.other_books.hits.hits.length
+                                item.inner_hits
+                                  ? item.inner_hits.other_books.hits.hits.length
+                                  : '-'
                               }}
                               length)</span
                             >
@@ -112,7 +114,11 @@
                       </div>
                     </div>
                     <div
-                      v-if="item.inner_hits.other_books.hits.hits.length > 1"
+                      v-if="
+                        item.inner_hits
+                          ? item.inner_hits.other_books.hits.hits.length > 1
+                          : false
+                      "
                       class="flex other-books-container"
                     >
                       <div class="flex row other-books-header">
