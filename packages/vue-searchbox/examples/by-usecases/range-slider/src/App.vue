@@ -82,6 +82,12 @@
                       >
                         #{{ item.property_type }}
                       </span>
+                      &nbsp;
+                      <span
+                        style="background: #efefef;padding: 3;border-radius: 3;margin-top: 10; margin-bottom: 10;width: auto;padding: 3px;"
+                      >
+                        Accomodates <b>{{ item.accommodates }}</b>
+                      </span>
                     </div>
                   </div>
                   <div class="pagination-wrapper">

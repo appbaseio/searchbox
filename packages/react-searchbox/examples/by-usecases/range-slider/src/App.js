@@ -140,7 +140,6 @@ export default () => (
                               Math.min(160, item.description.length)
                             )}
                           </p>
-
                           <span
                             style={{
                               background: '#efefef',
@@ -152,6 +151,19 @@ export default () => (
                             }}
                           >
                             #{item.property_type}
+                          </span>
+                          &nbsp;
+                          <span
+                            style={{
+                              background: '#efefef',
+                              padding: 3,
+                              borderRadius: 3,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              width: 'auto'
+                            }}
+                          >
+                            Accomodates {item.accomodates}
                           </span>
                         </div>
                       ))}
