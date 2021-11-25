@@ -6,7 +6,8 @@
         <a
           href="https://docs.appbase.io/docs/reactivesearch/vue-searchbox/apireference/"
           target="_blank"
-        >API reference</a>
+          >API reference</a
+        >
       </span>
     </h2>
     <search-base
@@ -82,7 +83,10 @@
                   {{ results.time }}ms
                 </p>
                 <div v-if="!loading && !error">
-                  <v-client-table :data="results.data" :columns="columns" :options="options"></v-client-table>
+                  <v-client-table
+                    :data="results.data"
+                    :columns="columns"
+                  ></v-client-table>
                   <div class="pagination-wrapper">
                     <paginate
                       v-if="results.numberOfResults"
