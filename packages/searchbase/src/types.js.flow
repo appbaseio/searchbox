@@ -52,6 +52,10 @@ export type ComponentConfig = BaseConfig & {
   enablePredictiveSuggestions: boolean,
   preserveResults: boolean,
   maxPopularSuggestions: number,
+  autocompleteField: string | Array<string | DataField>,
+  highlightConfig: Object,
+  componentName:string,
+  after: Object,
   results: Array<Object>,
   beforeValueChange: (value: string) => Promise<any>,
   // called when value changes

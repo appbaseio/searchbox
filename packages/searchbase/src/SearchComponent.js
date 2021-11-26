@@ -8,7 +8,7 @@ import type {
   AppbaseSettings,
   GenerateQueryResponse,
   MicStatusField
-} from './types';
+} from './types.js.flow';
 import Observable from './Observable';
 import Base from './Base';
 import SearchBase from './SearchBase';
@@ -1216,6 +1216,9 @@ class SearchComponent extends Base {
                 // Set the execute to `false` for dependent components
                 const query = dependentComponent.componentQuery;
                 query.execute = false;
+                if (query.type === queryTypes.Suggestion) {
+                  query.type = queryTypes.Search;
+                }
                 // Add the query to request payload
                 requestQuery[id] = query;
               }
