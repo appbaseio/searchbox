@@ -77,7 +77,8 @@ export type ComponentConfig = BaseConfig & {
   onQueryChange: (next: string, prev: string) => void,
 
   // called when mic status changes
-  onMicStatusChange: (next: string, prev: string) => void
+  onMicStatusChange: (next: string, prev: string) => void,
+  ...rsAPIConfig
 };
 
 export type SearchBaseConfig = BaseConfig & {
