@@ -48,16 +48,19 @@
           :URLParams="true"
           class="custom-class"
           :size="5"
-          :maxPopularSuggestions="2"
-          :maxRecentSearches="3"
-          :enablePopularSuggestions="true"
-          :enableRecentSearches="true"
           iconPosition="left"
-          :popularSuggestionsConfig="{ size: 10, showGlobal: true }"
-          :showDistinctSuggestions="true"
-          :enablePredictiveSuggestions="false"
-          :maxPredictedWords="2"
-          :recentSuggestionsConfig="{ size: 5 }"
+          :enablePopularSuggestions="true"
+          :popularSuggestionsConfig="{
+            size: 3,
+            minChars: 2,
+            index: 'good-books-ds'
+          }"
+          :enableRecentSuggestions="true"
+          :recentSuggestionsConfig="{
+            size: 3,
+            minHits: 2,
+            index: 'good-books-ds'
+          }"
         />
         <div class="row">
           <div class="col">

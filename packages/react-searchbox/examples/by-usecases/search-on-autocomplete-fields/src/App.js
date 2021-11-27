@@ -34,6 +34,7 @@ export default () => (
 
       <SearchBox
         id="search-component"
+        index="custom"
         dataField={[
           {
             field: 'description',

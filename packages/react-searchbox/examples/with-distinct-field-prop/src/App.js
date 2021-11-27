@@ -53,6 +53,7 @@ export default () => (
         title="Search"
         placeholder="Search for Books"
         style={{ paddingBottom: 10 }}
+        distinctField="original_title.keyword"
       />
       <div>
         <SearchComponent

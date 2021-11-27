@@ -99,6 +99,8 @@ export type ComponentConfig = BaseConfig & {
 
   autocompleteField?: string | Array<string | DataField>;
 
+  componentName?: string;
+
   highlightConfig?: Object;
 
   categoryField?: string;

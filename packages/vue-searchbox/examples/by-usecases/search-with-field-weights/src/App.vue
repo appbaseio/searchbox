@@ -42,10 +42,6 @@
           :URLParams="true"
           class="custom-class"
           :size="5"
-          :maxPopularSuggestions="2"
-          :maxRecentSearches="3"
-          :enablePopularSuggestions="true"
-          :enableRecentSearches="true"
           iconPosition="left"
         />
         <search-component

@@ -161,18 +161,18 @@ searchComponent.onValueChange = value => {
 // eslint-disable-next-line
 new Autocomplete('#autocomplete', {
   search: () => {
-    return searchComponent.suggestions;
+    return searchComponent.results?.data ?? [];
   },
-  getResultValue: result => result.label,
+  getResultValue: result => result.name,
   renderResult: (result, props) => `
     <li ${props}>
       <div class="suggestion">
         <div>
-          <img src=${result.source.avatar} alt=${result.label} />
+          <img src=${result.avatar} alt=${result.name} />
         </div>
         <div>
-        <h4>${result.label}</h4>
-        <p>${result.source.description}</p>
+        <h4>${result.name}</h4>
+        <p>${result.description}</p>
         </div>
       </div>
     </li>

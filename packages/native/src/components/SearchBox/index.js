@@ -187,7 +187,9 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance?.results?.data ?? [];
+    const suggestions = this.componentInstance.mongodb
+      ? this.componentInstance.suggestions
+      : this.componentInstance?.results?.data ?? [];
     return suggestions;
   }
 

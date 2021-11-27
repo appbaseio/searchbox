@@ -10,7 +10,7 @@ ReactDOM.render(
     url="https://appbase-demo-ansible-abxiydt-arc.searchbase.io"
     appbaseConfig={{
       recordAnalytics: true,
-      enableQueryRules: true,
+      enableQueryRules: false,
       userId: 'jon@appbase.io',
       customEvents: {
         platform: 'ios',
