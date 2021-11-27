@@ -106,7 +106,12 @@ export default () => (
             highlight
             dataField="original_title"
             size={5}
-            includeFields={['name', 'description', 'property_type']}
+            includeFields={[
+              'name',
+              'description',
+              'property_type',
+              'accomodates'
+            ]}
             react={{
               and: ['facet-component']
             }}
