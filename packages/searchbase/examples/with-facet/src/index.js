@@ -40,7 +40,9 @@ const searchComponent = searchbase.register('search-component', {
   // dataField: ['name', 'description', 'name.raw', 'fullname', 'owner', 'topics'],
   clearOnQueryChange: true,
   enablePredictiveSuggestions: true,
-  size: 5
+  size: 5,
+  type: 'suggestion',
+  showDistinctSuggestions: true
 });
 
 // Register filter component with dependency on search component
@@ -163,15 +165,15 @@ new Autocomplete('#autocomplete', {
   search: () => {
     return searchComponent.results?.data ?? [];
   },
-  getResultValue: result => result.name,
+  getResultValue: result => result.value,
   renderResult: (result, props) => `
     <li ${props}>
       <div class="suggestion">
         <div>
-          <img src=${result.avatar} alt=${result.name} />
+          <img src=${result.avatar} alt=${result.value} />
         </div>
         <div>
-        <h4>${result.name}</h4>
+        <h4>${result.label}</h4>
         <p>${result.description}</p>
         </div>
       </div>
