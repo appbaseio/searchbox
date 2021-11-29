@@ -128,7 +128,7 @@ export default {
     VueSlider
   },
   data() {
-    return { internalValue: [0, 16] };
+    return { internalValue: [1, 16] };
   },
   methods: {
     handleChange(newValue, setValue) {
