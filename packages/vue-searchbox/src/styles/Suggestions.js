@@ -12,7 +12,7 @@ const suggestions = css`
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 400px;
+  max-height: 405px;
   overflow-y: auto;
   box-sizing: border-box;
 
