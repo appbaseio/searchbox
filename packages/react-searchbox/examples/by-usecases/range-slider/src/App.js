@@ -42,7 +42,7 @@ export default () => (
             size={0}
             // To initialize with default value
             value={{
-              start: 0,
+              start: 1,
               end: 16
             }}
             render={({ results, loading, value, setValue }) => {
