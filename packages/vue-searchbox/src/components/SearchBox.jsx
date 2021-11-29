@@ -689,28 +689,24 @@ const SearchBox = {
 																alignItems: 'center'
 															}}
 														>
-															{item._suggestion_type
-                                !== suggestionTypes.Index
-                              && item._suggestion_type !== undefined ? (
-																	<div
-																		style={{
-																			padding: '0 10px 0 0',
-																			display: 'flex'
-																		}}
-																	>
-																		<CustomSvg
-																			iconId={`${index + 1}-${item.value}-icon`}
-																			className={
-																				getClassName(
-																					innerClass,
-																					`${item._suggestion_type}-search-icon`
-																				) || null
-																			}
-																			icon={getIcon(item._suggestion_type)}
-																			type={`${item._suggestion_type}-search-icon`}
-																		/>
-																	</div>
-																) : null}
+															<div
+																style={{
+																	padding: '0 10px 0 0',
+																	display: 'flex'
+																}}
+															>
+																<CustomSvg
+																	iconId={`${index + 1}-${item.value}-icon`}
+																	className={
+																		getClassName(
+																			innerClass,
+																			`${item._suggestion_type}-search-icon`
+																		) || null
+																	}
+																	icon={getIcon(item._suggestion_type)}
+																	type={`${item._suggestion_type}-search-icon`}
+																/>
+															</div>
 															<SuggestionItem
 																currentValue={instanceValue}
 																suggestion={item}
