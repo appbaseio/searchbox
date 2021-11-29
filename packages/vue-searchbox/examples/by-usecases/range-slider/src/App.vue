@@ -34,7 +34,7 @@
                 <h3>How many people you want to accommodate?</h3>
                 <vue-slider
                   :value="internalValue"
-                  :min="0"
+                  :min="1"
                   :max="16"
                   @change="newVal => handleChange(newVal, setValue)"
                 />
@@ -86,7 +86,7 @@
                       <span
                         style="background: #efefef;padding: 3;border-radius: 3;margin-top: 10; margin-bottom: 10;width: auto;padding: 3px;"
                       >
-                        Accomodates <b>{{ item.accommodates }}</b>
+                        Accommodates <b>{{ item.accommodates }}</b>
                       </span>
                     </div>
                   </div>

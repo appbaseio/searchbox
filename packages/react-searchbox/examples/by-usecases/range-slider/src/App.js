@@ -54,7 +54,7 @@ export default () => (
                     <div style={{ marginTop: 20 }}>
                       {results.raw && (
                         <Rheostat
-                          min={0}
+                          min={1}
                           max={16}
                           values={[value.start, value.end]}
                           handle={({ style, ...passProps }) => {
@@ -168,7 +168,7 @@ export default () => (
                               width: 'auto'
                             }}
                           >
-                            Accomodates {item.accomodates}
+                            Accommodates {item.accommodates}
                           </span>
                         </div>
                       ))}
