@@ -110,7 +110,7 @@ export default () => (
               'name',
               'description',
               'property_type',
-              'accomodates'
+              'accommodates'
             ]}
             react={{
               and: ['facet-component']
