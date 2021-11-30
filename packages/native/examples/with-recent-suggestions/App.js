@@ -104,7 +104,12 @@ export default function App() {
             setResetPagination(true);
           }}
           renderNoSuggestion={() => <Text>No suggestions found</Text>}
-          enablePredictiveSuggestions
+          enableRecentSuggestions
+          recentSuggestionsConfig={{
+            size: 3,
+            minHits: 2,
+            index: 'good-books-ds'
+          }}
           autosuggest
         />
         <SearchComponent
