@@ -11,11 +11,11 @@ import './styles.css';
 
 export default () => (
   <SearchBase
-    index="default"
     url="https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/public-demo-skxjb/service/http_endpoint/incoming_webhook/reactivesearch"
     mongodb={{
       db: 'sample_airbnb',
-      collection: 'listingsAndReviews'
+      collection: 'listingsAndReviews',
+      index: 'custom'
     }}
   >
     <div>
@@ -34,7 +34,12 @@ export default () => (
 
       <SearchBox
         id="search-component"
-        index="custom"
+        dataField={[
+          {
+            field: 'name',
+            weight: 3
+          }
+        ]}
         autocompleteField={[
           {
             field: 'name',
@@ -48,12 +53,13 @@ export default () => (
       <SearchComponent
         id="result-component"
         highlight
-        dataField="original_title"
+        dataField="name"
         size={5}
         includeFields={['name', 'description', 'property_type']}
         react={{
           and: ['search-component']
         }}
+        index="custom"
       >
         {({ results, loading, size, setValue, setFrom }) => {
           return (
@@ -102,7 +108,7 @@ export default () => (
               )}
               <ReactPaginate
                 pageCount={Math.floor(results.numberOfResults / size)}
-                onPageChange={({ selected }) => setFrom((selected + 1) * size)}
+                onPageChange={({ selected }) => setFrom(selected * size)}
                 previousLabel="previous"
                 nextLabel="next"
                 breakLabel="..."

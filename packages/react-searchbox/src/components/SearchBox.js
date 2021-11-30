@@ -56,6 +56,7 @@ import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
 import AutofillSvg from '../styles/AutofillSvg';
 import { arrayOf } from 'prop-types';
+import SearchSvg from '../styles/SearchSvg';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -226,7 +227,11 @@ class SearchBox extends React.Component {
   };
 
   onInputChange = event => {
-    this.setValue({ value: event.target.value, event });
+    this.setValue({
+      value: event.target.value,
+      event,
+      triggerCustomQuery: !event.target.value
+    });
   };
 
   isControlled = () => {
@@ -681,22 +686,19 @@ class SearchBox extends React.Component {
                   alignItems: 'stretch'
                 }}
               >
-                {item._suggestion_type !== suggestionTypes.Index &&
-                item._suggestion_type !== undefined ? (
-                  <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
-                    <CustomSvg
-                      iconId={`${index + 1}-${item.value}-icon`}
-                      className={
-                        getClassName(
-                          innerClass,
-                          `${item._suggestion_type}-search-icon`
-                        ) || null
-                      }
-                      icon={getIcon(item._suggestion_type)}
-                      type={`${item._suggestion_type}-search-icon`}
-                    />
-                  </div>
-                ) : null}
+                <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
+                  <CustomSvg
+                    iconId={`${index + 1}-${item.value}-icon`}
+                    className={
+                      getClassName(
+                        innerClass,
+                        `${item._suggestion_type}-search-icon`
+                      ) || null
+                    }
+                    icon={getIcon(item._suggestion_type)}
+                    type={`${item._suggestion_type}-search-icon`}
+                  />
+                </div>
                 <SuggestionItem currentValue={currentValue} suggestion={item} />
                 <AutofillSvg
                   onClick={e => {

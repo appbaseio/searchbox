@@ -48,18 +48,37 @@ const CustomSvg = {
 				</svg>
 			);
 		}
+		window.console.log('this.$props.type', this.$props.type);
+		if (this.$props.type === 'popular-search-icon') {
+			return (
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					alt="Popular Searches"
+					height="20"
+					width="20"
+					viewBox="0 0 24 24"
+					style={{ fill: '#707070' }}
+					class={this.$props.className}
+				>
+					<path d="M0 0h24v24H0z" fill="none" />
+					<path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
+				</svg>
+			);
+		}
 		return (
 			<svg
+				alt="Search"
+				className="search-icon"
+				height="15"
 				xmlns="http://www.w3.org/2000/svg"
-				alt="Popular Searches"
-				height="20"
-				width="20"
-				viewBox="0 0 24 24"
-				style={{ fill: '#707070' }}
-				class={this.$props.className}
+				viewBox="0 0 15 15"
+				style={{
+					position: 'relative',
+					fill: '#707070'
+				}}
 			>
-				<path d="M0 0h24v24H0z" fill="none" />
-				<path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
+				<title>Search</title>
+				<path d="M6.02945,10.20327a4.17382,4.17382,0,1,1,4.17382-4.17382A4.15609,4.15609,0,0,1,6.02945,10.20327Zm9.69195,4.2199L10.8989,9.59979A5.88021,5.88021,0,0,0,12.058,6.02856,6.00467,6.00467,0,1,0,9.59979,10.8989l4.82338,4.82338a.89729.89729,0,0,0,1.29912,0,.89749.89749,0,0,0-.00087-1.29909Z" />
 			</svg>
 		);
 	}
