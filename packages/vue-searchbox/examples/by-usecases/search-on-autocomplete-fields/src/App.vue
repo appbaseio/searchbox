@@ -13,17 +13,22 @@
       </span>
     </h2>
     <search-base
-      index="default"
       url="https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/public-demo-skxjb/service/http_endpoint/incoming_webhook/reactivesearch"
       :mongodb="{
         db: 'sample_airbnb',
-        collection: 'listingsAndReviews'
+        collection: 'listingsAndReviews',
+        index: 'custom'
       }"
     >
       <div>
         <search-box
           id="search-component"
-          index="custom"
+          :dataField="[
+            {
+              field: 'name',
+              weight: 3
+            }
+          ]"
           :autocompleteField="[
             {
               field: 'name',
@@ -48,6 +53,7 @@
           :dataField="['name']"
           :size="5"
           :react="{ and: ['search-component'] }"
+          index="custom"
         >
           <div
             class="result-list-container"
