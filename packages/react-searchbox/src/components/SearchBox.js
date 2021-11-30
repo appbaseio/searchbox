@@ -227,7 +227,11 @@ class SearchBox extends React.Component {
   };
 
   onInputChange = event => {
-    this.setValue({ value: event.target.value, event });
+    this.setValue({
+      value: event.target.value,
+      event,
+      triggerCustomQuery: !event.target.value
+    });
   };
 
   isControlled = () => {
