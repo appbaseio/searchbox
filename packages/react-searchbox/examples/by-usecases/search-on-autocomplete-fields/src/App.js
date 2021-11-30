@@ -35,12 +35,6 @@ export default () => (
       <SearchBox
         id="search-component"
         index="custom"
-        dataField={[
-          {
-            field: 'description',
-            weight: 1
-          }
-        ]}
         autocompleteField={[
           {
             field: 'name',

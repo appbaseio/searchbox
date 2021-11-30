@@ -42,7 +42,7 @@ export default () => (
             size={0}
             // To initialize with default value
             value={{
-              start: 0,
+              start: 1,
               end: 16
             }}
             render={({ results, loading, value, setValue }) => {
@@ -54,7 +54,7 @@ export default () => (
                     <div style={{ marginTop: 20 }}>
                       {results.raw && (
                         <Rheostat
-                          min={0}
+                          min={1}
                           max={16}
                           values={[value.start, value.end]}
                           handle={({ style, ...passProps }) => {
@@ -110,7 +110,7 @@ export default () => (
               'name',
               'description',
               'property_type',
-              'accomodates'
+              'accommodates'
             ]}
             react={{
               and: ['facet-component']
@@ -168,7 +168,7 @@ export default () => (
                               width: 'auto'
                             }}
                           >
-                            Accomodates {item.accomodates}
+                            Accommodates {item.accommodates}
                           </span>
                         </div>
                       ))}

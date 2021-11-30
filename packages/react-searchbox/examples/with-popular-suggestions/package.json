@@ -1,16 +1,16 @@
 {
-    "name": "@appbaseio/react-searchbox-mongo-search-with-field-weights-example",
+    "name": "@appbaseio/react-searchbox-example-with-popular-suggestions",
     "homepage": ".",
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@appbaseio/react-searchbox": "1.6.0-alpha.1",
         "prop-types": "^15.6.2",
-        "react": "^16.4.1",
-        "react-dom": "^16.4.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
         "react-paginate": "^6.5.0",
-        "react-scripts": "^1.1.4"
+        "react-scripts": "^1.1.4",
+        "@appbaseio/react-searchbox": "1.6.0-alpha.1"
     },
     "scripts": {
         "start": "react-scripts start",
