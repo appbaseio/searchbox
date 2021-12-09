@@ -230,7 +230,8 @@ class SearchBox extends React.Component {
     this.setValue({
       value: event.target.value,
       event,
-      triggerCustomQuery: !event.target.value
+      triggerCustomQuery: !event.target.value,
+      cause: !event.target.value ? causes.CLEAR_VALUE : undefined
     });
   };
 
@@ -244,6 +245,7 @@ class SearchBox extends React.Component {
 
   setValue = ({ value, isOpen = true, ...rest }) => {
     const { onChange, debounce, autosuggest } = this.props;
+    console.log(value, debounce, autosuggest);
     if (!value && autosuggest && rest.cause !== causes.CLEAR_VALUE) {
       this.componentInstance.triggerDefaultQuery();
     }
@@ -257,21 +259,13 @@ class SearchBox extends React.Component {
     } else if (debounce > 0) {
       this.componentInstance.setValue(value, {
         triggerDefaultQuery: rest.cause === causes.CLEAR_VALUE,
-        triggerCustomQuery: false,
+        triggerCustomQuery: rest.triggerCustomQuery,
         stateChanges: true
       });
       if (autosuggest) {
-        // Clear results for empty query
-        if (value) {
-          debounceFunc(this.triggerDefaultQuery, debounce);
-        } else {
-          this.componentInstance.clearResults();
-        }
+        debounceFunc(this.triggerDefaultQuery, debounce);
       } else {
         debounceFunc(this.triggerCustomQuery, debounce);
-      }
-      if (rest.triggerCustomQuery) {
-        this.triggerCustomQuery();
       }
     } else {
       this.componentInstance.setValue(value, {
