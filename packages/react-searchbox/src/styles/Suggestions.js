@@ -32,7 +32,6 @@ const suggestions = css`
       text-overflow: ellipsis;
       white-space: nowrap;
       position: relative;
-      top: -2px;
     }
 
     &:hover,

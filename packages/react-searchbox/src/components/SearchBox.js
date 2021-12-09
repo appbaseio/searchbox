@@ -686,7 +686,13 @@ class SearchBox extends React.Component {
                   alignItems: 'stretch'
                 }}
               >
-                <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
+                <div
+                  style={{
+                    padding: '0 10px 0 0',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
                   <CustomSvg
                     iconId={`${index + 1}-${item.value}-icon`}
                     className={

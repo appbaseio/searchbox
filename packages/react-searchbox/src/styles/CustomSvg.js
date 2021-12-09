@@ -1,5 +1,6 @@
 import React from 'react';
 import { element, string } from '../utils/types';
+import SearchSvg from './SearchSvg';
 const CustomSvg = ({ iconId, className, icon, type }) => {
   if (icon) {
     return React.createElement('div', { className }, [
@@ -32,7 +33,7 @@ const CustomSvg = ({ iconId, className, icon, type }) => {
         height="20"
         viewBox="0 0 24 24"
         className={className}
-        style={{ fill: '#707070', transform: 'scale(0.9) translateY(-2px)' }}
+        style={{ fill: '#707070', transform: 'scale(0.9) translateY(-1px)' }}
       >
         <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
       </svg>
@@ -55,27 +56,14 @@ const CustomSvg = ({ iconId, className, icon, type }) => {
     );
   }
   return (
-    <svg
-      alt="Search"
-      className="search-icon"
-      height="15"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 15 15"
+    <SearchSvg
       style={{
         position: 'relative',
-        fill: '#707070'
+        fill: '#707070',
+        left: '3px',
+        marginRight: '8px'
       }}
-    >
-      <title>Search</title>
-      <path
-        d="
-        M6.02945,10.20327a4.17382,4.17382,0,1,1,4.17382-4.17382A4.15609,4.15609,
-        0,0,1,6.02945,10.20327Zm9.69195,4.2199L10.8989,9.59979A5.88021,5.88021,
-        0,0,0,12.058,6.02856,6.00467,6.00467,0,1,0,9.59979,10.8989l4.82338,
-        4.82338a.89729.89729,0,0,0,1.29912,0,.89749.89749,0,0,0-.00087-1.29909Z
-      "
-      />
-    </svg>
+    />
   );
 };
 
