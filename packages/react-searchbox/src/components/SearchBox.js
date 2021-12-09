@@ -245,7 +245,6 @@ class SearchBox extends React.Component {
 
   setValue = ({ value, isOpen = true, ...rest }) => {
     const { onChange, debounce, autosuggest } = this.props;
-    console.log(value, debounce, autosuggest);
     if (!value && autosuggest && rest.cause !== causes.CLEAR_VALUE) {
       this.componentInstance.triggerDefaultQuery();
     }
