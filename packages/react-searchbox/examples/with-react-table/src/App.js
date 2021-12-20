@@ -158,7 +158,7 @@ export default () => (
                     {!loading && !results.data.length ? (
                       <div>No results found</div>
                     ) : (
-                      <p class="result-stat">
+                      <p className="result-stat">
                         {results.numberOfResults} results found in{' '}
                         {results.time}ms
                       </p>

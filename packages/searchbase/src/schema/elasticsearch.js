@@ -281,6 +281,14 @@ export default {
     },
     type: dataTypes.BOOLEAN
   },
+  enableRecentSearches: {
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.BOOLEAN
+  },
   enablePopularSuggestions: {
     components: {
       [SEARCHCOMPONENT]: {

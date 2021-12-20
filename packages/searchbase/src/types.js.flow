@@ -52,6 +52,10 @@ export type ComponentConfig = BaseConfig & {
   enablePredictiveSuggestions: boolean,
   preserveResults: boolean,
   maxPopularSuggestions: number,
+  autocompleteField: string | Array<string | DataField>,
+  highlightConfig: Object,
+  componentName:string,
+  after: Object,
   results: Array<Object>,
   beforeValueChange: (value: string) => Promise<any>,
   // called when value changes
@@ -73,7 +77,8 @@ export type ComponentConfig = BaseConfig & {
   onQueryChange: (next: string, prev: string) => void,
 
   // called when mic status changes
-  onMicStatusChange: (next: string, prev: string) => void
+  onMicStatusChange: (next: string, prev: string) => void,
+  ...rsAPIConfig
 };
 
 export type SearchBaseConfig = BaseConfig & {

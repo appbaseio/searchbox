@@ -208,9 +208,10 @@ const SearchBox = {
 			if (!instanceValue && defaultSuggestions) {
 				return defaultSuggestions;
 			}
-			const {
-				results: { data: suggestions }
-			} = this.getComponentInstance();
+			const suggestions = this.getComponentInstance().mongodb
+				? this.getComponentInstance().suggestions
+				: this.getComponentInstance()?.results?.data;
+
 			return suggestions;
 		},
 		_applySetter(prev, next, setterFunc) {
@@ -635,7 +636,7 @@ const SearchBox = {
 				{title && (
 					<Title class={getClassName(innerClass, 'title') || ''}>{title}</Title>
 				)}
-				{hasSuggestions || autosuggest ? (
+				{hasSuggestions && autosuggest ? (
 					<DownShift
 						id="searchbox-downshift"
 						handleChange={this.onSuggestionSelected}
@@ -688,27 +689,24 @@ const SearchBox = {
 																alignItems: 'center'
 															}}
 														>
-															{item._suggestion_type
-                              !== suggestionTypes.Index ? (
-																	<div
-																		style={{
-																			padding: '0 10px 0 0',
-																			display: 'flex'
-																		}}
-																	>
-																		<CustomSvg
-																			iconId={`${index + 1}-${item.value}-icon`}
-																			className={
-																				getClassName(
-																					innerClass,
-																					`${item._suggestion_type}-search-icon`
-																				) || null
-																			}
-																			icon={getIcon(item._suggestion_type)}
-																			type={`${item._suggestion_type}-search-icon`}
-																		/>
-																	</div>
-																) : null}
+															<div
+																style={{
+																	padding: '0 10px 0 0',
+																	display: 'flex'
+																}}
+															>
+																<CustomSvg
+																	iconId={`${index + 1}-${item.value}-icon`}
+																	className={
+																		getClassName(
+																			innerClass,
+																			`${item._suggestion_type}-search-icon`
+																		) || null
+																	}
+																	icon={getIcon(item._suggestion_type)}
+																	type={`${item._suggestion_type}-search-icon`}
+																/>
+															</div>
 															<SuggestionItem
 																currentValue={instanceValue}
 																suggestion={item}

@@ -31,7 +31,7 @@
               :value="[]"
               title="Facet"
               queryFormat="and"
-              size="8"
+              :size="8"
               :includeFields="['name']"
             >
               <div

@@ -17,7 +17,7 @@ export class App extends Component {
       <div>
         <div>
           <h2>
-            React Searchbox Demo{`${this.state.text}`}
+            React Searchbox Demo
             <span style={{ fontSize: '1rem' }}>
               <a
                 href="https://docs.appbase.io/docs/reactivesearch/react-searchbox/apireference/"
@@ -43,6 +43,7 @@ export class App extends Component {
             title="Search"
             placeholder="Search for Books"
             size={5}
+            autosuggest={false}
             value={this.state.text}
             onChange={(value, searchComponent, e) => {
               // Perform actions after updating the value
@@ -51,6 +52,8 @@ export class App extends Component {
                   text: value
                 },
                 () => {
+                  // to fetch the suggestions
+                  // searchComponent.triggerDefaultQuery();
                   // To update results
                   searchComponent.triggerCustomQuery();
                 }
@@ -138,9 +141,7 @@ export class App extends Component {
                   )}
                   <ReactPaginate
                     pageCount={Math.floor(results.numberOfResults / size)}
-                    onPageChange={({ selected }) =>
-                      setFrom((selected + 1) * size)
-                    }
+                    onPageChange={({ selected }) => setFrom(selected * size)}
                     previousLabel="previous"
                     nextLabel="next"
                     breakLabel="..."

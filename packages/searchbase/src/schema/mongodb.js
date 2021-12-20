@@ -160,6 +160,14 @@ export default {
     },
     type: dataTypes.NUMBER
   },
+  aggregations: {
+    components: {
+      [SEARCHCOMPONENT]: {
+        required: false
+      }
+    },
+    type: dataTypes.ARRAY
+  },
   highlight: {
     components: {
       [SEARCHCOMPONENT]: {

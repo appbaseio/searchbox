@@ -57,10 +57,18 @@ export default () => (
         URLParams
         className="custom-class"
         size={5}
-        maxPopularSuggestions={2}
-        maxRecentSearches={3}
-        enablePopularSuggestions
-        enableRecentSearches
+        enablePopularSuggestions={true}
+        popularSuggestionsConfig={{
+          size: 3,
+          minChars: 2,
+          index: 'good-books-ds'
+        }}
+        enableRecentSuggestions={true}
+        recentSuggestionsConfig={{
+          size: 3,
+          minHits: 2,
+          index: 'good-books-ds'
+        }}
         iconPosition="left"
         style={{ paddingBottom: 10 }}
       />
@@ -197,9 +205,7 @@ export default () => (
                   )}
                   <ReactPaginate
                     pageCount={Math.floor(results.numberOfResults / size)}
-                    onPageChange={({ selected }) =>
-                      setFrom((selected + 1) * size)
-                    }
+                    onPageChange={({ selected }) => setFrom(selected * size)}
                     previousLabel="previous"
                     nextLabel="next"
                     breakLabel="..."

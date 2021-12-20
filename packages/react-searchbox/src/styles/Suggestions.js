@@ -12,7 +12,7 @@ const suggestions = css`
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 390px;
+  max-height: 405px;
   overflow-y: auto;
   box-sizing: border-box;
 
@@ -32,7 +32,6 @@ const suggestions = css`
       text-overflow: ellipsis;
       white-space: nowrap;
       position: relative;
-      top: -2px;
     }
 
     &:hover,

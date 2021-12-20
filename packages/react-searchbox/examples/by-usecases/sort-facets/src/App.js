@@ -1,9 +1,6 @@
 import React from 'react';
 
-import {
-  SearchBase,
-  SearchComponent
-} from '@appbaseio/react-searchbox';
+import { SearchBase, SearchComponent } from '@appbaseio/react-searchbox';
 import ReactPaginate from 'react-paginate';
 
 import './styles.css';
@@ -142,9 +139,7 @@ export default () => (
                   )}
                   <ReactPaginate
                     pageCount={Math.floor(results.numberOfResults / size)}
-                    onPageChange={({ selected }) =>
-                      setFrom((selected + 1) * size)
-                    }
+                    onPageChange={({ selected }) => setFrom(selected * size)}
                     previousLabel="previous"
                     nextLabel="next"
                     breakLabel="..."

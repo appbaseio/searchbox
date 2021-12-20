@@ -58,7 +58,6 @@
           :showVoiceSearch="true"
           :URLParams="true"
           class="custom-class"
-          :enablePopularSuggestions="true"
           iconPosition="left"
           :enablePredictiveSuggestions="true"
         />

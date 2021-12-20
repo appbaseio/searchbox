@@ -56,6 +56,7 @@ import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
 import AutofillSvg from '../styles/AutofillSvg';
 import { arrayOf } from 'prop-types';
+import SearchSvg from '../styles/SearchSvg';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -142,8 +143,9 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance?.results?.data ?? [];
-
+    const suggestions = this.componentInstance.mongodb
+      ? this.componentInstance.suggestions
+      : this.componentInstance?.results?.data ?? [];
     return suggestions;
   }
 
@@ -225,7 +227,12 @@ class SearchBox extends React.Component {
   };
 
   onInputChange = event => {
-    this.setValue({ value: event.target.value, event });
+    this.setValue({
+      value: event.target.value,
+      event,
+      triggerCustomQuery: !event.target.value,
+      cause: !event.target.value ? causes.CLEAR_VALUE : undefined
+    });
   };
 
   isControlled = () => {
@@ -251,21 +258,13 @@ class SearchBox extends React.Component {
     } else if (debounce > 0) {
       this.componentInstance.setValue(value, {
         triggerDefaultQuery: rest.cause === causes.CLEAR_VALUE,
-        triggerCustomQuery: false,
+        triggerCustomQuery: rest.triggerCustomQuery,
         stateChanges: true
       });
       if (autosuggest) {
-        // Clear results for empty query
-        if (value) {
-          debounceFunc(this.triggerDefaultQuery, debounce);
-        } else {
-          this.componentInstance.clearResults();
-        }
+        debounceFunc(this.triggerDefaultQuery, debounce);
       } else {
         debounceFunc(this.triggerCustomQuery, debounce);
-      }
-      if (rest.triggerCustomQuery) {
-        this.triggerCustomQuery();
       }
     } else {
       this.componentInstance.setValue(value, {
@@ -680,21 +679,25 @@ class SearchBox extends React.Component {
                   alignItems: 'stretch'
                 }}
               >
-                {item._suggestion_type !== suggestionTypes.Index ? (
-                  <div style={{ padding: '0 10px 0 0', display: 'flex' }}>
-                    <CustomSvg
-                      iconId={`${index + 1}-${item.value}-icon`}
-                      className={
-                        getClassName(
-                          innerClass,
-                          `${item._suggestion_type}-search-icon`
-                        ) || null
-                      }
-                      icon={getIcon(item._suggestion_type)}
-                      type={`${item._suggestion_type}-search-icon`}
-                    />
-                  </div>
-                ) : null}
+                <div
+                  style={{
+                    padding: '0 10px 0 0',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <CustomSvg
+                    iconId={`${index + 1}-${item.value}-icon`}
+                    className={
+                      getClassName(
+                        innerClass,
+                        `${item._suggestion_type}-search-icon`
+                      ) || null
+                    }
+                    icon={getIcon(item._suggestion_type)}
+                    type={`${item._suggestion_type}-search-icon`}
+                  />
+                </div>
                 <SuggestionItem currentValue={currentValue} suggestion={item} />
                 <AutofillSvg
                   onClick={e => {
@@ -743,7 +746,7 @@ class SearchBox extends React.Component {
             {title}
           </Title>
         )}
-        {hasSuggestions || autosuggest ? (
+        {hasSuggestions && autosuggest ? (
           <Downshift
             onChange={this.onSuggestionSelected}
             onStateChange={this.handleStateChange}

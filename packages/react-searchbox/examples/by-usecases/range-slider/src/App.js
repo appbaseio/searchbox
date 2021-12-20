@@ -1,10 +1,7 @@
 import React from 'react';
 import Rheostat from 'rheostat';
 
-import {
-  SearchBase,
-  SearchComponent
-} from '@appbaseio/react-searchbox';
+import { SearchBase, SearchComponent } from '@appbaseio/react-searchbox';
 import ReactPaginate from 'react-paginate';
 
 import './styles.css';
@@ -45,7 +42,7 @@ export default () => (
             size={0}
             // To initialize with default value
             value={{
-              start: 0,
+              start: 1,
               end: 16
             }}
             render={({ results, loading, value, setValue }) => {
@@ -57,7 +54,7 @@ export default () => (
                     <div style={{ marginTop: 20 }}>
                       {results.raw && (
                         <Rheostat
-                          min={0}
+                          min={1}
                           max={16}
                           values={[value.start, value.end]}
                           handle={({ style, ...passProps }) => {
@@ -109,7 +106,12 @@ export default () => (
             highlight
             dataField="original_title"
             size={5}
-            includeFields={['name', 'description', 'property_type']}
+            includeFields={[
+              'name',
+              'description',
+              'property_type',
+              'accommodates'
+            ]}
             react={{
               and: ['facet-component']
             }}
@@ -143,7 +145,6 @@ export default () => (
                               Math.min(160, item.description.length)
                             )}
                           </p>
-
                           <span
                             style={{
                               background: '#efefef',
@@ -156,15 +157,26 @@ export default () => (
                           >
                             #{item.property_type}
                           </span>
+                          &nbsp;
+                          <span
+                            style={{
+                              background: '#efefef',
+                              padding: 3,
+                              borderRadius: 3,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              width: 'auto'
+                            }}
+                          >
+                            Accommodates {item.accommodates}
+                          </span>
                         </div>
                       ))}
                     </div>
                   )}
                   <ReactPaginate
                     pageCount={Math.floor(results.numberOfResults / size)}
-                    onPageChange={({ selected }) =>
-                      setFrom((selected + 1) * size)
-                    }
+                    onPageChange={({ selected }) => setFrom(selected * size)}
                     previousLabel="previous"
                     nextLabel="next"
                     breakLabel="..."

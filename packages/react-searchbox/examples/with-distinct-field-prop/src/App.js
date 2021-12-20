@@ -53,6 +53,7 @@ export default () => (
         title="Search"
         placeholder="Search for Books"
         style={{ paddingBottom: 10 }}
+        distinctField="original_title.keyword"
       />
       <div>
         <SearchComponent
@@ -188,9 +189,7 @@ export default () => (
                 )}
                 <ReactPaginate
                   pageCount={Math.floor(results.numberOfResults / size)}
-                  onPageChange={({ selected }) =>
-                    setFrom((selected + 1) * size)
-                  }
+                  onPageChange={({ selected }) => setFrom(selected * size)}
                   previousLabel="previous"
                   nextLabel="next"
                   breakLabel="..."

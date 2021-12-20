@@ -138,9 +138,7 @@ export default () => (
                   )}
                   <ReactPaginate
                     pageCount={Math.floor(results.numberOfResults / size)}
-                    onPageChange={({ selected }) =>
-                      setFrom((selected + 1) * size)
-                    }
+                    onPageChange={({ selected }) => setFrom(selected * size)}
                     previousLabel="previous"
                     nextLabel="next"
                     breakLabel="..."

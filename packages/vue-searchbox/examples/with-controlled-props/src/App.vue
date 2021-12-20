@@ -47,6 +47,7 @@
           @focus="handleFocus"
           @key-down="handleKeyDown"
           @key-up="handleKeyUp"
+          :autosuggest="false"
         />
         <div>
           <search-component
@@ -82,9 +83,7 @@
                         <div>
                           <div>
                             by
-                            <span class="authors-list">{{
-                              item.authors
-                            }}</span>
+                            <span class="authors-list">{{ item.authors }}</span>
                           </div>
                           <div class="ratings-list flex align-center">
                             <span class="stars">
@@ -146,11 +145,11 @@ export default {
     Paginate
   },
   data() {
-		const state = {
-			text: ''
-		};
-		return state;
-	},
+    const state = {
+      text: ''
+    };
+    return state;
+  },
   methods: {
     isChecked(value, key) {
       return value ? value.includes(key) : false;
@@ -164,20 +163,20 @@ export default {
     },
     handleBlur(searchComponent, e) {
       // searchComponent.triggerCustomQuery();
-      // console.log('handleBlur called ==>> ', searchComponent, e);
+      window.console.log('handleBlur called ==>> ', searchComponent, e);
     },
     handleKeyPress(searchComponent, e) {
-      // console.log('handleKeyPress called ==>> ', searchComponent, e);
+      window.console.log('handleKeyPress called ==>> ', searchComponent, e);
     },
     handleFocus(searchComponent, e) {
-      // console.log('handleFocus called ==>> ', searchComponent, e);
+      window.console.log('handleFocus called ==>> ', searchComponent, e);
     },
     handleKeyDown(searchComponent, e) {
-      // console.log('handleKeyDown called ==>> ', searchComponent, e);
+      window.console.log('handleKeyDown called ==>> ', searchComponent, e);
     },
     handleKeyUp(searchComponent, e) {
-      // console.log('handleKeyUp called ==>> ', searchComponent, e);
-    },
+      window.console.log('handleKeyUp called ==>> ', searchComponent, e);
+    }
   }
 };
 </script>

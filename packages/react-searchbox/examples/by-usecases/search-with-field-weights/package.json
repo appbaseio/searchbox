@@ -1,11 +1,11 @@
 {
-    "name": "@appbaseio/react-searchbox-demo-example",
+    "name": "@appbaseio/react-searchbox-mongo-search-with-field-weights-example",
     "homepage": ".",
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@appbaseio/react-searchbox": "1.5.3",
+        "@appbaseio/react-searchbox": "1.6.0-alpha.4",
         "prop-types": "^15.6.2",
         "react": "^16.4.1",
         "react-dom": "^16.4.1",
