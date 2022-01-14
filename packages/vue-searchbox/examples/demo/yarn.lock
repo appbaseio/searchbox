@@ -9,10 +9,10 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/searchbase@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.5.1.tgz#c5a755ac2bf77772f7db27456b40619227549d0b"
-  integrity sha512-G7RVqQ+HPK8jfd1pDTqspyKEMIdTTVrpiZSBrLUk+bVTcmG96bUvf1nehHp34b6XpYBEg/aSqkKQWW1okaa4zA==
+"@appbaseio/searchbase@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.7.0.tgz#a8bdfebdd749394e3b048ff928a6c44a20f382a9"
+  integrity sha512-wAQfaa6CNX/+UTYC/0b0fNLrnDBD6PmFRKKEUKZ5iGIUox5vosg85ZfRPWnISrQ/BXlgZPrxbHFhcAqZ0cYwFg==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -25,12 +25,12 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
-"@appbaseio/vue-searchbox@1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.5.2.tgz#601e72718a0522b379a2a764e163772a375caa6d"
-  integrity sha512-7R5ry2CMqYXf440mGNBpIZw+eKIZsmD8NhlzQ8andrhzTWCUj2xa2+BZUo/qyRj2EdkC+x3/CfoEl6PdGtKs2g==
+"@appbaseio/vue-searchbox@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.7.0.tgz#cc4eecf29937a44f851944264668808d745a3cbf"
+  integrity sha512-nvYNuhKXxXUh5lic9LKELV2LPliZyqeZhQiRSUe70LXG3HDCBhz2zoAA0v02ij+IOJXaijEcCyQwnBFZrEmOsQ==
   dependencies:
-    "@appbaseio/searchbase" "1.5.1"
+    "@appbaseio/searchbase" "1.7.0"
     "@appbaseio/vue-emotion" "^0.4.4"
     "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
     compute-scroll-into-view "^1.0.11"
@@ -3805,9 +3805,9 @@ flush-write-stream@^1.0.0:
     readable-stream "^2.3.6"
 
 follow-redirects@^1.0.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
-  integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
+  version "1.14.7"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
+  integrity sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==
 
 for-in@^1.0.2:
   version "1.0.2"
