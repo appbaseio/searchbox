@@ -56,7 +56,10 @@ export const types = {
 	searchOperators: VueTypes.bool.def(false),
 	render: VueTypes.func,
 	renderError: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
-	renderNoSuggestion: VueTypes.oneOfType([VueTypes.string, VueTypes.any]),
+	renderNoSuggestion: VueTypes.oneOfType([
+		VueTypes.string,
+		VueTypes.any
+	]),
 	renderMic: VueTypes.func,
 	innerClass: VueTypes.object,
 	style: VueTypes.object,
@@ -71,13 +74,21 @@ export const types = {
 	appbaseConfig: VueTypes.shape({
 		recordAnalytics: VueTypes.bool,
 		enableQueryRules: VueTypes.bool,
-		userId: VueTypes.string,
+		enableSearchRelevancy: VueTypes.bool,
 		customEvents: VueTypes.object,
+		userId: VueTypes.string,
+		useCache: VueTypes.bool,
 		enableTelemetry: VueTypes.bool
 	}),
 	showDistinctSuggestions: VueTypes.bool.def(true),
 	queryString: VueTypes.queryString,
-	queryTypes: VueTypes.oneOf(['search', 'term', 'geo', 'range', 'suggestion']),
+	queryTypes: VueTypes.oneOf([
+		'search',
+		'term',
+		'geo',
+		'range',
+		'suggestion'
+	]),
 	reactType: VueTypes.shape({
 		and: reactKeyType,
 		or: reactKeyType,

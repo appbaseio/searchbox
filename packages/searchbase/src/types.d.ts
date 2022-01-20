@@ -31,8 +31,10 @@ export type Observer = {
 export type AppbaseSettings = {
   recordAnalytics?: boolean;
   enableQueryRules?: boolean;
-  userId?: string;
+  enableSearchRelevancy?: boolean;
   customEvents?: Object;
+  userId?: string;
+  useCache?: boolean;
   enableTelemetry?: boolean;
 };
 

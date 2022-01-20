@@ -67,7 +67,9 @@ export const wholeNumber = (props, propName, componentName) => {
 export const appbaseConfig = shape({
   recordAnalytics: bool,
   enableQueryRules: bool,
-  userId: string,
+  enableSearchRelevancy: bool,
   customEvents: object,
+  userId: string,
+  useCache: bool,
   enableTelemetry: bool
 });
