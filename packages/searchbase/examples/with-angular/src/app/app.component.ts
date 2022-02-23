@@ -198,21 +198,20 @@ export class AppComponent implements AfterContentInit {
         triggerCustomQuery: true
       });
       this.suggestions = of(this.searchComponent.suggestions);
-    } else {
-      // Update suggestions when value gets changed
-      this.suggestions = of(value).pipe(
-        distinctUntilChanged(),
-        switchMap(val => {
-          this.searchComponent.setValue(val, {
-            triggerDefaultQuery: false,
-            triggerCustomQuery: false
-          });
-          return from(this.searchComponent.triggerDefaultQuery()).pipe(
-            map(() => this.searchComponent.suggestions)
-          );
-        })
-      );
     }
+    // Update suggestions when value gets changed
+    this.suggestions = of(value).pipe(
+      distinctUntilChanged(),
+      switchMap(val => {
+        this.searchComponent.setValue(val, {
+          triggerDefaultQuery: false,
+          triggerCustomQuery: false
+        });
+        return from(this.searchComponent.triggerDefaultQuery()).pipe(
+          map(() => this.searchComponent.suggestions)
+        );
+      })
+    );
   }
 
   handlePageChange(page: PageEvent) {
@@ -229,11 +228,8 @@ export class AppComponent implements AfterContentInit {
         triggerDefaultQuery: false
       });
     } else if (type === 'search') {
-      this.searchComponent.setValue('', {
-        triggerCustomQuery: true,
-        triggerDefaultQuery: false
-      });
       this.searchQuery = '';
+      this.setSuggestions('');
     }
   }
 }
