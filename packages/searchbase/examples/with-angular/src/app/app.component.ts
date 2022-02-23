@@ -94,7 +94,14 @@ export class AppComponent implements AfterContentInit {
       //     weight: 0.1
       //   }
       // ],
-      includeFields: ['name', 'description', 'owner', 'fullname', 'language', 'topics'],
+      includeFields: [
+        'name',
+        'description',
+        'owner',
+        'fullname',
+        'language',
+        'topics'
+      ],
       clearOnQueryChange: true,
       size: 5
     });
@@ -102,7 +109,7 @@ export class AppComponent implements AfterContentInit {
     // Register a component to filter languages with empty value
     this.searchBase.register('filter-languages', {
       dataField: 'language',
-      value: [],
+      value: '',
       customQuery: () => ({
         query: {
           bool: {
@@ -187,10 +194,9 @@ export class AppComponent implements AfterContentInit {
   setSuggestions(value) {
     if (!value) {
       this.searchComponent.setValue('', {
-        triggerDefaultQuery: false,
-        triggerCustomQuery: false
+        triggerDefaultQuery: true,
+        triggerCustomQuery: true
       });
-      this.searchComponent.clearResults();
       this.suggestions = of(this.searchComponent.suggestions);
     } else {
       // Update suggestions when value gets changed
