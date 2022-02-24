@@ -95,7 +95,7 @@ export class AppComponent implements AfterContentInit {
       ],
       size: 5,
       // To clear the filter values when search query gets changed
-      clearFiltersOnQueryChange: true
+      clearOnQueryChange: true
     });
 
     // Register a component to filter languages with empty value
