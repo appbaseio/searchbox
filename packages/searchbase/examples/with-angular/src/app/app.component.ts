@@ -92,7 +92,7 @@ export class AppComponent implements AfterContentInit {
       ],
       size: 5,
       // To clear the filter values when search query gets changed
-      clearFiltersOnQueryChange: true
+      clearOnQueryChange: true
     });
 
     // Register filter component with dependency on search component
