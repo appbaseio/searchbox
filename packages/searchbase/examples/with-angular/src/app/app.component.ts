@@ -101,7 +101,7 @@ export class AppComponent implements AfterContentInit {
     // Register a component to filter languages with empty value
     this.searchBase.register('filter-languages', {
       dataField: 'language',
-      value: [],
+      value: '',
       customQuery: () => ({
         query: {
           bool: {
