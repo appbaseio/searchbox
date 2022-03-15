@@ -267,13 +267,12 @@ const SearchBox = {
 				return;
 			}
 
-			const suggestionValue = suggestion._category
-				? suggestion.label
-				: suggestion.value;
+			const suggestionValue = suggestion.value;			
 			this.setValue({
 				value: suggestionValue,
 				isOpen: false,
-				triggerCustomQuery: true
+				triggerCustomQuery: true,
+				category: suggestion._category
 			});
 			this.triggerClickAnalytics(
 				suggestion && suggestion._click_id,
@@ -311,7 +310,7 @@ const SearchBox = {
 			}
 			return false;
 		},
-		setValue({ value, isOpen = true, ...rest }) {
+		setValue({ value, isOpen = true, category = undefined, ...rest }) {
 			const { debounce } = this.$props;
 			this.isOpen = isOpen;
 			const componentInstance = this.getComponentInstance();
@@ -321,14 +320,16 @@ const SearchBox = {
 			if (this.isControlled()) {
 				componentInstance.setValue(value, {
 					triggerDefaultQuery: false,
-					triggerCustomQuery: false
+					triggerCustomQuery: false,
+					category
 				});
 				this.$emit('change', value, componentInstance, rest.event);
 			} else if (debounce > 0) {
 				componentInstance.setValue(value, {
 					triggerDefaultQuery: rest.cause === causes.CLEAR_VALUE,
 					triggerCustomQuery: false,
-					stateChanges: true
+					stateChanges: true,
+					category
 				});
 				if (this.autosuggest) {
 					// Clear results for empty query
@@ -346,7 +347,8 @@ const SearchBox = {
 				componentInstance.setValue(value, {
 					triggerCustomQuery: rest.triggerCustomQuery,
 					triggerDefaultQuery: this.autosuggest,
-					stateChanges: true
+					stateChanges: true,
+					category
 				});
 
 				if (!this.autosuggest) {
