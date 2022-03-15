@@ -14,7 +14,6 @@ class URLParamsProvider extends React.Component {
     const { id } = this.props;
     if (window) {
       this.init();
-
       window.addEventListener('popstate', () => {
         const options = {
           triggerCustomQuery: true,
@@ -25,9 +24,17 @@ class URLParamsProvider extends React.Component {
         if (this.params.has(id)) {
           // Set component value
           try {
-            const paramValue = JSON.parse(this.params.get(id));
+            let paramValue = JSON.parse(this.params.get(id));
+            let category;
+            if (typeof paramValue === 'object' && paramValue.category) {
+              category = paramValue.category;
+              paramValue = paramValue.value;
+            }
             if (!isEqual(this.componentInstance.value, paramValue)) {
-              this.componentInstance.setValue(paramValue, options);
+              this.componentInstance.setValue(paramValue, {
+                ...options,
+                category
+              });
             }
           } catch (e) {
             console.error(e);
@@ -50,14 +57,21 @@ class URLParamsProvider extends React.Component {
           // Only set the valid values
           if (checkValidValue(change.value.next)) {
             // stringify the values
-            this.params.set(id, JSON.stringify(change.value.next));
+            let valueParam = change.value.next;
+            if (change.category) {
+              valueParam = {
+                value: change.value.next,
+                category: change.category
+              };
+            }
+            this.params.set(id, JSON.stringify(valueParam));
           } else {
             this.params.delete(id);
           }
           // Update URLParam
           this.pushToHistory();
         },
-        ['value']
+        ['value', 'category']
       );
     }
   }

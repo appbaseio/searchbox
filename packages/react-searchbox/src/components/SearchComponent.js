@@ -100,12 +100,16 @@ class SearchComponent extends React.Component {
       maxPopularSuggestions,
       stopwords
     } = this.props;
-    let { value } = this.props;
+    let { value, categoryValue: category } = this.props;
     if (window && window.location && window.location.search) {
       const params = new URLSearchParams(window.location.search);
       if (params.has(id)) {
         try {
           value = JSON.parse(params.get(id));
+          if (typeof value === 'object' && value.category) {
+            category = value.category;
+            value = value.value;
+          }
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e);
@@ -130,7 +134,7 @@ class SearchComponent extends React.Component {
       autocompleteField,
       highlightConfig,
       categoryField,
-      categoryValue,
+      categoryValue: category || categoryValue,
       nestedField,
       from,
       size,
