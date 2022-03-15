@@ -1070,7 +1070,8 @@ class SearchComponent extends Base {
           [key]: {
             prev: prevValue,
             next: nextValue
-          }
+          },
+          ...(options.category ? { category: options.category } : {})
         },
         key,
         this
