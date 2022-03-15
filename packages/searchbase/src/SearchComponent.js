@@ -1324,6 +1324,13 @@ class SearchComponent extends Base {
         // Set the execute to `false` for watcher components
         const watcherQuery = watcherComponent.componentQuery;
         watcherQuery.execute = false;
+        if (watcherQuery.type === queryTypes.Suggestion) {
+          watcherQuery.type = queryTypes.Search;
+
+          if (watcherComponent.categoryField) {
+            watcherQuery.categoryValue = watcherComponent.categoryValue;
+          }
+        }
         // Add the query to request payload
         finalQuery.push(watcherQuery);
       }
