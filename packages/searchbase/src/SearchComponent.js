@@ -562,7 +562,9 @@ class SearchComponent extends Base {
       customQuery: this.customQuery ? this.customQuery(this) : undefined,
       defaultQuery: this.defaultQuery ? this.defaultQuery(this) : undefined,
       ...(this.value && { value: this.value }),
-      categoryValue: this.categoryValue,
+      ...(this.type === queryTypes.Suggestion
+        ? { categoryValue: this.categoryValue }
+        : {}),
       after: this.after,
       aggregations: this.aggregations,
       enableSynonyms: this.enableSynonyms,
@@ -1030,6 +1032,9 @@ class SearchComponent extends Base {
     prevValue: any,
     nextValue: any
   ): void {
+    if (options.category) {
+      this.categoryValue = options.category;
+    }
     // // Trigger mic events
     if (key === 'micStatus' && this.onMicStatusChange) {
       this.onMicStatusChange(nextValue, prevValue);
@@ -1218,6 +1223,10 @@ class SearchComponent extends Base {
                 query.execute = false;
                 if (query.type === queryTypes.Suggestion) {
                   query.type = queryTypes.Search;
+
+                  if (dependentComponent.categoryField) {
+                    query.categoryValue = dependentComponent.categoryValue;
+                  }
                 }
                 // Add the query to request payload
                 requestQuery[id] = query;
