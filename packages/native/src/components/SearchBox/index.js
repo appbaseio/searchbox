@@ -283,7 +283,12 @@ class SearchBox extends React.Component {
     return false;
   };
 
-  setValue = ({ value, clearResults = true, ...rest }) => {
+  setValue = ({
+    value,
+    clearResults = true,
+    category = undefined,
+    ...rest
+  }) => {
     let triggerDefaultQuery = true;
     const { autoFillInProgress } = this.state;
     const { onChange, debounce, autosuggest } = this.props;
@@ -300,7 +305,8 @@ class SearchBox extends React.Component {
     if (this.isControlled()) {
       this.componentInstance.setValue(value, {
         triggerDefaultQuery: !!rest.triggerDefaultQuery,
-        triggerCustomQuery: !!rest.triggerCustomQuery
+        triggerCustomQuery: !!rest.triggerCustomQuery,
+        category
       });
       onChange(value, this.componentInstance);
     } else {
@@ -312,7 +318,8 @@ class SearchBox extends React.Component {
         this.componentInstance.setValue(value, {
           triggerDefaultQuery: false,
           triggerCustomQuery: false,
-          stateChanges: true
+          stateChanges: true,
+          category
         });
         // only fetch suggestions for value
         if (value && triggerDefaultQuery) {
@@ -329,7 +336,8 @@ class SearchBox extends React.Component {
           triggerCustomQuery: rest.triggerCustomQuery,
           // only fetch suggestions for value
           triggerDefaultQuery: !!value && triggerDefaultQuery,
-          stateChanges: true
+          stateChanges: true,
+          category
         });
         if (!autosuggest) {
           this.triggerCustomQuery();
@@ -367,12 +375,11 @@ class SearchBox extends React.Component {
       Linking.openURL(suggestion.url);
       return;
     }
-    const suggestionValue = suggestion?._category
-      ? suggestion.label
-      : suggestion.value;
+    const suggestionValue = suggestion.value;
     this.setValue({
       value: suggestionValue,
-      triggerCustomQuery: true
+      triggerCustomQuery: true,
+      category: suggestion._category
     });
     // Keyboard.dissmiss();
     this.closeModal();
