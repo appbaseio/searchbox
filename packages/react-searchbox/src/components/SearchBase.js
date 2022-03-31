@@ -26,6 +26,20 @@ class SearchBase extends React.Component {
       transformRequest: props.transformRequest,
       transformResponse: props.transformResponse
     });
+
+    console.log(
+      'calledContextCollector',
+      this.searchbase,
+      props.searchbaseContext
+    );
+    if (
+      typeof window === 'undefined' &&
+      props.contextCollector &&
+      !this.calledContextCollector
+    ) {
+      this.calledContextCollector = true;
+      props.contextCollector({ ctx: this.searchbase });
+    }
   }
 
   /* eslint-disable class-methods-use-this */

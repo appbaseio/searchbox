@@ -2,7 +2,7 @@ import React from 'react';
 import SearchBoxDefault from './components/SearchBox';
 import SearchBase from './components/SearchBase';
 import SearchComponent from './components/SearchComponent';
-import { SearchContext } from './utils/helper';
+import { SearchContext, getServerResults } from './utils/helper';
 import { Global, css } from '@emotion/core';
 
 class SearchBoxWithStyle extends React.Component {
@@ -35,5 +35,6 @@ export {
   SearchContext,
   SearchBoxWithStyle as SearchBox,
   SearchBase,
-  SearchComponent
+  SearchComponent,
+  getServerResults
 };

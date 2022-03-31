@@ -98,10 +98,16 @@ class SearchComponent extends React.Component {
       enableRecentSearches,
       applyStopwords,
       maxPopularSuggestions,
-      stopwords
+      stopwords,
+      triggerQueryOnInit
     } = this.props;
     let { value } = this.props;
-    if (window && window.location && window.location.search) {
+    if (
+      typeof window !== 'undefined' &&
+      window &&
+      window.location &&
+      window.location.search
+    ) {
       const params = new URLSearchParams(window.location.search);
       if (params.has(id)) {
         try {
@@ -113,6 +119,7 @@ class SearchComponent extends React.Component {
         }
       }
     }
+    console.log('id', id);
     // Register search base component
     context.register(id, {
       index,
@@ -196,11 +203,6 @@ class SearchComponent extends React.Component {
     if (value || customQuery) {
       this.componentInstance.triggerCustomQuery();
     }
-  }
-
-  componentDidMount() {
-    const { triggerQueryOnInit } = this.props;
-
     if (triggerQueryOnInit) {
       this.componentInstance.triggerDefaultQuery();
     }
@@ -224,7 +226,7 @@ class SearchComponent extends React.Component {
   render() {
     const { id, URLParams } = this.props;
     if (this.hasCustomRenderer && this.componentInstance) {
-      if (URLParams) {
+      if (URLParams && typeof window !== 'undefined') {
         return (
           <URLParamsProvider id={id}>
             {getComponent(this.componentInstance.mappedProps, this.props)}

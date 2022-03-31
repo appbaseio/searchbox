@@ -1,6 +1,34 @@
 import React from 'react';
-
+import { renderToString } from 'react-dom/server';
 export const SearchContext = React.createContext();
+
+const json = require('tanagra-json');
+export const getServerResults = () => {
+  let appContext;
+
+  return App => {
+    if (!appContext) {
+      const contextCollector = params => {
+        if (params.ctx) {
+          appContext = params.ctx;
+        }
+      };
+      const promiseArray = [];
+
+      renderToString(<App contextCollector={contextCollector} />);
+      const componentInstances = Object.keys(appContext._components);
+      for (let index = 0; index < componentInstances.length; index += 1) {
+        const item = componentInstances[index];
+        const promise = appContext.getComponent(item).triggerDefaultQuery;
+        // eslint-disable-next-line no-await-in-loop
+        promiseArray.push(promise);
+      }
+
+      return Promise.all(promiseArray).then(() => json.encode(appContext));
+    }
+    return null;
+  };
+};
 
 export const getClassName = (classMap, component) =>
   (classMap && classMap[component]) || '';
