@@ -27,11 +27,12 @@ class SearchBase extends React.Component {
       transformResponse: props.transformResponse
     });
 
-    console.log(
-      'calledContextCollector',
-      this.searchbase,
-      props.searchbaseContext
-    );
+    // console.log(
+    //   'calledContextCollector',
+    //   this.searchbase,
+    //   props.searchbaseContext
+    // );
+
     if (
       typeof window === 'undefined' &&
       props.contextCollector &&

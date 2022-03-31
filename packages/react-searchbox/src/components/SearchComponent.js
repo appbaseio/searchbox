@@ -119,7 +119,6 @@ class SearchComponent extends React.Component {
         }
       }
     }
-    console.log('id', id);
     // Register search base component
     context.register(id, {
       index,

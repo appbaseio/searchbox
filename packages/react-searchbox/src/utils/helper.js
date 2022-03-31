@@ -2,7 +2,6 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 export const SearchContext = React.createContext();
 
-const json = require('tanagra-json');
 export const getServerResults = () => {
   let appContext;
 
@@ -15,16 +14,19 @@ export const getServerResults = () => {
       };
       const promiseArray = [];
 
+      console.log('inside getServerResults');
       renderToString(<App contextCollector={contextCollector} />);
-      const componentInstances = Object.keys(appContext._components);
-      for (let index = 0; index < componentInstances.length; index += 1) {
-        const item = componentInstances[index];
-        const promise = appContext.getComponent(item).triggerDefaultQuery;
-        // eslint-disable-next-line no-await-in-loop
-        promiseArray.push(promise);
+      if (appContext) {
+        const componentInstances = Object.keys(appContext._components);
+        for (let index = 0; index < componentInstances.length; index += 1) {
+          const item = componentInstances[index];
+          const promise = appContext.getComponent(item).triggerDefaultQuery;
+          // eslint-disable-next-line no-await-in-loop
+          promiseArray.push(promise);
+        }
+        console.log('waiting for api calls in backend');
+        return Promise.all(promiseArray).then(() => appContext);
       }
-
-      return Promise.all(promiseArray).then(() => json.encode(appContext));
     }
     return null;
   };
