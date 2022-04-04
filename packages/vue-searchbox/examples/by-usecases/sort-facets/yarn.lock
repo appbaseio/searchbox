@@ -2,11 +2,19 @@
 # yarn lockfile v1
 
 
-"@appbaseio/searchbase-mongodb@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase-mongodb/-/searchbase-mongodb-0.0.2.tgz#341a0be1650f2a5daa16edee1371eb06de1a3422"
-  integrity sha512-/Yep6u15FOvxSfBdG1PP1kSRNT4Bt5B66+tauC4u6U2ofizkOfSiyHpz8Dxqxs9uhSRidTJByb1UY+RF4G7qIQ==
+"@appbaseio/analytics@^2.1.0-beta":
+  version "2.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-2.1.0-beta.tgz#0633486e4bfd4a7760a3dd204a74505d0f5e3810"
+  integrity sha512-99e7SkDVoFW99PEVnpp9n+MM5u7ZTK9hwVAuOJN9fpR7EkftHYEmvCiPf7HzObweb3PwqFjCQT4597cGNNTOgQ==
   dependencies:
+    cross-fetch "^3.0.4"
+
+"@appbaseio/searchbase@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.7.0.tgz#a8bdfebdd749394e3b048ff928a6c44a20f382a9"
+  integrity sha512-wAQfaa6CNX/+UTYC/0b0fNLrnDBD6PmFRKKEUKZ5iGIUox5vosg85ZfRPWnISrQ/BXlgZPrxbHFhcAqZ0cYwFg==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
 
 "@appbaseio/vue-emotion@^0.4.4":
@@ -17,12 +25,12 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
-"@appbaseio/vue-searchbox-mongodb@*":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox-mongodb/-/vue-searchbox-mongodb-0.0.2.tgz#cd269c9ff509de85e4902813345879cd22c0823f"
-  integrity sha512-TZyv6k4yCPKRHgMyzBH1U9ik2QRpxDOt1IA4ygTn+C0ylNCcIGGj7VE/kj0dAsbk7UNIgVvbCtP0pr2W3nVioA==
+"@appbaseio/vue-searchbox@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.7.0.tgz#cc4eecf29937a44f851944264668808d745a3cbf"
+  integrity sha512-nvYNuhKXxXUh5lic9LKELV2LPliZyqeZhQiRSUe70LXG3HDCBhz2zoAA0v02ij+IOJXaijEcCyQwnBFZrEmOsQ==
   dependencies:
-    "@appbaseio/searchbase-mongodb" "0.0.2"
+    "@appbaseio/searchbase" "1.7.0"
     "@appbaseio/vue-emotion" "^0.4.4"
     "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
     compute-scroll-into-view "^1.0.11"
@@ -8335,9 +8343,9 @@ url-loader@^1.1.2:
     schema-utils "^1.0.0"
 
 url-parse@^1.4.3, url-parse@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.3.tgz#71c1303d38fb6639ade183c2992c8cc0686df862"
-  integrity sha512-IIORyIQD9rvj0A4CLWsHkBBJuNqWpFQe224b6j9t/ABmquIS0qDU2pY6kl6AuOrL5OkCXHMCFNe1jBcuAggjvQ==
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
+  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
