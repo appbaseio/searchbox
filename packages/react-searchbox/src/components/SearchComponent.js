@@ -23,6 +23,7 @@ import {
   SearchContext
 } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider';
+import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchComponent extends React.Component {
   static contextType = SearchContext;
@@ -181,7 +182,8 @@ class SearchComponent extends React.Component {
       rankFeature,
       enableRecentSearches,
       applyStopwords,
-      stopwords
+      stopwords,
+      libAlias: LIBRARY_ALIAS.REACT_SEARCHBOX
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer) {

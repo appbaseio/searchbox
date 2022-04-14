@@ -1,5 +1,6 @@
 import { SearchBase as Headless } from '@appbaseio/searchbase';
 import VueTypes from 'vue-types';
+import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 import { types } from '../utils/types';
 
 const SearchBase = {
@@ -27,7 +28,8 @@ const SearchBase = {
 			headers,
 			appbaseConfig: this.$props.appbaseConfig,
 			transformRequest: this.$props.transformRequest,
-			transformResponse: this.$props.transformResponse
+			transformResponse: this.$props.transformResponse,
+			libAlias: LIBRARY_ALIAS.VUE_SEARCHBOX
 		});
 		return {
 			searchbase: this.searchbase
