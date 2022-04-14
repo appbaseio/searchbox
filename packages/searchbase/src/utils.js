@@ -357,7 +357,7 @@ export function validateSchema(
   requiredProperties.forEach(requiredProperty => {
     if (!passedPropertiesKeys.includes(requiredProperty)) {
       throw new Error(
-        `${requiredProperty} is required for <${componentNameForErrorDisplay} /> component when used with the ${backendName} Search backend.`
+        `${requiredProperty} is required for ${componentNameForErrorDisplay} class when used with the ${backendName} Search backend.`
       );
     }
   });
