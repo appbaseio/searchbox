@@ -11,6 +11,35 @@ const mongodb = {
   collection: 'listingsAndReviews'
 };
 
+describe('SearchBase: getComponents', () => {
+  test('should return a list of components', () => {
+    const searchBase = new SearchBase({ index, url, credentials });
+    const componentIdPrefix = 'search-component';
+    searchBase.register(componentIdPrefix + '-1', {
+      enablePredictiveSuggestions: true,
+      dataField: ['name']
+    });
+    searchBase.register(componentIdPrefix + '-2', {
+      enablePredictiveSuggestions: true,
+      dataField: ['name']
+    });
+    expect(searchBase.getComponents()).toHaveProperty(componentIdPrefix + '-1');
+    expect(searchBase.getComponents()).toHaveProperty(componentIdPrefix + '-2');
+  });
+});
+
+describe('SearchBase: getComponent', () => {
+  test('should return a component by id', () => {
+    const searchBase = new SearchBase({ index, url, credentials });
+    const componentId = 'search-component';
+    searchBase.register(componentId, {
+      enablePredictiveSuggestions: true,
+      dataField: ['name']
+    });
+    expect(searchBase.getComponent(componentId).id).toBe(componentId);
+  });
+});
+
 describe('SearchComponent instance: inheritance testing', () => {
   test('component credentials (index, url, credentials)', () => {
     /* eslint-disable-next-line */
