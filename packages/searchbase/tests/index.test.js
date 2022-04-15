@@ -11,64 +11,6 @@ const mongodb = {
   collection: 'listingsAndReviews'
 };
 
-describe('SearchBase: Input Validations (Elasticsearch as SearchBackend)', () => {
-  test('throw error if empty url', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({
-        index
-      });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'url is required for SearchBase class when used with the elasticsearch Search backend.'
-      );
-    }
-  });
-  test('throw error if empty index', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({
-        url: 'https://appbase-demo.dev.io'
-      });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'index is required for SearchBase class when used with the elasticsearch Search backend.'
-      );
-    }
-  });
-  test('throw error if empty credentials', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({
-        index,
-        url: 'https://appbase-demo.dev.io'
-      });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'credentials is required for <SearchBase /> component when used with the elasticsearch Search backend.'
-      );
-    }
-  });
-});
-
-describe('SearchBase: Input Validations (MongoDB as SearchBackend)', () => {
-  test('throw error if empty url', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({
-        mongodb
-      });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'url is required for <SearchBase /> component when used with the mongodb Search backend.'
-      );
-    }
-  });
-});
 describe('SearchComponent instance: inheritance testing', () => {
   test('component credentials (index, url, credentials)', () => {
     /* eslint-disable-next-line */
