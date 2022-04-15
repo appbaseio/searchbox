@@ -38,4 +38,19 @@ describe('SearchComponent: setter methods', () => {
       stateChanges: true
     });
   });
+  test('should set size', () => {
+    const searchBase = new SearchBase({ index, url, credentials });
+    const componentId = 'search-component';
+    const nextSize = 10;
+    const searchComponent = searchBase.register(componentId, {
+      size: 5
+    });
+    searchComponent.subscribeToStateChanges(change => {
+      const sizeChange = change.size.next;
+      expect(sizeChange).toBe(nextSize);
+    });
+    searchComponent.setSize(nextSize, {
+      stateChanges: true
+    });
+  });
 });
