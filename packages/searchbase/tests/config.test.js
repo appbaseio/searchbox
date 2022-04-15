@@ -69,3 +69,62 @@ describe('SearchBase: Input Validations (MongoDB as SearchBackend)', () => {
     }
   });
 });
+
+describe('SearchComponent: Input Validations (Elasticsearch as SearchBackend)', () => {
+  test('throw error if empty url', () => {
+    try {
+      /* eslint-disable-next-line */
+      const searchComponent = new SearchComponent({
+        index
+      });
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.message).toEqual(
+        'url is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+      );
+    }
+  });
+  test('throw error if empty index', () => {
+    try {
+      /* eslint-disable-next-line */
+      const searchComponent = new SearchComponent({
+        url: 'https://appbase-demo.dev.io'
+      });
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.message).toEqual(
+        'index is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+      );
+    }
+  });
+  test('throw error if empty credentials', () => {
+    try {
+      /* eslint-disable-next-line */
+      const searchComponent = new SearchComponent({
+        index,
+        url: 'https://appbase-demo.dev.io'
+      });
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.message).toEqual(
+        'credentials is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+      );
+    }
+  });
+});
+
+describe('SearchComponent: Input Validations (MongoDB as SearchBackend)', () => {
+  test('throw error if empty url', () => {
+    try {
+      /* eslint-disable-next-line */
+      const searchComponent = new SearchComponent({
+        mongodb
+      });
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.message).toEqual(
+        'url is required for <SearchBase /> component when used with the mongodb Search backend.'
+      );
+    }
+  });
+});
