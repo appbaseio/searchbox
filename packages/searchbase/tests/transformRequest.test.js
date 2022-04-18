@@ -89,4 +89,52 @@ describe('SearchComponent: transformRequest', () => {
       })
     );
   });
+  test('should not be overriden by SearchBase.transformRequest', async () => {
+    const AFTER_ONE_HOUR = new Date(Date.now() + 1000 * 60 * 60);
+    const AFTER_TWO_HOUR = new Date(Date.now() + 2 * 1000 * 60 * 60);
+    const componentId = 'search-component';
+    //transformRequest takes the same input as fetch
+    const searchBase = new SearchBase({
+      index,
+      url,
+      credentials,
+      transformRequest: request =>
+        Promise.resolve({
+          ...request,
+          headers: {
+            ...request.headers,
+            Expires: AFTER_ONE_HOUR
+          }
+        })
+    });
+    const searchComponent = new SearchComponent({
+      index,
+      url,
+      credentials,
+      id: componentId,
+      transformRequest: request =>
+        Promise.resolve({
+          ...request,
+          headers: {
+            ...request.headers,
+            Expires: AFTER_TWO_HOUR
+          }
+        })
+    });
+
+    window.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        [componentId]: { hits: { hits: [] } }
+      })
+    });
+
+    await searchComponent.triggerDefaultQuery();
+    expect(window.fetch).toHaveBeenCalledWith(
+      `${url}/${index}/${suffix}`,
+      expect.objectContaining({
+        headers: expect.objectContaining({ Expires: AFTER_TWO_HOUR })
+      })
+    );
+  });
 });
