@@ -26,13 +26,8 @@ class SearchBase extends React.Component {
       transformRequest: props.transformRequest,
       transformResponse: props.transformResponse
     });
-
-    // console.log(
-    //   'calledContextCollector',
-    //   this.searchbase,
-    //   props.searchbaseContext
-    // );
-
+    this.searchbase.initialState = props.initialState;
+    // server side rendered app to collect context
     if (
       typeof window === 'undefined' &&
       props.contextCollector &&
@@ -74,7 +69,9 @@ SearchBase.propTypes = {
   appbaseConfig: appbaseConfig,
   transformRequest: func,
   transformResponse: func,
-  mongodb: object
+  mongodb: object,
+  contextCollector: func,
+  initialState: object
 };
 
 export default SearchBase;
