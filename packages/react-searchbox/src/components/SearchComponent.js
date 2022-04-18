@@ -98,8 +98,7 @@ class SearchComponent extends React.Component {
       enableRecentSearches,
       applyStopwords,
       maxPopularSuggestions,
-      stopwords,
-      triggerQueryOnInit
+      stopwords
     } = this.props;
     let { value } = this.props;
     if (
@@ -119,6 +118,7 @@ class SearchComponent extends React.Component {
         }
       }
     }
+    console.log('registering......', id);
     // Register search base component
     context.register(id, {
       index,
@@ -189,6 +189,32 @@ class SearchComponent extends React.Component {
       applyStopwords,
       stopwords
     });
+    if (context.initialState) {
+      const initialState = context.initialState[id];
+      if (initialState) {
+        this.componentInstance.aggregationData.data =
+          initialState.aggregationData.data;
+        this.componentInstance.aggregationData.setRaw(
+          initialState.aggregationData.rawData
+        );
+        this.componentInstance.categoryValue = initialState.categoryValue;
+        this.componentInstance._queryId = initialState.queryId;
+        this.componentInstance.value = initialState.value;
+        this.componentInstance._lastRequestTimeCustomQuery =
+          initialState._lastRequestTimeCustomQuery;
+        this.componentInstance._lastRequestTimeDefaultQuery =
+          initialState._lastRequestTimeDefaultQuery;
+        this.componentInstance.results.data = initialState.results.data;
+        this.componentInstance.results.raw = initialState.results.raw;
+        this.componentInstance.results.setRaw(initialState.results.rawData);
+        if (Array.isArray(JSON.parse(initialState._query))) {
+          this.componentInstance._query = JSON.parse(initialState._query)[0];
+        } else {
+          this.componentInstance._query = initialState._query;
+        }
+      }
+    }
+
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
       this.componentInstance.subscribeToStateChanges(change => {
@@ -199,16 +225,27 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (value || customQuery) {
-      this.componentInstance.triggerCustomQuery();
-    }
-    if (triggerQueryOnInit) {
-      this.componentInstance.triggerDefaultQuery();
+  }
+
+  componentDidMount() {
+    const { triggerQueryOnInit, customQuery } = this.props;
+    if (this.componentInstance) {
+      if (triggerQueryOnInit) {
+        this.componentInstance.triggerDefaultQuery();
+      }
+      if (
+        // check to prevent customQuery at clientside when leveraging SSR
+        (!this.context.initialState && this.componentInstance.value) ||
+        customQuery
+      ) {
+        this.componentInstance.triggerCustomQuery();
+      }
     }
   }
 
   componentWillUnmount() {
     const { id } = this.props;
+    console.log('unmount', typeof window);
     // unregister component
     this.context.unregister(id);
   }
@@ -225,7 +262,7 @@ class SearchComponent extends React.Component {
   render() {
     const { id, URLParams } = this.props;
     if (this.hasCustomRenderer && this.componentInstance) {
-      if (URLParams && typeof window !== 'undefined') {
+      if (URLParams) {
         return (
           <URLParamsProvider id={id}>
             {getComponent(this.componentInstance.mappedProps, this.props)}
