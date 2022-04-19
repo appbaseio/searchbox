@@ -702,6 +702,13 @@ class SearchComponent extends Base {
     }
   };
 
+  // Method to set the category value
+  setCategoryValue = (value: any, options?: Options = defaultOptions): void => {
+    const prev = this.categoryValue;
+    this.categoryValue = value;
+    this._applyOptions(options, 'categoryValue', prev, this.value);
+  };
+
   // Method to set the size option
   setSize = (size: number, options?: Options = defaultOptions): void => {
     const prev = this.size;
@@ -1032,9 +1039,6 @@ class SearchComponent extends Base {
     prevValue: any,
     nextValue: any
   ): void {
-    if (options.category) {
-      this.categoryValue = options.category;
-    }
     // // Trigger mic events
     if (key === 'micStatus' && this.onMicStatusChange) {
       this.onMicStatusChange(nextValue, prevValue);
@@ -1070,8 +1074,7 @@ class SearchComponent extends Base {
           [key]: {
             prev: prevValue,
             next: nextValue
-          },
-          ...(options.category ? { category: options.category } : {})
+          }
         },
         key,
         this
