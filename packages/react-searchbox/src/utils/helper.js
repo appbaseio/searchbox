@@ -5,6 +5,9 @@ export const SearchContext = React.createContext();
 // parse query string
 // ref: https://stackoverflow.com/a/13896633/10822996
 function parseQuery(str) {
+  if (str instanceof Object) {
+    return str;
+  }
   if (typeof str != 'string' || str.length === 0) return {};
   let s = str.split('/?')[1]?.split('&');
   if (!s) return {};
@@ -32,7 +35,6 @@ export const getServerResults = () => {
   return (App, queryString = '') => {
     // parse the query String to respect url params in SSR
     let parsedQueryString = parseQuery(queryString);
-
     if (!appContext) {
       // callback function to collect SearchBase context
       const contextCollector = params => {

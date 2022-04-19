@@ -56,7 +56,6 @@ import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
 import AutofillSvg from '../styles/AutofillSvg';
 import { arrayOf } from 'prop-types';
-import SearchSvg from '../styles/SearchSvg';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -972,26 +971,29 @@ SearchBox.defaultProps = {
   categoryValue: ''
 };
 
-export default props => (
-  <SearchComponent
-    triggerQueryOnInit={
-      props.enableRecentSearches || props.enableRecentSuggestions
-    }
-    value="" // Init value as empty
-    type={queryTypes.Suggestion}
-    clearOnQueryChange
-    componentName="SearchBox"
-    {...props}
-    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
-  >
-    {({ error, loading, results, value, micStatus }) => (
-      <SearchBox
-        {...props}
-        error={error}
-        loading={loading}
-        results={results}
-        micStatus={micStatus}
-      />
-    )}
-  </SearchComponent>
-);
+export default props => {
+  console.log('searchbox wrapper called');
+  return (
+    <SearchComponent
+      triggerQueryOnInit={
+        props.enableRecentSearches || props.enableRecentSuggestions
+      }
+      value="" // Init value as empty
+      type={queryTypes.Suggestion}
+      clearOnQueryChange
+      componentName="SearchBox"
+      {...props}
+      subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
+    >
+      {({ error, loading, results, value, micStatus }) => (
+        <SearchBox
+          {...props}
+          error={error}
+          loading={loading}
+          results={results}
+          micStatus={micStatus}
+        />
+      )}
+    </SearchComponent>
+  );
+};
