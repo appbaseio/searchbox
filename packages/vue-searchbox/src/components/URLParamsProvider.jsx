@@ -29,11 +29,16 @@ const URLParamsProvider = {
 							if (typeof paramValue === 'object' && paramValue.category) {
 								category = paramValue.category;
 								paramValue = paramValue.value;
+
+								componentInstance.setCategoryValue(category, {
+									triggerCustomQuery: false,
+									triggerDefaultQuery: false,
+									stateChanges: false
+								});
 							}
 							if (!isEqual(componentInstance.value, paramValue)) {
 								componentInstance.setValue(paramValue, {
-									...options,
-									category
+									...options									
 								});
 							}
 						} catch (e) {
@@ -61,10 +66,10 @@ const URLParamsProvider = {
 						if (checkValidValue(change.value.next)) {
 							// stringify the values
 							let valueParam = change.value.next;
-							if (change.category) {
+							if (component.categoryValue) {
 								valueParam = {
 									value: change.value.next,
-									category: change.category
+									category: component.categoryValue
 								};
 							}
 							this.params.set(id, JSON.stringify(valueParam));
@@ -74,7 +79,7 @@ const URLParamsProvider = {
 						// Update URLParam
 						this.pushToHistory();
 					},
-					['value', 'category']
+					['value']
 				);
 			}
 		}
