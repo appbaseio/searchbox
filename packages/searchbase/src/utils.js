@@ -262,6 +262,7 @@ export const searchBaseMappings = {
   // ---------------- Setter Methods ----------------
   setDataField: 'setDataField',
   setValue: 'setValue',
+  setCategoryValue: 'setCategoryValue',
   setSize: 'setSize',
   setFrom: 'setFrom',
   setFuzziness: 'setFuzziness',
