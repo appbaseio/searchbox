@@ -14,6 +14,8 @@ import Base from './Base';
 import SearchBase from './SearchBase';
 import Results from './Results';
 import Aggregations from './Aggregations';
+import fetch from 'cross-fetch';
+
 
 import {
   queryTypes,
