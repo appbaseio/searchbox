@@ -38,6 +38,9 @@ describe('SearchBase: register', () => {
     searchBase.register(componentId, searchComponent);
     expect(searchBase.getComponent(componentId).id).toBe(componentId);
   });
+});
+
+describe('SearchComponent: appbaseConfig', () => {
   test('should inherit appbaseConfig from SearchBase', () => {
     const searchBase = new SearchBase({
       index,
