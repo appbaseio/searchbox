@@ -29,11 +29,17 @@ class URLParamsProvider extends React.Component {
             if (typeof paramValue === 'object' && paramValue.category) {
               category = paramValue.category;
               paramValue = paramValue.value;
+
+              // set cateogry value silently
+              this.componentInstance.setCategoryValue(category, {
+                triggerCustomQuery: false,
+                triggerDefaultQuery: false,
+                stateChanges: false
+              });
             }
             if (!isEqual(this.componentInstance.value, paramValue)) {
               this.componentInstance.setValue(paramValue, {
-                ...options,
-                category
+                ...options
               });
             }
           } catch (e) {
@@ -58,10 +64,10 @@ class URLParamsProvider extends React.Component {
           if (checkValidValue(change.value.next)) {
             // stringify the values
             let valueParam = change.value.next;
-            if (change.category) {
+            if (this.componentInstance.categoryValue) {
               valueParam = {
                 value: change.value.next,
-                category: change.category
+                category: this.componentInstance.categoryValue
               };
             }
             this.params.set(id, JSON.stringify(valueParam));
@@ -71,7 +77,7 @@ class URLParamsProvider extends React.Component {
           // Update URLParam
           this.pushToHistory();
         },
-        ['value', 'category']
+        ['value']
       );
     }
   }
