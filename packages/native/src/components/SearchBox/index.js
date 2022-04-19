@@ -302,11 +302,18 @@ class SearchBox extends React.Component {
         autoFillInProgress: false
       });
     }
+
+    // to set the category value - silent  update
+
+    this.componentInstance.setCategoryValue(category, {
+      triggerDefaultQuery: false,
+      triggerCustomQuery: false
+    });
+
     if (this.isControlled()) {
       this.componentInstance.setValue(value, {
         triggerDefaultQuery: !!rest.triggerDefaultQuery,
-        triggerCustomQuery: !!rest.triggerCustomQuery,
-        category
+        triggerCustomQuery: !!rest.triggerCustomQuery
       });
       onChange(value, this.componentInstance);
     } else {
@@ -318,8 +325,7 @@ class SearchBox extends React.Component {
         this.componentInstance.setValue(value, {
           triggerDefaultQuery: false,
           triggerCustomQuery: false,
-          stateChanges: true,
-          category
+          stateChanges: true
         });
         // only fetch suggestions for value
         if (value && triggerDefaultQuery) {
@@ -336,8 +342,7 @@ class SearchBox extends React.Component {
           triggerCustomQuery: rest.triggerCustomQuery,
           // only fetch suggestions for value
           triggerDefaultQuery: !!value && triggerDefaultQuery,
-          stateChanges: true,
-          category
+          stateChanges: true
         });
         if (!autosuggest) {
           this.triggerCustomQuery();
