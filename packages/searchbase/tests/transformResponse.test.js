@@ -46,3 +46,77 @@ describe('SearchBase: transformResponse', () => {
     expect(response).toBe(mockHits);
   });
 });
+
+describe('SearchComponent: transformResponse', () => {
+  test('should transform the response', async () => {
+    const componentId = 'search-component';
+    const mockHits = { hits: [1, 2, 3] };
+    //transformRequest takes the same input as fetch
+    const searchComponent = new SearchComponent({
+      index,
+      url,
+      credentials,
+      id: componentId,
+      transformResponse: async elasticsearchResponse => {
+        return {
+          ...elasticsearchResponse,
+          [componentId]: mockHits
+        };
+      }
+    });
+
+    window.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        [componentId]: { hits: { hits: [] } }
+      })
+    });
+
+    const response = await searchComponent.triggerDefaultQuery();
+    expect(response).toBe(mockHits);
+  });
+  test('should not be overriden by SearchBase.transformResponse', async () => {
+    const componentId = 'search-component';
+    const mockHitsSearchBase = { hits: [1, 2, 3] };
+    const mockHitsSearchComponent = { hits: [2, 3, 4] };
+
+    const searchComponent = new SearchComponent({
+      index,
+      url,
+      credentials,
+      id: componentId,
+      //transformResponse should return the complete response
+      transformResponse: async elasticsearchResponse => {
+        return {
+          ...elasticsearchResponse,
+          [componentId]: mockHitsSearchComponent
+        };
+      }
+    });
+    const searchBase = new SearchBase({
+      index,
+      url,
+      credentials,
+      id: componentId,
+      //transformResponse should return the complete response
+      transformResponse: async elasticsearchResponse => {
+        return {
+          ...elasticsearchResponse,
+          [componentId]: mockHitsSearchBase
+        };
+      }
+    });
+
+    searchBase.register(componentId, searchComponent);
+
+    window.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        [componentId]: { hits: { hits: [] } }
+      })
+    });
+
+    const response = await searchComponent.triggerDefaultQuery();
+    expect(response).toBe(mockHitsSearchComponent);
+  });
+});
