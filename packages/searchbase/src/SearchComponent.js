@@ -562,9 +562,7 @@ class SearchComponent extends Base {
       customQuery: this.customQuery ? this.customQuery(this) : undefined,
       defaultQuery: this.defaultQuery ? this.defaultQuery(this) : undefined,
       ...(this.value && { value: this.value }),
-      ...(this.type !== queryTypes.Suggestion
-        ? { categoryValue: this.categoryValue }
-        : {}),
+      categoryValue: this.categoryValue,
       after: this.after,
       aggregations: this.aggregations,
       enableSynonyms: this.enableSynonyms,
