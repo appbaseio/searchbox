@@ -335,7 +335,8 @@ export function validateSchema(
   schema = {},
   backendName = '',
   componentName = '',
-  componentNameForErrorDisplay = ''
+  componentNameForErrorDisplay = '',
+  isHeadless = false
 ) {
   const passedPropertiesKeys = Object.keys(passedProperties).filter(
     propertyKey => !!passedProperties[propertyKey]
@@ -357,7 +358,9 @@ export function validateSchema(
   requiredProperties.forEach(requiredProperty => {
     if (!passedPropertiesKeys.includes(requiredProperty)) {
       throw new Error(
-        `${requiredProperty} is required for <${componentNameForErrorDisplay} /> component when used with the ${backendName} Search backend.`
+        `${requiredProperty} is required for ${componentNameForErrorDisplay} ${
+          isHeadless ? 'class' : 'component'
+        } when used with the ${backendName} Search backend.`
       );
     }
   });
@@ -366,7 +369,9 @@ export function validateSchema(
   passedPropertiesKeys.forEach(passedPropertyKey => {
     if (!acceptedProperties.includes(passedPropertyKey)) {
       throw new Error(
-        `<${componentNameForErrorDisplay} /> component doesn't accept a property ${passedPropertyKey}, backend used is ${backendName}.`
+        `${componentNameForErrorDisplay} ${
+          isHeadless ? 'class' : 'component'
+        } doesn't accept a property ${passedPropertyKey}, backend used is ${backendName}.`
       );
     }
 
@@ -378,7 +383,9 @@ export function validateSchema(
     );
     if (!acceptedTypes.includes(receivedPropertyType)) {
       throw new Error(
-        `<${componentNameForErrorDisplay} /> component accepts a property ${passedPropertyKey} with type(s) [${acceptedTypes.join(
+        `${componentNameForErrorDisplay} ${
+          isHeadless ? 'class' : 'component'
+        } accepts a property ${passedPropertyKey} with type(s) [${acceptedTypes.join(
           ', '
         )}], but type was set as ${receivedPropertyType}.`
       );
@@ -583,4 +590,12 @@ export const getSuggestions = (
     });
   }
   return suggestionsList;
+};
+
+export const LIBRARY_ALIAS = {
+  REACT_SEARCHBOX: 'react-searchbox',
+  VUE_SEARCHBOX: 'vue-searchbox',
+  SEARCHBOX: 'searchbox',
+  SEARCHBASE: 'searchbase',
+  NATIVE: 'native'
 };

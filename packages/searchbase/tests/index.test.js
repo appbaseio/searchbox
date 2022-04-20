@@ -17,7 +17,7 @@ describe('SearchBase instance: Error reporting', () => {
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'url is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'url is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -30,7 +30,7 @@ describe('SearchBase instance: Error reporting', () => {
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'index is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'index is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
