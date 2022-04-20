@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToStaticMarkup } from 'react-dom/server';
 export const SearchContext = React.createContext();
 
 // parse query string
@@ -47,7 +47,10 @@ export const getServerResults = () => {
 
       // render the app server-side to collect context and build initial state
       // for hydration on client side
-      renderToString(<App contextCollector={contextCollector} />);
+      const appString = renderToStaticMarkup(
+        <App contextCollector={contextCollector} />
+      );
+
 
       if (appContext) {
         const componentInstancesIds = Object.keys(appContext._components);
