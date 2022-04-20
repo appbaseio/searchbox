@@ -118,7 +118,6 @@ class SearchComponent extends React.Component {
         }
       }
     }
-    console.log('registering......', id);
     // Register search base component
     context.register(id, {
       index,
@@ -245,7 +244,6 @@ class SearchComponent extends React.Component {
 
   componentWillUnmount() {
     const { id } = this.props;
-    console.log('unmount', typeof window);
     // unregister component
     this.context.unregister(id);
   }
