@@ -8,16 +8,6 @@ const url = 'https://scalr.api.appbase.io';
 const credentials = 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38';
 
 describe('SearchBase instance: Error reporting', () => {
-  test('throw error if empty index', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({});
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual('SearchBase: Please provide a valid index.');
-    }
-  });
-
   test('throw error if empty url', () => {
     try {
       /* eslint-disable-next-line */
@@ -26,7 +16,22 @@ describe('SearchBase instance: Error reporting', () => {
       });
       expect(true).toBe(false);
     } catch (e) {
-      expect(e.message).toEqual('SearchBase: Please provide a valid url.');
+      expect(e.message).toEqual(
+        'url is required for SearchBase class when used with the elasticsearch Search backend.'
+      );
+    }
+  });
+  test('throw error if empty index', () => {
+    try {
+      /* eslint-disable-next-line */
+      const searchbase = new SearchBase({
+        url: 'https://appbase-demo.dev.io'
+      });
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.message).toEqual(
+        'index is required for SearchBase class when used with the elasticsearch Search backend.'
+      );
     }
   });
 });

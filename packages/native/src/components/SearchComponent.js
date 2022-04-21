@@ -16,6 +16,7 @@ import {
   hasCustomRenderer,
   SearchContext
 } from '../utils/helper';
+import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchComponent extends React.Component {
   static contextType = SearchContext;
@@ -158,7 +159,8 @@ class SearchComponent extends React.Component {
       rankFeature,
       enableRecentSearches,
       applyStopwords,
-      stopwords
+      stopwords,
+      libAlias: LIBRARY_ALIAS.NATIVE
     });
     // Subscribe to state changes
     if (this.hasCustomRenderer && this.componentInstance) {

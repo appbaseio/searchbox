@@ -2,6 +2,7 @@ import VueTypes from 'vue-types';
 import { types } from '../utils/types';
 import { getCamelCase } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider.jsx';
+import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 const SearchComponent = {
 	name: 'search-component',
@@ -273,7 +274,8 @@ const SearchComponent = {
 					prev,
 					next
 				});
-			}
+			},
+			libAlias: LIBRARY_ALIAS.VUE_SEARCHBOX
 		});
 		Object.keys(componentInstance.mappedProps).forEach(key => {
 			this.$set(this.searchState, key, componentInstance.mappedProps[key]);

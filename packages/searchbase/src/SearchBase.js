@@ -21,7 +21,8 @@ class SearchBase extends Base {
     headers,
     appbaseConfig,
     transformRequest,
-    transformResponse
+    transformResponse,
+    libAlias
   }: SearchBaseConfig) {
     super({
       index,
@@ -31,7 +32,8 @@ class SearchBase extends Base {
       headers,
       appbaseConfig,
       transformRequest,
-      transformResponse
+      transformResponse,
+      libAlias
     });
     this._components = {};
   }

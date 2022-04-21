@@ -279,6 +279,7 @@ class SearchComponent extends Base {
     autocompleteField,
     highlightConfig,
     componentName,
+    libAlias,
     ...rsAPIConfig
   }: ComponentConfig) {
     super({
@@ -289,7 +290,8 @@ class SearchComponent extends Base {
       headers,
       appbaseConfig,
       transformRequest,
-      transformResponse
+      transformResponse,
+      libAlias
     });
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
     // eslint-disable-next-line

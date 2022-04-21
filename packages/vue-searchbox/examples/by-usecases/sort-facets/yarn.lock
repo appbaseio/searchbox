@@ -2,11 +2,19 @@
 # yarn lockfile v1
 
 
-"@appbaseio/searchbase-mongodb@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase-mongodb/-/searchbase-mongodb-0.0.2.tgz#341a0be1650f2a5daa16edee1371eb06de1a3422"
-  integrity sha512-/Yep6u15FOvxSfBdG1PP1kSRNT4Bt5B66+tauC4u6U2ofizkOfSiyHpz8Dxqxs9uhSRidTJByb1UY+RF4G7qIQ==
+"@appbaseio/analytics@^2.1.0-beta":
+  version "2.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-2.1.0-beta.tgz#0633486e4bfd4a7760a3dd204a74505d0f5e3810"
+  integrity sha512-99e7SkDVoFW99PEVnpp9n+MM5u7ZTK9hwVAuOJN9fpR7EkftHYEmvCiPf7HzObweb3PwqFjCQT4597cGNNTOgQ==
   dependencies:
+    cross-fetch "^3.0.4"
+
+"@appbaseio/searchbase@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.7.0.tgz#a8bdfebdd749394e3b048ff928a6c44a20f382a9"
+  integrity sha512-wAQfaa6CNX/+UTYC/0b0fNLrnDBD6PmFRKKEUKZ5iGIUox5vosg85ZfRPWnISrQ/BXlgZPrxbHFhcAqZ0cYwFg==
+  dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
 
 "@appbaseio/vue-emotion@^0.4.4":
@@ -17,12 +25,12 @@
     emotion-utils "^9.1.0"
     nano-assign "^1.0.0"
 
-"@appbaseio/vue-searchbox-mongodb@*":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox-mongodb/-/vue-searchbox-mongodb-0.0.2.tgz#cd269c9ff509de85e4902813345879cd22c0823f"
-  integrity sha512-TZyv6k4yCPKRHgMyzBH1U9ik2QRpxDOt1IA4ygTn+C0ylNCcIGGj7VE/kj0dAsbk7UNIgVvbCtP0pr2W3nVioA==
+"@appbaseio/vue-searchbox@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/vue-searchbox/-/vue-searchbox-1.7.0.tgz#cc4eecf29937a44f851944264668808d745a3cbf"
+  integrity sha512-nvYNuhKXxXUh5lic9LKELV2LPliZyqeZhQiRSUe70LXG3HDCBhz2zoAA0v02ij+IOJXaijEcCyQwnBFZrEmOsQ==
   dependencies:
-    "@appbaseio/searchbase-mongodb" "0.0.2"
+    "@appbaseio/searchbase" "1.7.0"
     "@appbaseio/vue-emotion" "^0.4.4"
     "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
     compute-scroll-into-view "^1.0.11"
@@ -3988,9 +3996,9 @@ flush-write-stream@^1.0.0:
     readable-stream "^2.3.6"
 
 follow-redirects@^1.0.0:
-  version "1.14.4"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.4.tgz#838fdf48a8bbdd79e52ee51fb1c94e3ed98b9379"
-  integrity sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==
+  version "1.14.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
+  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -5590,9 +5598,9 @@ minimatch@^3.0.2, minimatch@^3.0.4:
     brace-expansion "^1.1.7"
 
 minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
 mississippi@^2.0.0:
   version "2.0.0"
@@ -8335,9 +8343,9 @@ url-loader@^1.1.2:
     schema-utils "^1.0.0"
 
 url-parse@^1.4.3, url-parse@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.3.tgz#71c1303d38fb6639ade183c2992c8cc0686df862"
-  integrity sha512-IIORyIQD9rvj0A4CLWsHkBBJuNqWpFQe224b6j9t/ABmquIS0qDU2pY6kl6AuOrL5OkCXHMCFNe1jBcuAggjvQ==
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
+  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
