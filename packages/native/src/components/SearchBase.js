@@ -3,6 +3,7 @@ import { SearchBase as Headless } from '@appbaseio/searchbase';
 import { string, func, object } from 'prop-types';
 import { appbaseConfig } from '../utils/types';
 import { SearchContext } from '../utils/helper';
+import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchBase extends React.Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class SearchBase extends React.Component {
       headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
-      transformResponse: props.transformResponse
+      transformResponse: props.transformResponse,
+      libAlias: LIBRARY_ALIAS.NATIVE
     });
   }
 

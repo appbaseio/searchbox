@@ -8,6 +8,7 @@ import {
   string
 } from '../utils/types';
 import { SearchContext } from '../utils/helper';
+import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchBase extends React.Component {
   constructor(props) {
@@ -24,7 +25,8 @@ class SearchBase extends React.Component {
       headers,
       appbaseConfig: props.appbaseConfig,
       transformRequest: props.transformRequest,
-      transformResponse: props.transformResponse
+      transformResponse: props.transformResponse,
+      libAlias: LIBRARY_ALIAS.REACT_SEARCHBOX
     });
   }
 

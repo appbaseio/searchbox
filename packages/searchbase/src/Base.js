@@ -1,6 +1,12 @@
 // @flow
 import AppbaseAnalytics from '@appbaseio/analytics';
-import { btoa, validateSchema, backendAlias, componentsAlias } from './utils';
+import {
+  btoa,
+  validateSchema,
+  backendAlias,
+  componentsAlias,
+  LIBRARY_ALIAS
+} from './utils';
 import type { AppbaseSettings, BaseConfig } from './types.js.flow';
 import SCHEMA from './schema/index';
 
@@ -48,7 +54,8 @@ class Base {
     mongodb,
     appbaseConfig,
     transformRequest,
-    transformResponse
+    transformResponse,
+    libAlias
   }: BaseConfig) {
     const backendName = backendAlias[mongodb ? 'MONGODB' : 'ELASTICSEARCH'];
     // eslint-disable-next-line
@@ -67,7 +74,8 @@ class Base {
       schema,
       backendName,
       componentsAlias.SEARCHBASE,
-      componentsAlias.SEARCHBASE
+      componentsAlias.SEARCHBASE,
+      !libAlias || libAlias === LIBRARY_ALIAS.SEARCHBASE
     );
 
     this.index = index;
