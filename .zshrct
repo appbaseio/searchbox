@@ -1,6 +1,0 @@
-export PATH="\$PATH:/Applications/Visual Studio 
-Code.app/Contents/Resources/app/bin"
-
-source /home/mohdashraf/.gvm/scripts/gvm
-
-[[ -s "/Users/mohdashraf/.gvm/scripts/gvm" ]] && source "/Users/mohdashraf/.gvm/scripts/gvm"
