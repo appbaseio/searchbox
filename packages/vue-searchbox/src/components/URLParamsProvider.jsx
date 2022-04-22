@@ -1,11 +1,11 @@
 import VueTypes from 'vue-types';
-import { isEqual, checkValidValue } from '../utils/helper'
+import { isEqual, checkValidValue } from '../utils/helper';
 
 const URLParamsProvider = {
 	name: 'URLParamsProvider',
 	inject: ['searchbase'],
 	props: {
-		id: VueTypes.string.isRequired,
+		id: VueTypes.string.isRequired
 	},
 	mounted() {
 		const { id } = this.$props;
@@ -20,13 +20,26 @@ const URLParamsProvider = {
 				};
 				this.init();
 				const componentInstance = this.getComponentInstance();
-				if(componentInstance) {
+				if (componentInstance) {
 					if (this.params.has(id)) {
 						// Set component value
 						try {
-							const paramValue = JSON.parse(this.params.get(id));
+							let paramValue = JSON.parse(this.params.get(id));
+							let category;
+							if (typeof paramValue === 'object' && paramValue.category) {
+								category = paramValue.category;
+								paramValue = paramValue.value;
+
+								componentInstance.setCategoryValue(category, {
+									triggerCustomQuery: false,
+									triggerDefaultQuery: false,
+									stateChanges: false
+								});
+							}
 							if (!isEqual(componentInstance.value, paramValue)) {
-								componentInstance.setValue(paramValue, options);
+								componentInstance.setValue(paramValue, {
+									...options									
+								});
 							}
 						} catch (e) {
 							console.error(e);
@@ -37,11 +50,10 @@ const URLParamsProvider = {
 						componentInstance.setValue(null, options);
 					}
 				}
-
 			});
 
 			const component = this.getComponentInstance();
-			if(component) {
+			if (component) {
 				component.subscribeToStateChanges(
 					change => {
 						this.init();
@@ -53,7 +65,14 @@ const URLParamsProvider = {
 						// Only set the valid values
 						if (checkValidValue(change.value.next)) {
 							// stringify the values
-							this.params.set(id, JSON.stringify(change.value.next));
+							let valueParam = change.value.next;
+							if (component.categoryValue) {
+								valueParam = {
+									value: change.value.next,
+									category: component.categoryValue
+								};
+							}
+							this.params.set(id, JSON.stringify(valueParam));
 						} else {
 							this.params.delete(id);
 						}
@@ -113,11 +132,7 @@ const URLParamsProvider = {
 		}
 	},
 	render() {
-		return this.$slots.default ? (
-			<div>
-				{this.$slots.default}
-			</div>
-		) : null
+		return this.$slots.default ? <div>{this.$slots.default}</div> : null;
 	}
 };
 

@@ -702,6 +702,13 @@ class SearchComponent extends Base {
     }
   };
 
+  // Method to set the category value
+  setCategoryValue = (value: any, options?: Options = defaultOptions): void => {
+    const prev = this.categoryValue;
+    this.categoryValue = value;
+    this._applyOptions(options, 'categoryValue', prev, this.value);
+  };
+
   // Method to set the size option
   setSize = (size: number, options?: Options = defaultOptions): void => {
     const prev = this.size;
@@ -1220,6 +1227,10 @@ class SearchComponent extends Base {
                 query.execute = false;
                 if (query.type === queryTypes.Suggestion) {
                   query.type = queryTypes.Search;
+
+                  if (dependentComponent.categoryField) {
+                    query.categoryValue = dependentComponent.categoryValue;
+                  }
                 }
                 // Add the query to request payload
                 requestQuery[id] = query;
@@ -1316,6 +1327,13 @@ class SearchComponent extends Base {
         // Set the execute to `false` for watcher components
         const watcherQuery = watcherComponent.componentQuery;
         watcherQuery.execute = false;
+        if (watcherQuery.type === queryTypes.Suggestion) {
+          watcherQuery.type = queryTypes.Search;
+
+          if (watcherComponent.categoryField) {
+            watcherQuery.categoryValue = watcherComponent.categoryValue;
+          }
+        }
         // Add the query to request payload
         finalQuery.push(watcherQuery);
       }
