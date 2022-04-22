@@ -35,6 +35,7 @@ describe('SearchComponent: setter methods', () => {
   test.each(settersTable)('should set %s', (field, initialVal, updatedVal) => {
     const searchBase = new SearchBase({ index, url, credentials });
     const componentId = 'search-component';
+    //Make the name of setter
     const capitalizedField = field[0].toUpperCase() + field.slice(1);
     const setterName = 'set' + capitalizedField;
     const searchComponent = searchBase.register(componentId, {

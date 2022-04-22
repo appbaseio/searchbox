@@ -114,30 +114,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
       expect.objectContaining({ value: 'harry' })
     );
   });
-  test('should trigger custom query', async () => {
-    const searchComponentId = 'search-component';
-    const resultComponentId = 'result-component';
-
-    const searchComponent = searchBase.register(searchComponentId, {
-      value: 'harry'
-    });
-    const resultComponent = searchBase.register(resultComponentId, {
-      react: { and: searchComponentId }
-    });
-
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [searchComponentId]: { hits: { hits: [] } },
-        [resultComponentId]: { hits: { hits: [] } }
-      })
-    });
-
-    await searchComponent.triggerCustomQuery();
-    expect(resultComponent.query[1]).toEqual(
-      expect.objectContaining({ value: 'harry' })
-    );
-  });
 
   test('should trigger custom query as Elasticsearch query DSL', async () => {
     const searchComponentId = 'search-component';
