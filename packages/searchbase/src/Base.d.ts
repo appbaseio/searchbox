@@ -12,6 +12,7 @@ declare abstract class Base {
     headers,
     appbaseConfig,
     mongodb,
+    libAlias,
     transformRequest,
     transformResponse
   }: BaseConfig);
@@ -30,6 +31,9 @@ declare abstract class Base {
 
   // es url
   url: string;
+
+  // library alias
+  libAlias?: string;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

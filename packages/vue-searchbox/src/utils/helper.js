@@ -223,11 +223,3 @@ export const suggestionTypes = {
 	Recent: 'recent',
 	Promoted: 'promoted'
 };
-
-export const LIBRARY_ALIAS = {
-  REACT_SEARCHBOX: 'react-searchbox',
-  VUE_SEARCHBOX: 'vue-searchbox',
-  SEARCHBOX: 'searchbox',
-  SEARCHBASE: 'searchbase',
-  NATIVE: 'native'
-};

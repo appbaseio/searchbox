@@ -1,8 +1,8 @@
 import VueTypes from 'vue-types';
+import { LIBRARY_ALIAS } from '@appbaseio/searchbase';
 import { types } from '../utils/types';
-import { getCamelCase, LIBRARY_ALIAS } from '../utils/helper';
+import { getCamelCase } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider.jsx';
-
 
 const SearchComponent = {
 	name: 'search-component',
@@ -79,7 +79,7 @@ const SearchComponent = {
 		// mongodb specific
 		autocompleteField: types.dataField,
 		highlightConfig: VueTypes.object,
-		mongodb: VueTypes.object,
+		mongodb: VueTypes.object
 	},
 	data() {
 		return {
@@ -160,12 +160,16 @@ const SearchComponent = {
 			autocompleteField,
 			highlightConfig
 		} = this.rawProps;
-		let { value } = this.rawProps;
+		let { value, categoryValue: category } = this.rawProps;
 		if (window && window.location && window.location.search) {
 			const params = new URLSearchParams(window.location.search);
 			if (params.has(id)) {
 				try {
 					value = JSON.parse(params.get(id));
+					if (typeof value === 'object' && value.category) {
+						category = value.category;
+						value = value.value;
+					}
 				} catch (e) {
 					console.error(e);
 					// Do not set value if JSON parsing fails.
@@ -186,7 +190,7 @@ const SearchComponent = {
 			queryFormat,
 			dataField,
 			categoryField,
-			categoryValue,
+			categoryValue: category || categoryValue,
 			nestedField,
 			from,
 			size,

@@ -4,10 +4,15 @@ import {
   getSuggestions,
   highlightResults,
   parseHits
+  // suggestionsWithCurrentValueOut
 } from '../src/utils';
 
 import { hits, parsedHits } from '../tests_data/hit';
-import { nestedFields } from '../tests_data/suggestions';
+import {
+  nestedFields
+  // suggestions,
+  // suggestionsWithNoCurrentValueOut
+} from '../tests_data/suggestions';
 
 test('highlight results', () => {
   expect(

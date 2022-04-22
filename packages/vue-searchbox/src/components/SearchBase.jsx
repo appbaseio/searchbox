@@ -1,6 +1,5 @@
-import { SearchBase as Headless } from '@appbaseio/searchbase';
+import { SearchBase as Headless, LIBRARY_ALIAS } from '@appbaseio/searchbase';
 import VueTypes from 'vue-types';
-import { LIBRARY_ALIAS } from '../utils/helper';
 import { types } from '../utils/types';
 
 const SearchBase = {

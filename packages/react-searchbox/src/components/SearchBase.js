@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchBase as Headless } from '@appbaseio/searchbase';
+import { SearchBase as Headless, LIBRARY_ALIAS } from '@appbaseio/searchbase';
 import {
   appbaseConfig,
   func,
@@ -8,7 +8,6 @@ import {
   string
 } from '../utils/types';
 import { SearchContext } from '../utils/helper';
-import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchBase extends React.Component {
   constructor(props) {

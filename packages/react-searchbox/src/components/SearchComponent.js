@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { LIBRARY_ALIAS } from '@appbaseio/searchbase';
 import {
   any,
   appbaseConfig as appbaseConfigDef,
@@ -23,7 +24,6 @@ import {
   SearchContext
 } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider';
-import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchComponent extends React.Component {
   static contextType = SearchContext;
@@ -101,6 +101,7 @@ class SearchComponent extends React.Component {
       maxPopularSuggestions,
       stopwords
     } = this.props;
+<<<<<<< HEAD
     let { value } = this.props;
     if (
       typeof window !== 'undefined' &&
@@ -108,10 +109,18 @@ class SearchComponent extends React.Component {
       window.location &&
       window.location.search
     ) {
+=======
+    let { value, categoryValue: category } = this.props;
+    if (window && window.location && window.location.search) {
+>>>>>>> master
       const params = new URLSearchParams(window.location.search);
       if (params.has(id)) {
         try {
           value = JSON.parse(params.get(id));
+          if (typeof value === 'object' && value.category) {
+            category = value.category;
+            value = value.value;
+          }
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e);
@@ -136,7 +145,7 @@ class SearchComponent extends React.Component {
       autocompleteField,
       highlightConfig,
       categoryField,
-      categoryValue,
+      categoryValue: category || categoryValue,
       nestedField,
       from,
       size,
