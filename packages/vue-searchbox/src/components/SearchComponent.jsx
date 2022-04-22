@@ -1,8 +1,8 @@
 import VueTypes from 'vue-types';
+import { LIBRARY_ALIAS } from '@appbaseio/searchbase';
 import { types } from '../utils/types';
 import { getCamelCase } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider.jsx';
-import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 const SearchComponent = {
 	name: 'search-component',

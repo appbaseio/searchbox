@@ -41,6 +41,7 @@ export type BaseConfig = {
   credentials: string,
   mongodb: Object,
   appbaseConfig?: AppbaseSettings,
+  libAlias?: string,
   enableTelemetry?: boolean,
   headers: Object,
   transformRequest?: (requestOptions: Object) => Promise<Object>,

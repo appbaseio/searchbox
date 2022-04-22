@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { LIBRARY_ALIAS } from '@appbaseio/searchbase';
 import {
   any,
   appbaseConfig as appbaseConfigDef,
@@ -23,7 +24,6 @@ import {
   SearchContext
 } from '../utils/helper';
 import URLParamsProvider from './URLParamsProvider';
-import { LIBRARY_ALIAS } from '../../../searchbase/src/utils';
 
 class SearchComponent extends React.Component {
   static contextType = SearchContext;
