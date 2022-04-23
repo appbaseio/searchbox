@@ -101,18 +101,13 @@ class SearchComponent extends React.Component {
       maxPopularSuggestions,
       stopwords
     } = this.props;
-<<<<<<< HEAD
-    let { value } = this.props;
+    let { value, categoryValue: category } = this.props;
     if (
       typeof window !== 'undefined' &&
       window &&
       window.location &&
       window.location.search
     ) {
-=======
-    let { value, categoryValue: category } = this.props;
-    if (window && window.location && window.location.search) {
->>>>>>> master
       const params = new URLSearchParams(window.location.search);
       if (params.has(id)) {
         try {
