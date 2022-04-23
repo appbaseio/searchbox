@@ -4,8 +4,12 @@ import {
   SearchBase,
   SearchComponent
 } from '@appbaseio/react-searchbox';
+import useStyles from 'isomorphic-style-loader/useStyles';
+import styles from './App.css';
 
 const App = props => {
+  useStyles(styles);
+
   return (
     <SearchBase
       index="good-books-ds"
@@ -25,7 +29,7 @@ const App = props => {
         : {})}
       initialState={props.initialState}
     >
-      <div>
+      <div css={styles._getContent().toString()}>
         <h2>
           React Searchbox Demo{' '}
           <span style={{ fontSize: '1rem' }}>

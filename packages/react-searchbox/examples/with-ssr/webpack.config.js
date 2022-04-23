@@ -31,6 +31,19 @@ module.exports = [
               loader: 'babel-loader'
             }
           ]
+        },
+        {
+          test: /\.css$/,
+          use: [
+            'isomorphic-style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1
+              }
+            },
+            'postcss-loader'
+          ]
         }
       ]
     }
@@ -52,6 +65,19 @@ module.exports = [
             {
               loader: 'babel-loader'
             }
+          ]
+        },
+        {
+          test: /\.css$/,
+          use: [
+            'isomorphic-style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1
+              }
+            },
+            'postcss-loader'
           ]
         }
       ]

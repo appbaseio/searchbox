@@ -5,11 +5,14 @@ import { renderToString } from 'react-dom/server';
 import App from './App';
 import template from './template';
 import { getServerResults } from '@appbaseio/react-searchbox';
+import StyleContext from 'isomorphic-style-loader/StyleContext';
+
 const server = express();
 
 server.use('/assets', express.static(join(__dirname, 'assets')));
 
 server.get('/', async (req, res) => {
+  // extracting query params
   const queryParams = { ...req.query };
   Object.keys(paramKey => {
     try {
@@ -21,15 +24,38 @@ server.get('/', async (req, res) => {
     }
   });
 
-  const initialState = await getServerResults()(App, queryParams.query);
+  // 👇  CSS LOADING using isomorphic-style-loader 👇
 
-  const plainHTML = renderToString(<App initialState={initialState} />);
+  const css = new Set(); // CSS for all rendered React components
+  const insertCss = (...styles) =>
+    styles.forEach(style => css.add(style._getCss()));
+  // refer to: https://github.com/kriasoft/isomorphic-style-loader
 
+  // 👇CALCULATING INITIAL STATE👇
+  const AppRef = props => {
+    return (
+      <StyleContext.Provider value={{ insertCss }}>
+        <App {...props} />
+      </StyleContext.Provider>
+    );
+  };
+  const initialState = await getServerResults()(AppRef, queryParams);
+
+  // 👇 SERVER RENDERING THE PAGE TO SEND BACK AS RESPONSE 👇
+
+  const plainHTML = renderToString(
+    <StyleContext.Provider value={{ insertCss }}>
+      <App initialState={initialState} />
+    </StyleContext.Provider>
+  );
+
+  // 👇 SEND RESPONSE TO CLIENT
   res.send(
     template({
       body: plainHTML,
       title: 'Server Rendered App',
-      initialState: JSON.stringify(initialState)
+      initialState: JSON.stringify(initialState),
+      css: css
     })
   );
 });
