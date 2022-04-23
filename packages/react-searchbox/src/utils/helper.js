@@ -47,10 +47,7 @@ export const getServerResults = () => {
 
       // render the app server-side to collect context and build initial state
       // for hydration on client side
-      const appString = renderToStaticMarkup(
-        <App contextCollector={contextCollector} />
-      );
-
+      renderToStaticMarkup(<App contextCollector={contextCollector} />);
 
       if (appContext) {
         const componentInstancesIds = Object.keys(appContext._components);
@@ -130,8 +127,11 @@ export const getServerResults = () => {
             return Error;
           });
       }
+      Promise.reject(
+        new Error('Could not compute server-side initial state of the app!')
+      );
     }
-    return null;
+    return Promise.resolve(appContext);
   };
 };
 
