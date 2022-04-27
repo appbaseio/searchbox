@@ -31,6 +31,7 @@ import Icons from './Icons.jsx';
 import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
 import AutofillSvg from '../styles/AutofillSvg';
+import Button from '../styles/Button';
 
 const SearchBox = {
 	name: 'search-box',
@@ -136,7 +137,9 @@ const SearchBox = {
 		stopwords: VueTypes.arrayOf(VueTypes.string),
 		mongodb: VueTypes.object,
 		autocompleteField: types.dataField,
-		highlightConfig: VueTypes.object
+		highlightConfig: VueTypes.object,
+		enterButton: VueTypes.bool.def(false),
+		renderEnterButton: VueTypes.any
 	},
 	data() {
 		this.state = {
@@ -212,7 +215,7 @@ const SearchBox = {
 				? this.getComponentInstance().suggestions
 				: this.getComponentInstance()?.results?.data;
 
-			return suggestions;
+			return suggestions ?? [];
 		},
 		_applySetter(prev, next, setterFunc) {
 			if (!equals(prev, next)) {
@@ -344,7 +347,7 @@ const SearchBox = {
 						componentInstance.clearResults();
 					}
 					debounceFunc(this.triggerDefaultQuery, debounce);
-				} else {
+				} else if (!this.enterButton) {
 					debounceFunc(this.triggerCustomQuery, debounce);
 				}
 				if (rest.triggerCustomQuery) {
@@ -354,10 +357,10 @@ const SearchBox = {
 				componentInstance.setValue(value, {
 					triggerCustomQuery: rest.triggerCustomQuery,
 					triggerDefaultQuery: this.autosuggest,
-					stateChanges: true					
+					stateChanges: true
 				});
 
-				if (!this.autosuggest) {
+				if (!this.autosuggest && !this.enterButton) {
 					this.triggerCustomQuery();
 				}
 			}
@@ -399,6 +402,40 @@ const SearchBox = {
 			const { addonAfter } = this.$scopedSlots;
 			if (addonAfter) {
 				return <InputAddon>{addonAfter()}</InputAddon>;
+			}
+
+			return null;
+		},
+		renderEnterButtonElement() {
+			const { enterButton, innerClass } = this.$props;
+			const { renderEnterButton } = this.$scopedSlots;
+			const enterButtonOnClick = () => {
+				this.isOpen = false;
+				this.triggerCustomQuery();
+			};
+
+			if (enterButton) {
+				const getEnterButtonMarkup = () => {
+					if (renderEnterButton) {
+						return renderEnterButton(enterButtonOnClick);
+					}
+
+					return (
+						<Button
+							class={`enter-btn ${getClassName(innerClass, 'enterButton')}`}
+							primary
+							onClick={enterButtonOnClick}
+						>
+             				Search
+						</Button>
+					);
+				};
+
+				return (
+					<div class="enter-button-wrapper">
+						{getEnterButtonMarkup()}
+					</div>
+				);
 			}
 
 			return null;
@@ -777,6 +814,7 @@ const SearchBox = {
                           && renderSuggestionsContainer()}
 											</InputWrapper>
 											{this.renderInputAddonAfter()}
+											{this.renderEnterButtonElement()}
 										</InputGroup>
 										{expandSuggestionsContainer && renderSuggestionsContainer()}
 									</div>
@@ -829,6 +867,7 @@ const SearchBox = {
 								{this.renderIcons()}
 							</InputWrapper>
 							{this.renderInputAddonAfter()}
+							{this.renderEnterButtonElement()}
 						</InputGroup>
 					</div>
 				)}
