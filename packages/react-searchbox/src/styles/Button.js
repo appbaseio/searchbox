@@ -45,6 +45,11 @@ const Button = styled('a')`
   }
 
   ${props => (props.primary ? primary : null)};
+
+  &.enter-btn {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
 `;
 
 export default Button;

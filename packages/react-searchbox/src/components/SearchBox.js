@@ -143,9 +143,10 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance.mongodb
-      ? this.componentInstance.suggestions
-      : this.componentInstance?.results?.data ?? [];
+    const suggestions =
+      (this.componentInstance.mongodb
+        ? this.componentInstance.suggestions
+        : this.componentInstance?.results?.data) ?? [];
     return suggestions;
   }
 
@@ -410,7 +411,7 @@ class SearchBox extends React.Component {
   };
 
   renderEnterButtonElement = () => {
-    const { enterButton, renderEnterButton } = this.props;
+    const { enterButton, renderEnterButton, innerClass } = this.props;
 
     const enterButtonOnClick = () => {
       this.triggerCustomQuery();
@@ -427,11 +428,7 @@ class SearchBox extends React.Component {
 
         return (
           <Button
-            style={{
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0
-            }}
-            className="enter-btn"
+            className={`enter-btn ${getClassName(innerClass, 'enterButton')}`}
             primary
             onClick={enterButtonOnClick}
           >
@@ -441,9 +438,7 @@ class SearchBox extends React.Component {
       };
 
       return (
-        <div style={{ height: '100%' }} className="enter-button-wrapper">
-          {getEnterButtonMarkup()}
-        </div>
+        <div className="enter-button-wrapper">{getEnterButtonMarkup()}</div>
       );
     }
 
