@@ -213,7 +213,9 @@ class SearchComponent extends React.Component {
         this.componentInstance.results.raw = initialState.results.raw;
         this.componentInstance.results.setRaw(initialState.results.rawData);
         if (Array.isArray(JSON.parse(initialState._query))) {
-          this.componentInstance._query = JSON.parse(initialState._query)[0];
+          this.componentInstance._query = JSON.parse(initialState._query).find(
+            queryItem => queryItem.id === this.componentInstance.id
+          );
         } else {
           this.componentInstance._query = initialState._query;
         }
@@ -240,8 +242,8 @@ class SearchComponent extends React.Component {
       }
       if (
         // check to prevent customQuery at clientside when leveraging SSR
-        (!this.context.initialState && this.componentInstance.value) ||
-        customQuery
+        !this.context.initialState &&
+        (this.componentInstance.value || customQuery)
       ) {
         this.componentInstance.triggerCustomQuery();
       }

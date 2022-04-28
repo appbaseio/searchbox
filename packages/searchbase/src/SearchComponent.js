@@ -797,8 +797,13 @@ class SearchComponent extends Base {
 
   // Method to execute the component's own query i.e default query
   triggerDefaultQuery = (options?: Option = defaultOption): Promise<any> => {
-    // To prevent duplicate queries
-    if (isEqual(this._query, JSON.parse(JSON.stringify(this.componentQuery)))) {
+    // To prevent duplicate queries  
+    if (
+      isEqual(
+       this._query? JSON.parse(JSON.stringify(this._query)):undefined,
+        JSON.parse(JSON.stringify(this.componentQuery))
+      )
+    ) {
       return Promise.resolve(true);
     }
 
