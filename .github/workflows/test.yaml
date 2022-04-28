@@ -25,4 +25,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
-      - run: cd packages/searchbase && yarn test --verbose --maxWorkers=1
+      - run: cd packages/searchbase && yarn test
