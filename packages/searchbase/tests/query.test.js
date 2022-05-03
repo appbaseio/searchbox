@@ -22,7 +22,7 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
   });
   test('should trigger query with all options', async () => {
     const componentId = 'search-component';
-    const query = {
+    const props = {
       react: {
         and: ['date-component', 'language-filter']
       },
@@ -30,7 +30,7 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
       queryFormat: 'and'
     };
     const searchComponent = searchBase.register(componentId, {
-      ...query,
+      ...props,
       type: 'search'
     });
 
@@ -42,7 +42,10 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
 
     await searchComponent.triggerDefaultQuery();
-    expect(searchComponent.query[0]).toEqual(expect.objectContaining(query));
+    const searchComponentQuery = searchComponent.query.find(
+      q => q.id === componentId
+    );
+    expect(searchComponentQuery).toEqual(expect.objectContaining(props));
   });
   test('should trigger default query as Elasticsearch query DSL', async () => {
     const componentId = 'search-component';
@@ -62,7 +65,10 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
 
     await searchComponent.triggerDefaultQuery();
-    expect(searchComponent.query[0].defaultQuery).toEqual(
+    const searchComponentQuery = searchComponent.query.find(
+      q => q.id === componentId
+    );
+    expect(searchComponentQuery.defaultQuery).toEqual(
       expect.objectContaining(query)
     );
   });
@@ -86,7 +92,10 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
 
     await searchComponent.triggerDefaultQuery();
-    expect(searchComponent.query[0].defaultQuery).toEqual(
+    const searchComponentQuery = searchComponent.query.find(
+      q => q.id === componentId
+    );
+    expect(searchComponentQuery.defaultQuery).toEqual(
       expect.objectContaining(query)
     );
   });
@@ -110,7 +119,10 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
 
     await searchComponent.triggerCustomQuery();
-    expect(resultComponent.query[1]).toEqual(
+    const resultComponentQuery = resultComponent.query.find(
+      q => q.id === searchComponentId //should have a query with id of the search-component
+    );
+    expect(resultComponentQuery).toEqual(
       expect.objectContaining({ value: 'harry' })
     );
   });
@@ -133,9 +145,12 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
         [resultComponentId]: { hits: { hits: [] } }
       })
     });
-
     await searchComponent.triggerCustomQuery();
-    expect(resultComponent.query[1].customQuery).toEqual(query);
+    const resultComponentQuery = resultComponent.query.find(
+      q => q.id === searchComponentId //should have a query with id of the search-component
+    );
+    console.log(resultComponent.query);
+    expect(resultComponentQuery).toEqual(expect.objectContaining(query));
   });
 
   test('should trigger custom query as stored query', async () => {
@@ -158,7 +173,10 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
 
     await searchComponent.triggerCustomQuery();
-    expect(resultComponent.query[1].customQuery).toEqual(query);
+    const resultComponentQuery = resultComponent.query.find(
+      q => q.id === searchComponentId //should have a query with id of the search-component
+    );
+    expect(resultComponentQuery).toEqual(expect.objectContaining(query));
   });
 });
 describe('Request Generation Logic(MongoDB as SearchBackend', () => {
