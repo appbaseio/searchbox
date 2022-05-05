@@ -2,21 +2,29 @@
 # yarn lockfile v1
 
 
-"@appbaseio/react-searchbox-mongodb@*":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox-mongodb/-/react-searchbox-mongodb-0.0.2.tgz#14214edd7fa911feeb1b9707dbc8de39ee15bbcb"
-  integrity sha512-aVqfPyVJenTLoMIrdN/aARJAEX9ME1igHbBP8uT4Usw9EDKfyj4RCMKEANKF6mYGPLh3LP/qqF291GXPwqmDog==
+"@appbaseio/analytics@^2.1.0-beta":
+  version "2.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@appbaseio/analytics/-/analytics-2.1.0-beta.tgz#0633486e4bfd4a7760a3dd204a74505d0f5e3810"
+  integrity sha512-99e7SkDVoFW99PEVnpp9n+MM5u7ZTK9hwVAuOJN9fpR7EkftHYEmvCiPf7HzObweb3PwqFjCQT4597cGNNTOgQ==
   dependencies:
-    "@appbaseio/searchbase-mongodb" "0.0.2"
+    cross-fetch "^3.0.4"
+
+"@appbaseio/react-searchbox@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.7.0.tgz#4b0e722785b7e2f67c903ac266d986203c80b261"
+  integrity sha512-mYsazb9KIHIpILl8SSXnzfW2TPfeE6Q7el8xweCT3oaw/WCZd/RToMY7eQneul774rGLAxm6DhOzjMt/+/IPtw==
+  dependencies:
+    "@appbaseio/searchbase" "1.7.0"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase-mongodb@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase-mongodb/-/searchbase-mongodb-0.0.2.tgz#341a0be1650f2a5daa16edee1371eb06de1a3422"
-  integrity sha512-/Yep6u15FOvxSfBdG1PP1kSRNT4Bt5B66+tauC4u6U2ofizkOfSiyHpz8Dxqxs9uhSRidTJByb1UY+RF4G7qIQ==
+"@appbaseio/searchbase@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.7.0.tgz#a8bdfebdd749394e3b048ff928a6c44a20f382a9"
+  integrity sha512-wAQfaa6CNX/+UTYC/0b0fNLrnDBD6PmFRKKEUKZ5iGIUox5vosg85ZfRPWnISrQ/BXlgZPrxbHFhcAqZ0cYwFg==
   dependencies:
+    "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.14.5", "@babel/code-frame@^7.15.8":
@@ -676,9 +684,9 @@ async-each@^1.0.1:
   integrity sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
 
 async@^2.1.2, async@^2.1.4, async@^2.4.1, async@^2.6.2:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
-  integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.6.4.tgz#706b7ff6084664cd7eae713f6f965433b5504221"
+  integrity sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==
   dependencies:
     lodash "^4.17.14"
 
