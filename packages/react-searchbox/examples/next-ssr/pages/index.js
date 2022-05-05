@@ -4,6 +4,7 @@ import {
   SearchComponent,
   getServerResults
 } from '@appbaseio/react-searchbox';
+import ReactPaginate from 'react-paginate';
 
 const App = props => {
   return (
@@ -140,6 +141,7 @@ const App = props => {
               react={{
                 and: ['search-component', 'author-filter']
               }}
+              URLParams
             >
               {({ results, loading, size, setValue, setFrom }) => {
                 return (
@@ -210,6 +212,26 @@ const App = props => {
                         ))}
                       </div>
                     )}
+                    <ReactPaginate
+                      pageCount={Math.floor(results.numberOfResults / size)}
+                      onPageChange={({ selected }) => setFrom(selected * size)}
+                      previousLabel="previous"
+                      nextLabel="next"
+                      breakLabel="..."
+                      breakClassName="break-me"
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      subContainerClassName="pages pagination"
+                      breakLinkClassName="page-link"
+                      containerClassName="pagination"
+                      pageClassName="page-item"
+                      pageLinkClassName="page-link"
+                      previousClassName="page-item"
+                      previousLinkClassName="page-link"
+                      nextClassName="page-item"
+                      nextLinkClassName="page-link"
+                      activeClassName="active"
+                    />
                   </div>
                 );
               }}
