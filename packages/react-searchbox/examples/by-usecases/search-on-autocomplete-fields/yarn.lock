@@ -9,20 +9,20 @@
   dependencies:
     cross-fetch "^3.0.4"
 
-"@appbaseio/react-searchbox@1.6.2-beta":
-  version "1.6.2-beta"
-  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.6.2-beta.tgz#77c5320ff3ce7fd22cb8f53ea2490a3bae116664"
-  integrity sha512-9tp2HbaSDiGKy3CA2vJWnB1ROo30aIRzX+cxQuyE7j/mJhnrHsW94WnChxRCbqshrteRbA/nNG2ZZrnxDeUCxQ==
+"@appbaseio/react-searchbox@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/react-searchbox/-/react-searchbox-1.7.0.tgz#4b0e722785b7e2f67c903ac266d986203c80b261"
+  integrity sha512-mYsazb9KIHIpILl8SSXnzfW2TPfeE6Q7el8xweCT3oaw/WCZd/RToMY7eQneul774rGLAxm6DhOzjMt/+/IPtw==
   dependencies:
-    "@appbaseio/searchbase" "1.6.2-beta"
+    "@appbaseio/searchbase" "1.7.0"
     "@emotion/core" "^10.0.17"
     "@emotion/styled" "^10.0.17"
     downshift "^3.3.1"
 
-"@appbaseio/searchbase@1.6.2-beta":
-  version "1.6.2-beta"
-  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.6.2-beta.tgz#2a5b10d92632bc593c38e8082b3b15e8b8e69d11"
-  integrity sha512-boiBd/iSxH6diQ4zo/L/N1shlFWT0pDwotbzDm7cnGE5B2DkGYJj70xGjzl29L8CCMo3RPmfPz3DGC9d4tm0qw==
+"@appbaseio/searchbase@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@appbaseio/searchbase/-/searchbase-1.7.0.tgz#a8bdfebdd749394e3b048ff928a6c44a20f382a9"
+  integrity sha512-wAQfaa6CNX/+UTYC/0b0fNLrnDBD6PmFRKKEUKZ5iGIUox5vosg85ZfRPWnISrQ/BXlgZPrxbHFhcAqZ0cYwFg==
   dependencies:
     "@appbaseio/analytics" "^2.1.0-beta"
     cross-fetch "^3.0.4"
@@ -2399,11 +2399,11 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     sha.js "^2.4.8"
 
 cross-fetch@^3.0.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
-  integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
+  integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
   dependencies:
-    node-fetch "2.6.1"
+    node-fetch "2.6.7"
 
 cross-spawn@5.1.0, cross-spawn@^5.0.1, cross-spawn@^5.1.0:
   version "5.1.0"
@@ -5869,10 +5869,12 @@ no-case@^2.2.0:
   dependencies:
     lower-case "^1.1.1"
 
-node-fetch@2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
-  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+node-fetch@2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
 
 node-forge@^0.10.0:
   version "0.10.0"
@@ -8745,6 +8747,14 @@ whatwg-url@^4.3.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-4.8.0.tgz#d2981aa9148c1e00a41c5a6131166ab4683bbcc0"
   integrity sha1-0pgaqRSMHgCkHFphMRZqtGg7vMA=
+  dependencies:
+    tr46 "~0.0.3"
+    webidl-conversions "^3.0.0"
+
+whatwg-url@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  integrity sha1-lmRU6HZUYuN2RNNib2dCzotwll0=
   dependencies:
     tr46 "~0.0.3"
     webidl-conversions "^3.0.0"
