@@ -5,6 +5,10 @@ const InputGroup = styled.div`
   align-items: center;
   height: 42px;
   width: 100%;
+
+  .enter-button-wrapper {
+    height: 100%;
+  }
 `;
 
 InputGroup.defaultProps = { className: 'input-group' };

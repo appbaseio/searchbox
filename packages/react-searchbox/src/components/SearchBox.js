@@ -56,7 +56,7 @@ import causes from '../utils/causes';
 import CustomSvg from '../styles/CustomSvg';
 import AutofillSvg from '../styles/AutofillSvg';
 import { arrayOf } from 'prop-types';
-import SearchSvg from '../styles/SearchSvg';
+import Button from '../styles/Button';
 
 class SearchBox extends React.Component {
   static contextType = SearchContext;
@@ -143,9 +143,10 @@ class SearchBox extends React.Component {
     if (!this.componentInstance.value && defaultSuggestions) {
       return defaultSuggestions;
     }
-    const suggestions = this.componentInstance.mongodb
-      ? this.componentInstance.suggestions
-      : this.componentInstance?.results?.data ?? [];
+    const suggestions =
+      (this.componentInstance.mongodb
+        ? this.componentInstance.suggestions
+        : this.componentInstance?.results?.data) ?? [];
     return suggestions;
   }
 
@@ -244,7 +245,7 @@ class SearchBox extends React.Component {
   };
 
   setValue = ({ value, isOpen = true, category = undefined, ...rest }) => {
-    const { onChange, debounce, autosuggest } = this.props;
+    const { onChange, debounce, autosuggest, enterButton } = this.props;
     if (!value && autosuggest && rest.cause !== causes.CLEAR_VALUE) {
       this.componentInstance.triggerDefaultQuery();
     }
@@ -272,7 +273,7 @@ class SearchBox extends React.Component {
       });
       if (autosuggest) {
         debounceFunc(this.triggerDefaultQuery, debounce);
-      } else {
+      } else if (!enterButton) {
         debounceFunc(this.triggerCustomQuery, debounce);
       }
     } else {
@@ -282,7 +283,7 @@ class SearchBox extends React.Component {
         stateChanges: true
       });
 
-      if (!autosuggest) {
+      if (!autosuggest && !enterButton) {
         this.triggerCustomQuery();
       }
     }
@@ -404,6 +405,41 @@ class SearchBox extends React.Component {
     const { addonAfter } = this.props;
     if (addonAfter) {
       return <InputAddon>{addonAfter}</InputAddon>;
+    }
+
+    return null;
+  };
+
+  renderEnterButtonElement = () => {
+    const { enterButton, renderEnterButton, innerClass } = this.props;
+
+    const enterButtonOnClick = () => {
+      this.triggerCustomQuery();
+      this.setState({
+        isOpen: false
+      });
+    };
+
+    if (enterButton) {
+      const getEnterButtonMarkup = () => {
+        if (typeof renderEnterButton === 'function') {
+          return renderEnterButton(enterButtonOnClick);
+        }
+
+        return (
+          <Button
+            className={`enter-btn ${getClassName(innerClass, 'enterButton')}`}
+            primary
+            onClick={enterButtonOnClick}
+          >
+            Search
+          </Button>
+        );
+      };
+
+      return (
+        <div className="enter-button-wrapper">{getEnterButtonMarkup()}</div>
+      );
     }
 
     return null;
@@ -808,6 +844,7 @@ class SearchBox extends React.Component {
                       })}
                   </InputWrapper>
                   {this.renderInputAddonAfter()}
+                  {this.renderEnterButtonElement()}
                 </InputGroup>
 
                 {this.props.expandSuggestionsContainer &&
@@ -849,6 +886,7 @@ class SearchBox extends React.Component {
                 {this.renderIcons()}
               </InputWrapper>
               {this.renderInputAddonAfter()}
+              {this.renderEnterButtonElement()}
             </InputGroup>
           </div>
         )}
@@ -940,7 +978,9 @@ SearchBox.propTypes = {
   enableRecentSearches: bool,
   enableRecentSuggestions: bool,
   applyStopwords: bool,
-  stopwords: arrayOf(string)
+  stopwords: arrayOf(string),
+  enterButton: bool,
+  renderEnterButton: func
 };
 
 SearchBox.defaultProps = {
@@ -977,7 +1017,8 @@ SearchBox.defaultProps = {
   urlField: '',
   rankFeature: undefined,
   categoryField: '',
-  categoryValue: ''
+  categoryValue: '',
+  enterButton: false
 };
 
 export default props => (
