@@ -1,6 +1,139 @@
 import React from 'react';
-
+import { renderToStaticMarkup } from 'react-dom/server';
 export const SearchContext = React.createContext();
+
+// parse query string
+// ref: https://stackoverflow.com/a/13896633/10822996
+function parseQuery(str) {
+  if (str instanceof Object) {
+    return str;
+  }
+  if (typeof str != 'string' || str.length === 0) return {};
+  let s = str.split('/?')[1]?.split('&');
+  if (!s) return {};
+  let sLength = s.length;
+  let bit;
+  let query = {};
+  let first;
+  let second;
+  for (let i = 0; i < sLength; i += 1) {
+    bit = s[i].split('=');
+    first = decodeURIComponent(bit[0]);
+    // eslint-disable-next-line no-continue
+    if (first.length === 0) continue;
+    second = decodeURIComponent(bit[1]);
+    if (typeof query[first] == 'undefined') query[first] = second;
+    else if (query[first] instanceof Array) query[first].push(second);
+    else query[first] = [query[first], second];
+  }
+  return query;
+}
+
+export const getServerResults = () => {
+  let appContext;
+
+  return (App, queryString = '') => {
+    // parse the query String to respect url params in SSR
+    let parsedQueryString = parseQuery(queryString);
+    if (!appContext) {
+      // callback function to collect SearchBase context
+      const contextCollector = params => {
+        if (params.ctx) {
+          appContext = params.ctx;
+        }
+      };
+
+      const promiseArray = [];
+
+      // render the app server-side to collect context and build initial state
+      // for hydration on client side
+      renderToStaticMarkup(<App contextCollector={contextCollector} />);
+
+      if (appContext) {
+        const componentInstancesIds = Object.keys(appContext._components);
+        for (let index = 0; index < componentInstancesIds.length; index += 1) {
+          const instanceId = componentInstancesIds[index];
+          let componentInstance = appContext._components[instanceId];
+
+          // handle url params
+          if (parsedQueryString[instanceId]) {
+            // Set component value
+            try {
+              const paramValue = JSON.parse(parsedQueryString[instanceId]);
+              if (
+                !isEqual(appContext.getComponent(instanceId).value, paramValue)
+              ) {
+                componentInstance.setValue(paramValue, {
+                  triggerCustomQuery: false,
+                  triggerDefaultQuery: false,
+                  stateChanges: false
+                });
+              }
+            } catch (e) {
+              console.error(e);
+              // Do not set value if JSON parsing fails.
+            }
+          }
+          const promise = componentInstance.triggerDefaultQuery();
+          // eslint-disable-next-line no-await-in-loop
+          promiseArray.push(promise);
+        }
+        return Promise.all([...promiseArray])
+          .then(values => {
+            let initialState = {};
+            for (
+              let index = 0;
+              index < componentInstancesIds.length;
+              index += 1
+            ) {
+              const instanceId = componentInstancesIds[index];
+              const {
+                value = null,
+                results = null,
+                aggregationData = null,
+                categoryValue = null,
+                queryId = null,
+                _lastRequestTimeDefaultQuery,
+                _lastRequestTimeCustomQuery,
+                _query = null
+              } = appContext._components[instanceId];
+              initialState[instanceId] = {
+                value,
+                results: {
+                  data: results.data,
+                  raw: results.raw,
+                  rawData: results.rawData
+                },
+                ...(categoryValue
+                  ? { categoryValue: categoryValue || null }
+                  : {}),
+                // query is to be parsed at client side
+                // has been stringified since Array is not serializable
+                _query: Array.isArray(_query) ? JSON.stringify(_query) : _query,
+                aggregationData: {
+                  data: aggregationData.data,
+                  rawData: aggregationData.rawData
+                },
+                queryId,
+                _lastRequestTimeDefaultQuery:
+                  _lastRequestTimeDefaultQuery || null,
+                _lastRequestTimeCustomQuery: _lastRequestTimeCustomQuery || null
+              };
+            }
+
+            return initialState;
+          })
+          .catch(Error => {
+            return Error;
+          });
+      }
+      Promise.reject(
+        new Error('Could not compute server-side initial state of the app!')
+      );
+    }
+    return Promise.resolve(appContext);
+  };
+};
 
 export const getClassName = (classMap, component) =>
   (classMap && classMap[component]) || '';

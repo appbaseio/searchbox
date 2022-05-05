@@ -14,7 +14,7 @@ import Base from './Base';
 import SearchBase from './SearchBase';
 import Results from './Results';
 import Aggregations from './Aggregations';
-
+import fetch from 'cross-fetch';
 import {
   queryTypes,
   queryFormats,
@@ -798,9 +798,15 @@ class SearchComponent extends Base {
   // Method to execute the component's own query i.e default query
   triggerDefaultQuery = (options?: Option = defaultOption): Promise<any> => {
     // To prevent duplicate queries
-    if (isEqual(this._query, this.componentQuery)) {
+    if (
+      isEqual(
+        this._query ? JSON.parse(JSON.stringify(this._query)) : undefined,
+        JSON.parse(JSON.stringify(this.componentQuery))
+      )
+    ) {
       return Promise.resolve(true);
     }
+
     const handleError = err => {
       this._setError(err, {
         stateChanges: options.stateChanges

@@ -27,6 +27,16 @@ class SearchBase extends React.Component {
       transformResponse: props.transformResponse,
       libAlias: LIBRARY_ALIAS.REACT_SEARCHBOX
     });
+    this.searchbase.initialState = props.initialState;
+    // server side rendered app to collect context
+    if (
+      typeof window === 'undefined' &&
+      props.contextCollector &&
+      !this.calledContextCollector
+    ) {
+      this.calledContextCollector = true;
+      props.contextCollector({ ctx: this.searchbase });
+    }
   }
 
   /* eslint-disable class-methods-use-this */
@@ -60,7 +70,9 @@ SearchBase.propTypes = {
   appbaseConfig: appbaseConfig,
   transformRequest: func,
   transformResponse: func,
-  mongodb: object
+  mongodb: object,
+  contextCollector: func,
+  initialState: object
 };
 
 export default SearchBase;

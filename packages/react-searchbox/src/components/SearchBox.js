@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { Global, css } from '@emotion/core';
 import {
   appbaseConfig as appbaseConfigDef,
   any,
@@ -792,6 +793,7 @@ class SearchBox extends React.Component {
         )}
         {hasSuggestions && autosuggest ? (
           <Downshift
+            id="downshift-component"
             onChange={this.onSuggestionSelected}
             onStateChange={this.handleStateChange}
             isOpen={this.state.isOpen}
@@ -806,7 +808,12 @@ class SearchBox extends React.Component {
               getRootProps,
               ...rest
             }) => (
-              <div {...getRootProps({ css: suggestionsContainer })}>
+              <div
+                {...getRootProps(
+                  { css: suggestionsContainer },
+                  { suppressRefError: true }
+                )}
+              >
                 <InputGroup>
                   {this.renderInputAddonBefore()}
                   <InputWrapper>
@@ -1021,26 +1028,47 @@ SearchBox.defaultProps = {
   enterButton: false
 };
 
-export default props => (
-  <SearchComponent
-    triggerQueryOnInit={
-      props.enableRecentSearches || props.enableRecentSuggestions
-    }
-    value="" // Init value as empty
-    type={queryTypes.Suggestion}
-    clearOnQueryChange
-    componentName="SearchBox"
-    {...props}
-    subscribeTo={['micStatus', 'error', 'requestPending', 'results', 'value']}
-  >
-    {({ error, loading, results, value, micStatus }) => (
-      <SearchBox
-        {...props}
-        error={error}
-        loading={loading}
-        results={results}
-        micStatus={micStatus}
+export default props => {
+  return (
+    <div>
+      <Global
+        styles={css`
+          * {
+            margin: 0;
+            font-family: inherit;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+        `}
       />
-    )}
-  </SearchComponent>
-);
+
+      <SearchComponent
+        triggerQueryOnInit={
+          props.enableRecentSearches || props.enableRecentSuggestions
+        }
+        value="" // Init value as empty
+        type={queryTypes.Suggestion}
+        clearOnQueryChange
+        componentName="SearchBox"
+        {...props}
+        subscribeTo={[
+          'micStatus',
+          'error',
+          'requestPending',
+          'results',
+          'value'
+        ]}
+      >
+        {({ error, loading, results, value, micStatus }) => (
+          <SearchBox
+            {...props}
+            error={error}
+            loading={loading}
+            results={results}
+            micStatus={micStatus}
+          />
+        )}
+      </SearchComponent>
+    </div>
+  );
+};

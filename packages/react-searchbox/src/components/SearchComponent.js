@@ -102,7 +102,12 @@ class SearchComponent extends React.Component {
       stopwords
     } = this.props;
     let { value, categoryValue: category } = this.props;
-    if (window && window.location && window.location.search) {
+    if (
+      typeof window !== 'undefined' &&
+      window &&
+      window.location &&
+      window.location.search
+    ) {
       const params = new URLSearchParams(window.location.search);
       if (params.has(id)) {
         try {
@@ -189,6 +194,34 @@ class SearchComponent extends React.Component {
       stopwords,
       libAlias: LIBRARY_ALIAS.REACT_SEARCHBOX
     });
+    if (context.initialState) {
+      const initialState = context.initialState[id];
+      if (initialState) {
+        this.componentInstance.aggregationData.data =
+          initialState.aggregationData.data;
+        this.componentInstance.aggregationData.setRaw(
+          initialState.aggregationData.rawData
+        );
+        this.componentInstance.categoryValue = initialState.categoryValue;
+        this.componentInstance._queryId = initialState.queryId;
+        this.componentInstance.value = initialState.value;
+        this.componentInstance._lastRequestTimeCustomQuery =
+          initialState._lastRequestTimeCustomQuery;
+        this.componentInstance._lastRequestTimeDefaultQuery =
+          initialState._lastRequestTimeDefaultQuery;
+        this.componentInstance.results.data = initialState.results.data;
+        this.componentInstance.results.raw = initialState.results.raw;
+        this.componentInstance.results.setRaw(initialState.results.rawData);
+        if (Array.isArray(JSON.parse(initialState._query))) {
+          this.componentInstance._query = JSON.parse(initialState._query).find(
+            queryItem => queryItem.id === this.componentInstance.id
+          );
+        } else {
+          this.componentInstance._query = initialState._query;
+        }
+      }
+    }
+
     // Subscribe to state changes
     if (this.hasCustomRenderer) {
       this.componentInstance.subscribeToStateChanges(change => {
@@ -199,16 +232,21 @@ class SearchComponent extends React.Component {
         this.setState(state);
       }, subscribeTo);
     }
-    if (value || customQuery) {
-      this.componentInstance.triggerCustomQuery();
-    }
   }
 
   componentDidMount() {
-    const { triggerQueryOnInit } = this.props;
-
-    if (triggerQueryOnInit) {
-      this.componentInstance.triggerDefaultQuery();
+    const { triggerQueryOnInit, customQuery } = this.props;
+    if (this.componentInstance) {
+      if (triggerQueryOnInit) {
+        this.componentInstance.triggerDefaultQuery();
+      }
+      if (
+        // check to prevent customQuery at clientside when leveraging SSR
+        !this.context.initialState &&
+        (this.componentInstance.value || customQuery)
+      ) {
+        this.componentInstance.triggerCustomQuery();
+      }
     }
   }
 
