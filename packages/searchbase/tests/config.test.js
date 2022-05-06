@@ -21,7 +21,7 @@ describe('SearchBase: Input Validations (Elasticsearch as SearchBackend)', () =>
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'url is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'url is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -34,7 +34,7 @@ describe('SearchBase: Input Validations (Elasticsearch as SearchBackend)', () =>
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'index is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'index is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -48,7 +48,7 @@ describe('SearchBase: Input Validations (Elasticsearch as SearchBackend)', () =>
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'credentials is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'credentials is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -64,7 +64,7 @@ describe('SearchBase: Input Validations (MongoDB as SearchBackend)', () => {
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'url is required for <SearchBase /> component when used with the mongodb Search backend.'
+        'url is required for SearchBase class when used with the mongodb Search backend.'
       );
     }
   });
@@ -80,7 +80,7 @@ describe('SearchComponent: Input Validations (Elasticsearch as SearchBackend)', 
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'url is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'url is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -93,7 +93,7 @@ describe('SearchComponent: Input Validations (Elasticsearch as SearchBackend)', 
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'index is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'index is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -107,7 +107,7 @@ describe('SearchComponent: Input Validations (Elasticsearch as SearchBackend)', 
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'credentials is required for <SearchBase /> component when used with the elasticsearch Search backend.'
+        'credentials is required for SearchBase class when used with the elasticsearch Search backend.'
       );
     }
   });
@@ -123,7 +123,7 @@ describe('SearchComponent: Input Validations (MongoDB as SearchBackend)', () => 
       expect(true).toBe(false);
     } catch (e) {
       expect(e.message).toEqual(
-        'url is required for <SearchBase /> component when used with the mongodb Search backend.'
+        'url is required for SearchBase class when used with the mongodb Search backend.'
       );
     }
   });
