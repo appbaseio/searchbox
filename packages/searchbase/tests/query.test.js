@@ -149,7 +149,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     const resultComponentQuery = resultComponent.query.find(
       q => q.id === searchComponentId //should have a query with id of the search-component
     );
-    console.log(resultComponent.query);
     expect(resultComponentQuery).toEqual(expect.objectContaining(query));
   });
 
