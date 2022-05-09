@@ -1,6 +1,5 @@
 const { SearchBase } = require('../dist/@appbaseio/searchbase.cjs.js');
 
-const suffix = '_reactivesearch.v3';
 const index = 'gitxplore-latest-app';
 const url = 'https://scalr.api.appbase.io';
 const credentials = 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38';
@@ -8,9 +7,18 @@ const mongodb = {
   db: 'sample_airbnb',
   collection: 'listingsAndReviews'
 };
-
+const crossFetch = require('cross-fetch');
+jest.mock('cross-fetch');
 beforeAll(() => jest.spyOn(window, 'fetch'));
-
+beforeEach(() => {
+  crossFetch.mockResolvedValue({
+    status: 200,
+    json: async () => ({
+      'search-component': { hits: { hits: [] } },
+      'result-component': { hits: { hits: [] } }
+    })
+  });
+});
 describe('Request Generation Logic(Elasticsearch as backend)', () => {
   let searchBase;
   beforeEach(() => {
@@ -120,7 +128,7 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
 
     await searchComponent.triggerCustomQuery();
     const resultComponentQuery = resultComponent.query.find(
-      q => q.id === searchComponentId //should have a query with id of the search-component
+      q => q.id === searchComponentId // should have a query with id of the search-component
     );
     expect(resultComponentQuery).toEqual(
       expect.objectContaining({ value: 'harry' })
@@ -147,7 +155,7 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
     await searchComponent.triggerCustomQuery();
     const resultComponentQuery = resultComponent.query.find(
-      q => q.id === searchComponentId //should have a query with id of the search-component
+      q => q.id === searchComponentId // should have a query with id of the search-component
     );
     expect(resultComponentQuery).toEqual(expect.objectContaining(query));
   });
@@ -173,7 +181,7 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
 
     await searchComponent.triggerCustomQuery();
     const resultComponentQuery = resultComponent.query.find(
-      q => q.id === searchComponentId //should have a query with id of the search-component
+      q => q.id === searchComponentId // should have a query with id of the search-component
     );
     expect(resultComponentQuery).toEqual(expect.objectContaining(query));
   });
