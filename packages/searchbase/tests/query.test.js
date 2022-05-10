@@ -7,18 +7,22 @@ const mongodb = {
   db: 'sample_airbnb',
   collection: 'listingsAndReviews'
 };
+const searchComponentId = 'search-component';
+const resultComponentId = 'result-component';
+const componentId = searchComponentId;
+
 const crossFetch = require('cross-fetch');
 jest.mock('cross-fetch');
-beforeAll(() => jest.spyOn(window, 'fetch'));
 beforeEach(() => {
   crossFetch.mockResolvedValue({
     status: 200,
     json: async () => ({
-      'search-component': { hits: { hits: [] } },
-      'result-component': { hits: { hits: [] } }
+      [searchComponentId]: { hits: { hits: [] } },
+      [resultComponentId]: { hits: { hits: [] } }
     })
   });
 });
+
 describe('Request Generation Logic(Elasticsearch as backend)', () => {
   let searchBase;
   beforeEach(() => {
@@ -29,7 +33,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     });
   });
   test('should trigger query with all options', async () => {
-    const componentId = 'search-component';
     const props = {
       react: {
         and: ['date-component', 'language-filter']
@@ -42,13 +45,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
       type: 'search'
     });
 
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [componentId]: { hits: { hits: [] } }
-      })
-    });
-
     await searchComponent.triggerDefaultQuery();
     const searchComponentQuery = searchComponent.query.find(
       q => q.id === componentId
@@ -56,20 +52,12 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     expect(searchComponentQuery).toEqual(expect.objectContaining(props));
   });
   test('should trigger default query as Elasticsearch query DSL', async () => {
-    const componentId = 'search-component';
     const query = {
       query: { match: { title: 'harry' } }
     };
     const searchComponent = searchBase.register(componentId, {
       defaultQuery: () => query,
       type: 'search'
-    });
-
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [componentId]: { hits: { hits: [] } }
-      })
     });
 
     await searchComponent.triggerDefaultQuery();
@@ -81,7 +69,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     );
   });
   test('should trigger default query as stored query', async () => {
-    const componentId = 'search-component';
     const query = {
       id: 'stored-query',
       params: { value: 'harry' }
@@ -90,13 +77,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     const searchComponent = searchBase.register(componentId, {
       defaultQuery: () => query,
       type: 'search'
-    });
-
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [componentId]: { hits: { hits: [] } }
-      })
     });
 
     await searchComponent.triggerDefaultQuery();
@@ -108,22 +88,11 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     );
   });
   test('should trigger custom query', async () => {
-    const searchComponentId = 'search-component';
-    const resultComponentId = 'result-component';
-
     const searchComponent = searchBase.register(searchComponentId, {
       value: 'harry'
     });
     const resultComponent = searchBase.register(resultComponentId, {
       react: { and: searchComponentId }
-    });
-
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [searchComponentId]: { hits: { hits: [] } },
-        [resultComponentId]: { hits: { hits: [] } }
-      })
     });
 
     await searchComponent.triggerCustomQuery();
@@ -136,8 +105,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
   });
 
   test('should trigger custom query as Elasticsearch query DSL', async () => {
-    const searchComponentId = 'search-component';
-    const resultComponentId = 'result-component';
     const query = { query: { match: { title: 'harry' } } };
     const searchComponent = searchBase.register(searchComponentId, {
       customQuery: () => query
@@ -146,13 +113,6 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
       react: { and: searchComponentId }
     });
 
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [searchComponentId]: { hits: { hits: [] } },
-        [resultComponentId]: { hits: { hits: [] } }
-      })
-    });
     await searchComponent.triggerCustomQuery();
     const resultComponentQuery = resultComponent.query.find(
       q => q.id === searchComponentId // should have a query with id of the search-component
@@ -161,22 +121,12 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
   });
 
   test('should trigger custom query as stored query', async () => {
-    const searchComponentId = 'search-component';
-    const resultComponentId = 'result-component';
     const query = { id: 'stored-query', params: { value: 'harry' } };
     const searchComponent = searchBase.register(searchComponentId, {
       customQuery: () => query
     });
     const resultComponent = searchBase.register(resultComponentId, {
       react: { and: searchComponentId }
-    });
-
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [searchComponentId]: { hits: { hits: [] } },
-        [resultComponentId]: { hits: { hits: [] } }
-      })
     });
 
     await searchComponent.triggerCustomQuery();
@@ -197,7 +147,6 @@ describe('Request Generation Logic(MongoDB as SearchBackend', () => {
     });
   });
   test('should trigger default query as MongoDB aggregation query', async () => {
-    const componentId = 'search-component';
     const query = {
       react: {
         and: ['date-component', 'language-filter']
@@ -210,28 +159,13 @@ describe('Request Generation Logic(MongoDB as SearchBackend', () => {
       type: 'search'
     });
 
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [componentId]: { hits: { hits: [] } }
-      })
-    });
-
     await searchComponent.triggerDefaultQuery();
     expect(searchComponent.query[0]).toEqual(expect.objectContaining(query));
   });
   test('should trigger custom query as MongoDB aggregation query', async () => {
-    const componentId = 'search-component';
     const query = { query: { match: { title: 'harry' } } };
     const searchComponent = searchBase.register(componentId, {
       customQuery: () => query
-    });
-
-    window.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        [componentId]: { hits: { hits: [] } }
-      })
     });
 
     await searchComponent.triggerCustomQuery();
