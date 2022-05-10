@@ -107,6 +107,7 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
   test('should trigger custom query as Elasticsearch query DSL', async () => {
     const query = { query: { match: { title: 'harry' } } };
     const searchComponent = searchBase.register(searchComponentId, {
+      value: 'harry',
       customQuery: () => query
     });
     const resultComponent = searchBase.register(resultComponentId, {
@@ -117,12 +118,15 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     const resultComponentQuery = resultComponent.query.find(
       q => q.id === searchComponentId // should have a query with id of the search-component
     );
-    expect(resultComponentQuery).toEqual(expect.objectContaining(query));
+    expect(resultComponentQuery).toEqual(
+      expect.objectContaining({ customQuery: query, value: 'harry' })
+    );
   });
 
   test('should trigger custom query as stored query', async () => {
     const query = { id: 'stored-query', params: { value: 'harry' } };
     const searchComponent = searchBase.register(searchComponentId, {
+      value: 'harry',
       customQuery: () => query
     });
     const resultComponent = searchBase.register(resultComponentId, {
@@ -133,7 +137,9 @@ describe('Request Generation Logic(Elasticsearch as backend)', () => {
     const resultComponentQuery = resultComponent.query.find(
       q => q.id === searchComponentId // should have a query with id of the search-component
     );
-    expect(resultComponentQuery).toEqual(expect.objectContaining(query));
+    expect(resultComponentQuery).toEqual(
+      expect.objectContaining({ customQuery: query, value: 'harry' })
+    );
   });
 });
 describe('Request Generation Logic(MongoDB as SearchBackend', () => {
@@ -165,6 +171,7 @@ describe('Request Generation Logic(MongoDB as SearchBackend', () => {
   test('should trigger custom query as MongoDB aggregation query', async () => {
     const query = { query: { match: { title: 'harry' } } };
     const searchComponent = searchBase.register(componentId, {
+      value: 'harry',
       customQuery: () => query
     });
 
