@@ -373,7 +373,7 @@ const SearchBox = {
 			const { isOpen } = changes;
 			this.isOpen = isOpen;
 		},
-		handleKeyDown(event, highlightedIndex) {
+		handleKeyDown(event, highlightedIndex = null) {
 			// if a suggestion was selected, delegate the handling
 			// to suggestion handler			
 			if (event.key === 'Enter') {
