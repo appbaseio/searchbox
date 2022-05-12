@@ -541,29 +541,22 @@ class SearchBox extends React.Component {
     return null;
   };
 
-  handleKeyDown = (event, highlightedIndex) => {
+  handleKeyDown = (event, highlightedIndex = null) => {
     // if a suggestion was selected, delegate the handling
     // to suggestion handler
-    if (event.key === 'Enter' && highlightedIndex === null) {
-      this.setValue({
-        value: event.target.value,
-        isOpen: false,
-        triggerCustomQuery: true
-      });
-      this.onValueSelected(event.target.value, causes.ENTER_PRESS);
-    }
-    if (event.key === 'Escape') {
-      this.setState({ isOpen: false });
-    }
-
-    if (this.props.onKeyDown) {
-      this.props.onKeyDown(this.componentInstance, event);
-    }
-  };
-
-  handleKeyDownNoAutosuggest = event => {
     if (event.key === 'Enter') {
-      this.enterButtonOnClick();
+      if (this.props.autosuggest === false) {
+        this.enterButtonOnClick();
+      } else if (highlightedIndex === null) {
+        this.setValue({
+          value: event.target.value,
+          isOpen: false,
+          triggerCustomQuery: true
+        });
+        this.onValueSelected(event.target.value, causes.ENTER_PRESS);
+      }
+    } else if (event.key === 'Escape') {
+      this.setState({ isOpen: false });
     }
 
     if (this.props.onKeyDown) {
@@ -892,7 +885,7 @@ class SearchBox extends React.Component {
                   onBlur={this.withTriggerQuery(onBlur)}
                   onFocus={this.withTriggerQuery(onFocus)}
                   onKeyPress={this.withTriggerQuery(onKeyPress)}
-                  onKeyDown={this.handleKeyDownNoAutosuggest}
+                  onKeyDown={this.handleKeyDown}
                   onKeyUp={this.withTriggerQuery(onKeyUp)}
                   autoFocus={autoFocus}
                   iconPosition={iconPosition}
