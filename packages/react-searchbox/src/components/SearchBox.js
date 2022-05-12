@@ -429,7 +429,7 @@ class SearchBox extends React.Component {
 
         return (
           <Button
-            className={`enter-btn ${getClassName(innerClass, 'enterButton')}`}
+            className={`enter-btn ${getClassName(innerClass, 'enter-button')}`}
             primary
             onClick={enterButtonOnClick}
           >
