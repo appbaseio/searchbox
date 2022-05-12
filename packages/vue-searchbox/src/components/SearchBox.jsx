@@ -375,8 +375,7 @@ const SearchBox = {
 		},
 		handleKeyDown(event, highlightedIndex) {
 			// if a suggestion was selected, delegate the handling
-			// to suggestion handler
-			console.log('hey');
+			// to suggestion handler			
 			if (event.key === 'Enter') {
 				if (this.$props.autosuggest === false) {
 					this.enterButtonOnClick();
