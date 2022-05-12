@@ -411,27 +411,27 @@ class SearchBox extends React.Component {
     return null;
   };
 
+  enterButtonOnClick = () => {
+    this.triggerCustomQuery();
+    this.setState({
+      isOpen: false
+    });
+  };
+
   renderEnterButtonElement = () => {
     const { enterButton, renderEnterButton, innerClass } = this.props;
-
-    const enterButtonOnClick = () => {
-      this.triggerCustomQuery();
-      this.setState({
-        isOpen: false
-      });
-    };
 
     if (enterButton) {
       const getEnterButtonMarkup = () => {
         if (typeof renderEnterButton === 'function') {
-          return renderEnterButton(enterButtonOnClick);
+          return renderEnterButton(this.enterButtonOnClick);
         }
 
         return (
           <Button
             className={`enter-btn ${getClassName(innerClass, 'enter-button')}`}
             primary
-            onClick={enterButtonOnClick}
+            onClick={this.enterButtonOnClick}
           >
             Search
           </Button>
@@ -554,6 +554,16 @@ class SearchBox extends React.Component {
     }
     if (event.key === 'Escape') {
       this.setState({ isOpen: false });
+    }
+
+    if (this.props.onKeyDown) {
+      this.props.onKeyDown(this.componentInstance, event);
+    }
+  };
+
+  handleKeyDownNoAutosuggest = event => {
+    if (event.key === 'Enter') {
+      this.enterButtonOnClick();
     }
 
     if (this.props.onKeyDown) {
@@ -882,7 +892,7 @@ class SearchBox extends React.Component {
                   onBlur={this.withTriggerQuery(onBlur)}
                   onFocus={this.withTriggerQuery(onFocus)}
                   onKeyPress={this.withTriggerQuery(onKeyPress)}
-                  onKeyDown={this.withTriggerQuery(onKeyDown)}
+                  onKeyDown={this.handleKeyDownNoAutosuggest}
                   onKeyUp={this.withTriggerQuery(onKeyUp)}
                   autoFocus={autoFocus}
                   iconPosition={iconPosition}
