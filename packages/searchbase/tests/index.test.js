@@ -6,33 +6,37 @@ const {
 const index = 'gitxplore-latest-app';
 const url = 'https://scalr.api.appbase.io';
 const credentials = 'LsxvulCKp:a500b460-73ff-4882-8d34-9df8064b3b38';
+const mongodb = {
+  db: 'sample_airbnb',
+  collection: 'listingsAndReviews'
+};
 
-describe('SearchBase instance: Error reporting', () => {
-  test('throw error if empty url', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({
-        index
-      });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'url is required for SearchBase class when used with the elasticsearch Search backend.'
-      );
-    }
+describe('SearchBase: getComponents', () => {
+  test('should return a list of components', () => {
+    const searchBase = new SearchBase({ index, url, credentials });
+    const componentIdPrefix = 'search-component';
+    searchBase.register(componentIdPrefix + '-1', {
+      enablePredictiveSuggestions: true,
+      dataField: ['name']
+    });
+    searchBase.register(componentIdPrefix + '-2', {
+      enablePredictiveSuggestions: true,
+      dataField: ['name']
+    });
+    expect(searchBase.getComponents()).toHaveProperty(componentIdPrefix + '-1');
+    expect(searchBase.getComponents()).toHaveProperty(componentIdPrefix + '-2');
   });
-  test('throw error if empty index', () => {
-    try {
-      /* eslint-disable-next-line */
-      const searchbase = new SearchBase({
-        url: 'https://appbase-demo.dev.io'
-      });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'index is required for SearchBase class when used with the elasticsearch Search backend.'
-      );
-    }
+});
+
+describe('SearchBase: getComponent', () => {
+  test('should return a component by id', () => {
+    const searchBase = new SearchBase({ index, url, credentials });
+    const componentId = 'search-component';
+    searchBase.register(componentId, {
+      enablePredictiveSuggestions: true,
+      dataField: ['name']
+    });
+    expect(searchBase.getComponent(componentId).id).toBe(componentId);
   });
 });
 
