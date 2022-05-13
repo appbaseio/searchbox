@@ -170,12 +170,20 @@ describe('Request Generation Logic(MongoDB as SearchBackend', () => {
   });
   test('should trigger custom query as MongoDB aggregation query', async () => {
     const query = { query: { match: { title: 'harry' } } };
-    const searchComponent = searchBase.register(componentId, {
+    const searchComponent = searchBase.register(searchComponentId, {
       value: 'harry',
       customQuery: () => query
     });
+    const resultComponent = searchBase.register(resultComponentId, {
+      react: { and: searchComponentId }
+    });
 
     await searchComponent.triggerCustomQuery();
-    expect(searchComponent.query[0]).toEqual(expect.objectContaining(query));
+    const resultComponentQuery = resultComponent.query.find(
+      q => q.id === searchComponentId // should have a query with id of the search-component
+    );
+    expect(resultComponentQuery).toEqual(
+      expect.objectContaining({ customQuery: query, value: 'harry' })
+    );
   });
 });
