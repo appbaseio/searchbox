@@ -411,27 +411,27 @@ class SearchBox extends React.Component {
     return null;
   };
 
+  enterButtonOnClick = () => {
+    this.triggerCustomQuery();
+    this.setState({
+      isOpen: false
+    });
+  };
+
   renderEnterButtonElement = () => {
     const { enterButton, renderEnterButton, innerClass } = this.props;
-
-    const enterButtonOnClick = () => {
-      this.triggerCustomQuery();
-      this.setState({
-        isOpen: false
-      });
-    };
 
     if (enterButton) {
       const getEnterButtonMarkup = () => {
         if (typeof renderEnterButton === 'function') {
-          return renderEnterButton(enterButtonOnClick);
+          return renderEnterButton(this.enterButtonOnClick);
         }
 
         return (
           <Button
             className={`enter-btn ${getClassName(innerClass, 'enter-button')}`}
             primary
-            onClick={enterButtonOnClick}
+            onClick={this.enterButtonOnClick}
           >
             Search
           </Button>
@@ -541,18 +541,21 @@ class SearchBox extends React.Component {
     return null;
   };
 
-  handleKeyDown = (event, highlightedIndex) => {
+  handleKeyDown = (event, highlightedIndex = null) => {
     // if a suggestion was selected, delegate the handling
     // to suggestion handler
-    if (event.key === 'Enter' && highlightedIndex === null) {
-      this.setValue({
-        value: event.target.value,
-        isOpen: false,
-        triggerCustomQuery: true
-      });
-      this.onValueSelected(event.target.value, causes.ENTER_PRESS);
-    }
-    if (event.key === 'Escape') {
+    if (event.key === 'Enter') {
+      if (this.props.autosuggest === false) {
+        this.enterButtonOnClick();
+      } else if (highlightedIndex === null) {
+        this.setValue({
+          value: event.target.value,
+          isOpen: false,
+          triggerCustomQuery: true
+        });
+        this.onValueSelected(event.target.value, causes.ENTER_PRESS);
+      }
+    } else if (event.key === 'Escape') {
       this.setState({ isOpen: false });
     }
 
@@ -882,7 +885,7 @@ class SearchBox extends React.Component {
                   onBlur={this.withTriggerQuery(onBlur)}
                   onFocus={this.withTriggerQuery(onFocus)}
                   onKeyPress={this.withTriggerQuery(onKeyPress)}
-                  onKeyDown={this.withTriggerQuery(onKeyDown)}
+                  onKeyDown={this.handleKeyDown}
                   onKeyUp={this.withTriggerQuery(onKeyUp)}
                   autoFocus={autoFocus}
                   iconPosition={iconPosition}

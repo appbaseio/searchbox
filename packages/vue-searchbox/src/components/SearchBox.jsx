@@ -373,16 +373,20 @@ const SearchBox = {
 			const { isOpen } = changes;
 			this.isOpen = isOpen;
 		},
-		handleKeyDown(event, highlightedIndex) {
+		handleKeyDown(event, highlightedIndex = null) {
 			// if a suggestion was selected, delegate the handling
-			// to suggestion handler
-			if (event.key === 'Enter' && highlightedIndex === null) {
-				this.setValue({
-					value: event.target.value,
-					isOpen: false,
-					triggerCustomQuery: true
-				});
-				this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
+			// to suggestion handler			
+			if (event.key === 'Enter') {
+				if (this.$props.autosuggest === false) {
+					this.enterButtonOnClick();
+				} else if (highlightedIndex === null) {
+					this.setValue({
+						value: event.target.value,
+						isOpen: false,
+						triggerCustomQuery: true
+					});
+					this.onValueSelectedHandler(event.target.value, causes.ENTER_PRESS);
+				}
 			}
 			this.withTriggerQuery('keyDown', event);
 		},
@@ -406,36 +410,32 @@ const SearchBox = {
 
 			return null;
 		},
+		enterButtonOnClick() {
+			this.isOpen = false;
+			this.triggerCustomQuery();
+		},
 		renderEnterButtonElement() {
 			const { enterButton, innerClass } = this.$props;
 			const { renderEnterButton } = this.$scopedSlots;
-			const enterButtonOnClick = () => {
-				this.isOpen = false;
-				this.triggerCustomQuery();
-			};
 
 			if (enterButton) {
 				const getEnterButtonMarkup = () => {
 					if (renderEnterButton) {
-						return renderEnterButton(enterButtonOnClick);
+						return renderEnterButton(this.enterButtonOnClick);
 					}
 
 					return (
 						<Button
 							class={`enter-btn ${getClassName(innerClass, 'enter-button')}`}
 							primary
-							onClick={enterButtonOnClick}
+							onClick={this.enterButtonOnClick}
 						>
-             				Search
+              Search
 						</Button>
 					);
 				};
 
-				return (
-					<div class="enter-button-wrapper">
-						{getEnterButtonMarkup()}
-					</div>
-				);
+				return <div class="enter-button-wrapper">{getEnterButtonMarkup()}</div>;
 			}
 
 			return null;
@@ -844,9 +844,7 @@ const SearchBox = {
 											focus: e => {
 												this.$emit('focus', e);
 											},
-											keydown: e => {
-												this.$emit('keyDown', e);
-											},
+											keydown: this.handleKeyDown,
 											keyup: e => {
 												this.$emit('keyUp', e);
 											}
