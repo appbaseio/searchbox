@@ -145,7 +145,6 @@ export class AppComponent implements AfterContentInit {
       },
       from: 0,
       size: 10,
-      includeFields: ['name', 'description', 'url', 'avatar', 'stars'],
       defaultQuery: () => ({
         track_total_hits: true
       })
