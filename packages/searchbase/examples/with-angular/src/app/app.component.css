@@ -30,7 +30,16 @@
 .count {
   color: #9d9d9d;
 }
-
+.badge {
+  position: absolute;
+  background: #0a0a22;
+  display: inline-block;
+  padding: 3px 5px;
+  border-radius: 4px;
+  color: white;
+  top: 5px;
+  right: 12px;
+}
 .filter-button {
   margin-left: 5px;
   margin-bottom: 5px;
@@ -135,6 +144,7 @@
 }
 
 .result-set .details {
+  position: relative;
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 15px;

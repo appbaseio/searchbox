@@ -55,6 +55,9 @@
               <img src={{item.avatar}} alt={{item.name}} />
             </div>
               <div class="details">
+                <div *ngIf="item.language" class="badge">
+                  {{ item.language }}
+                </div>
                 <h4>{{ item.name }}</h4>
                 <p>{{ item.description }}</p>
                 <div class="item-details">
