@@ -5,12 +5,10 @@ import { SearchBase } from '@appbaseio/searchbase';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
-export class AppComponent  {
-  index = 'gitxplore-app';
+export class AppComponent {
+  index = 'git-explore-2022';
   url = 'https://appbase-demo-ansible-abxiydt-arc.searchbase.io';
-  credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
-
+  credentials = 'b509481af6df:0708b82a-e98e-4884-935e-2bb0e61a82e1';
 
   searchBase: SearchBase;
 
@@ -22,6 +20,4 @@ export class AppComponent  {
       credentials: this.credentials
     });
   }
-
-
 }
