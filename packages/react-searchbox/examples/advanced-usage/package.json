@@ -5,7 +5,7 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@appbaseio/react-searchbox": "1.8.1",
+        "@appbaseio/react-searchbox": "1.9.0",
         "prop-types": "^15.6.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
