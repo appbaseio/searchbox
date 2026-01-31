@@ -42,7 +42,7 @@
   "devDependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.10.4",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.2.1",
+    "eslint": "^9.26.0",
     "nps": "^5.9.8",
     "nps-utils": "^1.7.0",
     "rollup": "^1.20.3",
