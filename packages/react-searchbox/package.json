@@ -48,7 +48,7 @@
         "babel-plugin-emotion": "^10.0.19",
         "concurrently": "^5.0.0",
         "cross-env": "^5.1.4",
-        "eslint": "6.x",
+        "eslint": "9.x",
         "eslint-config-prettier": "^6.3.0",
         "eslint-config-react-app": "^5.0.2",
         "eslint-plugin-flowtype": "3.x",
